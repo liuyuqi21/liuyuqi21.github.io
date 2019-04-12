@@ -1,0 +1,313 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="废话嗯，我的第一篇博客，由于我实在是太菜了，导致现在还没有一篇博客。。虽然这篇也没有什么营养（；´д｀）ゞ
+刚开始写代码的时候过sublime这样的编辑器，确实很不错，后来有人强力推荐PhpStorm，我就发现IDE实在太好用了，不解释(●ˇ∀ˇ●)。前段时间发现很多人推荐VS code，而且有天我找了一个很靠谱的sublime教程，结果他开头就。。于是我下了一个，就慢慢变成变成它的脑残粉了...">
+  
+  <title>用VS code写C/C++ [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2017/11/27/chrome插件推荐/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        chrome插件推荐
+      </div>
+    </div>
+  
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>用VS code写C/C++</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-25</span>
+      
+        <span id = "post-title-updated">修改于 2019-04-11</span>
+      
+      
+      
+    </p>
+    
+    <h2 id="废话"><a href="#废话" class="headerlink" title="废话"></a>废话</h2><p>嗯，我的第一篇博客，由于我实在是太菜了，导致现在还没有一篇博客。。虽然这篇也没有什么营养（；´д｀）ゞ</p>
+<p>刚开始写代码的时候过sublime这样的编辑器，确实很不错，后来有人强力推荐PhpStorm，我就发现IDE实在太好用了，不解释(●ˇ∀ˇ●)。前段时间发现很多人推荐VS code，而且有天我找了一个很靠谱的sublime教程，结果他开头就。。<br><img src="/images/2.png" alt=""><br>于是我下了一个，就慢慢变成变成它的脑残粉了，关于它的诸多好处，网上说了很多,我也在慢慢学会使用。</p>
+<h2 id="编译器下载"><a href="#编译器下载" class="headerlink" title="编译器下载"></a>编译器下载</h2><p>因为C/C++运行需要编译器，所以要去下载。<br>MinGW下载地址在这里<br><a href="https://sourceforge.net/projects/mingw/files" target="_blank" rel="external">https://sourceforge.net/projects/mingw/files</a><br>安装完以后弹出界面<br><img src="http://upload-images.jianshu.io/upload_images/2419083-3b225e8185a546ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>把这些选中之后按左上角Installationt-&gt;Apply Changes进行安装。</p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>之后还要配置环境变量，右键此电脑点击属性-&gt;高级系统设置-&gt;环境变量<br><img src="/images/1.png" alt="">点击红色的那一项编辑，然后新建，把下载好的编译器的路径填上去，我的是C:\MinGW\bin，不用加gdb.exe。然后win+r打开命令行，输入gcc -v查看是否有效。注意，成功以后还要重启一遍计算机，因为虽然它在命令行里有用但是在其他地方仍然没有生效。</p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>CtrlL+Shift+S打开扩展，安装C/C++和Code Runner这两个插件。<br>不安装Code Runner也是可以的，当时我上网查了很多配置的方法，下面这个不错。<br><a href="https://www.zhihu.com/question/30315894/answer/154979413" target="_blank" rel="external">https://www.zhihu.com/question/30315894/answer/154979413</a><br>但是折腾了很久也没有配置成功T_T，好在我发现了Code Runner 这个插件，真的超级好用啊，他可以运行多种语言，比如php也是可以的，亲测有效。这个插件不需要什么配置，只要按右上角的运行图标就可以。但是直接在这下面输出可能会乱码，所以点击文件-&gt;首选项-&gt;设置，找到”code-runner.runInTerminal”将它设为true，这样就是在终端运行，直接在终端运行更方便。运行的键盘快捷方式有点复杂，可以自己更改，在文件-&gt;首选项-&gt;键盘快捷方式里搜索Run Code。</p>
+<h2 id="其他插件"><a href="#其他插件" class="headerlink" title="其他插件"></a>其他插件</h2><p>VS code用来写Markdown也很方便，可以边写边在右侧试图看到效果。<br>Markdown PDF 这个插件可以将它转化为pdf格式，在编辑器里右键可以看到选项，点击后转化为pdf格式保存到同一文件夹下</p>
+<p>markdownlint可以帮助查看语法有没有错误，并且给出提示</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#废话"><span class="toc-text">废话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译器下载"><span class="toc-text">编译器下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置环境变量"><span class="toc-text">配置环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装插件"><span class="toc-text">安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他插件"><span class="toc-text">其他插件</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/11/27/chrome插件推荐/" class="prev">&larr; 上一篇 chrome插件推荐</a>
+  
+
+  
+
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
