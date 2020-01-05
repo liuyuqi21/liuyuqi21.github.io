@@ -1,7 +1,7 @@
 body {
   background-color: #34495e;
   margin: 0px;
-  font-family: "ink free", cambria, "Microsoft YaHei Light", "Microsoft Jhenghei", "Hiragino Sans GB", sans-serif, Lato, Georgia;
+  font-family: Lato, "Microsoft Jhenghei", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 18px;
 }
 @media (max-width: 860px) {
@@ -554,7 +554,7 @@ article img {
   overflow-y: auto;
 }
 .random-toc ol {
-  padding-left: 20px;
+  padding-left: 15px;
 }
 .random-toc h2 {
   text-align: center;
@@ -588,7 +588,7 @@ figure.highlight td.gutter {
   padding-right: 20px;
 }
 figure.highlight .line {
-  height: 22px;
+  white-space: pre-wrap;
 }
 code {
   font-family: Consolas, Monaco, Courier New, Lucida Console;
@@ -599,7 +599,6 @@ code {
 }
 table .line {
   font-family: Consolas, Monaco, Courier New, Lucida Console;
-  height: 22px;
 }
 blockquote {
   background-color: #eee;

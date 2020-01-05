@@ -1,0 +1,1884 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="Linux-命令
+文件目录操作：pwd，cd，ls，file，cp，mv，mkdir，rm，ln
+使用命令：type，help，man，apropos，info，whatis，alias
+权限：id，chmod，umask，sudo，chown，chgrp，passwd，usermod，useradd，groupadd，userdel
+进程管理：w，top，free，ps，kill，pkil...">
+  
+  <title>linux 命令 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/11/10/Redis-底层原理/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Redis-底层原理
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/05/16/面试知识点/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        面试知识点
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>linux 命令</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-07-18</span>
+      
+        <span id = "post-title-updated">修改于 2020-01-05</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/Linux/">Linux</a>
+      
+      </span>
+      
+      
+    </p>
+    
+    <h1 id="Linux-命令"><a href="#Linux-命令" class="headerlink" title="Linux-命令"></a>Linux-命令</h1><ul>
+<li>文件目录操作：pwd，cd，ls，file，cp，mv，mkdir，rm，ln</li>
+<li>使用命令：type，help，man，apropos，info，whatis，alias</li>
+<li>权限：id，chmod，umask，sudo，chown，chgrp，passwd，usermod，useradd，groupadd，userdel</li>
+<li>进程管理：w，top，free，ps，kill，pkill，pstree，killall，jobs，bg，fg，shutdown</li>
+<li>环境变量：set，printenv，export</li>
+<li>存储媒介：mount，umount，fsck，fdisk，mkfs，dd，genisoimage，wodim，md5sum</li>
+<li>网络系统：ifconfig，route，ping，netstat，ss，curl，telnet，traceroute，ftp，wget，ssh</li>
+<li>文件系统：file，mount，umount，fsck，df，du，tar，gzip，scp，rsync</li>
+<li>系统关机重启：shutdown，reboot</li>
+<li>常用工具：ssh，clear，history，who，screen</li>
+<li>文件查找：locate，find，whereis，which</li>
+<li>文件内容查看：head，tail，less，more</li>
+<li>文本处理：cat，sort，uniq，cut，paste，join，comm，diff，patch，tr</li>
+<li>文本搜素：grep，sed，awk</li>
+<li>格式化输出：nl，fold，fmt，pr，printf，groff</li>
+<li>软件包管理：</li>
+<li>编译程序：</li>
+</ul>
+<h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2><p><code>crontab [-u user] file crontab [-u user] [ -e | -l | -r ]</code></p>
+<h3 id="crontab-的文件格式"><a href="#crontab-的文件格式" class="headerlink" title="crontab 的文件格式"></a>crontab 的文件格式</h3><p>分 时 日 月 周 要运行的命令</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p><code>* * * * * myCommmand</code> 每分钟执行<br><code>3,15 * * * * myCommand</code> 每小时的第3和第15分钟执行<br><code>3,15 8-11 */2  *  * myCommand</code> 每隔两天的上午8点到11点的第3和第15分钟执行<br><code>3,15 8-11 * * 1 myCommand</code> 每周一一上午8点到11点的第3和第15分钟执行<br><code>* */1 * * * myCommand</code> 每一小时执行 </p>
+<h2 id="文件目录操作"><a href="#文件目录操作" class="headerlink" title="文件目录操作"></a>文件目录操作</h2><h3 id="pwd-打印出当前工作目录名"><a href="#pwd-打印出当前工作目录名" class="headerlink" title="pwd 打印出当前工作目录名"></a>pwd 打印出当前工作目录名</h3><ul>
+<li>-P 当目录是链接时，显示出实际路径</li>
+</ul>
+<h3 id="cd-切换目录"><a href="#cd-切换目录" class="headerlink" title="cd 切换目录"></a>cd 切换目录</h3><h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/</td>
+<td>进入根目录</td>
+</tr>
+<tr>
+<td>~</td>
+<td>或者不填 进入当前用户主目录</td>
+</tr>
+<tr>
+<td>-</td>
+<td>返回之前的目录</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ls-列出目录下的内容"><a href="#ls-列出目录下的内容" class="headerlink" title="ls 列出目录下的内容"></a>ls 列出目录下的内容</h3><h4 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>-all 列出目录下的所有文件，包括以 .  开头的隐藏文件</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>通常，如果指定了目录名，ls 命令会列出这个目录中的内容，而不是目录本身。 把这个选项与 -l 选项结合使用，可以看到所指定目录的详细信息，而不是目录中的内容。</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>显示文件详细信息时，以人们可读的格式，而不是以字节数来显示文件的大小。</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>以相反的顺序来显示结果。通常，ls 命令的输出结果按照字母升序排列</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>打印出每个文件后的 inode 号</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>以文件修改时间排序</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>显示文件详细信息</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>命令输出结果按照文件大小来排序。</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>同事列出所有子目录层</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-确定文件类型"><a href="#file-确定文件类型" class="headerlink" title="file 确定文件类型"></a>file 确定文件类型</h3><p>当调用 file 命令后，file 命令会打印出文件内容的简单描述</p>
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p><code>file filename</code></p>
+<h3 id="mkdir-创建文件夹"><a href="#mkdir-创建文件夹" class="headerlink" title="mkdir 创建文件夹"></a>mkdir 创建文件夹</h3><h4 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-m</td>
+<td>–mode=模式，设定权限&lt;模式&gt; (类似 chmod)，而不是 rwxrwxrwx 减 umask</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>–parents  可以是一个路径名称。此时若路径中的某些目录尚不存在,加上此选项后,系统将自动建立好那些尚不存在的目录,即一次可以建立多个目录; </td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–verbose  每次创建新目录都显示信息，–help 显示此帮助信息并退出，–version 输出版本信息并退出</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rm-删除文件或目录"><a href="#rm-删除文件或目录" class="headerlink" title="rm 删除文件或目录"></a>rm 删除文件或目录</h3><h4 id="参数-3"><a href="#参数-3" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f –force</td>
+<td>忽略不存在的文件，不给出提示</td>
+</tr>
+<tr>
+<td>-i –interactive</td>
+<td>进行交互式删除</td>
+</tr>
+<tr>
+<td>-r -R –recursive</td>
+<td>递归删除子目录</td>
+</tr>
+<tr>
+<td>-v –verbose</td>
+<td>详细显示进行的步骤，–help 显示此帮助信息并退出，–version 输出版本信息并退出</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rmdir-删除空目录"><a href="#rmdir-删除空目录" class="headerlink" title="rmdir 删除空目录"></a>rmdir 删除空目录</h3><h3 id="mv-移动-重命名文件和目录"><a href="#mv-移动-重命名文件和目录" class="headerlink" title="mv 移动/重命名文件和目录"></a>mv 移动/重命名文件和目录</h3><h4 id="格式-1"><a href="#格式-1" class="headerlink" title="格式"></a>格式</h4><p><code>mv [选项] 源文件或目录 目标文件或目录</code></p>
+<h4 id="参数-4"><a href="#参数-4" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>若需覆盖文件，则覆盖前先备份</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>强制，如果目标文件已经存在，不会询问是否覆盖</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>若目标文件已经存在，就会询问是否覆盖</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>若目标文件已经存在，且 source 比较新，才会更新(update)</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>–target-directory=DIRECTORY move all SOURCE arguments into DIRECTORY，即指定mv的目标目录，该选项适用于移动多个源文件到一个目录的情况，此时目标目录在前，源文件在后。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cp-复制文件或者目录"><a href="#cp-复制文件或者目录" class="headerlink" title="cp 复制文件或者目录"></a>cp 复制文件或者目录</h3><h4 id="格式-2"><a href="#格式-2" class="headerlink" title="格式"></a>格式</h4><p><code>cp [选项] [-t] 源 目的</code></p>
+<h4 id="参数-5"><a href="#参数-5" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>为每个已存在的目标文件创建备份</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>如果目标文件无法打开则将其移除并重试</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>复制目录及目录内的所有项目</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>不要覆盖已存在的文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="touch-修改文件的时间戳，或者新建一个不存在的文件"><a href="#touch-修改文件的时间戳，或者新建一个不存在的文件" class="headerlink" title="touch 修改文件的时间戳，或者新建一个不存在的文件"></a>touch 修改文件的时间戳，或者新建一个不存在的文件</h3><h4 id="参数-6"><a href="#参数-6" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>改变档案的读取时间记录</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>改变档案的修改时间记录</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>加入母的档案不存在，不建立任何档案，与 –no-create 的效果一样</td>
+</tr>
+<tr>
+<td>-d -t</td>
+<td>使用指定的日期时间，而非现在时间 touch -t 201911142234.50 log.log <code>[[CC]YY]MMDDhhmm[.SS]</code>   这里，CC为年数中的前两位，即”世纪数”；YY为年数的后两位，即某世纪中的年数．如果不给出CC的值，则touch   将把年数CCYY限定在1969–2068之内．MM为月数，DD为天将把年数CCYY限定在1969–2068之内．MM为月数，DD为天数，hh 为小时数(几点)，mm为分钟数，SS为秒数．此处秒的设定范围是0–61，这样可以处理闰秒．这些数字组成的时间是环境变量TZ指定的时区中的一个时 间．由于系统的限制，早于1970年1月1日的时间是错误的</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>使用参考文档的时间 touch -r log.log log2019.log</td>
+</tr>
+</tbody>
+</table>
+<h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><p>给命令传递参数的一个过滤器，一般与管道一起使用。<br>在使用 find命令的-exec选项处理匹配到的文件时， find命令将所有匹配到的文件一起传递给exec执行。但有些系统对能够传递给exec的命令长度有限制，这样在find命令运行几分钟之后，就会出现溢出错误。错误信息通常是“参数列太长”或“参数列溢出”。这就是xargs命令的用处所在，特别是与find命令一起使用。  </p>
+<p>find命令把匹配到的文件传递给xargs命令，而xargs命令每次只获取一部分文件而不是全部，不像-exec选项那样。这样它可以先处理最先获取的一部分文件，然后是下一批，并如此继续下去。  </p>
+<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><ul>
+<li>find / -name “core” -print | xargs echo “” &gt;/tmp/core.log 在整个系统中查找内存信息转储文件(core dump) ，然后把结果保存到/tmp/core.log 文件中</li>
+<li>find . -type f -print | xargs grep “hostname” 用grep命令在所有的普通文件中搜索hostname这个词</li>
+</ul>
+<h2 id="使用命令"><a href="#使用命令" class="headerlink" title="使用命令"></a>使用命令</h2><p>命令可以是以下四种形式之一</p>
+<ol>
+<li>是一个可执行程序</li>
+<li>是一个内建于 shell 自身的命令</li>
+<li>是一个 shell 函数</li>
+<li>是一个命令别名</li>
+</ol>
+<h3 id="type-显示命令的类型"><a href="#type-显示命令的类型" class="headerlink" title="type 显示命令的类型"></a>type 显示命令的类型</h3><h4 id="格式-3"><a href="#格式-3" class="headerlink" title="格式"></a>格式</h4><p><code>type command</code></p>
+<h3 id="help-得到-shell-内建命令的帮助文档"><a href="#help-得到-shell-内建命令的帮助文档" class="headerlink" title="help 得到 shell 内建命令的帮助文档"></a>help 得到 shell 内建命令的帮助文档</h3><p>bash 有一个内建的帮助工具，可供每一个 shell <strong>内建命令</strong> 使用。</p>
+<h3 id="–help-显示用法信息"><a href="#–help-显示用法信息" class="headerlink" title="–help 显示用法信息"></a>–help 显示用法信息</h3><p>许多 <strong>可执行程序</strong> 支持一个 –help 选项，这个选项是显示命令所支持的语法和选项说明。</p>
+<h3 id="man-显示程序手册页"><a href="#man-显示程序手册页" class="headerlink" title="man 显示程序手册页"></a>man 显示程序手册页</h3><p>许多希望被命令行使用的 <strong>可执行程序</strong>，提供了一个正式的文档，叫做手册或手册页(man page)。一个特殊的叫做 man 的分页程序，可用来浏览他们。</p>
+<h3 id="apropos-显示适当的命令"><a href="#apropos-显示适当的命令" class="headerlink" title="apropos 显示适当的命令"></a>apropos 显示适当的命令</h3><p>也有可能搜索参考手册列表，基于某个关键字的匹配项。</p>
+<p>输出结果每行的第一个字段是手册页的名字，第二个字段展示章节。注意，man 命令加上”-k”选项， 和 apropos 完成一样的功能。</p>
+<h3 id="whatis-显示非常简洁的命令说明"><a href="#whatis-显示非常简洁的命令说明" class="headerlink" title="whatis 显示非常简洁的命令说明"></a>whatis 显示非常简洁的命令说明</h3><p>whatis 程序显示匹配特定关键字的手册页的名字和一行命令说明：</p>
+<h3 id="info-显示程序-Info-条目"><a href="#info-显示程序-Info-条目" class="headerlink" title="info 显示程序 Info 条目"></a>info 显示程序 Info 条目</h3><p>GNU 项目提供了一个命令程序手册页的替代物，称为”info”。info 内容可通过 info 阅读器 程序读取。info 页是超级链接形式的，和网页很相似。</p>
+<h3 id="alias-创建命令别名"><a href="#alias-创建命令别名" class="headerlink" title="alias 创建命令别名"></a>alias 创建命令别名</h3><ul>
+<li><code>alias</code> 查看别名</li>
+<li><code>alias name=&#39;command&#39;</code> 创建别名 </li>
+<li><code>unalias name</code> 删除别名</li>
+</ul>
+<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><p>I/O 重定向允许我们更改输出地点和输入来源。一般地，输出送到屏幕，输入来自键盘， 但是通过 I/O 重定向，我们可以做出改变,将标准输出重定向到除屏幕以外的另一个文件。</p>
+<h3 id="gt-标准输出重定向"><a href="#gt-标准输出重定向" class="headerlink" title="&gt; 标准输出重定向"></a>&gt; 标准输出重定向</h3><p><code>ls &gt; output.txt</code> 结果输出到了 output.txt，使用‘&gt;’重定向符，目标文件总是从头开始被重写，如果需要清空一个文件内容，可以<code>&gt; output.txt</code></p>
+<h3 id="gt-gt-追加输出结果到目标文件"><a href="#gt-gt-追加输出结果到目标文件" class="headerlink" title="&gt;&gt; 追加输出结果到目标文件"></a>&gt;&gt; 追加输出结果到目标文件</h3><h3 id="2-gt-标准错误重定向"><a href="#2-gt-标准错误重定向" class="headerlink" title="2&gt; 标准错误重定向"></a>2&gt; 标准错误重定向</h3><p>标准错误重定向没有专用的重定向操作符。为了重定向标准错误，我们必须参考其文件描述符。 一个程序可以在几个编号的文件流中的任一个上产生输出。虽然我们已经将这些文件流的前 三个称作标准输入、输出和错误，shell 内部分别将其称为文件描述符0、1和2。</p>
+<h3 id="重定向标准输出和错误到同一个文件"><a href="#重定向标准输出和错误到同一个文件" class="headerlink" title="重定向标准输出和错误到同一个文件"></a>重定向标准输出和错误到同一个文件</h3><ul>
+<li>方法一：<code>ls -l /bin/usr &gt; ls-output.txt 2&gt;&amp;1</code>使用这种方法，我们完成两个重定向。首先重定向标准输出到文件 ls-output.txt，然后 重定向文件描述符2（标准错误）到文件描述符1（标准输出）使用表示法2&gt;&amp;1。注意重定向的顺序安排非常重要。标准错误的重定向必须总是出现在标准输出 重定向之后，要不然它不起作用。</li>
+<li>方法二：<code>ls -l /bin/usr &amp;&gt; ls-output.txt</code></li>
+</ul>
+<h3 id="处理不需要的输出"><a href="#处理不需要的输出" class="headerlink" title="处理不需要的输出"></a>处理不需要的输出</h3><p>系统提供了一个叫做”/dev/null”的特殊文件， 这个文件是系统设备，叫做位存储桶，它可以接受输入，并且对输入不做任何处理。<code>ls -l /bin/usr 2&gt; /dev/null</code></p>
+<h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>命令从标准输入读取数据并输送到标准输出的能力被一个称为管道线的 shell 特性所利用。 使用管道操作符”|”（竖杠）</p>
+<ul>
+<li><code>ls -l /usr/bin | less</code> 使用 less 来显示输出</li>
+</ul>
+<h3 id="tee-从-Stdin-读取数据，并同时输出到-Stdout-和文件"><a href="#tee-从-Stdin-读取数据，并同时输出到-Stdout-和文件" class="headerlink" title="tee 从 Stdin 读取数据，并同时输出到 Stdout 和文件"></a>tee 从 Stdin 读取数据，并同时输出到 Stdout 和文件</h3><p>Linux 提供了一个叫做 tee 的命令，这个命令制造了 一个”tee”，安装到我们的管道上。tee 程序从标准输入读入数据，并且同时复制数据 到标准输出（允许数据继续随着管道线流动）和一个或多个文件。当在某个中间处理 阶段来捕捉一个管道线的内容时很有用</p>
+<ul>
+<li><code>ls /usr/bin | tee ls.txt | grep zip</code> 在 grep 过滤管道线的内容之前，来捕捉整个目录列表到文件 ls.txt</li>
+</ul>
+<h2 id="展开"><a href="#展开" class="headerlink" title="展开"></a>展开</h2><h3 id="echo-它将它的文本参数打印到标准输出中"><a href="#echo-它将它的文本参数打印到标准输出中" class="headerlink" title="echo 它将它的文本参数打印到标准输出中"></a>echo 它将它的文本参数打印到标准输出中</h3><ul>
+<li><code>echo this is a test</code> 输出 this is a test</li>
+</ul>
+<h3 id="路径名展开"><a href="#路径名展开" class="headerlink" title="路径名展开"></a>路径名展开</h3><p>通配符所依赖的工作机制叫做路径名展开。</p>
+<ul>
+<li><code>echo D*</code> 显示当前目录下以 D 开头的文件</li>
+<li><code>echo /usr/*/share</code></li>
+<li>路径名展开不会显示隐藏文件，使用 <code>echo .*</code> 会显示出父目录，使用 <code>.[!.]?*</code> 可以展开成所有以圆点开头，第二个字符不包含圆点，再包含至少一个字符， 并且这个字符之后紧接着任意多个字符的文件名。</li>
+</ul>
+<h3 id="波浪线展开"><a href="#波浪线展开" class="headerlink" title="波浪线展开"></a>波浪线展开</h3><p>当它用在 一个单词的开头时，它会展开成指定用户的家目录名，如果没有指定用户名，则展开成当前用户的家目录</p>
+<ul>
+<li><code>echo ~</code> 显示 /home/me</li>
+<li><code>echo ~foo</code> 显示 /home/foo</li>
+</ul>
+<h3 id="算术表达式展开"><a href="#算术表达式展开" class="headerlink" title="算术表达式展开"></a>算术表达式展开</h3><p>格式：$((expression))  只支持整数</p>
+<ul>
+<li><code>echo $((2 + 2))</code> </li>
+</ul>
+<h3 id="花括号展开"><a href="#花括号展开" class="headerlink" title="花括号展开"></a>花括号展开</h3><p>花括号展开模式可能包含一个开头部分叫做报头，一个结尾部分叫做附言。花括号表达式本身可 能包含一个由逗号分开的字符串列表，或者一个整数区间，或者单个的字符的区间。这种模式不能 嵌入空白字符。</p>
+<ul>
+<li><code>echo Front-{A,B,C}-Back</code> Front-A-Back Front-B-Back Front-C-Back</li>
+<li><code>echo {1..5}</code> 1 2 3 4 5</li>
+<li><code>echo {Z..A}</code> Z Y X W V U T S R Q P O N M L K J I H G F E D C B A</li>
+<li>嵌套 <code>echo a{A{1,2},B{3,4}}b</code> aA1b aA2b aB3b aB4b</li>
+</ul>
+<h3 id="参数展开"><a href="#参数展开" class="headerlink" title="参数展开"></a>参数展开</h3><ul>
+<li><code>echo $USER</code> 输出用户名</li>
+<li>可以用 <code>printenv | less</code> 来查看有效的变量名</li>
+</ul>
+<h3 id="命令替换"><a href="#命令替换" class="headerlink" title="命令替换"></a>命令替换</h3><p>命令替换允许我们把一个命令的输出作为一个展开模式来使用：</p>
+<ul>
+<li><code>ls -l $(which cp)</code> 把 which cp 的执行结果作为一个参数传递给 ls 命令，因此可以在不知道 cp 命令 完整路径名的情况下得到它的文件属性列表。</li>
+</ul>
+<h3 id="双引号"><a href="#双引号" class="headerlink" title="双引号"></a>双引号</h3><p>如果你把文本放在双引号中， shell 使用的特殊字符，都失去它们的特殊含义，被当作普通字符来看待。 有几个例外： $，\ (反斜杠），和 `（倒引号）。这意味着单词分割、路径名展开、 波浪线展开和花括号展开都将失效，然而参数展开、算术展开和命令替换 仍然执行。</p>
+<ul>
+<li>ls -l “two words.txt” 当文件名含有空格时使用双引号</li>
+</ul>
+<h3 id="单引号"><a href="#单引号" class="headerlink" title="单引号"></a>单引号</h3><p>禁止所有的展开</p>
+<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><h3 id="id-显示用户身份号"><a href="#id-显示用户身份号" class="headerlink" title="id 显示用户身份号"></a>id 显示用户身份号</h3><h3 id="chmod-改变文件或目录的访问权限"><a href="#chmod-改变文件或目录的访问权限" class="headerlink" title="chmod 改变文件或目录的访问权限"></a>chmod 改变文件或目录的访问权限</h3><h4 id="参数-7"><a href="#参数-7" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>当发生改变时，报告处理信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>错误信息不输出</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>处理指定目录以及其子目录下的所有文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>运行时显示详细处理信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="权限范围"><a href="#权限范围" class="headerlink" title="权限范围"></a>权限范围</h4><table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u</td>
+<td>目录或者文件的当前的用户</td>
+</tr>
+<tr>
+<td>g</td>
+<td>目录或者文件的当前的群组</td>
+</tr>
+<tr>
+<td>o</td>
+<td>除了目录或者文件的当前用户或群组之外的用户或者群组</td>
+</tr>
+<tr>
+<td>a</td>
+<td>所有的用户及群组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="权限代号"><a href="#权限代号" class="headerlink" title="权限代号"></a>权限代号</h4><table>
+<thead>
+<tr>
+<th>代号</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>读权限，用数字4表示</td>
+</tr>
+<tr>
+<td>w</td>
+<td>写权限，用数字2表示</td>
+</tr>
+<tr>
+<td>x</td>
+<td>执行权限，用数字1表示</td>
+</tr>
+<tr>
+<td>-</td>
+<td>删除权限，用数字0表示</td>
+</tr>
+<tr>
+<td>s</td>
+<td>特殊权限 </td>
+</tr>
+</tbody>
+</table>
+<h4 id="格式-4"><a href="#格式-4" class="headerlink" title="格式"></a>格式</h4><ol>
+<li>文字设定法：<code>chmod ［who］ ［+ | - | =］ ［mode］ 文件名</code> chmod a+x a.txt</li>
+<li>数字设定法：<code>chmod ［mode］ 文件名</code> r=4，w=2，x=1</li>
+</ol>
+<h3 id="chgrp-变更文件与目录所属群组"><a href="#chgrp-变更文件与目录所属群组" class="headerlink" title="chgrp 变更文件与目录所属群组"></a>chgrp 变更文件与目录所属群组</h3><h4 id="参数同-chmod"><a href="#参数同-chmod" class="headerlink" title="参数同 chmod"></a>参数同 chmod</h4><ul>
+<li>–reference=&lt;文件或者目录&gt; 根据指定文件改变文件的群组属性</li>
+</ul>
+<h4 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>chgrp -R 100 test6</code> 通过群组识别码改变文件群组属性，100为users群组的识别码，具体群组和群组识别码可以去/etc/group文件中查看</li>
+</ul>
+<h3 id="chown-改变文件的拥有者和群组"><a href="#chown-改变文件的拥有者和群组" class="headerlink" title="chown 改变文件的拥有者和群组"></a>chown 改变文件的拥有者和群组</h3><h4 id="格式-5"><a href="#格式-5" class="headerlink" title="格式"></a>格式</h4><p><code>chown [选项] [所有者][:[组]] 文件</code></p>
+<h4 id="必要参数"><a href="#必要参数" class="headerlink" title="必要参数"></a>必要参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>显示更改的部分的信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>忽略错误信息</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>修复符号链接</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>处理指定目录以及其子目录下的所有文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细的处理信息</td>
+</tr>
+<tr>
+<td>-deference</td>
+<td>作用于符号链接的指向，而不是链接文件本身</td>
+</tr>
+</tbody>
+</table>
+<h4 id="选择参数"><a href="#选择参数" class="headerlink" title="选择参数"></a>选择参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>–reference=&lt;目录或文件&gt;</td>
+<td>把指定的目录/文件作为参考，把操作的文件/目录设置成参考文件/目录相同拥有者和群组</td>
+</tr>
+<tr>
+<td>–from=&lt;当前用户：当前群组&gt;</td>
+<td>只有当前用户和群组跟指定的用户和群组相同时才进行改变</td>
+</tr>
+<tr>
+<td>–help</td>
+<td>显示帮助信息</td>
+</tr>
+<tr>
+<td>–version</td>
+<td>显示版本信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>chown mail:mail log2012.log</code> 改变拥有者和群组</li>
+<li><code>chown root: log2012.log</code> 改变文件拥有者和群组</li>
+<li><code>chown :mail log2012.log</code> 改变文件群组</li>
+</ul>
+<h3 id="umask-设置默认权限"><a href="#umask-设置默认权限" class="headerlink" title="umask 设置默认权限"></a>umask 设置默认权限</h3><p>当创建一个文件时，umask 命令控制着文件的默认权限。umask 命令使用八进制表示法来表达 从文件模式属性中删除一个位掩码。</p>
+<h3 id="su-以其他用户身份和组-ID-运行一个-shell"><a href="#su-以其他用户身份和组-ID-运行一个-shell" class="headerlink" title="su 以其他用户身份和组 ID 运行一个 shell"></a>su 以其他用户身份和组 ID 运行一个 shell</h3><p>输入 exit 能返回原来的 shell</p>
+<h3 id="sudo-以另一个用户身份执行命令"><a href="#sudo-以另一个用户身份执行命令" class="headerlink" title="sudo 以另一个用户身份执行命令"></a>sudo 以另一个用户身份执行命令</h3><p>sudo 命令不要求超级用户的密码。使用 sudo 命令时，用户使用他/她自己的密码来认证。su 和 sudo 之间的一个重要区别是 sudo 不会重新启动一个 shell，也不会加载另一个 用户的 shell 运行环境。</p>
+<h3 id="passwd-更改用户密码"><a href="#passwd-更改用户密码" class="headerlink" title="passwd 更改用户密码"></a>passwd 更改用户密码</h3><ul>
+<li><code>passwd [user]</code></li>
+</ul>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p>当系统启动的时候，内核先把一些它自己的活动初始化为进程，然后运行一个叫做 init 的程序。init， 依次地，再运行一系列的称为 init 脚本的 shell 脚本（位于/etc），它们可以启动所有的系统服务。 其中许多系统服务以守护（daemon）程序的形式实现，守护程序仅在后台运行，没有任何用户接口(User Interface)。 这样，即使我们没有登录系统，至少系统也在忙于执行一些例行事务。</p>
+<p>在进程方案中，一个程序可以发动另一个程序被表述为一个父进程可以产生一个子进程。</p>
+<p>内核维护每个进程的信息，以此来保持事情有序。例如，系统分配给每个进程一个数字，这个数字叫做 进程(process) ID 或 PID。PID 号按升序分配，init 进程的 PID 总是1。内核也对分配给每个进程的内存和就绪状态进行跟踪以便继续执行这个进程。 像文件一样，进程也有所有者和用户 ID，有效用户 ID，等等。</p>
+<h3 id="top-显示当前系统正在执行的进程的相关信息"><a href="#top-显示当前系统正在执行的进程的相关信息" class="headerlink" title="top 显示当前系统正在执行的进程的相关信息"></a>top 显示当前系统正在执行的进程的相关信息</h3><h4 id="参数-8"><a href="#参数-8" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>批处理</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>显示完整的治命令</td>
+</tr>
+<tr>
+<td>-I</td>
+<td>忽略失效过程</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>保密模式</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>累积模式 </td>
+</tr>
+<tr>
+<td>-i&lt;时间&gt;</td>
+<td>设置间隔时间</td>
+</tr>
+<tr>
+<td>-u&lt;用户名&gt;</td>
+<td>指定用户名</td>
+</tr>
+<tr>
+<td>-p&lt;进程号&gt;</td>
+<td>指定进程</td>
+</tr>
+<tr>
+<td>-n&lt;次数&gt;</td>
+<td>循环显示的次数</td>
+</tr>
+</tbody>
+</table>
+<h4 id="输出信息"><a href="#输出信息" class="headerlink" title="输出信息"></a>输出信息</h4><p>各进程（任务）的状态监控，项目列信息说明如下：<br>信息|说明<br>—-|—<br>PID | 进程描述符<br>USER | 进程所有者<br>PR | 进程优先级<br>NI | nice值。负值表示高优先级，正值表示低优先级<br>VIRT | 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES<br>RES | 常驻内存，单位kb。RES=CODE+DATA<br>SHR（SHARE） | 共享内存大小，单位kb<br>S（STAT） | 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br>%CPU | CPU 使用率<br>%MEM | 进程使用的物理内存百分比<br>TIME+ | 进程使用的CPU时间总计，单位1/100秒<br>COMMAND | 进程名称（命令名/命令行）</p>
+<h3 id="amp-把一个进程放到后台执行"><a href="#amp-把一个进程放到后台执行" class="headerlink" title="&amp; 把一个进程放到后台执行"></a>&amp; 把一个进程放到后台执行</h3><ul>
+<li><code>xlogo &amp;</code> 在程序命令之后加上 &amp; 字符，让他在后台运行</li>
+</ul>
+<h3 id="jobs-列出从终端中启动了的任务"><a href="#jobs-列出从终端中启动了的任务" class="headerlink" title="jobs 列出从终端中启动了的任务"></a>jobs 列出从终端中启动了的任务</h3><p>返回任务号和这个任务的命令</p>
+<h3 id="停止一个进程"><a href="#停止一个进程" class="headerlink" title="停止一个进程"></a>停止一个进程</h3><p>输入 Ctrl+z 可以停止进程</p>
+<h3 id="fg-恢复程序到前台运行"><a href="#fg-恢复程序到前台运行" class="headerlink" title="fg 恢复程序到前台运行"></a>fg 恢复程序到前台运行</h3><h3 id="bg-把程序移到后台"><a href="#bg-把程序移到后台" class="headerlink" title="bg 把程序移到后台"></a>bg 把程序移到后台</h3><ul>
+<li><code>bg %1</code></li>
+</ul>
+<h3 id="free-显示-Linux-系统中空闲的内存情况"><a href="#free-显示-Linux-系统中空闲的内存情况" class="headerlink" title="free 显示 Linux 系统中空闲的内存情况"></a>free 显示 Linux 系统中空闲的内存情况</h3><h4 id="参数-9"><a href="#参数-9" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>以 Byte 为单位显示</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以 KB 为单位显示</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>以 MB 为单位显示</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>以 GB 为单位显示</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>不显示缓冲区调节列</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>持续观察内存使用状况</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>显示内存总和列</td>
+</tr>
+<tr>
+<td>-V</td>
+<td>显示版本信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><table>
+<thead>
+<tr>
+<th>输出</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>total</td>
+<td>总计物理内存大小</td>
+</tr>
+<tr>
+<td>used</td>
+<td>已使用多大</td>
+</tr>
+<tr>
+<td>free</td>
+<td>可用有多少</td>
+</tr>
+<tr>
+<td>shared</td>
+<td>多个进程共享内存总额</td>
+</tr>
+<tr>
+<td>buffers/cached</td>
+<td>磁盘缓存的大小</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ps-查看进程"><a href="#ps-查看进程" class="headerlink" title="ps 查看进程"></a>ps 查看进程</h3><h4 id="linux上进程有5种状态"><a href="#linux上进程有5种状态" class="headerlink" title="linux上进程有5种状态:"></a>linux上进程有5种状态:</h4><ol>
+<li>运行(正在运行或在运行队列中等待) </li>
+<li>中断(休眠中, 受阻, 在等待某个条件的形成或接受到信号) </li>
+<li>不可中断(收到信号不唤醒和不可运行, 进程必须等待直到有中断发生) </li>
+<li>僵死(进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放) </li>
+<li>停止(进程收到SIGSTOP, SIGSTP, SIGTIN, SIGTOU信号后停止运行运行)</li>
+</ol>
+<h4 id="参数-10"><a href="#参数-10" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>显示所有进程</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>显示同一终端下的所有程序</td>
+</tr>
+<tr>
+<td>-A</td>
+<td>显示所有进程</td>
+</tr>
+<tr>
+<td>x</td>
+<td>显示所有终端控制的进程</td>
+</tr>
+<tr>
+<td>c</td>
+<td>显示进程的真实名称</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>反向选择</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>等于“-A”</td>
+</tr>
+<tr>
+<td>e</td>
+<td>显示环境变量</td>
+</tr>
+<tr>
+<td>f</td>
+<td>显示程序间的关系</td>
+</tr>
+<tr>
+<td>-H</td>
+<td>显示树状结构</td>
+</tr>
+<tr>
+<td>r</td>
+<td>显示当前终端的进程</td>
+</tr>
+<tr>
+<td>T</td>
+<td>显示当前终端的所有程序</td>
+</tr>
+<tr>
+<td>u</td>
+<td>指定用户的所有进程</td>
+</tr>
+<tr>
+<td>-au</td>
+<td>显示较详细的资讯</td>
+</tr>
+<tr>
+<td>-C&lt;命令&gt;</td>
+<td>列出指定命令的状况</td>
+</tr>
+<tr>
+<td>–lines&lt;行数&gt;</td>
+<td>每页显示的行数</td>
+</tr>
+<tr>
+<td>–width&lt;字符数&gt;</td>
+<td>每页显示的字符数</td>
+</tr>
+<tr>
+<td>–help</td>
+<td>显示帮助信息</td>
+</tr>
+<tr>
+<td>–version</td>
+<td>显示版本显示</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-4"><a href="#实例-4" class="headerlink" title="实例"></a>实例</h4><ol>
+<li>显示所有进程信息 ps -A</li>
+<li>显式指定用户信息 ps -u root</li>
+<li>显示所有进程信息，连同命令行 ps -ef</li>
+<li>显示属于每个用户的进程信息 ps aux</li>
+</ol>
+<h3 id="pstree-输出一个树型结构的进程列表-processtree-，这个列表展示了进程间父-子关系。"><a href="#pstree-输出一个树型结构的进程列表-processtree-，这个列表展示了进程间父-子关系。" class="headerlink" title="pstree     输出一个树型结构的进程列表(processtree)，这个列表展示了进程间父/子关系。"></a>pstree     输出一个树型结构的进程列表(processtree)，这个列表展示了进程间父/子关系。</h3><h3 id="kill-给进程发送信号"><a href="#kill-给进程发送信号" class="headerlink" title="kill 给进程发送信号"></a>kill 给进程发送信号</h3><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>名字</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>HUP</td>
+<td>挂起</td>
+</tr>
+<tr>
+<td>2</td>
+<td>INT</td>
+<td>中断</td>
+</tr>
+<tr>
+<td>9</td>
+<td>KILL</td>
+<td>杀死</td>
+</tr>
+<tr>
+<td>15</td>
+<td>TERM</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>18</td>
+<td>CONT</td>
+<td>继续</td>
+</tr>
+<tr>
+<td>19</td>
+<td>STOP</td>
+<td>停止</td>
+</tr>
+</tbody>
+</table>
+<h4 id="格式-6"><a href="#格式-6" class="headerlink" title="格式"></a>格式</h4><p><code>kill [参数][进程号]</code></p>
+<h4 id="实例-5"><a href="#实例-5" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>kill -9 1</code></li>
+<li><code>kill -l</code> 得到完整信号列表</li>
+</ul>
+<h3 id="killall-给匹配特定程序或用户名的多个进程发送信号"><a href="#killall-给匹配特定程序或用户名的多个进程发送信号" class="headerlink" title="killall 给匹配特定程序或用户名的多个进程发送信号"></a>killall 给匹配特定程序或用户名的多个进程发送信号</h3><p>killall 杀死指定 <strong>名字</strong> 的进程（kill processes by name）。kill 命令可以杀死指定进程 <strong>PID</strong> 的进程。</p>
+<h4 id="格式-7"><a href="#格式-7" class="headerlink" title="格式"></a>格式</h4><p><code>killall [-u user][-signal] name...</code></p>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>shell 在环境中存储了两种基本类型的数据，虽然 bash 几乎无法分辨这些数据的类型。 它们是环境变量和 shell 变量。</p>
+<h3 id="set-显示-shell-或环境变量"><a href="#set-显示-shell-或环境变量" class="headerlink" title="set 显示 shell 或环境变量"></a>set 显示 shell 或环境变量</h3><h3 id="printenv-显示环境变量"><a href="#printenv-显示环境变量" class="headerlink" title="printenv 显示环境变量"></a>printenv 显示环境变量</h3><ul>
+<li><code>printenv</code> 显示所有环境变量</li>
+<li><code>printenv name</code> 显示特定变量的值</li>
+</ul>
+<h2 id="存储媒介"><a href="#存储媒介" class="headerlink" title="存储媒介"></a>存储媒介</h2><h3 id="mount-挂载一个文件系统"><a href="#mount-挂载一个文件系统" class="headerlink" title="mount 挂载一个文件系统"></a>mount 挂载一个文件系统</h3><h3 id="umount-卸载一个文件系统"><a href="#umount-卸载一个文件系统" class="headerlink" title="umount 卸载一个文件系统"></a>umount 卸载一个文件系统</h3><h3 id="fask-检查和修复一个文件系统"><a href="#fask-检查和修复一个文件系统" class="headerlink" title="fask 检查和修复一个文件系统"></a>fask 检查和修复一个文件系统</h3><h3 id="fdisk-分区表控制器"><a href="#fdisk-分区表控制器" class="headerlink" title="fdisk 分区表控制器"></a>fdisk 分区表控制器</h3><h3 id="mkfs-创建文件系统"><a href="#mkfs-创建文件系统" class="headerlink" title="mkfs 创建文件系统"></a>mkfs 创建文件系统</h3><h3 id="fdformat-格式化一张软盘"><a href="#fdformat-格式化一张软盘" class="headerlink" title="fdformat 格式化一张软盘"></a>fdformat 格式化一张软盘</h3><h3 id="dd-把面向块的数据直接写入设备"><a href="#dd-把面向块的数据直接写入设备" class="headerlink" title="dd 把面向块的数据直接写入设备"></a>dd 把面向块的数据直接写入设备</h3><h3 id="genisoimage-mkisofs-创建一个-ISO-9660的映像文件"><a href="#genisoimage-mkisofs-创建一个-ISO-9660的映像文件" class="headerlink" title="genisoimage (mkisofs) 创建一个 ISO 9660的映像文件"></a>genisoimage (mkisofs) 创建一个 ISO 9660的映像文件</h3><h3 id="wodim-cdrecord-把数据写入光存储媒介"><a href="#wodim-cdrecord-把数据写入光存储媒介" class="headerlink" title="wodim (cdrecord) 把数据写入光存储媒介"></a>wodim (cdrecord) 把数据写入光存储媒介</h3><h3 id="md5sum-计算-MD5检验码"><a href="#md5sum-计算-MD5检验码" class="headerlink" title="md5sum  计算 MD5检验码"></a>md5sum  计算 MD5检验码</h3><h2 id="网络系统"><a href="#网络系统" class="headerlink" title="网络系统"></a>网络系统</h2><h3 id="ping-发送-ICMP-ECHO-REQUEST-数据包到网络主机"><a href="#ping-发送-ICMP-ECHO-REQUEST-数据包到网络主机" class="headerlink" title="ping 发送 ICMP ECHO_REQUEST 数据包到网络主机"></a>ping 发送 ICMP ECHO_REQUEST 数据包到网络主机</h3><h3 id="traceroute-打印到一台网络主机的路由数据包"><a href="#traceroute-打印到一台网络主机的路由数据包" class="headerlink" title="traceroute 打印到一台网络主机的路由数据包"></a>traceroute 打印到一台网络主机的路由数据包</h3><p>显示从本地到指定主机要经过的所有“跳数”的网路流量列表</p>
+<p>对于那些提供标识信息的路由器，能看到主机名，IP地址和性能数据，对于没有提供标识的路由器，会看到几个星号</p>
+<h3 id="netstat-显示与IP、TCP、UDP和ICMP协议相关的统计数据"><a href="#netstat-显示与IP、TCP、UDP和ICMP协议相关的统计数据" class="headerlink" title="netstat 显示与IP、TCP、UDP和ICMP协议相关的统计数据"></a>netstat 显示与IP、TCP、UDP和ICMP协议相关的统计数据</h3><ul>
+<li><code>netstat -ie</code> 查看系统中的网络接口</li>
+<li><code>netstat -r</code> 显示路由表信息</li>
+<li><code>netstat -a</code> 列出所有端口</li>
+<li><code>netstat -nu</code> 显示当前 UDP 连接状况</li>
+<li><code>netstat -apu</code> 显示 UDP 端口号的使用情况</li>
+<li><code>netstat -i</code> 显示网卡列表</li>
+<li><code>netstat -s</code> 显示网络统计信息</li>
+<li><code>netstat -l</code> 显示监听的套接口</li>
+<li><code>netstat -at</code> 列出所有 tcp 端口</li>
+<li><code>netstat -a | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code> 统计机器中网络连接各个状态个数</li>
+<li><code>netstat -nat |awk &#39;{print $6}&#39;|sort|uniq -c</code> 把状态全都取出来后使用uniq -c统计后再进行排序</li>
+<li><code>netstat -nat | grep &quot;192.168.120.20:16067&quot; |awk &#39;{print $5}&#39;|awk -F: &#39;{print $4}&#39;|sort|uniq -c|sort -nr|head -20</code> 查看连接某服务端口最多的的IP地址</li>
+<li><code>netstat -ap | grep ssh</code> 找出程序运行的端口</li>
+<li><code>netstat -pt</code> 在 netstat 输出中显示 PID 和进程名称</li>
+<li><code>netstat -anpt | grep &#39;:16064&#39;</code> 找出运行在指定端口的进程</li>
+</ul>
+<h3 id="ftp-因特网文件传输程序"><a href="#ftp-因特网文件传输程序" class="headerlink" title="ftp 因特网文件传输程序"></a>ftp 因特网文件传输程序</h3><h3 id="wget-非交互式网络下载器"><a href="#wget-非交互式网络下载器" class="headerlink" title="wget 非交互式网络下载器"></a>wget 非交互式网络下载器</h3><h3 id="ssh-OpenSSH-SSH-客户端（远程登陆程序）"><a href="#ssh-OpenSSH-SSH-客户端（远程登陆程序）" class="headerlink" title="ssh OpenSSH SSH 客户端（远程登陆程序）"></a>ssh OpenSSH SSH 客户端（远程登陆程序）</h3><h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h3 id="file-显示文件详细信息"><a href="#file-显示文件详细信息" class="headerlink" title="file 显示文件详细信息"></a>file 显示文件详细信息</h3><h4 id="格式-8"><a href="#格式-8" class="headerlink" title="格式"></a>格式</h4><p><code>file [filename]</code></p>
+<h3 id="df-查看磁盘剩余空间的数量"><a href="#df-查看磁盘剩余空间的数量" class="headerlink" title="df 查看磁盘剩余空间的数量"></a>df 查看磁盘剩余空间的数量</h3><h3 id="tar-打包"><a href="#tar-打包" class="headerlink" title="tar 打包"></a>tar 打包</h3><h4 id="格式-9"><a href="#格式-9" class="headerlink" title="格式"></a>格式</h4><p><code>tar [必要参数] [选择参数] [打包后文件名] [文件或目录]</code></p>
+<h4 id="必要参数-1"><a href="#必要参数-1" class="headerlink" title="必要参数"></a>必要参数</h4><ul>
+<li>-A 新增压缩文件到已存在的压缩</li>
+<li>-B 设置区块大小</li>
+<li>-c 建立新的压缩文件</li>
+<li>-d 记录文件的差别</li>
+<li>-r 添加文件到已经压缩的文件</li>
+<li>-u 添加改变了和现有的文件到已经存在的压缩文件</li>
+<li>-x 从压缩文件中提取文件</li>
+<li>-t 显示压缩文件的内容</li>
+<li>-z 支持 gzip 解压文件</li>
+<li>-j 支持 bzip2 解压文件</li>
+<li>-z 支持 compress 解压文件</li>
+<li>-v 显示操作过程</li>
+<li>-l 文件系统边界设置</li>
+<li>-k 保留原有文件不被覆盖</li>
+<li>-m 保留五年间不被覆盖</li>
+<li>-W 确认压缩文件的正确性</li>
+</ul>
+<h4 id="可选参数"><a href="#可选参数" class="headerlink" title="可选参数"></a>可选参数</h4><ul>
+<li>-b 设置区块数目</li>
+<li>-C 切换到指定目录</li>
+<li>-f 指定压缩文件</li>
+</ul>
+<h4 id="常见解压、压缩命令"><a href="#常见解压、压缩命令" class="headerlink" title="常见解压、压缩命令"></a>常见解压、压缩命令</h4><h5 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h5><p>解包：tar xvf FileName.tar<br>打包：tar cvf FileName.tar DirName</p>
+<h5 id="gz"><a href="#gz" class="headerlink" title=".gz"></a>.gz</h5><p>解压1：gunzip FileName.gz<br>解压2：gzip -d FileName.gz<br>压缩：gzip FileName</p>
+<h5 id="tar-gz-和-tgz"><a href="#tar-gz-和-tgz" class="headerlink" title=".tar.gz 和 .tgz"></a>.tar.gz 和 .tgz</h5><p>解压：tar zxvf FileName.tar.gz<br>压缩：tar zcvf FileName.tar.gz DirName</p>
+<h5 id="bz2"><a href="#bz2" class="headerlink" title=".bz2"></a>.bz2</h5><p>解压1：bzip2 -d FileName.bz2<br>解压2：bunzip2 FileName.bz2<br>压缩： bzip2 -z FileName</p>
+<h5 id="tar-bz2"><a href="#tar-bz2" class="headerlink" title=".tar.bz2"></a>.tar.bz2</h5><p>解压：tar jxvf FileName.tar.bz2<br>压缩：tar jcvf FileName.tar.bz2 DirName</p>
+<h5 id="bz"><a href="#bz" class="headerlink" title=".bz"></a>.bz</h5><p>解压1：bzip2 -d FileName.bz<br>解压2：bunzip2 FileName.bz</p>
+<h5 id="tar-bz"><a href="#tar-bz" class="headerlink" title=".tar.bz"></a>.tar.bz</h5><p>解压：tar jxvf FileName.tar.bz</p>
+<h5 id="Z"><a href="#Z" class="headerlink" title=".Z"></a>.Z</h5><p>解压：uncompress FileName.Z<br>压缩：compress FileName</p>
+<h5 id="tar-Z"><a href="#tar-Z" class="headerlink" title=".tar.Z"></a>.tar.Z</h5><p>解压：tar Zxvf FileName.tar.Z<br>压缩：tar Zcvf FileName.tar.Z DirName</p>
+<h5 id="zip"><a href="#zip" class="headerlink" title=".zip"></a>.zip</h5><p>解压：unzip FileName.zip<br>压缩：zip FileName.zip DirName</p>
+<h5 id="rar"><a href="#rar" class="headerlink" title=".rar"></a>.rar</h5><p>解压：rar x FileName.rar<br>压缩：rar a FileName.rar DirName </p>
+<h3 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h3><ul>
+<li>-a或–ascii 　使用ASCII文字模式。 </li>
+<li>-c或–stdout或–to-stdout 　把压缩后的文件输出到标准输出设备，不去更动原始文件。 </li>
+<li>-d或–decompress或—-uncompress 　<strong>解压</strong> 文件。 </li>
+<li>-f或–force 　强行压缩文件。不理会文件名称或硬连接是否存在以及该文件是否为符号连接。 </li>
+<li>-h或–help 　在线帮助。 </li>
+<li>-l或–list 　列出压缩文件的相关信息。 </li>
+<li>-L或–license 　显示版本与版权信息。 </li>
+<li>-n或–no-name 　压缩文件时，不保存原来的文件名称及时间戳记。 </li>
+<li>-N或–name 　压缩文件时，保存原来的文件名称及时间戳记。 </li>
+<li>-q或–quiet 　不显示警告信息。 </li>
+<li>-r或–recursive 　递归处理，将指定目录下的所有文件及子目录一并处理。 </li>
+<li>-S&lt;压缩字尾字符串&gt;或—-suffix&lt;压缩字尾字符串&gt; 　更改压缩字尾字符串。 </li>
+<li>-t或–test 　测试压缩文件是否正确无误。 </li>
+<li>-v或–verbose 　显示指令执行过程。 </li>
+<li>-V或–version 　显示版本信息。 </li>
+</ul>
+<h3 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h3><h4 id="上传文件到远程服务器"><a href="#上传文件到远程服务器" class="headerlink" title="上传文件到远程服务器"></a>上传文件到远程服务器</h4><ul>
+<li><code>scp /path/filename  username@serverIp:/path</code></li>
+</ul>
+<h4 id="从远程服务器下载文件"><a href="#从远程服务器下载文件" class="headerlink" title="从远程服务器下载文件"></a>从远程服务器下载文件</h4><ul>
+<li><code>scp username@serverIp:/path/filename ~/local_dir</code></li>
+</ul>
+<h3 id="df-检查文件系统的磁盘空间占用情况"><a href="#df-检查文件系统的磁盘空间占用情况" class="headerlink" title="df 检查文件系统的磁盘空间占用情况"></a>df 检查文件系统的磁盘空间占用情况</h3><h4 id="参数-11"><a href="#参数-11" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>全部文件系统列表</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>方便阅读方式显示</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>显示 inode 信息</td>
+</tr>
+<tr>
+<td>-T</td>
+<td>文件系统类型</td>
+</tr>
+<tr>
+<td>-t&lt;文件系统类型&gt;</td>
+<td>只显示选定文件系统的磁盘信息</td>
+</tr>
+<tr>
+<td>-x&lt;文件系统类型&gt;</td>
+<td>不显示选定文件系统的磁盘信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="键盘高级操作技巧"><a href="#键盘高级操作技巧" class="headerlink" title="键盘高级操作技巧"></a><a href="http://billie66.github.io/TLCL/book/chap09.html" target="_blank" rel="external">键盘高级操作技巧</a></h3><h3 id="history-查看历史命令"><a href="#history-查看历史命令" class="headerlink" title="history 查看历史命令"></a>history 查看历史命令</h3><ul>
+<li><code>history | less</code> 搜索历史命令</li>
+</ul>
+<h3 id="clear-清空屏幕"><a href="#clear-清空屏幕" class="headerlink" title="clear 清空屏幕"></a>clear 清空屏幕</h3><h2 id="文件查找"><a href="#文件查找" class="headerlink" title="文件查找"></a>文件查找</h2><h3 id="which-显示一个可执行程序的位置"><a href="#which-显示一个可执行程序的位置" class="headerlink" title="which 显示一个可执行程序的位置"></a>which 显示一个可执行程序的位置</h3><p>只对 <strong>可执行程序</strong> 有效，不包括 <strong>内建命令</strong> 和 <strong>命令别名</strong>，which 指令会在 PATH 变量指定的路径中，搜索某个系统命令的位置，并且返回第一个搜索结果</p>
+<h3 id="locate-通过名字来查找文件"><a href="#locate-通过名字来查找文件" class="headerlink" title="locate 通过名字来查找文件"></a>locate 通过名字来查找文件</h3><p>和 find -name 一样，但是速度更快。<br>locate 命令可以在搜寻数据库时快速找到档案，数据库由 updatedb 程序来更新，updatedb 是由cron daemon 周期性建立的，locate命令在搜寻数据库时比由整个由硬盘资料来搜寻资料来得快，但较差劲的是locate所找到的档案若是最近才建立或 刚更名的，可能会找不到，在内定值中，updatedb 每天会跑一次，可以由修改 crontab 来更新设定值。(etc/crontab)</p>
+<h4 id="格式-10"><a href="#格式-10" class="headerlink" title="格式"></a>格式</h4><p><code>locate [选择参数][样式]</code></p>
+<h4 id="参数-12"><a href="#参数-12" class="headerlink" title="参数"></a>参数</h4><ul>
+<li>-e 将排除在寻找范围之外</li>
+<li>-o 指定资料库存的名称</li>
+<li>-d 指定资料库的路径</li>
+</ul>
+<h4 id="实例-6"><a href="#实例-6" class="headerlink" title="实例"></a>实例</h4><ol>
+<li><code>locate /etc/sh</code> 搜索 etc 目录下所有以 sh 开头的文件</li>
+<li><code>locate pwd</code> 查找和 pwd 相关的所有文件</li>
+<li><code>locate /etc/sh</code> 搜索 etc 目录下所有以 sh 开头的文件</li>
+</ol>
+<h3 id="whereis-查看文件的位置"><a href="#whereis-查看文件的位置" class="headerlink" title="whereis 查看文件的位置"></a>whereis 查看文件的位置</h3><p>whereis 命令只能用于 <strong>程序名</strong> 的搜索，而且只搜索二进制文件（参数-b）、man 说明文件（参数-m）和源代码文件（参数-s）。如果省略参数，则返回所有信息。使用和 locate 相同的数据库。</p>
+<h4 id="格式-11"><a href="#格式-11" class="headerlink" title="格式"></a>格式</h4><p><code>whereis [-bmsu] [BMS 目录名 -f ] 文件名</code></p>
+<h4 id="实例-7"><a href="#实例-7" class="headerlink" title="实例"></a>实例</h4><p>where nginx 将和 nginx 相关的文件都查找出来</p>
+<h3 id="find-在一个目录层次结构中搜索文件"><a href="#find-在一个目录层次结构中搜索文件" class="headerlink" title="find 在一个目录层次结构中搜索文件"></a>find 在一个目录层次结构中搜索文件</h3><h4 id="格式-12"><a href="#格式-12" class="headerlink" title="格式"></a>格式</h4><p><code>find pathname -options [-print -exec -ok ...]</code></p>
+<h4 id="参数-13"><a href="#参数-13" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pathname</td>
+<td>用来查找的目录路径。.表示当前目录</td>
+</tr>
+<tr>
+<td>-print</td>
+<td>将匹配的文件输出到标准输出</td>
+</tr>
+<tr>
+<td>-exec</td>
+<td>find命令对匹配的文件执行该参数所给出的shell命令。相应命令的形式为’command’ {} \;，注意{}和\;之间的空格。{} 代表前面查找出来的文件名</td>
+</tr>
+<tr>
+<td>-ok</td>
+<td>和 -exec 作用相同，在执行每个命令前让用户确定是否执行</td>
+</tr>
+</tbody>
+</table>
+<h4 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h4><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-name</td>
+<td>按照文件名查找</td>
+</tr>
+<tr>
+<td>-perm</td>
+<td>按照文件权限查找</td>
+</tr>
+<tr>
+<td>-user</td>
+<td>按照文件属主查找</td>
+</tr>
+<tr>
+<td>-group</td>
+<td>按照文件所属的组查找</td>
+</tr>
+<tr>
+<td>-mtime -n +n</td>
+<td>按照文件更改的时间来查找，-n 表示文件更改时间距现在 n 天以内，+n 表示文件更改时间距现在 n 天以前</td>
+</tr>
+<tr>
+<td>-nogroup</td>
+<td>查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在。</td>
+</tr>
+<tr>
+<td>-nouser</td>
+<td>查找无有效属主的文件，即该文件的属主在/etc/passwd中不存在。</td>
+</tr>
+<tr>
+<td>-newer file1 ! file2</td>
+<td>查找更改时间比文件file1新但比文件file2旧的文件。</td>
+</tr>
+<tr>
+<td>-type</td>
+<td>查找某一类型的文件，b - 块设备文件、d - 目录、c - 字符设备文件、p - 管道文件、l - 符号链接文件、f - 普通文件。</td>
+</tr>
+<tr>
+<td>-follow</td>
+<td>如果 find 命令遇到符号链接文件，就跟踪链接所指向的文件 </td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-8"><a href="#实例-8" class="headerlink" title="实例"></a>实例</h4><ol>
+<li><code>find . -name &quot;*.log&quot;</code> 根据关键词查找</li>
+<li><code>find . type d|sort</code> 查找当前所有目录并排序</li>
+<li><code>find . type -exec ls -l {} \;</code> 匹配当前目录下的所有普通文件，并在-exec选项中使用ls -l命令将它们列出。</li>
+<li><code>find . type f -mtime +14 -exec rm {} \;</code> 在目录中查找更改时间在n日以前的文件并删除它们</li>
+<li><code>find . \( -nmae &quot;*.txt&quot; -or -name &quot;*.pdf&quot; \)</code> 打印目录下所有以 .txt 和 .pdf 结尾的文件名</li>
+<li><code>find . ! -name &quot;*.txt&quot;</code> 打印当前目录下所有不以 .txt 结尾的文件名</li>
+</ol>
+<h2 id="文件内容查看"><a href="#文件内容查看" class="headerlink" title="文件内容查看"></a>文件内容查看</h2><h3 id="more-逐页读取文件（启动时加载整个文件）"><a href="#more-逐页读取文件（启动时加载整个文件）" class="headerlink" title="more 逐页读取文件（启动时加载整个文件）"></a>more 逐页读取文件（启动时加载整个文件）</h3><ul>
+<li>+n      从笫n行开始显示</li>
+<li>-n       定义屏幕大小为n行</li>
+<li>+/pattern 在每个档案显示前搜寻该字串（pattern），然后从该字串前两行之后开始显示  </li>
+<li>-c       从顶部清屏，然后显示</li>
+</ul>
+<h4 id="实例-9"><a href="#实例-9" class="headerlink" title="实例"></a>实例</h4><p>ls -l | more -5 使用 more 分页显示</p>
+<h3 id="less-（more-的改进版）"><a href="#less-（more-的改进版）" class="headerlink" title="less （more 的改进版）"></a>less （more 的改进版）</h3><p>可以向前或者向后浏览和搜索文件，而且不会加载整个文件</p>
+<h4 id="参数-14"><a href="#参数-14" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>&lt;缓冲区大小&gt; 设置缓冲区的大小</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>当文件显示结束后，自动离开</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>强迫打开特殊文件，例如外围设备代号、目录和二进制文件</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>只标志最后搜索的关键词</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>忽略搜索时的大小写</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>显示类似more命令的百分比</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>显示每行的行号</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>&lt;文件名&gt; 将less 输出的内容在指定文件中保存起来</td>
+</tr>
+<tr>
+<td>-Q</td>
+<td>不使用警告音</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>显示连续空行为一行</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>行过长时间将超出部分舍弃</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>&lt;数字&gt; 将“tab”键显示为规定的数字空格</td>
+</tr>
+<tr>
+<td>/字符串</td>
+<td>向下搜索“字符串”的功能</td>
+</tr>
+<tr>
+<td>?字符串</td>
+<td>向上搜索“字符串”的功能</td>
+</tr>
+<tr>
+<td>n</td>
+<td>重复前一个搜索（与 / 或 ? 有关）</td>
+</tr>
+<tr>
+<td>N</td>
+<td>反向重复前一个搜索（与 / 或 ? 有关）</td>
+</tr>
+<tr>
+<td>b</td>
+<td>向后翻一页</td>
+</tr>
+<tr>
+<td>d</td>
+<td>向后翻半页</td>
+</tr>
+<tr>
+<td>h</td>
+<td>显示帮助界面</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>退出less 命令</td>
+</tr>
+<tr>
+<td>u</td>
+<td>向前滚动半页</td>
+</tr>
+<tr>
+<td>y</td>
+<td>向前滚动一行</td>
+</tr>
+<tr>
+<td>空格键</td>
+<td>滚动一行</td>
+</tr>
+<tr>
+<td>回车键</td>
+<td>滚动一页</td>
+</tr>
+<tr>
+<td><code>[pagedown]</code></td>
+<td>向下翻动一页</td>
+</tr>
+<tr>
+<td><code>[pageup]</code></td>
+<td>向上翻动一页</td>
+</tr>
+</tbody>
+</table>
+<h3 id="head-显示档案的开头"><a href="#head-显示档案的开头" class="headerlink" title="head 显示档案的开头"></a>head 显示档案的开头</h3><h4 id="参数-15"><a href="#参数-15" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-q</td>
+<td>隐藏文件名</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示文件名</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>显示的字节数</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>显示的行数 </td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-10"><a href="#实例-10" class="headerlink" title="实例"></a>实例</h4><p>head -n -6 log2014.log 输出文件除了最后n行的全部内容</p>
+<h3 id="tail-查看文件最后几行"><a href="#tail-查看文件最后几行" class="headerlink" title="tail 查看文件最后几行"></a>tail 查看文件最后几行</h3><h4 id="参数-16"><a href="#参数-16" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f</td>
+<td>不断刷新，循环读取</td>
+</tr>
+<tr>
+<td>-q</td>
+<td>不显示处理信息</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细的处理信息</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>显示的字节数</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>显示的行数</td>
+</tr>
+<tr>
+<td>–pid=PID</td>
+<td>与 -f 合用，表示在进程 PID 死掉后结束</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>与 -f 合用，表示在每次反复的间隔休眠 s 秒</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uniq-报道或忽略重复行"><a href="#uniq-报道或忽略重复行" class="headerlink" title="uniq 报道或忽略重复行"></a>uniq 报道或忽略重复行</h3><h3 id="wc-打印行数、字数和字节数"><a href="#wc-打印行数、字数和字节数" class="headerlink" title="wc 打印行数、字数和字节数"></a>wc 打印行数、字数和字节数</h3><ul>
+<li><code>wc filename</code></li>
+</ul>
+<h2 id="文本处理"><a href="#文本处理" class="headerlink" title="文本处理"></a>文本处理</h2><h3 id="cat-连接文件并且打印到标准输出"><a href="#cat-连接文件并且打印到标准输出" class="headerlink" title="cat 连接文件并且打印到标准输出"></a>cat 连接文件并且打印到标准输出</h3><h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><ul>
+<li>一次显示整个文件 cat filename</li>
+<li>从键盘创建一个文件 cat &gt; filename,按下 Ctrl+d 结束</li>
+<li>讲几个文件合并为一个文件 cat file1 file2 &gt; file</li>
+</ul>
+<h4 id="参数-17"><a href="#参数-17" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-A</td>
+<td>–show-all 等价于 -vET</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>对非空输出行编号</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>等价于 -vE</td>
+</tr>
+<tr>
+<td>-E</td>
+<td>在每行结束出显示 $</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>对所有输出行编号</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>有连续两次以上的空白行，就代换为一行的空白行</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>与 -vT 等价</td>
+</tr>
+<tr>
+<td>-T</td>
+<td>将跳格字符显示为 ^I</td>
+</tr>
+<tr>
+<td>-v –show-nonprinting</td>
+<td>使用 ^ 和 M- 引用，除了 LFD 和 TAB 之外</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-11"><a href="#实例-11" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>cat -A foo.txt</code> 输出 ^IThe quick brown fox jumped over the lazy dog.       $ 。tab 用 ^I 表示，$ 著现在文本行真正的结尾处，表明文本包含末尾的空格。</li>
+</ul>
+<h4 id="tac-和cat相反，从最后一行开始显示"><a href="#tac-和cat相反，从最后一行开始显示" class="headerlink" title="tac 和cat相反，从最后一行开始显示"></a>tac 和cat相反，从最后一行开始显示</h4><h3 id="sort-给文本行排序"><a href="#sort-给文本行排序" class="headerlink" title="sort 给文本行排序"></a>sort 给文本行排序</h3><p>能够接受命令行中的多个文件作为参数，吧多个文件合并成一个有序的文件。</p>
+<h4 id="参数-18"><a href="#参数-18" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f</td>
+<td>不区分大小写</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>基于字符串的数值来排序</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>按相反顺序排序，按照降序排列</td>
+</tr>
+<tr>
+<td>-k</td>
+<td><code>--key=field1[,field2]</code> 对从 field1 到 field2 之间的字符排序，而不是整个文本行。</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>把排好序的输出结果发送到文件，而不是标准输出</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>定义分割字符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-12"><a href="#实例-12" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>sort file1.txt file2.txt file3.txt &gt; final_sorted_list.txt</code></li>
+<li><code>du -s /usr/share/* | sort -nr | head</code> 显示十个最大的空间消费者</li>
+<li><code>ls -l /usr/bin | sort -nr -k 5 | head</code> 按照文件大小（第五个字段）排序</li>
+<li><code>sort --key=1,1 --key=2n distros.txt</code> 我们指定了一个字段区域。因为我们只想对第一个字段排序，我们指定了 1,1， 意味着“始于并且结束于第一个字段。”在第二个实例中，我们指定了 2n，意味着第二个字段是排序的键值， 并且按照数值排序</li>
+</ul>
+<h3 id="uniq-报告或者省略重复行"><a href="#uniq-报告或者省略重复行" class="headerlink" title="uniq 报告或者省略重复行"></a>uniq 报告或者省略重复行</h3><p>只会删除相邻的重复行</p>
+<h4 id="参数-19"><a href="#参数-19" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>输出所有的重复行，每行开头显示重复的次数</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>只输出重复行</td>
+</tr>
+<tr>
+<td>-f n</td>
+<td>忽略开头的 n 个字段，字段之间由空格分隔</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cut-从每行中删除文本区域"><a href="#cut-从每行中删除文本区域" class="headerlink" title="cut 从每行中删除文本区域"></a>cut 从每行中删除文本区域</h3><h4 id="参数-20"><a href="#参数-20" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>以字节为单位进行分割</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>以字符为单位进行分割</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>自定义分隔符，默认为制表符</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>自定义字段</td>
+</tr>
+<tr>
+<td>–complement</td>
+<td>抽取整个文本行，除了那些由 -c 或 -f 选项指定的文本</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-13"><a href="#实例-13" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>cut -f 1,3 -d &#39; &#39; student.txt</code> 取出 student.txt 文件中的第一列和第三列</li>
+<li><code>cut -f 1-3 -d &#39; &#39; student.txt</code> 取出 student.txt 文件的前三列</li>
+</ul>
+<h3 id="paste-合并文件文本行"><a href="#paste-合并文件文本行" class="headerlink" title="paste 合并文件文本行"></a>paste 合并文件文本行</h3><h4 id="参数-21"><a href="#参数-21" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-s</td>
+<td>将每个文件合并成行而不是按行粘贴</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>自定义分隔符，默认为制表符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-14"><a href="#实例-14" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>paste distros-dates.txt distros-versions.txt</code> 将这两个文件按列拼接</li>
+</ul>
+<h3 id="join-基于某个共享字段来联合两个文件的文本行"><a href="#join-基于某个共享字段来联合两个文件的文本行" class="headerlink" title="join 基于某个共享字段来联合两个文件的文本行"></a>join 基于某个共享字段来联合两个文件的文本行</h3><h4 id="参数-22"><a href="#参数-22" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-j FIELD</td>
+<td>等同于 -1 FIELD -2 FIELD,-j 指定一个域作为匹配字段</td>
+</tr>
+<tr>
+<td>-1 FIELD</td>
+<td>以 file1 中 FIELD 字段进行匹配</td>
+</tr>
+<tr>
+<td>-2 FIELD</td>
+<td>以 file2 中 FIELD 字段进行匹配</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>自定义分隔符，默认为制表符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="comm-逐行比较两个有序的文件"><a href="#comm-逐行比较两个有序的文件" class="headerlink" title="comm 逐行比较两个有序的文件"></a>comm 逐行比较两个有序的文件</h3><h3 id="diff-逐行比较文件"><a href="#diff-逐行比较文件" class="headerlink" title="diff 逐行比较文件"></a>diff 逐行比较文件</h3><p>支持 许多输出格式，并且一次能处理许多文本文件。软件开发员经常使用 diff 程序来检查不同程序源码 版本之间的更改，diff 能够递归地检查源码目录，经常称之为源码树。</p>
+<h3 id="patch-给原始文件打补丁"><a href="#patch-给原始文件打补丁" class="headerlink" title="patch 给原始文件打补丁"></a>patch 给原始文件打补丁</h3><h3 id="tr-翻译或删除字符"><a href="#tr-翻译或删除字符" class="headerlink" title="tr 翻译或删除字符"></a>tr 翻译或删除字符</h3><p>tr 命令操作标准输入，并把结果输出到标准输出。tr 命令接受两个参数：要被转换的字符集以及相对应的转换后的字符集。字符集可以用三种方式来表示：</p>
+<ol>
+<li>一个枚举列表。例如， ABCDEFGHIJKLMNOPQRSTUVWXYZ</li>
+<li>一个字符域。例如，A-Z 。注意这种方法有时候面临与其它命令相同的问题，归因于 语系的排序规则，因此应该谨慎使用。</li>
+<li>POSIX 字符类。例如，[:upper:]</li>
+</ol>
+<h4 id="实例-15"><a href="#实例-15" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><code>echo &quot;lowercase letters&quot; | tr a-z A-Z</code> 将小写转换为大写</li>
+<li><code>echo &quot;lowercase letters&quot; | tr [:lower:] [:upper:]</code></li>
+</ul>
+<h3 id="aspell-交互式拼写检查器"><a href="#aspell-交互式拼写检查器" class="headerlink" title="aspell 交互式拼写检查器"></a>aspell 交互式拼写检查器</h3><h2 id="文本搜素"><a href="#文本搜素" class="headerlink" title="文本搜素"></a>文本搜素</h2><h3 id="grep-打印匹配行"><a href="#grep-打印匹配行" class="headerlink" title="grep 打印匹配行"></a>grep 打印匹配行</h3><h4 id="格式-13"><a href="#格式-13" class="headerlink" title="格式"></a>格式</h4><p><code>grep [option] regex [file...]</code></p>
+<h4 id="参数-23"><a href="#参数-23" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-i</td>
+<td>忽略大小写</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>只打印不匹配的行</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>打印匹配的数量</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-16"><a href="#实例-16" class="headerlink" title="实例"></a>实例</h4><ol>
+<li>从文件中读取关键词进行搜索 cat text.txt|grep -f test2.txt 输出test.txt文件中含有从test2.txt文件中读取出的关键词的内容行</li>
+<li>显示当前目录下面以.txt 结尾的文件中的所有包含每个字符串至少有7个连续小写字符的字符串的行 <code>grep &#39;[a-z]\{7\}&#39; *.txt</code></li>
+<li>从文件中查找关键词 grep ‘linux’ test.txt</li>
+</ol>
+<h3 id="sed-用于筛选和转换文本的流编辑器"><a href="#sed-用于筛选和转换文本的流编辑器" class="headerlink" title="sed 用于筛选和转换文本的流编辑器"></a>sed 用于筛选和转换文本的流编辑器</h3><h4 id="参数-24"><a href="#参数-24" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>n</td>
+<td>行号，n 是一个正整数。</td>
+</tr>
+<tr>
+<td>$</td>
+<td>最后一行。</td>
+</tr>
+<tr>
+<td>/regexp/</td>
+<td>所有匹配一个 POSIX 基本正则表达式的文本行。注意正则表达式通过 斜杠字符界定。选择性地，这个正则表达式可能由一个备用字符界定，通过\cregexpc 来 指定表达式，这里 c 就是一个备用的字符。</td>
+</tr>
+<tr>
+<td>addr1,addr2</td>
+<td>从 addr1 到 addr2 范围内的文本行，包含地址 addr2 在内。地址可能是上述任意 单独的地址形式。</td>
+</tr>
+<tr>
+<td>first~step</td>
+<td>匹配由数字 first 代表的文本行，然后随后的每个在 step 间隔处的文本行。例如 1~2 是指每个位于偶数行号的文本行，5~5 则指第五行和之后每五行位置的文本行。</td>
+</tr>
+<tr>
+<td>addr1,+n</td>
+<td>匹配地址 addr1 和随后的 n 个文本行。</td>
+</tr>
+<tr>
+<td>addr!</td>
+<td>匹配所有的文本行，除了 addr 之外，addr 可能是上述任意的地址形式。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><h2 id="格式化输出"><a href="#格式化输出" class="headerlink" title="格式化输出"></a>格式化输出</h2><h3 id="nl-添加行号"><a href="#nl-添加行号" class="headerlink" title="nl 添加行号"></a>nl 添加行号</h3><p>相当于 <code>cat -n</code></p>
+<h4 id="参数-25"><a href="#参数-25" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b a</td>
+<td>无论是否空行都输出行号</td>
+</tr>
+<tr>
+<td>-b t</td>
+<td>对非空行输出行号</td>
+</tr>
+<tr>
+<td>-n ln</td>
+<td>行号在萤幕的最左方显示</td>
+</tr>
+<tr>
+<td>-n rn</td>
+<td>行号在自己栏位的最右方显示，且不加 0</td>
+</tr>
+<tr>
+<td>-n rz</td>
+<td>行号在自己栏位的最右方显示，且加 0</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>行号宽度设置，默认为六</td>
+</tr>
+</tbody>
+</table>
+<h3 id="实例-17"><a href="#实例-17" class="headerlink" title="实例"></a>实例</h3><ul>
+<li><code>nl -b a -n rz -w 3 log2014.log</code> 让行号前面自动补上0，行号为3位</li>
+</ul>
+<h3 id="fold-限制文件列宽"><a href="#fold-限制文件列宽" class="headerlink" title="fold 限制文件列宽"></a>fold 限制文件列宽</h3><ul>
+<li><code>echo &quot;The quick brown fox jumped over the lazy dog.&quot; | fold -w 12</code> 限制行宽为 12 个字符，默认 80</li>
+<li>加上 -s 选项可以考虑单词边界</li>
+</ul>
+<h3 id="fmt-简单的文本格式转换器"><a href="#fmt-简单的文本格式转换器" class="headerlink" title="fmt 简单的文本格式转换器"></a>fmt 简单的文本格式转换器</h3><h3 id="pr"><a href="#pr" class="headerlink" title="pr"></a>pr</h3><h3 id="printf-格式化数据并打印"><a href="#printf-格式化数据并打印" class="headerlink" title="printf 格式化数据并打印"></a>printf 格式化数据并打印</h3><h3 id="groff-文件格式化系统"><a href="#groff-文件格式化系统" class="headerlink" title="groff 文件格式化系统"></a>groff 文件格式化系统</h3><h2 id="软件包管理"><a href="#软件包管理" class="headerlink" title="软件包管理"></a>软件包管理</h2><table>
+<thead>
+<tr>
+<th>Debian</th>
+<th>Red Hat</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apt-get update;apt-cache search search_string</td>
+<td>yum search search_string</td>
+<td>查找资源库中的软件包</td>
+</tr>
+<tr>
+<td>apt-get update; apt-get install package_name</td>
+<td>yum install package_name</td>
+<td>从资源库中安装一个软件包</td>
+</tr>
+<tr>
+<td>dpkg –install package_file</td>
+<td>rpm -i package_file</td>
+<td>通过软件包文件来安装软件</td>
+</tr>
+<tr>
+<td>apt-get remove package_name</td>
+<td>yum erase package_name</td>
+<td>卸载软件</td>
+</tr>
+<tr>
+<td>apt-get update; apt-get upgrade</td>
+<td>yum update</td>
+<td>经过资源库来更新软件包</td>
+</tr>
+<tr>
+<td>dpkg –install package_file</td>
+<td>rpm -U package_file</td>
+<td>经过软件包文件来升级软件</td>
+</tr>
+<tr>
+<td>dpkg –list</td>
+<td>rpm -qa</td>
+<td>列出所安装的软件包</td>
+</tr>
+<tr>
+<td>dpkg –status package_name</td>
+<td>rpm -q package_name</td>
+<td>确定是否安装了一个软件包</td>
+</tr>
+<tr>
+<td>apt-cache show package_name</td>
+<td>yum info package_name</td>
+<td>显示所安装软件包的信息</td>
+</tr>
+<tr>
+<td>dpkg –search file_name</td>
+<td>rpm -qf file_name</td>
+<td>查找安装了某个文件的软件包</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他内容"><a href="#其他内容" class="headerlink" title="其他内容"></a>其他内容</h2><h3 id="etc-group-文件"><a href="#etc-group-文件" class="headerlink" title="/etc/group 文件"></a>/etc/group 文件</h3><p>Linux /etc/group文件与/etc/passwd和/etc/shadow文件都是有关于系统管理员对用户和用户组管理时相关的文件。linux /etc/group文件是有关于系统管理员对用户和用户组管理的文件,linux用户组的所有信息都存放在/etc/group文件中。具有某种共同特征的用户集合起来就是用户组（Group）。用户组（Group）配置文件主要有 /etc/group和/etc/gshadow，其中/etc/gshadow是/etc/group的加密信息文件。</p>
+<p>用户组的所有信息都存放在/etc/group文件中。此文件的格式是由冒号(:)隔开若干个字段，这些字段具体如下：</p>
+<ul>
+<li>组名:口令:组标识号:组内用户列表</li>
+</ul>
+<h4 id="组名："><a href="#组名：" class="headerlink" title="组名："></a>组名：</h4><p>组名是用户组的名称，由字母或数字构成。与/etc/passwd中的登录名一样，组名不应重复。</p>
+<h4 id="口令："><a href="#口令：" class="headerlink" title="口令："></a>口令：</h4><p>口令字段存放的是用户组加密后的口令字。一般Linux系统的用户组都没有口令，即这个字段一般为空，或者是*。</p>
+<h4 id="组标识号："><a href="#组标识号：" class="headerlink" title="组标识号："></a>组标识号：</h4><p>组标识号与用户标识号类似，也是一个整数，被系统内部用来标识组。别称GID.</p>
+<h4 id="组内用户列表："><a href="#组内用户列表：" class="headerlink" title="组内用户列表："></a>组内用户列表：</h4><p>是属于这个组的所有用户的列表，不同用户之间用逗号(,)分隔。这个用户组可能是用户的主组，也可能是附加组。</p>
+<h3 id="date-显示系统当前时间和日期"><a href="#date-显示系统当前时间和日期" class="headerlink" title="date 显示系统当前时间和日期"></a>date 显示系统当前时间和日期</h3><h3 id="cal-显示当前月份的日历"><a href="#cal-显示当前月份的日历" class="headerlink" title="cal 显示当前月份的日历"></a>cal 显示当前月份的日历</h3><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.cnblogs.com/peida/archive/2012/12/05/2803591.html" target="_blank" rel="external">每天一个 linux 命令</a></li>
+<li><a href="http://billie66.github.io/TLCL/book/index.html" target="_blank" rel="external">The Linux Command Line</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-命令"><span class="toc-text">Linux-命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#crontab"><span class="toc-text">crontab</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#crontab-的文件格式"><span class="toc-text">crontab 的文件格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件目录操作"><span class="toc-text">文件目录操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwd-打印出当前工作目录名"><span class="toc-text">pwd 打印出当前工作目录名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cd-切换目录"><span class="toc-text">cd 切换目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ls-列出目录下的内容"><span class="toc-text">ls 列出目录下的内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-1"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file-确定文件类型"><span class="toc-text">file 确定文件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mkdir-创建文件夹"><span class="toc-text">mkdir 创建文件夹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-2"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rm-删除文件或目录"><span class="toc-text">rm 删除文件或目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-3"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rmdir-删除空目录"><span class="toc-text">rmdir 删除空目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mv-移动-重命名文件和目录"><span class="toc-text">mv 移动/重命名文件和目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-1"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-4"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cp-复制文件或者目录"><span class="toc-text">cp 复制文件或者目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-2"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-5"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#touch-修改文件的时间戳，或者新建一个不存在的文件"><span class="toc-text">touch 修改文件的时间戳，或者新建一个不存在的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-6"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xargs"><span class="toc-text">xargs</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-1"><span class="toc-text">实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用命令"><span class="toc-text">使用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#type-显示命令的类型"><span class="toc-text">type 显示命令的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-3"><span class="toc-text">格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#help-得到-shell-内建命令的帮助文档"><span class="toc-text">help 得到 shell 内建命令的帮助文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#–help-显示用法信息"><span class="toc-text">–help 显示用法信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#man-显示程序手册页"><span class="toc-text">man 显示程序手册页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#apropos-显示适当的命令"><span class="toc-text">apropos 显示适当的命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#whatis-显示非常简洁的命令说明"><span class="toc-text">whatis 显示非常简洁的命令说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#info-显示程序-Info-条目"><span class="toc-text">info 显示程序 Info 条目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alias-创建命令别名"><span class="toc-text">alias 创建命令别名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重定向"><span class="toc-text">重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-标准输出重定向"><span class="toc-text">> 标准输出重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-gt-追加输出结果到目标文件"><span class="toc-text">>> 追加输出结果到目标文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-gt-标准错误重定向"><span class="toc-text">2> 标准错误重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重定向标准输出和错误到同一个文件"><span class="toc-text">重定向标准输出和错误到同一个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理不需要的输出"><span class="toc-text">处理不需要的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管道"><span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tee-从-Stdin-读取数据，并同时输出到-Stdout-和文件"><span class="toc-text">tee 从 Stdin 读取数据，并同时输出到 Stdout 和文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#展开"><span class="toc-text">展开</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-它将它的文本参数打印到标准输出中"><span class="toc-text">echo 它将它的文本参数打印到标准输出中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路径名展开"><span class="toc-text">路径名展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#波浪线展开"><span class="toc-text">波浪线展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算术表达式展开"><span class="toc-text">算术表达式展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#花括号展开"><span class="toc-text">花括号展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数展开"><span class="toc-text">参数展开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令替换"><span class="toc-text">命令替换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#双引号"><span class="toc-text">双引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单引号"><span class="toc-text">单引号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限"><span class="toc-text">权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#id-显示用户身份号"><span class="toc-text">id 显示用户身份号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chmod-改变文件或目录的访问权限"><span class="toc-text">chmod 改变文件或目录的访问权限</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-7"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#权限范围"><span class="toc-text">权限范围</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#权限代号"><span class="toc-text">权限代号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-4"><span class="toc-text">格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chgrp-变更文件与目录所属群组"><span class="toc-text">chgrp 变更文件与目录所属群组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数同-chmod"><span class="toc-text">参数同 chmod</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-2"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chown-改变文件的拥有者和群组"><span class="toc-text">chown 改变文件的拥有者和群组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-5"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#必要参数"><span class="toc-text">必要参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择参数"><span class="toc-text">选择参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-3"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#umask-设置默认权限"><span class="toc-text">umask 设置默认权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#su-以其他用户身份和组-ID-运行一个-shell"><span class="toc-text">su 以其他用户身份和组 ID 运行一个 shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sudo-以另一个用户身份执行命令"><span class="toc-text">sudo 以另一个用户身份执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#passwd-更改用户密码"><span class="toc-text">passwd 更改用户密码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程管理"><span class="toc-text">进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#top-显示当前系统正在执行的进程的相关信息"><span class="toc-text">top 显示当前系统正在执行的进程的相关信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-8"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输出信息"><span class="toc-text">输出信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#amp-把一个进程放到后台执行"><span class="toc-text">& 把一个进程放到后台执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jobs-列出从终端中启动了的任务"><span class="toc-text">jobs 列出从终端中启动了的任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止一个进程"><span class="toc-text">停止一个进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fg-恢复程序到前台运行"><span class="toc-text">fg 恢复程序到前台运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bg-把程序移到后台"><span class="toc-text">bg 把程序移到后台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#free-显示-Linux-系统中空闲的内存情况"><span class="toc-text">free 显示 Linux 系统中空闲的内存情况</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-9"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输出"><span class="toc-text">输出</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ps-查看进程"><span class="toc-text">ps 查看进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#linux上进程有5种状态"><span class="toc-text">linux上进程有5种状态:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-10"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-4"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pstree-输出一个树型结构的进程列表-processtree-，这个列表展示了进程间父-子关系。"><span class="toc-text">pstree     输出一个树型结构的进程列表(processtree)，这个列表展示了进程间父/子关系。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kill-给进程发送信号"><span class="toc-text">kill 给进程发送信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-6"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-5"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#killall-给匹配特定程序或用户名的多个进程发送信号"><span class="toc-text">killall 给匹配特定程序或用户名的多个进程发送信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-7"><span class="toc-text">格式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境变量"><span class="toc-text">环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#set-显示-shell-或环境变量"><span class="toc-text">set 显示 shell 或环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#printenv-显示环境变量"><span class="toc-text">printenv 显示环境变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储媒介"><span class="toc-text">存储媒介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mount-挂载一个文件系统"><span class="toc-text">mount 挂载一个文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#umount-卸载一个文件系统"><span class="toc-text">umount 卸载一个文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fask-检查和修复一个文件系统"><span class="toc-text">fask 检查和修复一个文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fdisk-分区表控制器"><span class="toc-text">fdisk 分区表控制器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mkfs-创建文件系统"><span class="toc-text">mkfs 创建文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fdformat-格式化一张软盘"><span class="toc-text">fdformat 格式化一张软盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dd-把面向块的数据直接写入设备"><span class="toc-text">dd 把面向块的数据直接写入设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#genisoimage-mkisofs-创建一个-ISO-9660的映像文件"><span class="toc-text">genisoimage (mkisofs) 创建一个 ISO 9660的映像文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wodim-cdrecord-把数据写入光存储媒介"><span class="toc-text">wodim (cdrecord) 把数据写入光存储媒介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#md5sum-计算-MD5检验码"><span class="toc-text">md5sum  计算 MD5检验码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络系统"><span class="toc-text">网络系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ping-发送-ICMP-ECHO-REQUEST-数据包到网络主机"><span class="toc-text">ping 发送 ICMP ECHO_REQUEST 数据包到网络主机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#traceroute-打印到一台网络主机的路由数据包"><span class="toc-text">traceroute 打印到一台网络主机的路由数据包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#netstat-显示与IP、TCP、UDP和ICMP协议相关的统计数据"><span class="toc-text">netstat 显示与IP、TCP、UDP和ICMP协议相关的统计数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ftp-因特网文件传输程序"><span class="toc-text">ftp 因特网文件传输程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wget-非交互式网络下载器"><span class="toc-text">wget 非交互式网络下载器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssh-OpenSSH-SSH-客户端（远程登陆程序）"><span class="toc-text">ssh OpenSSH SSH 客户端（远程登陆程序）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件系统"><span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#file-显示文件详细信息"><span class="toc-text">file 显示文件详细信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-8"><span class="toc-text">格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#df-查看磁盘剩余空间的数量"><span class="toc-text">df 查看磁盘剩余空间的数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tar-打包"><span class="toc-text">tar 打包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-9"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#必要参数-1"><span class="toc-text">必要参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可选参数"><span class="toc-text">可选参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常见解压、压缩命令"><span class="toc-text">常见解压、压缩命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#tar"><span class="toc-text">tar</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#gz"><span class="toc-text">.gz</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#tar-gz-和-tgz"><span class="toc-text">.tar.gz 和 .tgz</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#bz2"><span class="toc-text">.bz2</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#tar-bz2"><span class="toc-text">.tar.bz2</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#bz"><span class="toc-text">.bz</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#tar-bz"><span class="toc-text">.tar.bz</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Z"><span class="toc-text">.Z</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#tar-Z"><span class="toc-text">.tar.Z</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#zip"><span class="toc-text">.zip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#rar"><span class="toc-text">.rar</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gzip"><span class="toc-text">gzip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scp"><span class="toc-text">scp</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#上传文件到远程服务器"><span class="toc-text">上传文件到远程服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从远程服务器下载文件"><span class="toc-text">从远程服务器下载文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#df-检查文件系统的磁盘空间占用情况"><span class="toc-text">df 检查文件系统的磁盘空间占用情况</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-11"><span class="toc-text">参数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用工具"><span class="toc-text">常用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#键盘高级操作技巧"><span class="toc-text">键盘高级操作技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#history-查看历史命令"><span class="toc-text">history 查看历史命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clear-清空屏幕"><span class="toc-text">clear 清空屏幕</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件查找"><span class="toc-text">文件查找</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#which-显示一个可执行程序的位置"><span class="toc-text">which 显示一个可执行程序的位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locate-通过名字来查找文件"><span class="toc-text">locate 通过名字来查找文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-10"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-12"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-6"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#whereis-查看文件的位置"><span class="toc-text">whereis 查看文件的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-11"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-7"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#find-在一个目录层次结构中搜索文件"><span class="toc-text">find 在一个目录层次结构中搜索文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-12"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-13"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选项"><span class="toc-text">选项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-8"><span class="toc-text">实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件内容查看"><span class="toc-text">文件内容查看</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#more-逐页读取文件（启动时加载整个文件）"><span class="toc-text">more 逐页读取文件（启动时加载整个文件）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-9"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#less-（more-的改进版）"><span class="toc-text">less （more 的改进版）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-14"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#head-显示档案的开头"><span class="toc-text">head 显示档案的开头</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-15"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-10"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tail-查看文件最后几行"><span class="toc-text">tail 查看文件最后几行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-16"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#uniq-报道或忽略重复行"><span class="toc-text">uniq 报道或忽略重复行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wc-打印行数、字数和字节数"><span class="toc-text">wc 打印行数、字数和字节数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文本处理"><span class="toc-text">文本处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cat-连接文件并且打印到标准输出"><span class="toc-text">cat 连接文件并且打印到标准输出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#功能"><span class="toc-text">功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-17"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-11"><span class="toc-text">实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tac-和cat相反，从最后一行开始显示"><span class="toc-text">tac 和cat相反，从最后一行开始显示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sort-给文本行排序"><span class="toc-text">sort 给文本行排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-18"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-12"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#uniq-报告或者省略重复行"><span class="toc-text">uniq 报告或者省略重复行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-19"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cut-从每行中删除文本区域"><span class="toc-text">cut 从每行中删除文本区域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-20"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-13"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#paste-合并文件文本行"><span class="toc-text">paste 合并文件文本行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-21"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-14"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join-基于某个共享字段来联合两个文件的文本行"><span class="toc-text">join 基于某个共享字段来联合两个文件的文本行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-22"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#comm-逐行比较两个有序的文件"><span class="toc-text">comm 逐行比较两个有序的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#diff-逐行比较文件"><span class="toc-text">diff 逐行比较文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#patch-给原始文件打补丁"><span class="toc-text">patch 给原始文件打补丁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tr-翻译或删除字符"><span class="toc-text">tr 翻译或删除字符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-15"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aspell-交互式拼写检查器"><span class="toc-text">aspell 交互式拼写检查器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文本搜素"><span class="toc-text">文本搜素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#grep-打印匹配行"><span class="toc-text">grep 打印匹配行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#格式-13"><span class="toc-text">格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-23"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-16"><span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sed-用于筛选和转换文本的流编辑器"><span class="toc-text">sed 用于筛选和转换文本的流编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-24"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#awk"><span class="toc-text">awk</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化输出"><span class="toc-text">格式化输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nl-添加行号"><span class="toc-text">nl 添加行号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数-25"><span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-17"><span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fold-限制文件列宽"><span class="toc-text">fold 限制文件列宽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fmt-简单的文本格式转换器"><span class="toc-text">fmt 简单的文本格式转换器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pr"><span class="toc-text">pr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#printf-格式化数据并打印"><span class="toc-text">printf 格式化数据并打印</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#groff-文件格式化系统"><span class="toc-text">groff 文件格式化系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#软件包管理"><span class="toc-text">软件包管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他内容"><span class="toc-text">其他内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#etc-group-文件"><span class="toc-text">/etc/group 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#组名："><span class="toc-text">组名：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#口令："><span class="toc-text">口令：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#组标识号："><span class="toc-text">组标识号：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#组内用户列表："><span class="toc-text">组内用户列表：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#date-显示系统当前时间和日期"><span class="toc-text">date 显示系统当前时间和日期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cal-显示当前月份的日历"><span class="toc-text">cal 显示当前月份的日历</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/11/10/Redis-底层原理/" class="prev">&larr; 上一篇 Redis-底层原理</a>
+  
+
+  
+
+  
+    <a href="/2019/05/16/面试知识点/" class="next">下一篇 面试知识点 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

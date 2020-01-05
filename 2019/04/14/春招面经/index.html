@@ -1,0 +1,443 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="从二月底到现在，投了一堆乱七八糟的，也没有收到几个面试，双非渣本就是这么惨。再加上学的是 PHP，看大部分后端要的都是 JAVA ，还有一部分 Python，PHP少得可怜，简直扎心。感觉 bat 级别的公司真的不是这么好混过去的，但是给我面试过的面试官人都很不错，其他难度都感觉还行，不算太难，但是前期经验不足，大厂就是一轮游，后来总结了很多想了很多，可惜再也没有面试的机会了，笔试了几个，一...">
+  
+  <title>春招面经 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/04/16/PHP-底层原理/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 底层原理
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/04/10/PHP-基础知识/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 基础
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>春招面经</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-04-14</span>
+      
+        <span id = "post-title-updated">修改于 2019-04-24</span>
+      
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/面试/">面试</a>
+      
+        
+          /
+        
+        
+        <a href="/tags/题目/">题目</a>
+      
+      </span>
+      
+    </p>
+    
+    <p>从二月底到现在，投了一堆乱七八糟的，也没有收到几个面试，双非渣本就是这么惨。再加上学的是 PHP，看大部分后端要的都是 JAVA ，还有一部分 Python，PHP少得可怜，简直扎心。感觉 bat 级别的公司真的不是这么好混过去的，但是给我面试过的面试官人都很不错，其他难度都感觉还行，不算太难，但是前期经验不足，大厂就是一轮游，后来总结了很多想了很多，可惜再也没有面试的机会了，笔试了几个，一个也没过。。上个礼拜面试通过了一家，本想着继续再试试别的，发现还真的没有机会了，不管怎么说暂时是有着落了，一共面试了6家公司，拿了两个offer，感觉不好也不坏，自己的运气还是可以的。我自己的心理素质是真的很差很差，面个试感觉跟送死一样，这一个月间真的很难受，每天提心吊胆的。</p>
+<h2 id="地平线"><a href="#地平线" class="headerlink" title="地平线"></a>地平线</h2><p>实习僧上投递的，面试的第一家公司，那个时候刚好在北京，就现场去了，第一次面试真的很紧张而且菜到不行，就算这样还是给了二面的机会感觉真的很感谢面试官了，然后最后当然还是挂了。面试体验挺不错的，面试官人都很好，刚到的时候工作人员还给我倒了一杯水。现场面试会直接用面试官的电脑写代码，还有看一段代码来解释，后来的电话面试都没有。一面和二面问的问题都写一起了。</p>
+<ol>
+<li>用过什么框架，讲一下 laravel 框架用到的设计模式，依赖注入解决的问题</li>
+<li>设计一个存储几千份邮件的方案，答案是设计一个哈希表</li>
+<li>问有没有了解布隆过滤器</li>
+<li>手写单例模式</li>
+<li>手写一个排序算法</li>
+<li>数据库查询优化，索引方面的问题</li>
+<li>数据库的事务如何实现</li>
+<li>Redis 有哪些数据结构，应用场景</li>
+<li>因为项目里写用到了 Elasticsearch，所以简单问了下用在什么地方，为什么快</li>
+</ol>
+<h2 id="小米"><a href="#小米" class="headerlink" title="小米"></a>小米</h2><p>也是实习僧投递的，第二天面试官就约了时间面试了，一面面的挺差的，问的都是基础，但是就是没有复习到，几乎都忘了，答不出来，也不知道这样的我是怎么过的。面试刚结束，面试官就发微信问我是不是紧张了，然后还给我提出了一些建议，真的人好好啊，一两个小时后又通知我过了，还说二面的面试官是女孩子叫我不要紧张(然而后来电话打来还是个男的)，真的太贴心了。由于二面问到的问题正好都有了解到，答的还可以就直接通过了。这也是我收到的第一个实习offer，但是由于时间问题，没能去成，当时真的好气，因为感觉面试太太太痛苦了，以为自己找到一个自认为还可以的实习就不用继续了，看来还是没有这么简单。</p>
+<h3 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h3><ol>
+<li>字符串 abcdef 怎么截取后面两位 substr()</li>
+<li>查找一个字符串中字符出现的位置 strpos()，如果没有找到，返回值是什么</li>
+<li>Redis 的基本操作，字符串类型，incr()，说看我用 redis 做了队列，那说说链表的基本操作</li>
+<li>给了一个场景（记不清了），叫我说出sql语句，我就答到了连接，然后面试官说要用左连接，效率比较高</li>
+<li>项目的商品表怎么设计的</li>
+<li>数据库连接 PDO</li>
+<li>算法，说思路 二叉树中序遍历 快排 判断链表是否有环</li>
+</ol>
+<h3 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h3><ol>
+<li>在一个学生信息成绩表查询出单科成绩最高分和最低分<br>我说order by score limit 1,面试官说我这样要写两条sql语句，能不能用一条，max，min</li>
+<li>说我这个项目查询课表的功能如果人太多的话查不出来怎么办<br> 我说缓存，用redis。问我缓存到什么数据结构里，我说字符串类型就可以了吧。然后问我有没有用过 zset，说下什么地方用到的，我想了想，说比如用户有发微博的功能，把微博存进去（之前看十八哥的微博项目视频看到了。自己也写了，但是记不太清，就随便说了）。</li>
+<li>说一下 web 请求页面的过程</li>
+<li>TCP三次握手</li>
+<li>php 如何跟 nginx 交流，cgi,php-fpm,fasicgi</li>
+<li>php 垃圾回收机制</li>
+<li>说说常用的字符串函数，数组函数</li>
+<li>说说常用的linux命令 </li>
+<li>如果系统正在运行，日志文件不断的写，tail 输出会怎么样<br> tail -f laravel.log 使用 -f 循环查看文件内容，可以自动刷新日志</li>
+<li>看我这个项目用到了laravel框架，说一下开发的时候用到了哪些类</li>
+<li>登录功能怎么实现</li>
+<li>session 和 cookie 的区别，浏览器禁用 cookie，session 还能用吗</li>
+</ol>
+<h2 id="腾讯"><a href="#腾讯" class="headerlink" title="腾讯"></a>腾讯</h2><p>牛客找人内推的，想着反正提前批挂了正式批还是可以笔试的还有机会。然而实际上我笔试很菜，根本过不了，一面挂了也没人捞我。看网上好多面经都问基础，我就使劲看，结果几乎都在怼项目，然后后面还问了些别的，感觉大厂的面试官真的，很有水平，不是问些套路性的问题，会结合项目，问你用到了什么技术，要看你自己的发挥，会不会把面试官引到自己擅长的点上，可惜我，不会，全程作死。一面挂。总之面试中问到一个点，会一直深入问，不是说把那些只是背下来就完了，会结合场景，比如什么什么这时候怎么办。。</p>
+<ol>
+<li>问项目，订单的实现的过程，订单表的设计（问得很详细，一直问，然而我订单表用到的字段记不太清了，好多重要的都没想起来）</li>
+<li>项目大流量怎么优化，缓存。从数据访问层优化，不怎么会（以前看过来着，给忘了）</li>
+<li>项目里用到了 elasticsearch，用在什么地方，怎么用的。（又一波作死，对 elasticsearch 不是特别熟）</li>
+<li>安全，xss 攻击，csrf 攻击，sql 注入</li>
+<li>问项目开发流程，和前端怎么配合的，我提到用了docker，问 dockerfile 是自己写的么，不是。那有没有配置那种一条命令直接启动的，没有。</li>
+<li>问项目的 nginx 是我配的么，问了一个场景，就是访问到 jpg，png 还有其他结尾的图片时进行匹配然后做处理，我说了用 location 然后给出详细配置，又问如果访问其他结尾的图片的时候要全部改成 gif 结尾来处理怎么办，我就说了正则替换什么的。。我不知道 nginx 中怎么处理（后来查了下，用 rewrite），然后就问我如果是在 php 中，要怎么进行正则替换。 </li>
+</ol>
+<h2 id="滴滴"><a href="#滴滴" class="headerlink" title="滴滴"></a>滴滴</h2><p>总体不是很难，但是自己答的不够好吧，一面挂。</p>
+<ol>
+<li>如果两个应用在不同的服务器上怎么通信<br> 真想打死自己，想不起来怎么答。然后面试官说 api。。这么简单我都想不到，真是想死。</li>
+<li>RESTFul api 了解吗，特点，状态码</li>
+<li>说下单例模式怎么写的，然后说 php 都是单线程的，如果是多线程语言怎么办。emmm，加锁？</li>
+<li>开发用到了 git 吧，怎么用的，多人合作 git 冲突怎么解决</li>
+<li>linux 文件查找的命令有哪些，如果要查看一个日志文件，但是内容很大，怎么查看找到想要的内容</li>
+<li>发一百万封邮件如何提高速度</li>
+<li>项目相关的问题，异步队列怎么实现</li>
+</ol>
+<h2 id="阿里"><a href="#阿里" class="headerlink" title="阿里"></a>阿里</h2><p>其实本来不想投，阿里几乎用的是 JAVA，我除非其他条件很好才会要我吧，但是群里正好有个老哥在到处内推，我就抱着体验的心态投了，后来才发现我投的阿里云是非常非常难进的部门，里面都是神仙😭，真的想不到这么垃圾的我如何过的简历筛选。阿里的面试官真的好有礼貌好亲切啊，开头自己介绍了一下。然后面试，面试的时候，几乎就是逮着一个点深入的问，我随便问问就给问倒了，那个礼拜我感觉特别挫败，面试前完全是个废人，但是面试的时候很平静，已经佛了。面完面试官问我有什么想问的，我知道自己绝对不可能过，也不知道问什么，就随便问他对我有啥建议，人家就说了下阿里几乎是用 JAVA 的，腾讯和百度用 php 比较多，然后说要多关注下大流量分布式啥的。唉，面完好想哭，觉得自己就是个废人，好想去和这些大佬做同事啊。</p>
+<ol>
+<li>数据库有哪些索引， 索引怎么建，联合索引的问题，如果在 abc 三个字段上分别建立索引查询时用到的是哪一个，如果是 ab 和 ac 和 bc 都要用索引，索引怎么建</li>
+<li>用 redis 做缓存，如何保证数据是最新的，如果几个人同时更改数据怎么办，数据库的数据更改了没有同步到 redis 里怎么办<br> 后来自己查的资料：<a href="https://www.jishuwen.com/d/2Cau" target="_blank" rel="external">缓存污染</a> 实时更新：MySQL binlog 增量订阅消费+消息队列+处理并把数据更新到 redis</li>
+<li>项目难点，怎么分工，设计</li>
+<li>linux 命令，查看 nginx 查看线程</li>
+<li>nginx 的特点，为什么用 nginx，和 apache的区别，为什么 nginx 性能更好（答nginx 用的epoll，apache 用的 select），然后又问 select 和 epoll 的区别</li>
+<li>近期有什么打算，学什么<br>我说自己一直从事后端开发，学下别的语言，比如 go，但是不想学前端，问为什么，我说我比较想专注于一个领域吧，同时学很多可能学不精。。</li>
+</ol>
+<h2 id="借贷宝"><a href="#借贷宝" class="headerlink" title="借贷宝"></a>借贷宝</h2><p>牛客网内推，也是第二天就接到 hr电话了，感觉态度也很好，面试官也还不错，面试难度中等，问题都比较套路，背背知识点可以过，平时多积累。面完十分钟 hr 就通知我过了，感觉效率挺高的。二面就问了三个问题，才问了十分钟就，结束了，问我有啥想问的。感觉 hr 比较热情，实习待遇也还可以。</p>
+<h3 id="一面-1"><a href="#一面-1" class="headerlink" title="一面"></a>一面</h3><ul>
+<li>php 获取昨天的日期</li>
+<li>数组去重的函数</li>
+<li>mysql 联合索引，联合索引的原理</li>
+<li>浏览器输入地址后请求的过程，浏览器做了什么</li>
+<li>tcp 三次握手，三次握手的原因<br>  关于这个我纠结了很久，我之前就看过这个问题，并且看到的回答是防止失效的报文到达服务器，我仔细的说了两遍，面试官说不对，是因为 tcp 是全双工通信。</li>
+<li>算法（只说思路） 链表环的入口节点 二叉树两个子节点寻找最近父节点 数组中重复的数字</li>
+<li>laravel 框架的原理，用到的设计模式，什么是依赖注入</li>
+<li>如何让实现类的动态加载</li>
+<li>如何实现框架中的路由功能</li>
+<li>看什么书</li>
+</ul>
+<h3 id="二面-1"><a href="#二面-1" class="headerlink" title="二面"></a>二面</h3><ul>
+<li>说下 php 底层原理（自己讲，知道多少讲多少）</li>
+<li>Nginx 配置，upstream 的作用，location，rewrite 的作用</li>
+<li>MySQL InnoDB 和 MyISAM 的区别，聚簇索引和非聚簇索引，非聚簇索引里如果有多个索引，是一个索引一个文件还是只有一个索引文件</li>
+<li>如何实现单点登陆 </li>
+</ul>
+<h2 id="京东"><a href="#京东" class="headerlink" title="京东"></a>京东</h2><ul>
+<li>介绍项目</li>
+<li>api 怎么设计的</li>
+<li>php 怎么合并两个数组</li>
+<li>分割字符串的函数</li>
+<li>MySQL 外键关联有几种</li>
+<li>左连接 右连接 不注明的话是什么连接</li>
+<li>场景设计，京东下面有很多 app，app下有很多子模块，子模块要读取配置，怎么设计表</li>
+<li>linux 怎么文件夹下查找 .php 结尾的文件<br>  find . -name *.php -ls</li>
+<li>怎么在文件夹下查找包含 123 字符的 php 文件<br>  grep “123” *.php</li>
+<li>问我还会啥语言 c++，java</li>
+<li>c++ 和 c 有啥区别，虚函数是什么，多态是什么</li>
+<li>c++ 和 java 对比有什么优缺点</li>
+<li>垃圾回收机制了解吗</li>
+</ul>
+<h2 id="腾讯-1"><a href="#腾讯-1" class="headerlink" title="腾讯"></a>腾讯</h2><ul>
+<li>将字符串格式的时间转换为标准时间格式</li>
+<li>两个表，员工和部门，查询出各个部门薪水最高的</li>
+<li>进程和线程的区别</li>
+<li>wait() 和 sleep() 的区别</li>
+<li>tcp三次握手四次挥手</li>
+<li>https 加密的过程</li>
+<li>设计模式 工厂模式的作用</li>
+<li>项目中队列的用途</li>
+<li>es 排序怎么做</li>
+<li>linux 杀死进程的命令 改变文件权限的命令</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地平线"><span class="toc-text">地平线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小米"><span class="toc-text">小米</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一面"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二面"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#腾讯"><span class="toc-text">腾讯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#滴滴"><span class="toc-text">滴滴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阿里"><span class="toc-text">阿里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借贷宝"><span class="toc-text">借贷宝</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一面-1"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二面-1"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#京东"><span class="toc-text">京东</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#腾讯-1"><span class="toc-text">腾讯</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/04/16/PHP-底层原理/" class="prev">&larr; 上一篇 PHP 底层原理</a>
+  
+
+  
+
+  
+    <a href="/2019/04/10/PHP-基础知识/" class="next">下一篇 PHP 基础 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

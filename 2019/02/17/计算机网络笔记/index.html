@@ -1,0 +1,448 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="计算机网络OST七层模型（开放网络系统互联参考模型）物理层
+功能：建立、维护、断开物理连接
+协议：RJ45，CLOCK，IEEE802.3
+设备：中继器，集线器数据链路层
+功能：将网络层传下来的 IP 数据报组装成帧，并检测和矫正物理层产生的传输差错。建立逻辑连接、进行硬件地址寻址、差错校验，流量控制，传输管理。
+协议：HDLC，PPP，STP，SDLC，CSMA
+设备：网桥，交换机网络层
+...">
+  
+  <title>计算机网络笔记 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/04/10/PHP-基础知识/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 基础
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2018/09/17/Nginx-笔记/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Nginx 笔记
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>计算机网络笔记</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-02-17</span>
+      
+        <span id = "post-title-updated">修改于 2020-01-05</span>
+      
+      
+      
+    </p>
+    
+    <h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="OST七层模型（开放网络系统互联参考模型）"><a href="#OST七层模型（开放网络系统互联参考模型）" class="headerlink" title="OST七层模型（开放网络系统互联参考模型）"></a>OST七层模型（开放网络系统互联参考模型）</h2><h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><ul>
+<li>功能：建立、维护、断开物理连接</li>
+<li>协议：RJ45，CLOCK，IEEE802.3</li>
+<li>设备：中继器，集线器<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3></li>
+<li>功能：将网络层传下来的 IP 数据报组装成帧，并检测和矫正物理层产生的传输差错。建立逻辑连接、进行硬件地址寻址、差错校验，流量控制，传输管理。</li>
+<li>协议：HDLC，PPP，STP，SDLC，CSMA</li>
+<li>设备：网桥，交换机<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3></li>
+<li>功能：负责在网络层将数据<strong>封装成数据报</strong>，将数据报从源端传到目的端，同时进行<strong>路由选择</strong>，为分组交换网上的不同主机提供<strong>通信服务</strong>。关键问题是对分组进行选择，并实现流量控制、拥塞控制、差错控制和网际互联等功能。传输单位<strong>数据报</strong>。</li>
+<li>协议：IP，ICMP，IGMP，ARP，OSPF，IPX</li>
+<li>设备：路由器<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3></li>
+<li>功能：负责主机中两个进程之间的通信，为端到端连接提供可靠的传输服务。为端到端连接提供流量控制、差错控制、服务质量、数据传输管理等服务。</li>
+<li>协议：TCP，UDP<h3 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h3></li>
+<li>功能：建立、管理、终止会话,如 session 认证，断点续传。会话层允许不同主机上各个进程之间的会话，会话层利用传输层提供的端到端的服务，向表示层提供它的增值服务。这种服务主要是为表示层实体或用户进程<strong>建立连接</strong>并在连接上提供<strong>有序</strong>地传输数据。</li>
+<li>协议：SQL,RPC(远程调用协议)<h3 id="表示层"><a href="#表示层" class="headerlink" title="表示层"></a>表示层</h3></li>
+<li>功能：用于处理两个通信系统中交换信息的方式。如图像、视频编码解密，数据的表示、安全、压缩</li>
+<li>协议：JPEG,MPEG,ASII<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3></li>
+<li>功能：网络服务与最终用户的一个接口</li>
+<li>协议：HTTP（80） FTP（21） TFTP（69） SMTP（25） DNS（53） TELNET（23） HTTPS POP3 DHCP SNMP（161）<h2 id="TCP-IP-分层"><a href="#TCP-IP-分层" class="headerlink" title="TCP/IP 分层"></a>TCP/IP 分层</h2></li>
+<li>网络接口层（接收和发送数据报）：负责将数据报发送到<strong>网络介质上</strong>，以及从网络上接收 TCP/IP 数据报，相当于 OSI 的物理层和数据链路层。</li>
+<li>网际层（数据报封装和路由寻址功能）：主要负责寻址和对数据报的封装以及重要的路由选择功能。</li>
+<li>传输层：<strong>负责在应用进程之后间的“端到端”通信</strong>，即从某个应用进程传输到另一个应用进程。</li>
+<li>应用层：是 TCP/IP 的最高层，他是直接为应用进程服务的的一层。当不同的应用进程数据通信或数据交换时，就去调用应用层的<strong>不同协议实体</strong>，让这些实体去调用 TCP 或者 UDP 层服务来进行网络传输。<h2 id="五层体系结构模型"><a href="#五层体系结构模型" class="headerlink" title="五层体系结构模型"></a>五层体系结构模型</h2></li>
+<li>应用层</li>
+<li>传输层</li>
+<li>网路层</li>
+<li>数据链路层</li>
+<li>物理层<h2 id="TCP-IP-四层协议模型"><a href="#TCP-IP-四层协议模型" class="headerlink" title="TCP/IP 四层协议模型"></a>TCP/IP 四层协议模型</h2></li>
+<li>应用层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>网络接口层<h2 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h2></li>
+<li>第一次握手：建立连接时，客户端发送syn（syn=j）包到服务器，并进入SYN_SEND状态，等待服务器确认</li>
+<li>第二次握手：服务器收到syn包，必须确认客户的syn（ack=j+1），同时自己也发送一个syn包（syn=k），即syn+ack包，此时服务器进入SYN_RECV状态</li>
+<li>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK（ack=k+1），发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手<br><strong>ACK ： TCP协议规定，只有ACK=1时有效，也规定连接建立后所有发送的报文的ACK必须为1</strong><br><strong>SYN(SYNchronization) ： 在连接建立时用来同步序号。当SYN=1而ACK=0时，表明这是一个连接请求报文。对方若同意建立连接，则应在响应报文中使SYN=1和ACK=1. 因此, SYN置1就表示这是一个连接请求或连接接受报文。</strong><br><strong>FIN （finis）即完，终结的意思， 用来释放一个连接。当 FIN = 1 时，表明此报文段的发送方的数据已经发送完毕，并要求释放连接。</strong><h2 id="TCP-滑动窗口协议"><a href="#TCP-滑动窗口协议" class="headerlink" title="TCP 滑动窗口协议"></a><a href="https://juejin.im/post/5c9f1dd651882567b4339bce#heading-0" target="_blank" rel="external">TCP 滑动窗口协议</a></h2>维持发送方/接受方缓冲区，缓冲区是用来解决网络之间数据不可靠的问题，例如丢包，重复包，出错，乱序。<br>如果丢包就超时重发。<h2 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h2></li>
+<li>1XX 信息类状态码，表示接受收请求正在处理</li>
+<li>2XX 成功状态码 204 no contnet 206 部分内容</li>
+<li>3XX 重定向 301永久重定向 302 临时重定向</li>
+<li>4XX 客户端错误</li>
+<li>5XX 服务器错误<h3 id="RESTFul-中使用的状态码"><a href="#RESTFul-中使用的状态码" class="headerlink" title="RESTFul 中使用的状态码"></a>RESTFul 中使用的状态码</h3></li>
+<li>200 OK - 对成功的 GET、PUT、PATCH 或 DELETE 操作进行响应。也可以被用在不创建新资源的 POST 操作上</li>
+<li>201 Created - 对创建新资源的 POST 操作进行响应。应该带着指向新资源地址的 Location 头</li>
+<li>202 Accepted - 服务器接受了请求，但是还未处理，响应中应该包含相应的指示信息，告诉客户端该去哪里查询关于本次请求的信息</li>
+<li>204 No Content - 对不会返回响应体的成功请求进行响应（比如 DELETE 请求）</li>
+<li>304 Not Modified - HTTP缓存header生效的时候用</li>
+<li>400 Bad Request - 请求异常，比如请求中的body无法解析</li>
+<li>401 Unauthorized - 没有进行认证或者认证非法</li>
+<li>403 Forbidden - 服务器已经理解请求，但是拒绝执行它</li>
+<li>404 Not Found - 请求一个不存在的资源</li>
+<li>405 Method Not Allowed - 所请求的 HTTP 方法不允许当前认证用户访问</li>
+<li>410 Gone - 表示当前请求的资源不再可用。当调用老版本 API 的时候很有用</li>
+<li>415 Unsupported Media Type - 如果请求中的内容类型是错误的</li>
+<li>422 Unprocessable Entity - 用来表示校验错误</li>
+<li>429 Too Many Requests - 由于请求频次达到上限而被拒绝访问<h2 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h2>-<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2></li>
+<li>HTTP是超文本传输协议，描述客户端和服务端的数据标准，该协议由W3C维护和管理</li>
+<li>HTTP1.0：每次发出请求都需要建立网络连接</li>
+<li>HTTP1.1：在一次网络连接上发出多次请求和得到多次响应。多了一些头</li>
+<li><code>&lt;link&gt; &lt;script src=&quot;&quot;&gt;&lt;/script&gt; &lt;img src=&quot;&quot;/&gt;</code>浏览器会自动发出请求</li>
+<li>URL：统一资源标识符</li>
+<li>URL：协议+主机:端口+URI 统一资源定位符<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2></li>
+<li>Http传输数据的问题：HTTP 传输的是明文，数据容易泄露</li>
+<li>HTTPS 将数据加密后再传输</li>
+<li>HTTP 需要 CA 证书</li>
+<li>HTTPS = SSL + HTTP<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3></li>
+<li>对称加密：加密算法是公开的，靠的是密钥来加密数据，使用一个密钥加密，使用相同的密钥才能解密</li>
+<li>常用的对称加密算法：DES，3DES，AES</li>
+<li>优点：计算量小，速度快，适合加密比较大的数据</li>
+<li>缺点:密钥的创数容易泄露，一个用户需要对应一个密钥，服务器管理密钥比较麻烦</li>
+<li>非对称加密：算法公开，一个公钥一个私钥 AES</li>
+<li>公钥加密私钥解密</li>
+<li>私钥加密公钥解密</li>
+<li>加密和加密使用不同钥匙</li>
+<li>优点：可以传输不同公钥，数据传输是安全的</li>
+<li>缺点：计算量大，加密和解密的速度比较慢<br>https原理：</li>
+</ul>
+<ol>
+<li>客户端发出请求</li>
+<li>服务器生成公钥和私钥</li>
+<li>服务器响应携带数字证书.数字证书包含公钥和服务器身份标识信息</li>
+<li>客户端验证公钥生成一个随机码，使用公钥加密随机码</li>
+<li>客户端发送加密后的数据给服务器</li>
+<li>服务器使用私钥解密得到客户端随机码</li>
+<li>客户端使用随机码加密数据，传输响应加密数据。服务器使用随机码解密数据<br>连接方式不同，80 443<h3 id="请求消息头"><a href="#请求消息头" class="headerlink" title="请求消息头"></a>请求消息头</h3></li>
+</ol>
+<ul>
+<li>消息头相当于服务器和浏览器之间的一些暗号指令，向服务端传递附加信息</li>
+<li>每个消息头包含一个头字段名称，然后依次是冒号，空格，只，回车和换行符</li>
+<li>消息头名称不区分大小写</li>
+<li>请求头字段都允许客户端在值部分制定多个可接受的选项，多个选项之间以逗号分隔</li>
+<li>有些字段可以出现多次<h4 id="常用的请求头"><a href="#常用的请求头" class="headerlink" title="常用的请求头"></a>常用的请求头</h4></li>
+<li>Accept:浏览器接受的数据类型（MIME类型：大类型/小类型 如txt–&gt;text/html）</li>
+<li>Accept-Encoding：浏览器能够进行解码的数据编码方式</li>
+<li>Accept-Language：浏览器所希望的语言种类</li>
+<li>Referer：包含一个URL，用户从该URL代表的的页面发出请求访问当前请求的页面（作用：统计广告投放效果，防盗链）</li>
+<li>Content-Type：请求正文的MIME类型</li>
+<li>默认类型：application/x-www-form-urlencided 表单类型 enctype属性的默认取值</li>
+<li>其他类型：multipart/foem-data 文件上传</li>
+<li>If-Modidied-Since：利用这个头与服务器的文件进行对比，如果一致，则从缓存中直接读取文件</li>
+<li>User-Agent：浏览器类型</li>
+<li>Content-Length：请求消息正文长度</li>
+<li>Connenction：表示是否需要持久连接</li>
+<li>Cookie：会话管理</li>
+<li>Referrer：上级请求路径</li>
+<li>X-Forwarded-For：请求端真实 IP<h3 id="响应消息头"><a href="#响应消息头" class="headerlink" title="响应消息头"></a>响应消息头</h3></li>
+<li>服务端向客户端传递的附加信息</li>
+<li>Location：新的资源的地址，和302/307实现请求重定向</li>
+<li>Content-Encoding：响应正文使用的压缩编码</li>
+<li>Content-Length：响应正文的长度</li>
+<li>Content-Language：服务器发送的文本语言</li>
+<li>Content-Type：响应正文的MIME类型</li>
+<li>Last-Modified：文件最后修改时间</li>
+<li>Refresh：指定客户端刷新频率，单位是秒</li>
+<li>Content-Disposition：attachment;filename= 指定客户端下载文件</li>
+<li>Set-Cookie：会话管理</li>
+<li>Expires:-1 Cache-Control:no-cache Pragma:no-cache 三个头一起用，告知浏览器不要缓存<h2 id="浏览器缓存和-304"><a href="#浏览器缓存和-304" class="headerlink" title="浏览器缓存和 304"></a>浏览器缓存和 304</h2></li>
+<li>禁止缓存：Cache-Control：no-store 与 Pragma：no-cache 都可以禁止缓存</li>
+<li>Pragma：no-cache 可以兼容 http 1.0</li>
+<li>Cache-Control：no-store 是 http 1.1提供的</li>
+<li>因此，Pragma: no-cache可以应用到http 1.0和http 1.1,而Cache-Control: no-store只能应用于http 1.1<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h2 id="长连接怎么实现"><a href="#长连接怎么实现" class="headerlink" title="长连接怎么实现"></a>长连接怎么实现</h2>在服务器程序中加入一个死循环，在循环中监测数据的变动，当发现新数据时，立即将其输出给浏览器并断开连接，浏览器在收到数据后，再次发起请求以进入下一个周期，这就是常说的长轮询方式。</li>
+</ul>
+<ol>
+<li>轮询的建立</li>
+<li>数据的推送</li>
+<li>轮询的终止</li>
+<li>轮询的重建</li>
+</ol>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#计算机网络"><span class="toc-text">计算机网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#OST七层模型（开放网络系统互联参考模型）"><span class="toc-text">OST七层模型（开放网络系统互联参考模型）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#物理层"><span class="toc-text">物理层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据链路层"><span class="toc-text">数据链路层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络层"><span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传输层"><span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#会话层"><span class="toc-text">会话层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表示层"><span class="toc-text">表示层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用层"><span class="toc-text">应用层</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP-分层"><span class="toc-text">TCP/IP 分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五层体系结构模型"><span class="toc-text">五层体系结构模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP-四层协议模型"><span class="toc-text">TCP/IP 四层协议模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP三次握手"><span class="toc-text">TCP三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-滑动窗口协议"><span class="toc-text">TCP 滑动窗口协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP状态码"><span class="toc-text">HTTP状态码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RESTFul-中使用的状态码"><span class="toc-text">RESTFul 中使用的状态码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET和POST的区别"><span class="toc-text">GET和POST的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP"><span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS"><span class="toc-text">HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加密"><span class="toc-text">加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求消息头"><span class="toc-text">请求消息头</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用的请求头"><span class="toc-text">常用的请求头</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应消息头"><span class="toc-text">响应消息头</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器缓存和-304"><span class="toc-text">浏览器缓存和 304</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#长连接怎么实现"><span class="toc-text">长连接怎么实现</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/04/10/PHP-基础知识/" class="prev">&larr; 上一篇 PHP 基础</a>
+  
+
+  
+
+  
+    <a href="/2018/09/17/Nginx-笔记/" class="next">下一篇 Nginx 笔记 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

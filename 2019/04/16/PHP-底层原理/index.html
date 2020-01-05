@@ -1,0 +1,400 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="生命周期和 Zend 引擎SAPI 指的是 PHP 集体应用的编程接口，脚本执行的开始都是以 SAPI 接口实现开始的
+SAPI 概述PHP 脚本的执行
+php 虽然是一个脚本语言。但不是靠解释器解释，而是 zend 虚拟机，屏蔽了操作系统的区别。
+php 代码编译成 opcode，用 zend 虚拟机来执行 opcode，php 脚本一结束，opcode 就清除了
+php 本身不支持缓存，...">
+  
+  <title>PHP 底层原理 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/04/16/PHP-面试知识点/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 面试知识点
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/04/14/春招面经/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        春招面经
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>PHP 底层原理</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-04-16</span>
+      
+        <span id = "post-title-updated">修改于 2020-01-05</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/PHP/">PHP</a>
+      
+      </span>
+      
+      
+    </p>
+    
+    <h2 id="生命周期和-Zend-引擎"><a href="#生命周期和-Zend-引擎" class="headerlink" title="生命周期和 Zend 引擎"></a>生命周期和 Zend 引擎</h2><p>SAPI 指的是 PHP 集体应用的编程接口，脚本执行的开始都是以 SAPI 接口实现开始的</p>
+<h2 id="SAPI-概述"><a href="#SAPI-概述" class="headerlink" title="SAPI 概述"></a>SAPI 概述</h2><h2 id="PHP-脚本的执行"><a href="#PHP-脚本的执行" class="headerlink" title="PHP 脚本的执行"></a>PHP 脚本的执行</h2><ul>
+<li>php 虽然是一个脚本语言。但不是靠解释器解释，而是 zend 虚拟机，屏蔽了操作系统的区别。</li>
+<li>php 代码编译成 opcode，用 zend 虚拟机来执行 opcode，php 脚本一结束，opcode 就清除了</li>
+<li>php 本身不支持缓存，但是 apc，xcache 等加速器，实现了这样的效果</li>
+</ul>
+<h2 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h2><p>Opcode 是一种 php 脚本编译后的中间语言</p>
+<ul>
+<li>Scanning（Lexing），将 php 代码转换为语言片段（Tokens）</li>
+<li>parsing，将 Tokens 转换成简单而有意义的表达式</li>
+<li>Compilation，将表达式编译成 Opcodes</li>
+<li>Execution，顺次执行 Opcodes，每次一条，从而实现 PHP 脚本的功能</li>
+</ul>
+<h2 id="变量的底层实现"><a href="#变量的底层实现" class="headerlink" title="变量的底层实现"></a>变量的底层实现</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> _zval_struct&#123;</div><div class="line">    <span class="keyword">union</span> &#123;</div><div class="line">        <span class="keyword">long</span> lval;</div><div class="line">        <span class="keyword">double</span> dval;</div><div class="line">        <span class="keyword">struct</span>&#123;</div><div class="line">            <span class="keyword">char</span> *val;</div><div class="line">            <span class="keyword">int</span> len;<span class="comment">//字符串长度</span></div><div class="line">        &#125;str;</div><div class="line">        HashTable *ht;</div><div class="line">        zend_object_value obj;</div><div class="line">        zend_ast *ast;</div><div class="line">    &#125;value;</div><div class="line">    <span class="comment">//变量的值，是个联合体</span></div><div class="line">    zend_uint refcount_gc <span class="comment">//指向次数</span></div><div class="line">    zend_uchar type <span class="comment">//变量类型</span></div><div class="line">    zend_uchar is_ref_gc <span class="comment">//是否引用</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>在php中，字符串长度直接体现在其结构体中。strlen速度非常快</li>
+</ul>
+<h2 id="PHP-中有-8-种数据类型，为什么联合体中只有-5-种"><a href="#PHP-中有-8-种数据类型，为什么联合体中只有-5-种" class="headerlink" title="PHP 中有 8 种数据类型，为什么联合体中只有 5 种"></a>PHP 中有 8 种数据类型，为什么联合体中只有 5 种</h2><ol>
+<li>NULL，直接 zval-&gt;type=IS_NULL 就可以表示，不必设置 value 的值。</li>
+<li>BOOL，zval-&gt;type=IS_BOOL,再设置 lval=1/0。</li>
+<li>Resource，资源型，往往是服务器上打开的一个接口，lval=服务器上打开的接口的编号。</li>
+</ol>
+<h2 id="符号表"><a href="#符号表" class="headerlink" title="符号表"></a>符号表</h2><p>符号表是一张哈希表 里面存储了变量名 -&gt; 变量的 zval 结构体的地址。</p>
+<p>在传值赋值时，以 <code>$a=3;$b=$a;</code>  为例，并没有再次产生结构体，而是两个变量共用一个结构体，refcount_gc 值为 2。</p>
+<p>a，b 指向同一结构体，修改其中一方时，结构体会分裂成两个，这种特点称为 cow（copy on write）。</p>
+<p>引用时，if_ref_gc=1,说明这个变量是引用，共用一个结构体，修改时直接改这个结构体的值，不分裂。</p>
+<p>如果 <code>$a=3;$b=$a; $c=&amp;$a;</code> 会强制分裂，b分裂一份结构体。</p>
+<p>数组的 zvalue 里面存放的是指针，指向哈希表，哈希表里面就是数组的键和存放数组值的 zval<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line">$tmp=$arr;</div><div class="line">$arr[<span class="number">1</span>]=<span class="number">11</span>;<span class="comment">//$tmp[1]=1</span></div></pre></td></tr></table></figure></p>
+<p>此时发生了分裂，数组的一号单元产生了一个新的结构体，但是0，2，3对应的还是同一个结构体<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line">$x=&amp;$arr[<span class="number">1</span>];</div><div class="line">$tmp=$arr;</div><div class="line">$arr[<span class="number">1</span>]=<span class="number">11</span>;<span class="comment">//$tmp[1]=11</span></div></pre></td></tr></table></figure></p>
+<p>此时强制分裂失效</p>
+<h2 id="弱类型的实现"><a href="#弱类型的实现" class="headerlink" title="弱类型的实现"></a>弱类型的实现</h2><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><ul>
+<li>foreach 循环后，数组指针停留在数组结尾</li>
+<li>foreach 操作的是 arrcopy，是 arr 的复制</li>
+</ul>
+<h2 id="符号表与作用域"><a href="#符号表与作用域" class="headerlink" title="符号表与作用域"></a>符号表与作用域</h2><ul>
+<li>当执行函数时，会生成函数的“执行环境结构体”，包含函数名，参数，执行步骤，所在的类，以及为这个函数生成一个符号表，符号表统一放在栈上，并把active_symbol_table指向刚产生的符号表，这个结构体是_zend_execute_data{}结构体，这个结构体中，有两个重要信息</li>
+<li>*op_array 是函数的执行步骤</li>
+<li>*hash_table–&gt;symbol_table 这个函数对应的符号表</li>
+<li>静态变量 放在op_array里，函数无论调用多少次。op_array只有一个，所以操作的是共同的变量<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2></li>
+<li>define，值为对象时，会把对象转成标量来存储，需要__toString魔术方法</li>
+<li>常量的符号表只有一个，所以全局有效，变量，每调用一次，生成一个独立的符号表<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2></li>
+<li>对象存储在 handle 里，handle 指向 hash 表中的对象<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2>PHP 5.3 版本之前都是采用引用计数的方式管理内存，PHP 所有的变量存在一个叫 zval 的变量容器中，当变量被引用的时候，引用计数会 + 1，变量引用计数变为 0 时，PHP 将在内存中销毁这个变量。</li>
+</ul>
+<p>但是引用计数中的循环引用，引用计数不会消减为 0，就会导致内存泄露。<br>而php中内存对象就是zval，而计数器就是refcount__gc。</p>
+<ul>
+<li>循环引用问题：<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$a=<span class="keyword">array</span>(<span class="string">"one"</span>);</div><div class="line">$a[]=&amp;$a;</div><div class="line"><span class="keyword">unset</span>($a);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在 5.3 版本之后，做了这些优化：</p>
+<ol>
+<li>并不是每次引用计数减少时都进入回收周期，只有根缓冲区满额后在开始垃圾回收；</li>
+<li>可以解决循环引用问题；</li>
+<li>可以总将内存泄露保持在一个阈值以下。</li>
+</ol>
+<p>有几个基本准则：</p>
+<ol>
+<li>如果一个 zval 的 refcount 增加，那么此 zval 还在使用，不属于垃圾</li>
+<li>如果一个 zval 的 refcount 减少到 0，那么 zval 可以被释放掉，不属于垃圾</li>
+<li>如果一个 zval 的 refcount 减少之后大于 0，那么此 zval 还不能被释放，此 zval 可能成为一个垃圾。</li>
+</ol>
+<p>新的GC算法目的就是防止循环引用的变量引起内存泄露问题。在PHP中GC算法，当节点缓冲区满了之后，垃圾分析算法就会启动，并且会释放掉发现的垃圾，从而回收内存。<br>首先PHP会分配一个固定大小的“根缓冲区”，这个缓冲区用于存放固定数量的zval，这个数量默认是10,000，如果需要修改则需要修改源代码Zend/zend_gc.c中的常量GC_ROOT_BUFFER_MAX_ENTRIES然后重新编译。<br>由上文我们可以知道，一个zval如果有引用，要么被全局符号表中的符号引用，要么被其它表示复杂类型的zval中的符号引用。因此在zval中存在一些可能根（root）。这里我们暂且不讨论PHP是如何发现这些可能根的，这是个很复杂的问题，总之PHP有办法发现这些可能根zval并将它们投入根缓冲区。<br>当根缓冲区满额时，PHP就会执行垃圾回收，此回收算法如下：</p>
+<ol>
+<li>对每个根缓冲区中的根zval按照深度优先遍历算法遍历所有能遍历到的zval，并将每个zval的refcount减1，同时为了避免对同一zval多次减1（因为可能不同的根能遍历到同一个zval），每次对某个zval减1后就对其标记为“已减”。</li>
+<li>再次对每个缓冲区中的根zval深度优先遍历，如果某个zval的refcount不为0，则对其加1，否则保持其为0。</li>
+<li>清空根缓冲区中的所有根（注意是把这些zval从缓冲区中清除而不是销毁它们），然后销毁所有refcount为0的zval，并收回其内存。</li>
+</ol>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><ul>
+<li><a href="http://www.php-internals.com/book/" target="_blank" rel="external">TIPI 深入理解 PHP 内核</a></li>
+<li><a href="http://www.laruence.com/2018/04/08/3170.html" target="_blank" rel="external">深入理解PHP7内核之zval</a></li>
+<li><a href="https://segmentfault.com/a/1190000013893628" target="_blank" rel="external">内存管理与垃圾回收</a>(<a href="https://www.jianshu.com/p/63a381a7f70c" target="_blank" rel="external">https://www.jianshu.com/p/63a381a7f70c</a>)</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生命周期和-Zend-引擎"><span class="toc-text">生命周期和 Zend 引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SAPI-概述"><span class="toc-text">SAPI 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP-脚本的执行"><span class="toc-text">PHP 脚本的执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行过程"><span class="toc-text">执行过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量的底层实现"><span class="toc-text">变量的底层实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP-中有-8-种数据类型，为什么联合体中只有-5-种"><span class="toc-text">PHP 中有 8 种数据类型，为什么联合体中只有 5 种</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符号表"><span class="toc-text">符号表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#弱类型的实现"><span class="toc-text">弱类型的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#foreach"><span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符号表与作用域"><span class="toc-text">符号表与作用域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常量"><span class="toc-text">常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象"><span class="toc-text">对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾回收"><span class="toc-text">垃圾回收</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关文章"><span class="toc-text">相关文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/04/16/PHP-面试知识点/" class="prev">&larr; 上一篇 PHP 面试知识点</a>
+  
+
+  
+
+  
+    <a href="/2019/04/14/春招面经/" class="next">下一篇 春招面经 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

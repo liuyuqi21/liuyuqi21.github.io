@@ -1,0 +1,435 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="子类重写父类的 protected 方法有什么限制
+final 修饰的类方法不可被子类重写
+php 是否重写父类方法只会根据方法名是否一致（5.3以后参数个数必须一致）
+重写是访问级别只可以等于或宽松于父类，不可提升访问级别php文件末尾是否应该加?&gt;结束符号主要防止 include，require 引用文件，把文件末尾可能的回车和空格等字符引用进来，还有一些函数必须在没有任何输出之前...">
+  
+  <title>收集的各种题 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/05/09/MySQL-知识点/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        MySQL 知识点
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/04/16/PHP-面试知识点/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 面试知识点
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>收集的各种题</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-04-16</span>
+      
+        <span id = "post-title-updated">修改于 2019-04-17</span>
+      
+      
+      
+    </p>
+    
+    <h4 id="子类重写父类的-protected-方法有什么限制"><a href="#子类重写父类的-protected-方法有什么限制" class="headerlink" title="子类重写父类的 protected 方法有什么限制"></a>子类重写父类的 protected 方法有什么限制</h4><ul>
+<li>final 修饰的类方法不可被子类重写</li>
+<li>php 是否重写父类方法只会根据方法名是否一致（5.3以后参数个数必须一致）</li>
+<li>重写是访问级别只可以等于或宽松于父类，不可提升访问级别<h4 id="php文件末尾是否应该加-gt-结束符号"><a href="#php文件末尾是否应该加-gt-结束符号" class="headerlink" title="php文件末尾是否应该加?&gt;结束符号"></a>php文件末尾是否应该加?&gt;结束符号</h4>主要防止 include，require 引用文件，把文件末尾可能的回车和空格等字符引用进来，还有一些函数必须在没有任何输出之前调用，就会造成不是期望的结果。PHP文件的编码不包含BOM的UTF8. 这也是PSR-2中的规范：纯PHP代码文件必须省略最后的 ?&gt; 结束标签。<h4 id="trait解决了什么痛点"><a href="#trait解决了什么痛点" class="headerlink" title="trait解决了什么痛点"></a>trait解决了什么痛点</h4></li>
+<li>trait 是为类似 php 的单继承语言二准备的一种代码复用机制<h4 id="yield是什么，使用场景"><a href="#yield是什么，使用场景" class="headerlink" title="yield是什么，使用场景"></a>yield是什么，使用场景</h4></li>
+<li>生成器提供了一种更容易的方法来实现简单的对象迭代</li>
+<li>laravel框架的model以游标方式读取数据是，用的是yield来防止一次性读取数据太多导致内存不足的问题<h4 id="PSR是什么"><a href="#PSR是什么" class="headerlink" title="PSR是什么"></a>PSR是什么</h4></li>
+<li>PSR-1 基础编码规范</li>
+<li>PSR-2 编码风格规范</li>
+<li>PSR-4 自动加载规范</li>
+<li>PSR-7 HTTP消息基础规范<h4 id="代理透传-实际ip的概念"><a href="#代理透传-实际ip的概念" class="headerlink" title="代理透传 实际ip的概念"></a>代理透传 实际ip的概念</h4></li>
+<li>代理一般会在HTTP的Header中输入三个字段<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">REMOTE_ADDR</div><div class="line">HTTP_X_FORWARDED_FOR</div><div class="line">HTTP_VIA</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>REMOTE_ADDR总是发送代理服务器的ip</p>
+<ul>
+<li>透传代理：真实ip地址会被放在HTTP_X_FORWARDED_FOR里面，HTTP_VIA也会发送，显示正在使用的代理服务器</li>
+<li>匿名代理：匿名代理不会把你的真实IP写在HTTP_X_FORWARDED_FOR头里面。但是HTTP_VIA头还是透露了您正在使用一个代理服务器。</li>
+<li>精英代理：精英代理只发送REMOTE_ADDR头,因此让你看起来像一个普通互联网用户不使用代理<h4 id="如何开启php异常提示"><a href="#如何开启php异常提示" class="headerlink" title="如何开启php异常提示"></a>如何开启php异常提示</h4></li>
+<li>php.ini中开启display_errors设置error_reporting等级</li>
+<li>运行时，使用ini_set(k,v)动态设置<h4 id="如何返回一个301重定向"><a href="#如何返回一个301重定向" class="headerlink" title="如何返回一个301重定向"></a>如何返回一个301重定向</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">http_response_code(<span class="number">301</span>);<span class="comment">//或者header("HTTP/1.1 301 Moved Permanently");</span></div><div class="line">header(<span class="string">'Location: /option-a'</span>);</div><div class="line"><span class="keyword">exit</span>;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制"><a href="#字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制" class="headerlink" title="字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制"></a>字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制</h4><ul>
+<li>字符串比较大小，从左(高位)至右，逐个字符 ASCII 比较</li>
+<li>字符串和数字比较，会先把字符串转换成数字类型，比如12se转换成12，abx转换成0，此时就不是字符的ASCII值与数字比较。0与任何不可转换成数字的字符串比较都是true</li>
+<li>两个不同进制的数字比较会转成十进制比较（得出这个结论是因为我在php中直接输出其他进制数字时均显示十进制格式<h4 id="什么是面向对象？主要特征是什么？几大原则是什么？"><a href="#什么是面向对象？主要特征是什么？几大原则是什么？" class="headerlink" title="什么是面向对象？主要特征是什么？几大原则是什么？"></a>什么是面向对象？主要特征是什么？几大原则是什么？</h4></li>
+<li>面向对象是程序的一种设计模式，它利于提高程序的重用性，是程序机构更加清晰</li>
+<li>主要特征：封装，继承，多态</li>
+<li>五大基本原则：单一职责原则，开放封闭原则，替换原则，以来原则，接口分离原则<h4 id="issset-empty-is-null的区别"><a href="#issset-empty-is-null的区别" class="headerlink" title="issset,empty,is_null的区别"></a>issset,empty,is_null的区别</h4></li>
+<li>isset判断变量是否定义或者是否为空</li>
+</ul>
+<ol>
+<li>变量存在返回true</li>
+<li>变量定义不赋值返回false</li>
+<li>变量赋值为null，返回false</li>
+</ol>
+<ul>
+<li>empty判断变量的值是否为空，能转换为false的都是空，没有任何属性对象的都认为是空</li>
+<li>is_null检测传入的值是否为null</li>
+</ul>
+<ol>
+<li>定义了，赋值为null</li>
+<li>定义了没有赋值</li>
+<li>unset一个变量<h4 id="对于大流量网站，采用什么方法来解决访问量的问题"><a href="#对于大流量网站，采用什么方法来解决访问量的问题" class="headerlink" title="对于大流量网站，采用什么方法来解决访问量的问题"></a>对于大流量网站，采用什么方法来解决访问量的问题</h4></li>
+</ol>
+<ul>
+<li>确认服务器硬件是否能够支持当前的流量</li>
+<li>数据库读写分离，优化数据表</li>
+<li>程序功能规则，禁止外部的盗链</li>
+<li>控制大文件的下载</li>
+<li>使用不同主机分流主要流量<h4 id="优化数据库的方法"><a href="#优化数据库的方法" class="headerlink" title="优化数据库的方法"></a>优化数据库的方法</h4></li>
+<li>选取最适用的字段属性，尽可能减少定义字段宽度，尽量把字段设置NOTNULL，例如’省份’、’性别’最好适用ENUM</li>
+<li>使用连接(JOIN)来代替子查询</li>
+<li>适用联合(UNION)来代替手动创建的临时表</li>
+<li>事务处理</li>
+<li>锁定表、优化事务处理</li>
+<li>适用外键，优化锁定表</li>
+<li>建立索引</li>
+<li>优化查询语句<h4 id="三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果"><a href="#三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果" class="headerlink" title="三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果"></a>三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果</h4></li>
+<li>被黑客利用，进行DDOS攻击(<a href="https://www.jianshu.com/p/1c65840fc02d" target="_blank" rel="external">https://www.jianshu.com/p/1c65840fc02d</a>)<h2 id="HTTP缓存策略"><a href="#HTTP缓存策略" class="headerlink" title="HTTP缓存策略"></a><a href="https://juejin.im/entry/599afbe5f265da247c4ee6e3" target="_blank" rel="external">HTTP缓存策略</a></h2></li>
+<li>强制缓存，响应header中有两个字段来标明失效规则（Expires/Cache-Control）</li>
+<li>对比缓存，缓存标识在请求头和响应头之间进行传递，Last-Modified/If-Modified-Since<h4 id="HTTP和HTTPS的差别在哪？有什么改进和优点"><a href="#HTTP和HTTPS的差别在哪？有什么改进和优点" class="headerlink" title="HTTP和HTTPS的差别在哪？有什么改进和优点"></a>HTTP和HTTPS的差别在哪？有什么改进和优点</h4></li>
+<li>HTTP 协议以明文方式发送内容，不提供任何方式的数据加密</li>
+<li>HTTPS 为了数据传输的安全，HTTPS 在 HTTP 的基础上加入了 SSL/TLS 协议，依靠证书来验证服务器的身份，并未浏览器和服务器之间的通信加密</li>
+<li>http 和 https 是使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443</li>
+<li>https 采用混合加密机制</li>
+<li>共享密钥加密/对称加密：加密和解密同用一个密钥</li>
+<li>公开密钥加密/非对称加密（公钥，私钥）发送方的一方使用对方的公开密钥进行加密处理，对方收到被加密的信息后，在使用自己的私有密钥进行解密</li>
+<li>HTTPS 在交换密钥环节使用公开密钥加密方式，之后建立通信交换报文阶段使用共享密钥加密方式</li>
+<li>数字证书认证机构（CA）颁发的公开密钥证书：接到证书的客户端可使用数字认证机构的公开密钥，对那张证书上的数字签名进行验证，一旦验证通过就可以明确两件事：一，认证服务器的公开密钥是真实有效的数字认证机构。二，服务器的公开密钥是值得信赖的<h4 id="php垃圾回收"><a href="#php垃圾回收" class="headerlink" title="php垃圾回收"></a><a href="http://php.net/manual/zh/features.gc.collecting-cycles.php" target="_blank" rel="external">php垃圾回收</a></h4></li>
+<li>在PHP5.3版本之前，PHP只有简单的基于引用计数的垃圾回收，当一个变量的引用计数变为0时， PHP将在内存中销毁这个变量，只是这里的垃圾并不能称之为垃圾。 并且PHP在一个生命周期结束后就会释放此进程/线程所占的内容，这种方式决定了PHP在前期不需要过多考虑内存的泄露问题。</li>
+<li>PHP5.3中引入了更加完善的垃圾回收机制。 新的垃圾回收机制解决了无法处理循环的引用内存泄漏问题。PHP5.3中的垃圾回收机制使用了引用计数系统中的同步周期回收(Concurrent Cycle Collection in Reference Counted Systems) ，算法的基本规则：如果一个引用计数增加，它将继续被使用，当然就不再在垃圾中。如果引用计数减少到零，所在变量容器将被清除。就是说，仅仅在引用计数减少到非零值时，才会产生垃圾周期，php会把一些可能为垃圾的容器（可能根）放在一个根缓冲区中，当这个缓冲区满了就会执行垃圾回收操作。<h4 id="限流算法"><a href="#限流算法" class="headerlink" title="限流算法"></a>限流算法</h4></li>
+<li>计数器算法</li>
+<li>滑动窗口算法</li>
+<li>漏桶算法</li>
+<li>令牌桶算法<h4 id="内存泄漏和内存溢出"><a href="#内存泄漏和内存溢出" class="headerlink" title="内存泄漏和内存溢出"></a>内存泄漏和内存溢出</h4></li>
+<li>内存泄漏：内存泄漏是指那些本应该回收（不再使用）的内存对象无法被系统回收的现象。</li>
+<li>内存溢出：系统在为某段执行指令（程序）分配内存的时候，发现内存不足，抛出错误，这叫做内存溢出。<h4 id="定义和声明"><a href="#定义和声明" class="headerlink" title="定义和声明"></a>定义和声明</h4></li>
+<li>定义创建对象并为这个对象分配了内存，声明没有分配内存。<h4 id="指针和引用"><a href="#指针和引用" class="headerlink" title="指针和引用"></a>指针和引用</h4></li>
+<li>指针：指针是一个变量，只不过这个变量存储的是一个地址，指向内存的一个存储单元；而引用跟原来的变量实质上是同一个东西，只不过是原变量的一个别名而已。<h4 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a><a href="https://www.jianshu.com/p/ce02402fb36b" target="_blank" rel="external">堆和栈的区别</a></h4>1、算法复杂度与初始状态无关的有：选择排序、堆排序、归并排序、基数排序。<br>2、元素总比较次数与初始状态无关的有：选择排序、基数排序。<br>3、元素总移动次数与初始状态无关的有：归并排序、基数排序。<h4 id="浏览器如何解析一个-url"><a href="#浏览器如何解析一个-url" class="headerlink" title="浏览器如何解析一个 url"></a>浏览器如何解析一个 url</h4></li>
+</ul>
+<ol>
+<li>首先当然是浏览器红输入url地址，当你的URL编程baidu.com的时候，baidu.com是一个一级域名，那你访问一个域名的时候，在Apache或者nginx上面的配置中就会给你访问一个默认的二级域名（当你没有写完整时），这中间的过程十分的复杂，因为你直接访问baidu.com和访问www.baidu.com不仅仅是名字上的差别，而涉及到了一个重定向的问题</li>
+<li>输入你的url地址之后，浏览器就开始好好工作了，寻找浏览器缓存（可以从浏览器缓存中取数据），系统缓存，路由器（有时候也叫DNS缓存）缓存，看看有没有缓存过这个url中的信息啊，这对于快速反应有着很大的帮助，有缓存就可以直接调用缓存了，没有的话就去访问DNS服务器吧浏览器缓存参考：点击打开链接 <a href="http://blog.csdn.net/longxibendi/article/details/41630389" target="_blank" rel="external">http://blog.csdn.net/longxibendi/article/details/41630389</a><br>DNS缓存：首先客户机将域名查询请求发送到本地DNS服务器，本地DNS服务器先在之前的记录（缓存）中查找，如果有缓存，则直接利用缓存进行解析，如果没有缓存，则进入本地的缓存的寻找。<br>本地缓存：如果本地服务器不能在本地找到缓存，则将请求发送到根域名DNS服务器（全球13台呢<br>哈哈哈）<br>本地服务器与网络服务器：本地服务器是内部局域网的设备才能访问，没有公网的IP，网络服务器<br>有公网IP，属于城域网更大的巴拉巴拉，即属于internet<br>3.请求终于来到了DNS服务器，DNS服务器将域名解析成IP地址，<br>域名解析：由于网络识别不认识什么域名，这些都是字符组合的，计算机当然不认识，IP地址就认<br>识了，域名解析就是将域名转化成ip地址<br>DNS：domain name system 域名系统<br>域名为什么存在呢，就是看一串ip地址会很难记住啊，就有了域名<br>域名结构：我们来看一个域名<br>.com 顶级域名 这是全球顶级域名<br>baidu.com 这是一级域名，一级域名就是在顶级域名前面加上一级<br>www.baidu.com 这是二级域名，百度的二级域名很多，还有tieba.baidu.com等等，可以<br>上网搜一搜<br>分区 任务日志 的第 36 页<br><a href="http://：大家基友疑问了，这不是域名吗？这是一种传输协议，还有很多其他的传输协议，就是网上" target="_blank" rel="external">http://：大家基友疑问了，这不是域名吗？这是一种传输协议，还有很多其他的传输协议，就是网上</a><br>传输东西的时候遵循的原则<br>IP地址：互联网上面的每一台主机有一个属于自己的IP地址，用来屏蔽物理性的差异，IP地址就像现<br>实中的住址一样，有了IP就有了目标地了。<br>4.浏览器有了IP就可以找到服务器，两者之间就可以建立TCP连接，服务器需要和浏览器建立tcp三次握手<br>（打好招呼，要来一发数据了）<br>TCP连接参考点击打开链接：<a href="http://blog.163.com/hlz_" target="_blank" rel="external">http://blog.163.com/hlz_</a><br>2599/blog/static/142378474201151943414397/<br>三次握手：简化版： 甲：你瞅啥 乙：瞅你咋地 甲：不服来一发啊 甲和乙就来一发数据了。<br>参考：<a href="http://blog.csdn.net/whuslei/article/details/6667471/" target="_blank" rel="external">http://blog.csdn.net/whuslei/article/details/6667471/</a> （三次握手+四次握手）<br>5.握手成功后，就可以来一发数据了，不过首先浏览器得向服务器发送http请求（如果是http协议）和请求<br>数据包<br>http请求就是用什么版本的协议请求，请求的方式是什么，你想要什么数据，这些数据是什么格式，<br>http请求参考：<a href="http://canrry.iteye.com/blog/1331292" target="_blank" rel="external">http://canrry.iteye.com/blog/1331292</a><br><a href="http://www.cnblogs.com/loveyakamoz/archive/2011/07/22/2113614.html" target="_blank" rel="external">http://www.cnblogs.com/loveyakamoz/archive/2011/07/22/2113614.html</a><br>6.请求通过网络，服务器收到了请求，进行处理后，将需要的数据（http响应头）返回浏览器<br>有请求就要响应，那服务器通过物理地址的取数据和逻辑处理，将数据以响应头的形式返回<br>数据在网络中传输的过程十分复杂，网络中传输一共有7层，每一层数据的形式有有所差异<br>数据包网络的传输参考：<a href="http://www.tuicool.com/articles/F3Qvie3" target="_blank" rel="external">http://www.tuicool.com/articles/F3Qvie3</a><br><a href="http://www.cnblogs.com/hnrainll/archive/2012/11/07/2758191.html" target="_blank" rel="external">http://www.cnblogs.com/hnrainll/archive/2012/11/07/2758191.html</a><br>http响应头参考：<a href="http://canrry.iteye.com/blog/1331292" target="_blank" rel="external">http://canrry.iteye.com/blog/1331292</a><br>7.浏览器收到http响应头，此时就要读取数据了，进行浏览器渲染，解析html<br>来自 <a href="http://blog.csdn.net/alwanyslongjing/article/details/52601920" target="_blank" rel="external">http://blog.csdn.net/alwanyslongjing/article/details/52601920</a><h4 id="const和define-定义常量的区别"><a href="#const和define-定义常量的区别" class="headerlink" title="const和define()定义常量的区别"></a>const和define()定义常量的区别</h4></li>
+</ol>
+<ul>
+<li>const在编译时定义常量，define()在运行时定义</li>
+<li>const不能用在if语句中，define()可以</li>
+<li>define()的一个常用场景是先判断常量是否已经定义再定义常量</li>
+<li>const 具有更好的可读性，const是语言结构而不是函数，而且与在类中定义类常量的形式保持一致</li>
+<li>const在当前的命名空间中定义常量， 而define()要实现类似效果必须在定义时传递完整的命名空间名称</li>
+<li>const从PHP5.6版本开始可以把数组用作常量值，而define()在PHP7.0版本开始才支持把数组用作常量值</li>
+<li>因为const是语言结构并且在编译时定义常量所以const会比define() 稍稍快一些</li>
+<li>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FOO</span></span></div><div class="line">&#123;</div><div class="line"><span class="keyword">const</span> BAR = <span class="number">2</span>;<span class="comment">// 正确</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Baz</span></span></div><div class="line">&#123;</div><div class="line">define(<span class="string">'QUX'</span>, <span class="number">2</span>)<span class="comment">// 错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="如何在页面之间传递变量-至少两种方式"><a href="#如何在页面之间传递变量-至少两种方式" class="headerlink" title="如何在页面之间传递变量(至少两种方式)"></a>如何在页面之间传递变量(至少两种方式)</h4><p>GET,POST,COOKIE,SESSION，隐藏表单</p>
+<h4 id="请问GET-和POST的区别是什么"><a href="#请问GET-和POST的区别是什么" class="headerlink" title="请问GET 和POST的区别是什么?"></a>请问GET 和POST的区别是什么?</h4><p>GET方法传输数据,所有的信息都会出现在URL地址中,最多只能传输1024字节，而POST可以通过表单传输大量数据,最多可以传输2M数据,可以根据需求调节.</p>
+<h4 id="能够使HTML和PHP分离开使用的模板"><a href="#能够使HTML和PHP分离开使用的模板" class="headerlink" title="能够使HTML和PHP分离开使用的模板"></a>能够使HTML和PHP分离开使用的模板</h4><p>Smarty,Dwoo,TinyButStrong,Template Lite,Savant,phemplate,XTemplate</p>
+<h4 id="JS表单弹出对话框函数是-获得输入焦点函数是"><a href="#JS表单弹出对话框函数是-获得输入焦点函数是" class="headerlink" title="JS表单弹出对话框函数是?获得输入焦点函数是?"></a>JS表单弹出对话框函数是?获得输入焦点函数是?</h4><p>弹出对话框: alert(),prompt(),confirm()</p>
+<h4 id="php读取文件内容的几种方法和函数？"><a href="#php读取文件内容的几种方法和函数？" class="headerlink" title="php读取文件内容的几种方法和函数？"></a>php读取文件内容的几种方法和函数？</h4><p>打开文件，然后读取。Fopen() fread()<br>打开读取一次完成 file_get_contents()</p>
+<h4 id="HTTP-状态中302、403、-500代码含义？"><a href="#HTTP-状态中302、403、-500代码含义？" class="headerlink" title="HTTP 状态中302、403、 500代码含义？"></a>HTTP 状态中302、403、 500代码含义？</h4><p>一二三四五原则:一 消息系列 二 成功系列 三 重定向系列   四错误系列   五 服务器端错误系列</p>
+<h4 id="javascript能否定义二维数组，如果不能你如何解决？"><a href="#javascript能否定义二维数组，如果不能你如何解决？" class="headerlink" title="javascript能否定义二维数组，如果不能你如何解决？"></a>javascript能否定义二维数组，如果不能你如何解决？</h4><p>javascript不支持二维数组定义，可以用arr[0] = new array()来解决</p>
+<h4 id="MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么"><a href="#MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么" class="headerlink" title="MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?"></a>MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?</h4><p>Varchar是变长，节省存储空间，char是固定长度。查找效率要varchar型快，因为varchar是非定长，必须先查找长度，然后进行数据的提取，比char定长类型多了一个步骤，所以效率低一些</p>
+<h4 id="MYSQL取得当前时间的函数是-，格式化日期的函数是"><a href="#MYSQL取得当前时间的函数是-，格式化日期的函数是" class="headerlink" title="MYSQL取得当前时间的函数是?，格式化日期的函数是?"></a>MYSQL取得当前时间的函数是?，格式化日期的函数是?</h4><p>now(),date()</p>
+<h4 id="const和define-定义常量的区别-1"><a href="#const和define-定义常量的区别-1" class="headerlink" title="const和define()定义常量的区别"></a>const和define()定义常量的区别</h4><ul>
+<li>const在编译时定义常量，define()在运行时定义</li>
+<li>const不能用在if语句中，define()可以</li>
+<li>define()的一个常用场景是先判断常量是否已经定义再定义常量</li>
+<li>const 具有更好的可读性，const是语言结构而不是函数，而且与在类中定义类常量的形式保持一致</li>
+<li>const在当前的命名空间中定义常量， 而define()要实现类似效果必须在定义时传递完整的命名空间名称</li>
+<li>const从PHP5.6版本开始可以把数组用作常量值，而define()在PHP7.0版本开始才支持把数组用作常量值</li>
+<li>因为const是语言结构并且在编译时定义常量所以const会比define() 稍稍快一些</li>
+<li>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FOO</span></span></div><div class="line">&#123;</div><div class="line"><span class="keyword">const</span> BAR = <span class="number">2</span>;<span class="comment">// 正确</span></div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Baz</span></span></div><div class="line">&#123;</div><div class="line">define(<span class="string">'QUX'</span>, <span class="number">2</span>)<span class="comment">// 错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#子类重写父类的-protected-方法有什么限制"><span class="toc-text">子类重写父类的 protected 方法有什么限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php文件末尾是否应该加-gt-结束符号"><span class="toc-text">php文件末尾是否应该加?>结束符号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#trait解决了什么痛点"><span class="toc-text">trait解决了什么痛点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#yield是什么，使用场景"><span class="toc-text">yield是什么，使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PSR是什么"><span class="toc-text">PSR是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代理透传-实际ip的概念"><span class="toc-text">代理透传 实际ip的概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何开启php异常提示"><span class="toc-text">如何开启php异常提示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何返回一个301重定向"><span class="toc-text">如何返回一个301重定向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制"><span class="toc-text">字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是面向对象？主要特征是什么？几大原则是什么？"><span class="toc-text">什么是面向对象？主要特征是什么？几大原则是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#issset-empty-is-null的区别"><span class="toc-text">issset,empty,is_null的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对于大流量网站，采用什么方法来解决访问量的问题"><span class="toc-text">对于大流量网站，采用什么方法来解决访问量的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化数据库的方法"><span class="toc-text">优化数据库的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果"><span class="toc-text">三次握手，最后一次客户端对服务器的响应如果失败了，服务器没有收到，会产生什么后果</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP缓存策略"><span class="toc-text">HTTP缓存策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP和HTTPS的差别在哪？有什么改进和优点"><span class="toc-text">HTTP和HTTPS的差别在哪？有什么改进和优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php垃圾回收"><span class="toc-text">php垃圾回收</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#限流算法"><span class="toc-text">限流算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存泄漏和内存溢出"><span class="toc-text">内存泄漏和内存溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定义和声明"><span class="toc-text">定义和声明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#指针和引用"><span class="toc-text">指针和引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆和栈的区别"><span class="toc-text">堆和栈的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#浏览器如何解析一个-url"><span class="toc-text">浏览器如何解析一个 url</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const和define-定义常量的区别"><span class="toc-text">const和define()定义常量的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何在页面之间传递变量-至少两种方式"><span class="toc-text">如何在页面之间传递变量(至少两种方式)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#请问GET-和POST的区别是什么"><span class="toc-text">请问GET 和POST的区别是什么?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#能够使HTML和PHP分离开使用的模板"><span class="toc-text">能够使HTML和PHP分离开使用的模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS表单弹出对话框函数是-获得输入焦点函数是"><span class="toc-text">JS表单弹出对话框函数是?获得输入焦点函数是?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php读取文件内容的几种方法和函数？"><span class="toc-text">php读取文件内容的几种方法和函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-状态中302、403、-500代码含义？"><span class="toc-text">HTTP 状态中302、403、 500代码含义？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#javascript能否定义二维数组，如果不能你如何解决？"><span class="toc-text">javascript能否定义二维数组，如果不能你如何解决？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么"><span class="toc-text">MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MYSQL取得当前时间的函数是-，格式化日期的函数是"><span class="toc-text">MYSQL取得当前时间的函数是?，格式化日期的函数是?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const和define-定义常量的区别-1"><span class="toc-text">const和define()定义常量的区别</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/05/09/MySQL-知识点/" class="prev">&larr; 上一篇 MySQL 知识点</a>
+  
+
+  
+
+  
+    <a href="/2019/04/16/PHP-面试知识点/" class="next">下一篇 PHP 面试知识点 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

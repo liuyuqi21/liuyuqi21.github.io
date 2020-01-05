@@ -1,0 +1,434 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="高并发和快速的原因
+redis 是基于内存的
+redis 是单线程的，省去了很多上下文切换线程的时间
+redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。
+
+为什么单线程Redis 的性能瓶...">
+  
+  <title>Redis-底层原理 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+  
+    <div class="item next">
+      <a href="/2019/07/18/linux-命令/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        linux 命令
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>Redis-底层原理</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-11-10</span>
+      
+        <span id = "post-title-updated">修改于 2020-01-05</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/Redis/">Redis</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/Redis/">Redis</a>
+      
+      </span>
+      
+    </p>
+    
+    <h2 id="高并发和快速的原因"><a href="#高并发和快速的原因" class="headerlink" title="高并发和快速的原因"></a>高并发和快速的原因</h2><ul>
+<li>redis 是基于内存的</li>
+<li>redis 是单线程的，省去了很多上下文切换线程的时间</li>
+<li>redis 使用<strong>多路复用</strong>技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。</li>
+</ul>
+<h3 id="为什么单线程"><a href="#为什么单线程" class="headerlink" title="为什么单线程"></a>为什么单线程</h3><p>Redis 的性能瓶颈不在于 <strong>CPU 资源</strong>，而在于内存访问和网络 IO。采用单线程设计的好处是，极大简化了数据结构和算法的实现，不需要各种<strong>锁的性能消耗</strong>。Redis 通过<strong>异步 IO 和 pipeline</strong> 等机制来实现高速的并发访问。</p>
+<h4 id="其他开源软件采用的模型"><a href="#其他开源软件采用的模型" class="headerlink" title="其他开源软件采用的模型"></a>其他开源软件采用的模型</h4><ul>
+<li>Nginx 多进程单线程</li>
+<li>Memcached 单进程多线程</li>
+</ul>
+<h3 id="单线程的劣势"><a href="#单线程的劣势" class="headerlink" title="单线程的劣势"></a>单线程的劣势</h3><p>无法发挥多核 CPU 的性能，不过可以通过在单机开多个 Redis 实例来完善。</p>
+<h3 id="IO-多路复用技术"><a href="#IO-多路复用技术" class="headerlink" title="IO 多路复用技术"></a>IO 多路复用技术</h3><p><strong>多路</strong>指的是多个 socket 连接，<strong>复用</strong> 值得是复用一个线程。多路复用主要有三种技术：select，poll，epoll。</p>
+<h2 id="数据淘汰策略"><a href="#数据淘汰策略" class="headerlink" title="数据淘汰策略"></a>数据淘汰策略</h2><h1 id="底层数据结构"><a href="#底层数据结构" class="headerlink" title="底层数据结构"></a>底层数据结构</h1><h2 id="SDS-简单动态字符串"><a href="#SDS-简单动态字符串" class="headerlink" title="SDS 简单动态字符串"></a>SDS 简单动态字符串</h2><ul>
+<li>常数复杂度获取字符串长度</li>
+<li>杜绝缓冲区溢出</li>
+<li>减少修改字符串长度时所需的内存重分配次数。</li>
+<li>二进制安全</li>
+<li>兼容部分 C 字符串函数</li>
+</ul>
+<p>一个 sds 字符串的完整结构，由在内存地址上前后相邻的两部分构成。</p>
+<ul>
+<li>一个 header，通常包含字符串的长度（len）、最大容量（alloc）和 flags。sdshdr5 有所不同</li>
+<li>一个字符数组。长度等于最大容量 +1。为了放 null 结束符，和传统 C 字符串做兼容。<h3 id="header"><a href="#header" class="headerlink" title="header"></a>header</h3>sds 包含一个 header 结构，sds 一共有5 种类型的 header，之所以有 5 种，是为了能让不同长度的字符串可以使用不同大小的 header。</li>
+</ul>
+<p>除 sdshdr5 之外，其他 4 个 header 的结构都包含 3 个字段。</p>
+<ul>
+<li>len：表示字符串的真正长度（不包含 bull 结束符在内）</li>
+<li>alloc：表示字符串的最大容量（不包含最后最后多余的那个字节）</li>
+<li>flags：总是占用一个字节。其中的最低 3 个 bit 用来表示 header 的类型。<br>sdshdr5 与其他几个 header 结构不同，不包含 alloc 字段，长度使用 flags 的高 5 位来存储。因此，它不能为字符串分配空余空间。如果字符串需要动态增长，它就必要要重新分配内存。这种类型更适合存储静态的短字符串（长度小于 32）</li>
+</ul>
+<p>可以看出，header 存放在真正的字符串数据前面（低地址方向），这样有几个好处</p>
+<ul>
+<li>header 和数据相邻，而不用分成两块内存空间来单独分配。这样有利于减少内存碎片，提高存储效率。</li>
+<li>虽然 header 有多个类型，但是 sds 可以统一用 char* 来表示。且它与传统的C语言字符串保持类型兼容。如果一个sds里面存储的是可打印字符串，那么我们可以直接把它传给C函数，比如使用strcmp比较字符串大小，或者使用printf进行打印。</li>
+</ul>
+<h3 id="SDS-的定义"><a href="#SDS-的定义" class="headerlink" title="SDS 的定义"></a>SDS 的定义</h3><p>SDS 包含三个部分,free,len,buf[]</p>
+<ul>
+<li>buf[]：字节数组，用来存放实际字符串</li>
+<li>len：记录 buf 数组中已经使用的字节数量</li>
+<li>free：记录 buf 数组中未使用的字节的数量</li>
+</ul>
+<h3 id="O-1-获取字符串的长度"><a href="#O-1-获取字符串的长度" class="headerlink" title="O(1) 获取字符串的长度"></a>O(1) 获取字符串的长度</h3><p>直接获取len</p>
+<h3 id="杜绝缓冲区溢出"><a href="#杜绝缓冲区溢出" class="headerlink" title="杜绝缓冲区溢出"></a>杜绝缓冲区溢出</h3><p>C 语言字符串不记录自身长度，所以 strcat 假定用户在执行这个函数时， 已经为 dest 分配了足够多的内存， 可以容纳 src 字符串中的所有内容， 而一旦这个假定不成立时， 就会产生缓冲区溢出。</p>
+<p>SDS 的 SDS 的空间分配策略完全杜绝了发生缓冲区溢出的可能性： 当 SDS API 需要对 SDS 进行修改时， API 会先检查 SDS 的空间是否满足修改所需的要求， 如果不满足的话， API 会自动将 SDS 的空间扩展至执行修改所需的大小， 然后才执行实际的修改操作。</p>
+<h3 id="减少内存分配次数"><a href="#减少内存分配次数" class="headerlink" title="减少内存分配次数"></a>减少内存分配次数</h3><p>而在 SDS 中我们在对一个 SDS 初始化的时候会根据实际 buf[] 字符串的长度进行预先空间分配，并且标记为 free。这种方式叫做<strong>空间预分配</strong>。free 的空间分配的策略是根据 buf[] 大小来决定的，如果 buf[] 大小小于 1MB，则 len 多大 free 就多大；如果 buf[] 大小大于 1MB，则 free 固定设置为 1MB。</p>
+<p>如果 SDS 的字符串长度减少，那么 SDS 会将减少的长度存放到 free 中，而不是直接回收，这样可以方便下次如果再次使用，减少内存重新分配。这种策略叫做<strong>惰性空间释放</strong>。</p>
+<h3 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h3><p>这是由于 Redis 不依赖一 ‘\0’ 空字符作为结束字符。C 语言之所以不支持就是因为二进制流中会携带 ‘\0’ 字符，导致无法知道字符串真实的结束位置。这就带来了另一个 Redis 特性，就是二进制的安全性。</p>
+<h2 id="robj（Redis-Object）"><a href="#robj（Redis-Object）" class="headerlink" title="robj（Redis Object）"></a>robj（Redis Object）</h2><p>类似于 php 的 zvalue</p>
+<h2 id="dict-字典"><a href="#dict-字典" class="headerlink" title="dict 字典"></a>dict 字典</h2><ul>
+<li>Redis 的一个 database 中所有的 key 到 value 的映射，就是使用一个 dict 来维护的。</li>
+<li>一个 Redis hash 结构，当它的 field 较多时，会采用 dict 来存储。</li>
+<li>zset 使用 dict 和 skiplist 共同维护</li>
+</ul>
+<p>Redis 的字典使用哈希表作为底层实现，一个哈希表里面可以有多个哈希表的节点，而每个哈希表节点就保存了字典的一个键值对。</p>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictht&#123;</div><div class="line">    <span class="comment">//哈希表数组， 数组中的每个元素都是一个指向 dict.h/dictEntry 结构的指针， 每个 dictEntry 结构保存着一个键值对。</span></div><div class="line">    dictEntry **table;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表大小</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表大小掩码，用于计算索引值</span></div><div class="line">    <span class="comment">//总是等于 size-1</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</div><div class="line"></div><div class="line">    <span class="comment">//该哈希表已有节点的数量，这个属性和哈希值一起决定一个键应该被放到 table 数组的哪个索引上面。</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> userd;</div><div class="line">&#125; dictht;</div></pre></td></tr></table></figure>
+<h3 id="哈希表节点"><a href="#哈希表节点" class="headerlink" title="哈希表节点"></a>哈希表节点</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictEntry&#123;</div><div class="line">    <span class="comment">//键</span></div><div class="line">    <span class="keyword">void</span> *key;</div><div class="line"></div><div class="line">    <span class="comment">//值</span></div><div class="line">    <span class="keyword">union</span>&#123;</div><div class="line">        <span class="keyword">void</span> *val;</div><div class="line">        <span class="keyword">uint64_t</span> u64;</div><div class="line">        <span class="keyword">int64_t</span> s64;</div><div class="line">    &#125; v;</div><div class="line"></div><div class="line">    <span class="comment">//指向下个哈希表节点，形成链表</span></div><div class="line">    <span class="comment">//这个指针可以将多个哈希值相同的键值对连接在一起，以此来解决键冲突的问题</span></div><div class="line">    <span class="keyword">struct</span> dictEntry *next;</div><div class="line">&#125; dictEntry;</div></pre></td></tr></table></figure>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dict&#123;</div><div class="line">    <span class="comment">//类型特定函数</span></div><div class="line">    dictType *type;</div><div class="line"></div><div class="line">    <span class="comment">//私有数据</span></div><div class="line">    <span class="keyword">void</span> *privdata;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表</span></div><div class="line">    dictht ht[<span class="number">2</span>];</div><div class="line"></div><div class="line">    <span class="comment">//rehash 索引</span></div><div class="line">    <span class="comment">//当 rehash 不在进行时，值为 -1</span></div><div class="line">    <span class="keyword">int</span> rehashidx;</div><div class="line">&#125; dict;</div></pre></td></tr></table></figure>
+<ul>
+<li>type 属性是一个指向 dictType 结构的指针，每个 ditType 结构保存了一簇用于操作特定类型键值对的函数，Redis 会为用途不同的字典设置不同的类型特定函数。</li>
+<li>privdata 属性保存了需要传给那些类型特定函数的可选参数。</li>
+<li>ht 属性是一个包含两个项的数组，数组中的每个项都是一个 dictht 哈希表，一般情况下， 字典只使用 ht[0] 哈希表， ht[1] 哈希表只会在对 ht[0] 哈希表进行 rehash 时使用。</li>
+<li>rehashidx 记录了 rehash 目前的进度， 如果目前没有在进行 rehash ， 那么它的值为 -1 。</li>
+</ul>
+<h3 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h3><p>当要将一个新的键值对添加到字典里面时， 程序需要先根据键值对的键计算出哈希值和索引值， 然后再根据索引值， 将包含新键值对的哈希表节点放到哈希表数组的指定索引上面。</p>
+<h3 id="解决键冲突"><a href="#解决键冲突" class="headerlink" title="解决键冲突"></a>解决键冲突</h3><p>Redis 的哈希表使用拉链法解决冲突，每个哈希表都有一个 next 指针，多个哈希表节点可以用 next 指针构成一个单向链表。</p>
+<h3 id="rehash（重新散列）"><a href="#rehash（重新散列）" class="headerlink" title="rehash（重新散列）"></a>rehash（重新散列）</h3><p>随着操作的不断执行， 哈希表保存的键值对会逐渐地增多或者减少， 为了让哈希表的负载因子（load factor）维持在一个合理的范围之内， 当哈希表保存的键值对数量太多或者太少时， 程序需要对哈希表的大小进行相应的扩展或者收缩。<br><code>负载因子 = 哈希表已保存节点数量 / 哈希表大小</code></p>
+<ol>
+<li>为字典的 <code>hash[1]</code> 哈希表分配空间</li>
+<li>将保存在 <code>ht[0]</code> 中的所有键值对 rehash 到 <code>ht[1]</code> 上面： rehash 指的是重新计算键的哈希值和索引值， 然后将键值对放置到 <code>ht[1]</code> 哈希表的指定位置上。</li>
+<li>当 <code>ht[0]</code> 包含的所有键值对都迁移到了 <code>ht[1]</code> 之后 （<code>ht[0]</code> 变为空表）， 释放 <code>ht[0]</code> ， 将 <code>ht[1]</code> 设置为 <code>ht[0]</code> ， 并在 <code>ht[1]</code> 新创建一个空白哈希表， 为下一次 rehash 做准备。 </li>
+</ol>
+<h3 id="渐进式-rehash"><a href="#渐进式-rehash" class="headerlink" title="渐进式 rehash"></a>渐进式 rehash</h3><ol>
+<li>为 <code>ht[1]</code> 分配空间，让字典同时持有 <code>ht[0]</code> 和 <code>ht[1]</code> 两个哈希表</li>
+<li>在字典中维持一个索引计数器变量 rehashidx，并将它的值设为 0，表示 rehash 工作正式开始</li>
+<li>在 rehash 进行期间，每次对字典执行添加、删除、查找或者更新操作时，程序除了执行指定的操作以外，还会顺带将 <code>ht[0]</code> 哈希表在 rehashidx 索引上的所有键值对 rehash 到 <code>ht[1]</code>，当 rehash 工作完成之后，程序将 rehashidx 属性的值增一。</li>
+<li>rehash 操作完成后，程序将 rehashidx 属性的值设为 -1。<br>渐进式 rehash 的好处在于它采取分而治之的方式， 将 rehash 键值对所需的计算工作均摊到对字典的每个添加、删除、查找和更新操作上， 从而避免了集中式 rehash 而带来的庞大计算量。</li>
+</ol>
+<p>因为在进行渐进式 rehash 的过程中，字典会同时使用 <code>ht[0]</code> 和 <code>ht[1]</code> 两个哈希表，所以在渐进式 rehash 进行期间，字典的删除（delete）、查找（find）、更新（update）等操作会在两个哈希表上进行。比如说，要在字典里面查找一个键的话，程序会先在 <code>ht[0]</code> 里面进行查找，如果没找到的话，就会继续到 <code>ht[1]</code> 里面进行查找，诸如此类。</p>
+<p>另外， 在渐进式 rehash 执行期间， 新添加到字典的键值对一律会被保存到 <code>ht[1]</code> 里面， 而 <code>ht[0]</code> 则不再进行任何添加操作。这一措施保证了 <code>ht[0]</code> 包含的键值对数量会只减不增， 并随着 rehash 操作的执行而最终变成空表。</p>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><p>链表由 list 结构和 listNode 结构组成。</p>
+<p>listNode 结构有 <code>prev</code>，<code>next</code>，<code>value</code>。</p>
+<p>list 结构为链表提供了表头指针 <code>head</code>、表尾指针 <code>tail</code>、 以及链表长度计数器 <code>len</code> ， 而 <code>dup</code> 、 <code>free</code> 和 <code>match</code> 成员则是用于实现多态链表所需的类型特定函数：</p>
+<ul>
+<li>dup 函数用于复制链表节点所保存的值</li>
+<li>free 函数用于释放链表节点所保存的值</li>
+<li>match 函数用于对比链表节点所保存的值和另一个输入值是否相等</li>
+</ul>
+<h2 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h2><p>跳跃表是一种有序数据结构，它通过在每个节点中维持多个指向其他节点的指针， 从而达到快速访问节点的目的。zskiplistNode 结构用于表示跳跃表节点，而 zskiplist 结构用于保存跳跃表节点的相关信息。</p>
+<p>Redis 只在两个地方用到了跳跃表， 一个是实现有序集合键， 另一个是在集群节点中用作内部数据结构。</p>
+<h3 id="zskiplist-结构"><a href="#zskiplist-结构" class="headerlink" title="zskiplist 结构"></a>zskiplist 结构</h3><ul>
+<li>header 指向跳跃表的表头节点</li>
+<li>tail 表头节点的层数不计算在内</li>
+<li>level 记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不计算在内）</li>
+<li>length 记录跳跃表的长度（表头节点的层数不计算在内）</li>
+</ul>
+<h3 id="zskiplistNode-结构"><a href="#zskiplistNode-结构" class="headerlink" title="zskiplistNode 结构"></a>zskiplistNode 结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> zskiplistNode &#123;</div><div class="line"></div><div class="line">    <span class="comment">// 后退指针</span></div><div class="line">    <span class="comment">// 在程序从表尾向表头遍历时使用</span></div><div class="line">    <span class="keyword">struct</span> zskiplistNode *backward;</div><div class="line"></div><div class="line">    <span class="comment">// 分值</span></div><div class="line">    <span class="comment">// 节点按各自所保存的分值从小到大排列</span></div><div class="line">    <span class="keyword">double</span> score;</div><div class="line"></div><div class="line">    <span class="comment">// 成员对象</span></div><div class="line">    robj *obj;</div><div class="line"></div><div class="line">    <span class="comment">// 层</span></div><div class="line">    <span class="keyword">struct</span> zskiplistLevel &#123;</div><div class="line"></div><div class="line">        <span class="comment">// 前进指针</span></div><div class="line">        <span class="comment">// 用于从表头向表尾方向访问节点</span></div><div class="line">        <span class="keyword">struct</span> zskiplistNode *forward;</div><div class="line"></div><div class="line">        <span class="comment">// 跨度</span></div><div class="line">        <span class="comment">// 用于记录两个节点之间的距离</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</div><div class="line"></div><div class="line">    &#125; level[];</div><div class="line"></div><div class="line">&#125; zskiplistNode;</div></pre></td></tr></table></figure>
+<h3 id="层（level）"><a href="#层（level）" class="headerlink" title="层（level）"></a>层（level）</h3><p>level 数组可以包含多个元素，每个元素都包含一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度。</p>
+<p>每次创建一个新的跳跃表节点的时候，程序都根据幂次定律随机生成一个介于 1 和 32 之间的值作为 level 数组的大小，这个大小就是层的“高度”。一般来说， 层的数量越多， 访问其他节点的速度就越快。</p>
+<ul>
+<li>跨度（span）：用户记录两个几点之间的距离，跨度是用来计算排位的（rank），在查找某个节点的过程中，将沿途访问过的所有层的跨度累计起来，得到的结果就是目标节点在跳跃表中的排位。</li>
+</ul>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="http://zhangtielei.com/posts/server.html" target="_blank" rel="external">Redis 内部数据结构详解</a></li>
+<li><a href="https://www.kancloud.cn/kancloud/redisbook/63829" target="_blank" rel="external">Redis 设计与实现（第二版）</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#高并发和快速的原因"><span class="toc-text">高并发和快速的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么单线程"><span class="toc-text">为什么单线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#其他开源软件采用的模型"><span class="toc-text">其他开源软件采用的模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单线程的劣势"><span class="toc-text">单线程的劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO-多路复用技术"><span class="toc-text">IO 多路复用技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据淘汰策略"><span class="toc-text">数据淘汰策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#底层数据结构"><span class="toc-text">底层数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SDS-简单动态字符串"><span class="toc-text">SDS 简单动态字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#header"><span class="toc-text">header</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SDS-的定义"><span class="toc-text">SDS 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#O-1-获取字符串的长度"><span class="toc-text">O(1) 获取字符串的长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#杜绝缓冲区溢出"><span class="toc-text">杜绝缓冲区溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少内存分配次数"><span class="toc-text">减少内存分配次数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制安全"><span class="toc-text">二进制安全</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#robj（Redis-Object）"><span class="toc-text">robj（Redis Object）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dict-字典"><span class="toc-text">dict 字典</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希表"><span class="toc-text">哈希表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希表节点"><span class="toc-text">哈希表节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字典"><span class="toc-text">字典</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希算法"><span class="toc-text">哈希算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决键冲突"><span class="toc-text">解决键冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rehash（重新散列）"><span class="toc-text">rehash（重新散列）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渐进式-rehash"><span class="toc-text">渐进式 rehash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链表"><span class="toc-text">链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跳跃表"><span class="toc-text">跳跃表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist-结构"><span class="toc-text">zskiplist 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplistNode-结构"><span class="toc-text">zskiplistNode 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#层（level）"><span class="toc-text">层（level）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+
+  
+
+  
+    <a href="/2019/07/18/linux-命令/" class="next">下一篇 linux 命令 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
