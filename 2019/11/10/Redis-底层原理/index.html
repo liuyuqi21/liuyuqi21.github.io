@@ -31,11 +31,11 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -201,9 +201,52 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
 <li>zset 使用 dict 和 skiplist 共同维护</li>
 </ul>
 <p>Redis 的字典使用哈希表作为底层实现，一个哈希表里面可以有多个哈希表的节点，而每个哈希表节点就保存了字典的一个键值对。</p>
-<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictht&#123;</div><div class="line">    <span class="comment">//哈希表数组， 数组中的每个元素都是一个指向 dict.h/dictEntry 结构的指针， 每个 dictEntry 结构保存着一个键值对。</span></div><div class="line">    dictEntry **table;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表大小</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表大小掩码，用于计算索引值</span></div><div class="line">    <span class="comment">//总是等于 size-1</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</div><div class="line"></div><div class="line">    <span class="comment">//该哈希表已有节点的数量，这个属性和哈希值一起决定一个键应该被放到 table 数组的哪个索引上面。</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> userd;</div><div class="line">&#125; dictht;</div></pre></td></tr></table></figure>
-<h3 id="哈希表节点"><a href="#哈希表节点" class="headerlink" title="哈希表节点"></a>哈希表节点</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dictEntry&#123;</div><div class="line">    <span class="comment">//键</span></div><div class="line">    <span class="keyword">void</span> *key;</div><div class="line"></div><div class="line">    <span class="comment">//值</span></div><div class="line">    <span class="keyword">union</span>&#123;</div><div class="line">        <span class="keyword">void</span> *val;</div><div class="line">        <span class="keyword">uint64_t</span> u64;</div><div class="line">        <span class="keyword">int64_t</span> s64;</div><div class="line">    &#125; v;</div><div class="line"></div><div class="line">    <span class="comment">//指向下个哈希表节点，形成链表</span></div><div class="line">    <span class="comment">//这个指针可以将多个哈希值相同的键值对连接在一起，以此来解决键冲突的问题</span></div><div class="line">    <span class="keyword">struct</span> dictEntry *next;</div><div class="line">&#125; dictEntry;</div></pre></td></tr></table></figure>
-<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> dict&#123;</div><div class="line">    <span class="comment">//类型特定函数</span></div><div class="line">    dictType *type;</div><div class="line"></div><div class="line">    <span class="comment">//私有数据</span></div><div class="line">    <span class="keyword">void</span> *privdata;</div><div class="line"></div><div class="line">    <span class="comment">//哈希表</span></div><div class="line">    dictht ht[<span class="number">2</span>];</div><div class="line"></div><div class="line">    <span class="comment">//rehash 索引</span></div><div class="line">    <span class="comment">//当 rehash 不在进行时，值为 -1</span></div><div class="line">    <span class="keyword">int</span> rehashidx;</div><div class="line">&#125; dict;</div></pre></td></tr></table></figure>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><pre><code class="language-c">typedef struct dictht{
+    //哈希表数组， 数组中的每个元素都是一个指向 dict.h/dictEntry 结构的指针， 每个 dictEntry 结构保存着一个键值对。
+    dictEntry **table;
+
+    //哈希表大小
+    unsigned long size;
+
+    //哈希表大小掩码，用于计算索引值
+    //总是等于 size-1
+    unsigned long sizemask;
+
+    //该哈希表已有节点的数量，这个属性和哈希值一起决定一个键应该被放到 table 数组的哪个索引上面。
+    unsigned long userd;
+} dictht;
+</code></pre>
+<h3 id="哈希表节点"><a href="#哈希表节点" class="headerlink" title="哈希表节点"></a>哈希表节点</h3><pre><code class="language-c">typedef struct dictEntry{
+    //键
+    void *key;
+
+    //值
+    union{
+        void *val;
+        uint64_t u64;
+        int64_t s64;
+    } v;
+
+    //指向下个哈希表节点，形成链表
+    //这个指针可以将多个哈希值相同的键值对连接在一起，以此来解决键冲突的问题
+    struct dictEntry *next;
+} dictEntry;
+</code></pre>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><pre><code class="language-c">typedef struct dict{
+    //类型特定函数
+    dictType *type;
+
+    //私有数据
+    void *privdata;
+
+    //哈希表
+    dictht ht[2];
+
+    //rehash 索引
+    //当 rehash 不在进行时，值为 -1
+    int rehashidx;
+} dict;
+</code></pre>
 <ul>
 <li>type 属性是一个指向 dictType 结构的指针，每个 ditType 结构保存了一簇用于操作特定类型键值对的函数，Redis 会为用途不同的字典设置不同的类型特定函数。</li>
 <li>privdata 属性保存了需要传给那些类型特定函数的可选参数。</li>
@@ -242,7 +285,34 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
 <li>level 记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不计算在内）</li>
 <li>length 记录跳跃表的长度（表头节点的层数不计算在内）</li>
 </ul>
-<h3 id="zskiplistNode-结构"><a href="#zskiplistNode-结构" class="headerlink" title="zskiplistNode 结构"></a>zskiplistNode 结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> zskiplistNode &#123;</div><div class="line"></div><div class="line">    <span class="comment">// 后退指针</span></div><div class="line">    <span class="comment">// 在程序从表尾向表头遍历时使用</span></div><div class="line">    <span class="keyword">struct</span> zskiplistNode *backward;</div><div class="line"></div><div class="line">    <span class="comment">// 分值</span></div><div class="line">    <span class="comment">// 节点按各自所保存的分值从小到大排列</span></div><div class="line">    <span class="keyword">double</span> score;</div><div class="line"></div><div class="line">    <span class="comment">// 成员对象</span></div><div class="line">    robj *obj;</div><div class="line"></div><div class="line">    <span class="comment">// 层</span></div><div class="line">    <span class="keyword">struct</span> zskiplistLevel &#123;</div><div class="line"></div><div class="line">        <span class="comment">// 前进指针</span></div><div class="line">        <span class="comment">// 用于从表头向表尾方向访问节点</span></div><div class="line">        <span class="keyword">struct</span> zskiplistNode *forward;</div><div class="line"></div><div class="line">        <span class="comment">// 跨度</span></div><div class="line">        <span class="comment">// 用于记录两个节点之间的距离</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</div><div class="line"></div><div class="line">    &#125; level[];</div><div class="line"></div><div class="line">&#125; zskiplistNode;</div></pre></td></tr></table></figure>
+<h3 id="zskiplistNode-结构"><a href="#zskiplistNode-结构" class="headerlink" title="zskiplistNode 结构"></a>zskiplistNode 结构</h3><pre><code class="language-c">typedef struct zskiplistNode {
+
+    // 后退指针
+    // 在程序从表尾向表头遍历时使用
+    struct zskiplistNode *backward;
+
+    // 分值
+    // 节点按各自所保存的分值从小到大排列
+    double score;
+
+    // 成员对象
+    robj *obj;
+
+    // 层
+    struct zskiplistLevel {
+
+        // 前进指针
+        // 用于从表头向表尾方向访问节点
+        struct zskiplistNode *forward;
+
+        // 跨度
+        // 用于记录两个节点之间的距离
+        unsigned int span;
+
+    } level[];
+
+} zskiplistNode;
+</code></pre>
 <h3 id="层（level）"><a href="#层（level）" class="headerlink" title="层（level）"></a>层（level）</h3><p>level 数组可以包含多个元素，每个元素都包含一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度。</p>
 <p>每次创建一个新的跳跃表节点的时候，程序都根据幂次定律随机生成一个介于 1 和 32 之间的值作为 level 数组的大小，这个大小就是层的“高度”。一般来说， 层的数量越多， 访问其他节点的速度就越快。</p>
 <ul>
@@ -362,8 +432,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -371,6 +439,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

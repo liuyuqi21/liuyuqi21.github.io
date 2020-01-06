@@ -36,11 +36,11 @@ kill 信号量 进程号信号量|作用——|——-TERM，INT|立刻停止QUI
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -173,33 +173,136 @@ kill 信号量 进程号信号量|作用——|——-TERM，INT|立刻停止QUI
 <li>nginx -s reopen 重读日志文件（USR1）</li>
 <li>nginx -t 测试配置文件是否出错</li>
 </ul>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">worker-process 1;//指有一个工作的子进程，可以自行修改,一般设置为 CPU 数*核数</div><div class="line">Event&#123;</div><div class="line">//一般配置 nginx 连接特性</div><div class="line">worker——connections 1024; //指一个子进程最大允许 1024 个连接</div><div class="line">&#125;</div><div class="line">http&#123;</div><div class="line">//配置 http 服务器的主要段</div><div class="line">server&#123;</div><div class="line">//虚拟主机段</div><div class="line">listen 80;//监听端口</div><div class="line">server_name xxx.com;//监听的域名或者ip</div><div class="line">location / &#123;</div><div class="line">root 文件路径，相对于 nginx 根路径</div><div class="line">&#125;</div><div class="line">access_log logs/host.access.log main;//该 server，访问的日志文件是 logs/host.access.log，格式是 main 格式，可以自定义其他格式</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre><code class="language-conf">worker-process 1;//指有一个工作的子进程，可以自行修改,一般设置为 CPU 数*核数
+Event{
+//一般配置 nginx 连接特性
+worker——connections 1024; //指一个子进程最大允许 1024 个连接
+}
+http{
+//配置 http 服务器的主要段
+server{
+//虚拟主机段
+listen 80;//监听端口
+server_name xxx.com;//监听的域名或者ip
+location / {
+root 文件路径，相对于 nginx 根路径
+}
+access_log logs/host.access.log main;//该 server，访问的日志文件是 logs/host.access.log，格式是 main 格式，可以自定义其他格式
+}
+}
+</code></pre>
 <h3 id="Location-段"><a href="#Location-段" class="headerlink" title="Location 段"></a>Location 段</h3><p>location = patt{} 精准匹配<br>location patt{} 一般匹配<br>location ~ patt{} 正则匹配<br>首先看看有没有精准匹配，如果有停止匹配过程</p>
-<h2 id="Rewrite-语法"><a href="#Rewrite-语法" class="headerlink" title="Rewrite 语法"></a>Rewrite 语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//注意 if 后要加空格</div><div class="line">if 空格 (条件)&#123;</div><div class="line">重写模式</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Rewrite-语法"><a href="#Rewrite-语法" class="headerlink" title="Rewrite 语法"></a>Rewrite 语法</h2><pre><code class="language-conf">//注意 if 后要加空格
+if 空格 (条件){
+重写模式
+}
+</code></pre>
 <p>条件的写法：</p>
 <ul>
 <li>‘=’来判断是否相等，用于字符串比较</li>
 <li>‘~’用来判断正则匹配（区分大小写），’~*’不区分大小写</li>
-<li>-f -d -e 来判断是否为文件，为目录，是否存在<br>例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">if ($request_mothed=POST)&#123;</div><div class="line">return 403;</div><div class="line">&#125;</div><div class="line">//判断浏览器是否是 IE</div><div class="line">if ($http_user_agent ~* msie)&#123;</div><div class="line">rewrite ^.*$ ie.html;</div><div class="line">break;//防止循环重定向</div><div class="line">&#125;</div><div class="line">//如果访问不存在的路径</div><div class="line">if (!-e $document_root$fastcgi_script_name)&#123;</div><div class="line">rewrite ^.*$ 404.html;</div><div class="line">break;//仍然要加 break</div><div class="line">//或者 rewrite ^.*$ 404.html break;</div><div class="line">&#125;</div><div class="line">ps：服务器内部的 rewrite 和 302 跳转不一样，内部的 rewrite 上下文没变。</div><div class="line">set 是设置变量用的,可以用来达到多条件判断时作标志用。达到 apache 下的 rewrite_condition 的效果</div><div class="line">if ($http_user_agent ~* msie)&#123;</div><div class="line">set $isie 1;/</div><div class="line">&#125;</div><div class="line">if ($fastcgi_scrip_name = ie.html)&#123;</div><div class="line">set $isie 0;</div><div class="line">&#125;</div><div class="line">if ($isie = 1)&#123;</div><div class="line">rewrite ^.*$ ie.html;//如果是ie浏览器且访问的不是 ie.html 则重定向，作用同上面的 break</div><div class="line">&#125;</div><div class="line">//url 重写</div><div class="line">location /ecshop&#123;</div><div class="line">rewrite &quot;goods-(\d&#123;1,7&#125;)\.html&quot; /ecshop/goods.php?id=$1;</div><div class="line">&#125;</div><div class="line">//将其他图片格式结尾的全部变成gif</div><div class="line">location ~* \.(jpg|jpeg|png)$&#123;</div><div class="line">rewrite &apos;(.*?).(jpg|jpeg|png)$&apos; $1.gif</div><div class="line">&#125;</div><div class="line">ps:正则里如果有&#123;&#125;，正则要用&quot;&quot;包括</div></pre></td></tr></table></figure>
+<li>-f -d -e 来判断是否为文件，为目录，是否存在<br>例子：<pre><code class="language-conf">if ($request_mothed=POST){
+return 403;
+}
+//判断浏览器是否是 IE
+if ($http_user_agent ~* msie){
+rewrite ^.*$ ie.html;
+break;//防止循环重定向
+}
+//如果访问不存在的路径
+if (!-e $document_root$fastcgi_script_name){
+rewrite ^.*$ 404.html;
+break;//仍然要加 break
+//或者 rewrite ^.*$ 404.html break;
+}
+ps：服务器内部的 rewrite 和 302 跳转不一样，内部的 rewrite 上下文没变。
+set 是设置变量用的,可以用来达到多条件判断时作标志用。达到 apache 下的 rewrite_condition 的效果
+if ($http_user_agent ~* msie){
+set $isie 1;/
+}
+if ($fastcgi_scrip_name = ie.html){
+set $isie 0;
+}
+if ($isie = 1){
+rewrite ^.*$ ie.html;//如果是ie浏览器且访问的不是 ie.html 则重定向，作用同上面的 break
+}
+//url 重写
+location /ecshop{
+rewrite &quot;goods-(\d{1,7})\.html&quot; /ecshop/goods.php?id=$1;
+}
+//将其他图片格式结尾的全部变成gif
+location ~* \.(jpg|jpeg|png)${
+rewrite &#39;(.*?).(jpg|jpeg|png)$&#39; $1.gif
+}
+ps:正则里如果有{}，正则要用&quot;&quot;包括
+</code></pre>
 </li>
 </ul>
-<h2 id="整合-PHP"><a href="#整合-PHP" class="headerlink" title="整合 PHP"></a>整合 PHP</h2><p>Apache 一般是把 PHP 当作自己的模块来启动。<br>而 Nginx 则是把 HTTP 请求变量（如 get，user_agent 等）转发给 php 进程，与 Nginx 进行通信，称为 fastcgi 运行方式<br>编译后的php以 fpm（fastcgi）方式运行<br>把请求的信息转发给 9000 端口的 PHP 进程，让 PHP 处理，指定目录下的 PHP 文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">location ~ \.php$ &#123;</div><div class="line">root html;</div><div class="line">fastcgi_pass 127.0.0.1:9000;</div><div class="line">fastcgi_index index.php</div><div class="line">fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</div><div class="line">include fastcgi_params;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="整合-PHP"><a href="#整合-PHP" class="headerlink" title="整合 PHP"></a>整合 PHP</h2><p>Apache 一般是把 PHP 当作自己的模块来启动。<br>而 Nginx 则是把 HTTP 请求变量（如 get，user_agent 等）转发给 php 进程，与 Nginx 进行通信，称为 fastcgi 运行方式<br>编译后的php以 fpm（fastcgi）方式运行<br>把请求的信息转发给 9000 端口的 PHP 进程，让 PHP 处理，指定目录下的 PHP 文件</p>
+<pre><code class="language-conf">location ~ \.php$ {
+root html;
+fastcgi_pass 127.0.0.1:9000;
+fastcgi_index index.php
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+include fastcgi_params;
+}
+</code></pre>
 <ol>
 <li>碰到 php 文件</li>
 <li>把根目录定位到 html</li>
 <li>把请求上下文转交给 php 进程</li>
 <li>并告诉 php 进程，当前的脚本是 $document_root$fastcgi_script_name，php 就会去找这个脚本并处理</li>
 </ol>
-<h3 id="pathifo-支持"><a href="#pathifo-支持" class="headerlink" title="pathifo 支持"></a>pathifo 支持</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">location ~ \.php(.*)$&#123;</div><div class="line">...</div><div class="line">fastcgi_param PATH_INFO $1;//后向引用</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="url-重写"><a href="#url-重写" class="headerlink" title="url 重写"></a>url 重写</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">使用 rewrite</div><div class="line">location / &#123;</div><div class="line">if (!-e $request_filename)&#123;</div><div class="line">rewrite ^(.*)$ /index.php?s=$1</div><div class="line">&#125;</div><div class="line">&#125;//配合上面的 phthinfo</div><div class="line">//使用 try_files</div><div class="line">location / &#123;</div><div class="line">try_files $uri /index.php?$uri;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="gzip-压缩"><a href="#gzip-压缩" class="headerlink" title="gzip 压缩"></a>gzip 压缩</h2><p>常用参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">gzip on|off; #是否开启gzip</div><div class="line">gzip_buffers 32 4K| 16 8K #缓冲(压缩在内存中缓冲几块? 每块多大?)</div><div class="line">gzip_comp_level [1-9] #推荐6 压缩级别(级别越高,压的越小,越浪费CPU计算资源)</div><div class="line">gzip_disable #正则匹配UA 什么样的Uri不进行gzip</div><div class="line">gzip_min_length 4000 # 开始压缩的最小长度(再小就不要压缩了,意义不在)</div><div class="line">gzip_http_version 1.0|1.1 # 开始压缩的http协议版本(可以不设置,目前几乎全是1.1协议)</div><div class="line">gzip_proxied # 设置请求者代理服务器,该如何缓存内容</div><div class="line">gzip_types text/plain application/xml # 对哪些类型的文件用压缩 如txt,xml,html ,css</div><div class="line">gzip_vary on|off # 是否传输gzip压缩标志</div></pre></td></tr></table></figure></p>
+<h3 id="pathifo-支持"><a href="#pathifo-支持" class="headerlink" title="pathifo 支持"></a>pathifo 支持</h3><pre><code class="language-conf">location ~ \.php(.*)${
+...
+fastcgi_param PATH_INFO $1;//后向引用
+}
+</code></pre>
+<h3 id="url-重写"><a href="#url-重写" class="headerlink" title="url 重写"></a>url 重写</h3><pre><code class="language-conf">使用 rewrite
+location / {
+if (!-e $request_filename){
+rewrite ^(.*)$ /index.php?s=$1
+}
+}//配合上面的 phthinfo
+//使用 try_files
+location / {
+try_files $uri /index.php?$uri;
+}
+</code></pre>
+<h2 id="gzip-压缩"><a href="#gzip-压缩" class="headerlink" title="gzip 压缩"></a>gzip 压缩</h2><p>常用参数</p>
+<pre><code class="language-conf">gzip on|off; #是否开启gzip
+gzip_buffers 32 4K| 16 8K #缓冲(压缩在内存中缓冲几块? 每块多大?)
+gzip_comp_level [1-9] #推荐6 压缩级别(级别越高,压的越小,越浪费CPU计算资源)
+gzip_disable #正则匹配UA 什么样的Uri不进行gzip
+gzip_min_length 4000 # 开始压缩的最小长度(再小就不要压缩了,意义不在)
+gzip_http_version 1.0|1.1 # 开始压缩的http协议版本(可以不设置,目前几乎全是1.1协议)
+gzip_proxied # 设置请求者代理服务器,该如何缓存内容
+gzip_types text/plain application/xml # 对哪些类型的文件用压缩 如txt,xml,html ,css
+gzip_vary on|off # 是否传输gzip压缩标志
+</code></pre>
 <p>可以写在 http，server，location 里<br>ps：图片，MP3 这样的二进制文件不必压缩，因为压缩比比价小</p>
-<h2 id="expire-缓存设置-提高网站性能"><a href="#expire-缓存设置-提高网站性能" class="headerlink" title="expire 缓存设置 提高网站性能"></a>expire 缓存设置 提高网站性能</h2><p>在 location 或 if 段里写<br>格式：expires 30s(30m,2h,30d);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">locaion ~* \.(jpg|jpeg|gif|png)$ &#123;</div><div class="line">root html;</div><div class="line">expire 2d;//图片在两天内缓存在浏览器中</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="expire-缓存设置-提高网站性能"><a href="#expire-缓存设置-提高网站性能" class="headerlink" title="expire 缓存设置 提高网站性能"></a>expire 缓存设置 提高网站性能</h2><p>在 location 或 if 段里写<br>格式：expires 30s(30m,2h,30d);</p>
+<pre><code class="language-conf">locaion ~* \.(jpg|jpeg|gif|png)$ {
+root html;
+expire 2d;//图片在两天内缓存在浏览器中
+}
+</code></pre>
 <p>(注意:服务器的日期要准确,如果服务器的日期落后于实际日期,可能导致缓存失效)<br>另: 304 也是一种很好的缓存手段<br>原理是: 服务器响应文件内容是,同时响应etag标签(内容的签名,内容一变,他也变), 和 last_modified_since 2个标签值<br>浏览器下次去请求时,头信息发送这两个标签, 服务器检测文件有没有发生变化,如无,直接头信息返回 etag,last_modified_since<br>浏览器知道内容无改变,于是直接调用本地缓存.<br>这个过程,也请求了服务器,但是传着的内容极少.</p>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proxy_pass http://localhost:8080//写在localtion里</div></pre></td></tr></table></figure>
-<p>反向代理的后端有多台服务器，可以形成负载均衡，把多台服务器用 up_stream 绑定成一台服务器<br>upstream imgserver{<br>server 127.0.0.1:81 weight=1 max_fails=2 fail_timeout=3;<br>server 127.0.0.1:82 weight=1 max_fails=2 fail_timeout=3;<br>}<br>upstream 做负载均衡不可以用 localhost<br>location ~* .(png|jpg|jpeg)$ {<br>proxy_pass <a href="http://imgserver" target="_blank" rel="external">http://imgserver</a>;<br>}<br>默认地负载均衡算法就是针对后端服务器的顺序，逐个请求。也有其他负载均衡算法,如一致性哈希,需要安装第3方模块.<br>反向代理导致后端服务器 IP，为前端服务器的 IP，而不是客户真正的 IP，使用 x-forword<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proxy_set_header X-Forwarded-For $remote_addr;</div></pre></td></tr></table></figure></p>
-<h2 id="整合-mencached"><a href="#整合-mencached" class="headerlink" title="整合 mencached"></a>整合 mencached</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">location / &#123;</div><div class="line">set $memcached_key &quot;$uri&quot;;</div><div class="line">memcached_pass 127.0.0.1:11211;</div><div class="line">error_page 404 /callback.php;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="使用第三方模块实现一致性哈希"><a href="#使用第三方模块实现一致性哈希" class="headerlink" title="使用第三方模块实现一致性哈希"></a>使用第三方模块实现一致性哈希</h2><p>如 <a href="http://wiki.nginx.org/NginxHttpUpstreamConsistentHash" target="_blank" rel="external">http://wiki.nginx.org/NginxHttpUpstreamConsistentHash</a><br>这个模块就是用一致性hash来请求后端结节,并且其算法,与PHP中的memcache模块的一致性hash算法,兼容.<br>安装后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">upstream memserver &#123;</div><div class="line">consistent_hash $request_uri;</div><div class="line">server 127.0.0.1:11211;</div><div class="line">server 127.0.0.1:11212;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><pre><code>proxy_pass http://localhost:8080//写在localtion里
+</code></pre><p>反向代理的后端有多台服务器，可以形成负载均衡，把多台服务器用 up_stream 绑定成一台服务器<br>upstream imgserver{<br>server 127.0.0.1:81 weight=1 max_fails=2 fail_timeout=3;<br>server 127.0.0.1:82 weight=1 max_fails=2 fail_timeout=3;<br>}<br>upstream 做负载均衡不可以用 localhost<br>location ~* .(png|jpg|jpeg)$ {<br>proxy_pass <a href="http://imgserver" target="_blank" rel="external">http://imgserver</a>;<br>}<br>默认地负载均衡算法就是针对后端服务器的顺序，逐个请求。也有其他负载均衡算法,如一致性哈希,需要安装第3方模块.<br>反向代理导致后端服务器 IP，为前端服务器的 IP，而不是客户真正的 IP，使用 x-forword</p>
+<pre><code>proxy_set_header X-Forwarded-For $remote_addr;
+</code></pre><h2 id="整合-mencached"><a href="#整合-mencached" class="headerlink" title="整合 mencached"></a>整合 mencached</h2><pre><code>location / {
+set $memcached_key &quot;$uri&quot;;
+memcached_pass 127.0.0.1:11211;
+error_page 404 /callback.php;
+}
+</code></pre><h2 id="使用第三方模块实现一致性哈希"><a href="#使用第三方模块实现一致性哈希" class="headerlink" title="使用第三方模块实现一致性哈希"></a>使用第三方模块实现一致性哈希</h2><p>如 <a href="http://wiki.nginx.org/NginxHttpUpstreamConsistentHash" target="_blank" rel="external">http://wiki.nginx.org/NginxHttpUpstreamConsistentHash</a><br>这个模块就是用一致性hash来请求后端结节,并且其算法,与PHP中的memcache模块的一致性hash算法,兼容.<br>安装后</p>
+<pre><code class="language-conf">upstream memserver {
+consistent_hash $request_uri;
+server 127.0.0.1:11211;
+server 127.0.0.1:11212;
+}
+</code></pre>
 <p>在PHP.ini中,如下配置<br>memcache.hash_strategy = consistent<br>这样: nginx与PHP即可完成对memcached的集群与负载均衡算法.</p>
 <h2 id="大访问量优化"><a href="#大访问量优化" class="headerlink" title="大访问量优化"></a>大访问量优化</h2><ul>
 <li>开发人员：合并 css，背景图片，减少 mysql 查询</li>
@@ -317,8 +420,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -326,6 +427,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

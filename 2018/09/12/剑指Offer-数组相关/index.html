@@ -16,7 +16,12 @@
   
   
   
-    <meta name="description" content="3.1 数组中重复的数字1234567891011121314151617bool duplicate(int numbers[], int length, int* duplication) &#123;	if (numbers == nullptr || length &lt;= 0) &#123;		return false;	&#125;	for (int i = 0; i &lt;...">
+    <meta name="description" content="3.1 数组中重复的数字bool duplicate(int numbers[], int length, int* duplication) {
+    if (numbers == nullptr || length &lt;= 0) {
+        return false;
+    }
+    for (int i = 0; i &lt; length; i++) {
+     ...">
   
   <title>剑指Offer-数组相关 [ Cellophane ]</title>
   
@@ -26,11 +31,11 @@
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -154,24 +159,467 @@
       
     </p>
     
-    <h2 id="3-1-数组中重复的数字"><a href="#3-1-数组中重复的数字" class="headerlink" title="3.1 数组中重复的数字"></a>3.1 数组中重复的数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">duplicate</span><span class="params">(<span class="keyword">int</span> numbers[], <span class="keyword">int</span> length, <span class="keyword">int</span>* duplication)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (numbers == <span class="literal">nullptr</span> || length &lt;= <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">		<span class="keyword">if</span> (numbers[i] != i) &#123;</div><div class="line">			<span class="keyword">int</span> temp = numbers[i];</div><div class="line">			<span class="keyword">if</span> (numbers[temp] == temp) &#123;</div><div class="line">				*duplication = temp;</div><div class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			numbers[i] = numbers[temp];</div><div class="line">			numbers[temp] = temp;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="3-2-不修改数组找出重复的数字"><a href="#3-2-不修改数组找出重复的数字" class="headerlink" title="3.2 不修改数组找出重复的数字"></a>3.2 不修改数组找出重复的数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">duplicate</span><span class="params">(<span class="keyword">int</span> numbers[], <span class="keyword">int</span> length, <span class="keyword">int</span>* duplication)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (numbers == <span class="literal">nullptr</span> || length &lt;= <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> start = <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> end = length - <span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span> (start &lt;= end) &#123;</div><div class="line">		<span class="keyword">int</span> middle = (end - start) / <span class="number">2</span> + start;</div><div class="line">		<span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">		count = countRange(numbers, length, start, middle);</div><div class="line">		<span class="keyword">if</span> (start == end) &#123;</div><div class="line">			<span class="keyword">if</span> (count &gt; <span class="number">1</span>) &#123;</div><div class="line">				*duplication = start;</div><div class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (count &gt; (middle - start + <span class="number">1</span>)) &#123;</div><div class="line">			end = middle;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			start = middle + <span class="number">1</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">countRange</span><span class="params">(<span class="keyword">int</span> numbers[], <span class="keyword">int</span> length, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;length; i++) &#123;</div><div class="line">		<span class="keyword">if</span> (numbers[i] &lt;= end&amp;&amp;numbers[i] &gt;= start) &#123;</div><div class="line">			count++;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> count;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="4-二维数组中的查找"><a href="#4-二维数组中的查找" class="headerlink" title="4. 二维数组中的查找"></a>4. 二维数组中的查找</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Find</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">array</span>)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> rows = <span class="built_in">array</span>.size();</div><div class="line">	<span class="keyword">int</span> cols = <span class="built_in">array</span>[<span class="number">0</span>].size();</div><div class="line">	<span class="keyword">int</span> row = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> col = cols - <span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span> (col &gt;= <span class="number">0</span> &amp;&amp; row &lt; rows)</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">array</span>[row][col] &gt; target) &#123;</div><div class="line">			col--;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">array</span>[row][col] &lt; target) &#123;</div><div class="line">			row++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11. 旋转数组的最小数字"></a>11. 旋转数组的最小数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">minNumberInRotateArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">array</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right = <span class="built_in">array</span>.size() - <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">array</span>[left] &lt; <span class="built_in">array</span>[right])</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">array</span>[left];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (left &lt; right)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">array</span>[mid] &gt; <span class="built_in">array</span>[right])</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[mid + <span class="number">1</span>] &lt; <span class="built_in">array</span>[mid])</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">return</span> <span class="built_in">array</span>[mid + <span class="number">1</span>];</div><div class="line">            &#125;</div><div class="line">            left = mid + <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">array</span>[mid] &lt; <span class="built_in">array</span>[right])</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[mid] &lt; <span class="built_in">array</span>[mid - <span class="number">1</span>])</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">return</span> <span class="built_in">array</span>[mid];</div><div class="line">            &#125;</div><div class="line">            right = mid - <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            right = right - <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">array</span>[left];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="21-1-调整数组的顺序使奇数位于偶数前面"><a href="#21-1-调整数组的顺序使奇数位于偶数前面" class="headerlink" title="21.1 调整数组的顺序使奇数位于偶数前面"></a>21.1 调整数组的顺序使奇数位于偶数前面</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">reOrderArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;<span class="built_in">array</span>)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">array</span>.size() &lt;= <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> begin = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> end = <span class="built_in">array</span>.size() - <span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span> (begin &lt; end) &#123;</div><div class="line">		<span class="keyword">while</span> (begin &lt; end &amp;&amp; (<span class="built_in">array</span>[begin] &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</div><div class="line">			begin++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">while</span> (begin &lt; end &amp;&amp; (<span class="built_in">array</span>[end] &amp; <span class="number">1</span>) == <span class="number">0</span>) &#123;</div><div class="line">			end--;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (begin &lt; end) &#123;</div><div class="line">			<span class="keyword">int</span> temp = <span class="built_in">array</span>[begin];</div><div class="line">			<span class="built_in">array</span>[begin] = <span class="built_in">array</span>[end];</div><div class="line">			<span class="built_in">array</span>[end] = temp;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="21-2-保证元素相对位置不变"><a href="#21-2-保证元素相对位置不变" class="headerlink" title="21.2 保证元素相对位置不变"></a>21.2 保证元素相对位置不变</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">reOrderArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;<span class="built_in">array</span>)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">array</span>.size() &lt;= <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> oddCnt = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">array</span>.size(); i++) &#123;</div><div class="line">		<span class="keyword">if</span> ((<span class="built_in">array</span>[i] &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</div><div class="line">			oddCnt++;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; copy(<span class="built_in">array</span>);</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> num : copy) &#123;</div><div class="line">		<span class="keyword">if</span> ((num &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</div><div class="line">			<span class="built_in">array</span>[i++] = num;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="built_in">array</span>[oddCnt++] = num;</div><div class="line">		&#125;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="39-数组中出现的次数超过一半的数字"><a href="#39-数组中出现的次数超过一半的数字" class="headerlink" title="39. 数组中出现的次数超过一半的数字"></a>39. 数组中出现的次数超过一半的数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">MoreThanHalfNum_Solution</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; numbers)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (numbers.size() == <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">return</span> numbers[<span class="number">0</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> number = numbers[<span class="number">0</span>];</div><div class="line">	<span class="keyword">int</span> times = <span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; numbers.size(); i++) &#123;</div><div class="line">		<span class="keyword">if</span> (numbers[i] == number) &#123;</div><div class="line">			times++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			times--;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (times == <span class="number">0</span>) &#123;</div><div class="line">			number = numbers[i];</div><div class="line">			times = <span class="number">1</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (times &lt; <span class="number">2</span> &amp;&amp; (number == numbers[numbers.size() - <span class="number">1</span>])) &#123;</div><div class="line">		number = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> number;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="基于-partition-解法"><a href="#基于-partition-解法" class="headerlink" title="基于 partition 解法"></a>基于 partition 解法</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">MoreThanHalfNum_Solution</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; numbers)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (numbers.size() == <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">return</span> numbers[<span class="number">0</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> len = numbers.size();</div><div class="line">	<span class="keyword">int</span> mid = len / <span class="number">2</span>;</div><div class="line">	<span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> end = len - <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> index = partition(numbers, start, end);</div><div class="line">	<span class="keyword">while</span> (index != mid) &#123;</div><div class="line">		<span class="keyword">if</span> (index &gt; mid) &#123;</div><div class="line">			end = index - <span class="number">1</span>;</div><div class="line">			index = partition(numbers, start, end);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			start = index + <span class="number">1</span>;</div><div class="line">			index = partition(numbers, start, end);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> times = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; ++i) &#123;</div><div class="line">		<span class="keyword">if</span> (numbers[i] == numbers[index])</div><div class="line">			times++;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (times * <span class="number">2</span> &lt;= len) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> numbers[index];</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;nums, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> pivot = nums[l];</div><div class="line">	<span class="keyword">while</span> (l&lt;r) &#123;</div><div class="line">		<span class="keyword">while</span> (l&lt;r&amp;&amp;nums[r] &gt;= pivot) &#123;</div><div class="line">			r--;</div><div class="line">		&#125;</div><div class="line">		nums[l] = nums[r];</div><div class="line">		<span class="keyword">while</span> (l&lt;r&amp;&amp;nums[l] &lt;= pivot) &#123;</div><div class="line">			l++;</div><div class="line">		&#125;</div><div class="line">		nums[r] = nums[l];</div><div class="line">	&#125;</div><div class="line">	nums[l] = pivot;</div><div class="line">	<span class="keyword">return</span> l;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="40-最小的k个数"><a href="#40-最小的k个数" class="headerlink" title="40. 最小的k个数"></a>40. 最小的k个数</h2><h3 id="基于堆的解法"><a href="#基于堆的解法" class="headerlink" title="基于堆的解法"></a>基于堆的解法</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">multiset</span>&lt;<span class="keyword">int</span>, greater&lt;<span class="keyword">int</span>&gt;&gt; intSet;</div><div class="line"><span class="keyword">typedef</span> <span class="built_in">multiset</span>&lt;<span class="keyword">int</span>, greater&lt;<span class="keyword">int</span>&gt;&gt;::iterator setIterator;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; GetLeastNumbers_Solution(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; input, <span class="keyword">int</span> k) &#123;</div><div class="line">        <span class="keyword">if</span>(k&lt;<span class="number">1</span>||input.size()&lt;k)&#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;();</div><div class="line">        &#125;</div><div class="line">       <span class="comment">//multiset</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::const_iterator iter=input.begin();</div><div class="line">        <span class="keyword">for</span>(;iter!=input.end();iter++)&#123;</div><div class="line">            <span class="keyword">if</span>(intSet.size()&lt;k)&#123;</div><div class="line">                intSet.insert(*iter);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                setIterator=intSet.begin();</div><div class="line">                <span class="keyword">if</span>(*iter&lt;*(intSet.begin()))&#123;</div><div class="line">                    intSet.erase(setIterator);</div><div class="line">                    intSet.insert(*iter);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(intSet.begin(),intSet.end());</div><div class="line">         </div><div class="line">        <span class="comment">//优先队列</span></div><div class="line">        priority_queue&lt;<span class="keyword">int</span>&gt; p;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;input.size();i++)&#123;</div><div class="line">            p.push(input[i]);</div><div class="line">            <span class="keyword">if</span>(p.size()&gt;k)&#123;</div><div class="line">                p.pop();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;k;i++)&#123;</div><div class="line">            res.push_back(p.top());</div><div class="line">            p.pop();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res;</div></pre></td></tr></table></figure>
-<h3 id="基于-partition-的解法"><a href="#基于-partition-的解法" class="headerlink" title="基于 partition 的解法"></a>基于 partition 的解法</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> pivot = a[start];</div><div class="line">	<span class="keyword">int</span> p = start + <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> q = end;</div><div class="line">	<span class="keyword">while</span> (p &lt;= q) &#123;</div><div class="line">		<span class="keyword">while</span> (a[p] &lt; pivot &amp;&amp; p &lt;= q) p++;</div><div class="line">		<span class="keyword">while</span> (a[q] &gt;= pivot &amp;&amp; p &lt;= q) q--;</div><div class="line">		<span class="keyword">if</span> (p &lt; q) &#123;</div><div class="line">			swap(a[p], a[q]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	swap(a[start], a[q]);</div><div class="line">	<span class="keyword">return</span> q;</div><div class="line">&#125;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; GetLeastNumbers_Solution(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; input, <span class="keyword">int</span> k) &#123;</div><div class="line">	<span class="keyword">if</span> (k &lt; <span class="number">1</span> || input.size() &lt; k) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;();</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> end = input.size() - <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> index = partition(input, start, end);</div><div class="line">	<span class="keyword">while</span> (index != k - <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (index &gt; k - <span class="number">1</span>) &#123;</div><div class="line">			end = index - <span class="number">1</span>;</div><div class="line">			index = partition(input, start, end);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			start = index + <span class="number">1</span>;</div><div class="line">			index = partition(input, start, end);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</div><div class="line">		res.push_back(input[i]);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindGreatestSumOfSubArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">array</span>)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">array</span>.size() == <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> result = <span class="built_in">array</span>[<span class="number">0</span>];</div><div class="line">	<span class="keyword">int</span> max = result;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="built_in">array</span>.size(); i++) &#123;</div><div class="line">		<span class="keyword">if</span> (result &lt; <span class="number">0</span>) &#123;</div><div class="line">			result = <span class="built_in">array</span>[i];</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			result = <span class="built_in">array</span>[i] + result;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (result &gt; max) &#123;	</div><div class="line">			max = result;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> max;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="45-把数组排成最小的数"><a href="#45-把数组排成最小的数" class="headerlink" title="45. 把数组排成最小的数"></a>45. 把数组排成最小的数</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="built_in">string</span> <span class="title">PrintMinNumber</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; numbers)</span> </span>&#123;</div><div class="line">       sort(numbers.begin(),numbers.end(),[](<span class="keyword">const</span> <span class="keyword">int</span>&amp; a,<span class="keyword">const</span> <span class="keyword">int</span>&amp; b)&#123;</div><div class="line">       <span class="keyword">return</span> to_string(a)+to_string(b)&lt;to_string(b)+to_string(a);&#125;);</div><div class="line">       <span class="built_in">string</span> res;</div><div class="line">       <span class="keyword">for</span> (<span class="keyword">auto</span> c:numbers)   </div><div class="line">           res+=to_string(c);</div><div class="line">       <span class="keyword">return</span> res;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h2 id="51-数组中的逆序对"><a href="#51-数组中的逆序对" class="headerlink" title="51. 数组中的逆序对"></a>51. 数组中的逆序对</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<h2 id="53-1-数字在排序数组中出现的次数"><a href="#53-1-数字在排序数组中出现的次数" class="headerlink" title="53.1 数字在排序数组中出现的次数"></a>53.1 数字在排序数组中出现的次数</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetNumberOfK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; data, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (data.size() == <span class="number">0</span> || k &lt;= <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> number = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> l = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> r = data.size() - <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> first = getFirstK(data, k, l, r);</div><div class="line">	<span class="keyword">int</span> last = getLastK(data, k, l, r);</div><div class="line">	<span class="keyword">if</span> (first &gt; <span class="number">-1</span> &amp;&amp; last &gt; <span class="number">-1</span>) &#123;</div><div class="line">		number = last - first + <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> number;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getFirstK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; data, <span class="keyword">int</span> k, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (l &gt; r) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> m = (l + r) / <span class="number">2</span>;</div><div class="line">	<span class="keyword">if</span> (data[m] == k &amp;&amp; data[m - <span class="number">1</span>] != k) &#123;</div><div class="line">		<span class="keyword">return</span> m;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (data[m] &gt;= k) &#123;</div><div class="line">		r = m - <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		l = m + <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> getFirstK(data, k, l, r);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getLastK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; data, <span class="keyword">int</span> k, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (l &gt; r) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> m = (l + r) / <span class="number">2</span>;</div><div class="line">	<span class="keyword">if</span> (data[m] == k &amp;&amp; data[m + <span class="number">1</span>] != k) &#123;</div><div class="line">		<span class="keyword">return</span> m;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (data[m] &lt;= k) &#123;</div><div class="line">		l = m + <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		r = m - <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> getLastK(data, k, l, r);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="53-2-0-n-1-中缺失的数字"><a href="#53-2-0-n-1-中缺失的数字" class="headerlink" title="53.2 0~n-1 中缺失的数字"></a>53.2 0~n-1 中缺失的数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetMissingNumber</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; numbers)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (numbers.size() &lt;= <span class="number">0</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">	<span class="keyword">int</span> left = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> right = numbers.size() - <span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span> (left &lt;= right) &#123;</div><div class="line">		<span class="keyword">int</span> middle = (right + left) / <span class="number">2</span>;</div><div class="line">		<span class="keyword">if</span> (numbers[middle] != middle) &#123;</div><div class="line">			<span class="keyword">if</span> (middle == <span class="number">0</span> || numbers[middle - <span class="number">1</span>] == middle - <span class="number">1</span>)</div><div class="line">				<span class="keyword">return</span> middle;</div><div class="line">			right = middle - <span class="number">1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> </div><div class="line">			left = middle + <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (left == numbers.size()) &#123;</div><div class="line">		<span class="keyword">return</span> left;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="56-1-数组中只出现一次的两个数字"><a href="#56-1-数组中只出现一次的两个数字" class="headerlink" title="56.1 数组中只出现一次的两个数字"></a>56.1 数组中只出现一次的两个数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FindNumsAppearOnce</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; data,<span class="keyword">int</span>* num1,<span class="keyword">int</span> *num2)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span>(data.size()&lt;<span class="number">2</span>)&#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;     </div><div class="line">       <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; <span class="built_in">map</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.size(); i++)</div><div class="line">            <span class="built_in">map</span>[data[i]]++;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;v;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.size(); i++)</div><div class="line">            <span class="keyword">if</span> (<span class="built_in">map</span>[data[i]]== <span class="number">1</span>)</div><div class="line">                v.push_back(data[i]);</div><div class="line">        *num1 = v[<span class="number">0</span>]; *num2 = v[<span class="number">1</span>];</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="57-1-和为-s-的数字"><a href="#57-1-和为-s-的数字" class="headerlink" title="57.1 和为 s 的数字"></a>57.1 和为 s 的数字</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; FindNumbersWithSum(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">array</span>, <span class="keyword">int</span> sum) &#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; result;</div><div class="line">	<span class="keyword">int</span> length = <span class="built_in">array</span>.size();</div><div class="line">	<span class="keyword">int</span> left = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> right = length - <span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span> (left &lt; right) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">array</span>[left] + <span class="built_in">array</span>[right] == sum) &#123;</div><div class="line">			result.push_back(<span class="built_in">array</span>[left]);</div><div class="line">			result.push_back(<span class="built_in">array</span>[right]);</div><div class="line">			<span class="keyword">return</span> result;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">array</span>[left] + <span class="built_in">array</span>[right] &lt; sum) &#123;</div><div class="line">			left++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			right--;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="57-2-和为-s-的连续正数序列"><a href="#57-2-和为-s-的连续正数序列" class="headerlink" title="57.2 和为 s 的连续正数序列"></a>57.2 和为 s 的连续正数序列</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; FindContinuousSequence(<span class="keyword">int</span> sum) &#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</div><div class="line">	<span class="keyword">if</span> (sum &lt; <span class="number">3</span>) &#123;</div><div class="line">		<span class="keyword">return</span> res;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> start = <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> end = <span class="number">2</span>;</div><div class="line">	<span class="keyword">int</span> middle = (<span class="number">1</span> + sum) / <span class="number">2</span>;</div><div class="line">	<span class="keyword">int</span> count = start + end;</div><div class="line">	<span class="keyword">while</span> (start &lt; middle) &#123;</div><div class="line">		<span class="keyword">while</span> (count &lt; sum) &#123;</div><div class="line">			end++;</div><div class="line">			count = count + end;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (count == sum) &#123;</div><div class="line">			<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">list</span>;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt;= end; i++) &#123;</div><div class="line">				<span class="built_in">list</span>.push_back(i);</div><div class="line">			&#125;</div><div class="line">			res.push_back(<span class="built_in">list</span>);</div><div class="line">		&#125;</div><div class="line">		count = count - start;</div><div class="line">		start++;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    <h2 id="3-1-数组中重复的数字"><a href="#3-1-数组中重复的数字" class="headerlink" title="3.1 数组中重复的数字"></a>3.1 数组中重复的数字</h2><pre><code class="language-cpp">bool duplicate(int numbers[], int length, int* duplication) {
+    if (numbers == nullptr || length &lt;= 0) {
+        return false;
+    }
+    for (int i = 0; i &lt; length; i++) {
+        if (numbers[i] != i) {
+            int temp = numbers[i];
+            if (numbers[temp] == temp) {
+                *duplication = temp;
+                return true;
+            }
+            numbers[i] = numbers[temp];
+            numbers[temp] = temp;
+        }
+    }
+    return false;
+}
+</code></pre>
+<h2 id="3-2-不修改数组找出重复的数字"><a href="#3-2-不修改数组找出重复的数字" class="headerlink" title="3.2 不修改数组找出重复的数字"></a>3.2 不修改数组找出重复的数字</h2><pre><code class="language-cpp">bool duplicate(int numbers[], int length, int* duplication) {
+    if (numbers == nullptr || length &lt;= 0) {
+        return false;
+    }
+    int start = 1;
+    int end = length - 1;
+    while (start &lt;= end) {
+        int middle = (end - start) / 2 + start;
+        int count = 0;
+        count = countRange(numbers, length, start, middle);
+        if (start == end) {
+            if (count &gt; 1) {
+                *duplication = start;
+                return true;
+            }
+            else {
+                break;
+            }
+        }
+        if (count &gt; (middle - start + 1)) {
+            end = middle;
+        }
+        else {
+            start = middle + 1;
+        }
+    }
+    return false;
+}
+int countRange(int numbers[], int length, int start, int end) {
+    int count = 0;
+    for (int i = 0; i&lt;length; i++) {
+        if (numbers[i] &lt;= end&amp;&amp;numbers[i] &gt;= start) {
+            count++;
+        }
+    }
+    return count;
+}
+</code></pre>
+<h2 id="4-二维数组中的查找"><a href="#4-二维数组中的查找" class="headerlink" title="4. 二维数组中的查找"></a>4. 二维数组中的查找</h2><pre><code class="language-cpp">bool Find(int target, vector&lt;vector&lt;int&gt;&gt; array) {
+    int rows = array.size();
+    int cols = array[0].size();
+    int row = 0;
+    int col = cols - 1;
+    while (col &gt;= 0 &amp;&amp; row &lt; rows)
+        if (array[row][col] &gt; target) {
+            col--;
+        }
+        else if (array[row][col] &lt; target) {
+            row++;
+        }
+        else {
+            return true;
+        }
+        return false;
+}
+</code></pre>
+<h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11. 旋转数组的最小数字"></a>11. 旋转数组的最小数字</h2><pre><code class="language-cpp">int minNumberInRotateArray(vector&lt;int&gt; array)
+{
+    int left = 0;
+    int right = array.size() - 1;
+    if (array[left] &lt; array[right])
+    {
+        return array[left];
+    }
+    while (left &lt; right)
+    {
+        int mid = (left + right) / 2;
+        if (array[mid] &gt; array[right])
+        {
+            if (array[mid + 1] &lt; array[mid])
+            {
+                return array[mid + 1];
+            }
+            left = mid + 1;
+        }
+        else if (array[mid] &lt; array[right])
+        {
+            if (array[mid] &lt; array[mid - 1])
+            {
+                return array[mid];
+            }
+            right = mid - 1;
+        }
+        else
+        {
+            right = right - 1;
+        }
+    }
+    return array[left];
+}
+</code></pre>
+<h2 id="21-1-调整数组的顺序使奇数位于偶数前面"><a href="#21-1-调整数组的顺序使奇数位于偶数前面" class="headerlink" title="21.1 调整数组的顺序使奇数位于偶数前面"></a>21.1 调整数组的顺序使奇数位于偶数前面</h2><pre><code class="language-cpp">void reOrderArray(vector&lt;int&gt; &amp;array) {
+    if (array.size() &lt;= 1) {
+        return;
+    }
+    int begin = 0;
+    int end = array.size() - 1;
+    while (begin &lt; end) {
+        while (begin &lt; end &amp;&amp; (array[begin] &amp; 1) != 0) {
+            begin++;
+        }
+        while (begin &lt; end &amp;&amp; (array[end] &amp; 1) == 0) {
+            end--;
+        }
+        if (begin &lt; end) {
+            int temp = array[begin];
+            array[begin] = array[end];
+            array[end] = temp;
+        }
+    }
+}
+</code></pre>
+<h2 id="21-2-保证元素相对位置不变"><a href="#21-2-保证元素相对位置不变" class="headerlink" title="21.2 保证元素相对位置不变"></a>21.2 保证元素相对位置不变</h2><pre><code class="language-cpp">void reOrderArray(vector&lt;int&gt; &amp;array) {
+    if (array.size() &lt;= 1) {
+        return;
+    }
+    int oddCnt = 0;
+    for (int i = 0; i &lt; array.size(); i++) {
+        if ((array[i] &amp; 1) != 0) {
+            oddCnt++;
+        }
+    }
+    int i = 0;
+    vector&lt;int&gt; copy(array);
+    for (int num : copy) {
+        if ((num &amp; 1) != 0) {
+            array[i++] = num;
+        }
+        else {
+            array[oddCnt++] = num;
+        }
+    }    
+}
+</code></pre>
+<h2 id="39-数组中出现的次数超过一半的数字"><a href="#39-数组中出现的次数超过一半的数字" class="headerlink" title="39. 数组中出现的次数超过一半的数字"></a>39. 数组中出现的次数超过一半的数字</h2><pre><code class="language-cpp">int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) {
+    if (numbers.size() == 1) {
+        return numbers[0];
+    }
+    int number = numbers[0];
+    int times = 1;
+    for (int i = 1; i &lt; numbers.size(); i++) {
+        if (numbers[i] == number) {
+            times++;
+        }
+        else {
+            times--;
+        }
+        if (times == 0) {
+            number = numbers[i];
+            times = 1;
+        }
+    }
+    if (times &lt; 2 &amp;&amp; (number == numbers[numbers.size() - 1])) {
+        number = 0;
+    }
+    return number;
+}
+</code></pre>
+<h3 id="基于-partition-解法"><a href="#基于-partition-解法" class="headerlink" title="基于 partition 解法"></a>基于 partition 解法</h3><pre><code class="language-cpp">int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) {
+    if (numbers.size() == 1) {
+        return numbers[0];
+    }
+    int len = numbers.size();
+    int mid = len / 2;
+    int start = 0;
+    int end = len - 1;
+    int index = partition(numbers, start, end);
+    while (index != mid) {
+        if (index &gt; mid) {
+            end = index - 1;
+            index = partition(numbers, start, end);
+        }
+        else {
+            start = index + 1;
+            index = partition(numbers, start, end);
+        }
+    }
+
+    int times = 0;
+    for (int i = 0; i &lt; len; ++i) {
+        if (numbers[i] == numbers[index])
+            times++;
+    }
+    if (times * 2 &lt;= len) {
+        return 0;
+    }
+    else {
+        return numbers[index];
+    }
+}
+int partition(vector&lt;int&gt; &amp;nums, int l, int r) {
+    int pivot = nums[l];
+    while (l&lt;r) {
+        while (l&lt;r&amp;&amp;nums[r] &gt;= pivot) {
+            r--;
+        }
+        nums[l] = nums[r];
+        while (l&lt;r&amp;&amp;nums[l] &lt;= pivot) {
+            l++;
+        }
+        nums[r] = nums[l];
+    }
+    nums[l] = pivot;
+    return l;
+}
+</code></pre>
+<h2 id="40-最小的k个数"><a href="#40-最小的k个数" class="headerlink" title="40. 最小的k个数"></a>40. 最小的k个数</h2><h3 id="基于堆的解法"><a href="#基于堆的解法" class="headerlink" title="基于堆的解法"></a>基于堆的解法</h3><pre><code class="language-cpp">typedef multiset&lt;int, greater&lt;int&gt;&gt; intSet;
+typedef multiset&lt;int, greater&lt;int&gt;&gt;::iterator setIterator;
+vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
+        if(k&lt;1||input.size()&lt;k){
+            return vector&lt;int&gt;();
+        }
+       //multiset
+        vector&lt;int&gt;::const_iterator iter=input.begin();
+        for(;iter!=input.end();iter++){
+            if(intSet.size()&lt;k){
+                intSet.insert(*iter);
+            }else{
+                setIterator=intSet.begin();
+                if(*iter&lt;*(intSet.begin())){
+                    intSet.erase(setIterator);
+                    intSet.insert(*iter);
+                }
+            }
+        }
+
+        return vector&lt;int&gt;(intSet.begin(),intSet.end());
+
+        //优先队列
+        priority_queue&lt;int&gt; p;
+        for(int i=0;i&lt;input.size();i++){
+            p.push(input[i]);
+            if(p.size()&gt;k){
+                p.pop();
+            }
+        }
+        vector&lt;int&gt; res;
+        for(int i=0;i&lt;k;i++){
+            res.push_back(p.top());
+            p.pop();
+        }
+        return res; 
+</code></pre>
+<h3 id="基于-partition-的解法"><a href="#基于-partition-的解法" class="headerlink" title="基于 partition 的解法"></a>基于 partition 的解法</h3><pre><code class="language-cpp">int partition(vector&lt;int&gt;&amp; nums, int start, int end) {
+    int pivot = a[start];
+    int p = start + 1;
+    int q = end;
+    while (p &lt;= q) {
+        while (a[p] &lt; pivot &amp;&amp; p &lt;= q) p++;
+        while (a[q] &gt;= pivot &amp;&amp; p &lt;= q) q--;
+        if (p &lt; q) {
+            swap(a[p], a[q]);
+        }
+    }
+    swap(a[start], a[q]);
+    return q;
+}
+vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
+    if (k &lt; 1 || input.size() &lt; k) {
+        return vector&lt;int&gt;();
+    }
+    int start = 0;
+    int end = input.size() - 1;
+    int index = partition(input, start, end);
+    while (index != k - 1) {
+        if (index &gt; k - 1) {
+            end = index - 1;
+            index = partition(input, start, end);
+        }
+        else {
+            start = index + 1;
+            index = partition(input, start, end);
+        }
+    }
+    vector&lt;int&gt; res;
+    for (int i = 0; i &lt; k; i++) {
+        res.push_back(input[i]);
+    }
+    return res;
+}
+</code></pre>
+<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><pre><code class="language-cpp">int FindGreatestSumOfSubArray(vector&lt;int&gt; array) {
+    if (array.size() == 0) {
+        return 0;
+    }
+    int result = array[0];
+    int max = result;
+    for (int i = 1; i &lt; array.size(); i++) {
+        if (result &lt; 0) {
+            result = array[i];
+        }
+        else {
+            result = array[i] + result;
+        }
+        if (result &gt; max) {    
+            max = result;
+        }
+    }
+    return max;
+}
+</code></pre>
+<h2 id="45-把数组排成最小的数"><a href="#45-把数组排成最小的数" class="headerlink" title="45. 把数组排成最小的数"></a>45. 把数组排成最小的数</h2><pre><code class="language-cpp"> string PrintMinNumber(vector&lt;int&gt; numbers) {
+        sort(numbers.begin(),numbers.end(),[](const int&amp; a,const int&amp; b){
+        return to_string(a)+to_string(b)&lt;to_string(b)+to_string(a);});
+        string res;
+        for (auto c:numbers)   
+            res+=to_string(c);
+        return res;
+    }
+</code></pre>
+<h2 id="51-数组中的逆序对"><a href="#51-数组中的逆序对" class="headerlink" title="51. 数组中的逆序对"></a>51. 数组中的逆序对</h2><pre><code class="language-cpp">
+</code></pre>
+<h2 id="53-1-数字在排序数组中出现的次数"><a href="#53-1-数字在排序数组中出现的次数" class="headerlink" title="53.1 数字在排序数组中出现的次数"></a>53.1 数字在排序数组中出现的次数</h2><pre><code class="language-cpp">int GetNumberOfK(vector&lt;int&gt; data, int k) {
+    if (data.size() == 0 || k &lt;= 0) {
+        return 0;
+    }
+    int number = 0;
+    int l = 0;
+    int r = data.size() - 1;
+    int first = getFirstK(data, k, l, r);
+    int last = getLastK(data, k, l, r);
+    if (first &gt; -1 &amp;&amp; last &gt; -1) {
+        number = last - first + 1;
+    }
+    return number;
+}
+int getFirstK(vector&lt;int&gt; data, int k, int l, int r) {
+    if (l &gt; r) {
+        return -1;
+    }
+    int m = (l + r) / 2;
+    if (data[m] == k &amp;&amp; data[m - 1] != k) {
+        return m;
+    }
+    else if (data[m] &gt;= k) {
+        r = m - 1;
+    }
+    else {
+        l = m + 1;
+    }
+    return getFirstK(data, k, l, r);
+}
+int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
+    if (l &gt; r) {
+        return -1;
+    }
+    int m = (l + r) / 2;
+    if (data[m] == k &amp;&amp; data[m + 1] != k) {
+        return m;
+    }
+    else if (data[m] &lt;= k) {
+        l = m + 1;
+    }
+    else {
+        r = m - 1;
+    }
+    return getLastK(data, k, l, r);
+}
+</code></pre>
+<h2 id="53-2-0-n-1-中缺失的数字"><a href="#53-2-0-n-1-中缺失的数字" class="headerlink" title="53.2 0~n-1 中缺失的数字"></a>53.2 0~n-1 中缺失的数字</h2><pre><code class="language-cpp">int GetMissingNumber(vector&lt;int&gt; numbers) {
+    if (numbers.size() &lt;= 0)
+        return -1;
+    int left = 0;
+    int right = numbers.size() - 1;
+    while (left &lt;= right) {
+        int middle = (right + left) / 2;
+        if (numbers[middle] != middle) {
+            if (middle == 0 || numbers[middle - 1] == middle - 1)
+                return middle;
+            right = middle - 1;
+        }
+        else 
+            left = middle + 1;
+    }
+    if (left == numbers.size()) {
+        return left;
+    }
+    return -1;
+}
+</code></pre>
+<h2 id="56-1-数组中只出现一次的两个数字"><a href="#56-1-数组中只出现一次的两个数字" class="headerlink" title="56.1 数组中只出现一次的两个数字"></a>56.1 数组中只出现一次的两个数字</h2><pre><code class="language-cpp">void FindNumsAppearOnce(vector&lt;int&gt; data,int* num1,int *num2) {
+       if(data.size()&lt;2){
+            return;
+        }     
+       unordered_map&lt;int, int&gt; map;
+        for (int i = 0; i &lt; data.size(); i++)
+            map[data[i]]++;
+        vector&lt;int&gt;v;
+        for (int i = 0; i &lt; data.size(); i++)
+            if (map[data[i]]== 1)
+                v.push_back(data[i]);
+        *num1 = v[0]; *num2 = v[1];
+    }
+</code></pre>
+<h2 id="57-1-和为-s-的数字"><a href="#57-1-和为-s-的数字" class="headerlink" title="57.1 和为 s 的数字"></a>57.1 和为 s 的数字</h2><pre><code class="language-cpp">vector&lt;int&gt; FindNumbersWithSum(vector&lt;int&gt; array, int sum) {
+    vector&lt;int&gt; result;
+    int length = array.size();
+    int left = 0;
+    int right = length - 1;
+    while (left &lt; right) {
+        if (array[left] + array[right] == sum) {
+            result.push_back(array[left]);
+            result.push_back(array[right]);
+            return result;
+        }
+        else if (array[left] + array[right] &lt; sum) {
+            left++;
+        }
+        else {
+            right--;
+        }
+    }
+    return result;
+}
+</code></pre>
+<h3 id="57-2-和为-s-的连续正数序列"><a href="#57-2-和为-s-的连续正数序列" class="headerlink" title="57.2 和为 s 的连续正数序列"></a>57.2 和为 s 的连续正数序列</h3><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; FindContinuousSequence(int sum) {
+    vector&lt;vector&lt;int&gt;&gt; res;
+    if (sum &lt; 3) {
+        return res;
+    }
+    int start = 1;
+    int end = 2;
+    int middle = (1 + sum) / 2;
+    int count = start + end;
+    while (start &lt; middle) {
+        while (count &lt; sum) {
+            end++;
+            count = count + end;
+        }
+        if (count == sum) {
+            vector&lt;int&gt; list;
+            for (int i = start; i &lt;= end; i++) {
+                list.push_back(i);
+            }
+            res.push_back(list);
+        }
+        count = count - start;
+        start++;
+    }
+    return res;
+}
+</code></pre>
+
   </article>
   <div class="random-toc-area">
   <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
@@ -281,8 +729,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -290,6 +736,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

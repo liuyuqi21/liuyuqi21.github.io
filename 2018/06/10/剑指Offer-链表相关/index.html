@@ -16,7 +16,11 @@
   
   
   
-    <meta name="description" content="链表6. 从尾到头打印链表使用栈123456789101112131415vector&lt;int&gt; printListFromTailToHead(ListNode* head) &#123;        vector&lt;int&gt; list;        stack&lt;ListNode*&gt; s;        while(head!=nullptr)&#12...">
+    <meta name="description" content="链表6. 从尾到头打印链表使用栈vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
+        vector&lt;int&gt; list;
+        stack&lt;ListNode*&gt; s;
+        while(head!=nullptr){
+            s.push(head);...">
   
   <title>剑指Offer-链表相关 [ Cellophane ]</title>
   
@@ -26,11 +30,11 @@
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -154,22 +158,367 @@
       
     </p>
     
-    <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="6-从尾到头打印链表"><a href="#6-从尾到头打印链表" class="headerlink" title="6. 从尾到头打印链表"></a>6. 从尾到头打印链表</h2><h3 id="使用栈"><a href="#使用栈" class="headerlink" title="使用栈"></a>使用栈</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; printListFromTailToHead(ListNode* head) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">list</span>;</div><div class="line">        <span class="built_in">stack</span>&lt;ListNode*&gt; s;</div><div class="line">        <span class="keyword">while</span>(head!=<span class="literal">nullptr</span>)&#123;</div><div class="line">            s.push(head);</div><div class="line">            head=head-&gt;next;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">while</span>(!s.empty())&#123;</div><div class="line">            ListNode* node;</div><div class="line">            node=s.top();</div><div class="line">            <span class="built_in">list</span>.push_back(node-&gt;val);</div><div class="line">            s.pop();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">list</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; printListFromTailToHead(ListNode* head) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">list</span>;</div><div class="line">        <span class="keyword">if</span>(head!=<span class="literal">nullptr</span>)&#123;</div><div class="line">            <span class="built_in">list</span>=printListFromTailToHead(head-&gt;next);</div><div class="line">            <span class="built_in">list</span>.push_back(head-&gt;val);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="built_in">list</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="18-1-删除链表的节点"><a href="#18-1-删除链表的节点" class="headerlink" title="18.1 删除链表的节点"></a>18.1 删除链表的节点</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">DeleteNode</span><span class="params">(ListNode **pListHead, ListNode *pToBeDeleted)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (pListHead == <span class="literal">nullptr</span> || pToBeDeleted == <span class="literal">nullptr</span>) &#123;</div><div class="line">              <span class="keyword">return</span>;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">if</span> (pToBeDeleted-&gt;next != <span class="literal">nullptr</span>) &#123;</div><div class="line">              pToBeDeleted-&gt;val = pToBeDeleted-&gt;next-&gt;val;</div><div class="line">              pToBeDeleted-&gt;next = pToBeDeleted-&gt;next-&gt;next;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">else</span> <span class="keyword">if</span> (*pListHead==pToBeDeleted) &#123;</div><div class="line">              <span class="keyword">delete</span> pToBeDeleted;</div><div class="line">              pToBeDeleted = <span class="literal">nullptr</span>;</div><div class="line">              *pListHead = <span class="literal">nullptr</span>;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">else</span> &#123;</div><div class="line">              ListNode *pNode = *pListHead;</div><div class="line">              <span class="keyword">while</span> (pNode-&gt;next != pToBeDeleted) &#123;</div><div class="line">                     pNode = pNode-&gt;next;</div><div class="line">              &#125;</div><div class="line">              pNode-&gt;next = <span class="literal">nullptr</span>;</div><div class="line">              <span class="keyword">delete</span> pToBeDeleted;</div><div class="line">              pToBeDeleted = <span class="literal">nullptr</span>;</div><div class="line">       &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="18-2-删除链表中重复的节点"><a href="#18-2-删除链表中重复的节点" class="headerlink" title="18.2 删除链表中重复的节点"></a>18.2 删除链表中重复的节点</h2><h3 id="递归-1"><a href="#递归-1" class="headerlink" title="递归"></a>递归</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">deleteDuplication</span><span class="params">(ListNode* pHead)</span></span>&#123;</div><div class="line">     <span class="keyword">if</span>(pHead==<span class="literal">nullptr</span>||pHead-&gt;next==<span class="literal">nullptr</span>)&#123;</div><div class="line">            <span class="keyword">return</span> pHead;</div><div class="line">        &#125;</div><div class="line">        ListNode* next=pHead-&gt;next;</div><div class="line">        <span class="keyword">if</span>(pHead-&gt;val==next-&gt;val)&#123;</div><div class="line">            <span class="keyword">while</span>(next!=<span class="literal">nullptr</span>&amp;&amp;pHead-&gt;val==next-&gt;val)&#123;</div><div class="line">                 next=next-&gt;next;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> deleteDuplication(next);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            pHead-&gt;next=deleteDuplication(pHead-&gt;next);</div><div class="line">            <span class="keyword">return</span> pHead;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="非递归"><a href="#非递归" class="headerlink" title="非递归"></a>非递归</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">deleteDuplication</span><span class="params">(ListNode* pHead)</span></span></div><div class="line">   &#123;</div><div class="line">       <span class="keyword">if</span> (pHead == <span class="literal">nullptr</span> || pHead-&gt;next == <span class="literal">nullptr</span>) &#123;</div><div class="line">           <span class="keyword">return</span> pHead;</div><div class="line">       &#125;</div><div class="line">       ListNode* newHead = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</div><div class="line">       newHead-&gt;next = pHead;</div><div class="line">       ListNode* pNode = pHead;</div><div class="line">       ListNode* preNode = newHead;</div><div class="line">       <span class="keyword">while</span> (pNode != <span class="literal">nullptr</span>) &#123;</div><div class="line">           ListNode* pNext = pNode-&gt;next;</div><div class="line">           <span class="keyword">if</span> (pNext != <span class="literal">nullptr</span>&amp;&amp;pNext-&gt;val == pNode-&gt;val) &#123;</div><div class="line">               <span class="keyword">int</span> value = pNode-&gt;val;</div><div class="line">               <span class="keyword">while</span> (pNode != <span class="literal">nullptr</span>&amp;&amp;pNode-&gt;val == value) &#123;</div><div class="line">                   pNode = pNode-&gt;next;</div><div class="line">               &#125;</div><div class="line">               preNode-&gt;next=pNode;</div><div class="line">           &#125;	</div><div class="line">           <span class="keyword">else</span> &#123;</div><div class="line">               preNode = pNode;</div><div class="line">               pNode = pNode-&gt;next;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> newHead-&gt;next;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h2 id="22-链表中倒数第k个节点"><a href="#22-链表中倒数第k个节点" class="headerlink" title="22. 链表中倒数第k个节点"></a>22. 链表中倒数第k个节点</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">FindKthToTail</span><span class="params">(ListNode* pListHead, <span class="keyword">unsigned</span> <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (pListHead == <span class="literal">nullptr</span> || k == <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">	&#125;</div><div class="line">	ListNode* first = pListHead;</div><div class="line">	ListNode* second = pListHead;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k - <span class="number">1</span>; i++) &#123;</div><div class="line">		<span class="keyword">if</span> (second-&gt;next != <span class="literal">nullptr</span>) &#123;</div><div class="line">			second = second-&gt;next;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">while</span> (second-&gt;next != <span class="literal">nullptr</span>) &#123;</div><div class="line">		first = first-&gt;next;</div><div class="line">		second = second-&gt;next;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> first;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="23-链表中环的入口节点"><a href="#23-链表中环的入口节点" class="headerlink" title="23. 链表中环的入口节点"></a>23. 链表中环的入口节点</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (pHead == <span class="literal">nullptr</span> || pHead-&gt;next == <span class="literal">nullptr</span> || pHead-&gt;next-&gt;next == <span class="literal">nullptr</span>)</div><div class="line">              <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">       ListNode* fast = pHead-&gt;next-&gt;next;</div><div class="line">       ListNode* slow = pHead-&gt;next;</div><div class="line">       <span class="keyword">while</span> (fast != slow) &#123;</div><div class="line">              <span class="keyword">if</span> (fast-&gt;next != <span class="literal">nullptr</span>&amp;&amp; fast-&gt;next-&gt;next != <span class="literal">nullptr</span>) &#123;</div><div class="line">                     fast = fast-&gt;next-&gt;next;</div><div class="line">                     slow = slow-&gt;next;</div><div class="line">              &#125;</div><div class="line">              <span class="keyword">else</span> &#123;</div><div class="line">                     <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">              &#125;</div><div class="line">       &#125;</div><div class="line">       fast = pHead;</div><div class="line">       <span class="keyword">while</span> (fast != slow) &#123;</div><div class="line">              fast = fast-&gt;next;</div><div class="line">              slow = slow-&gt;next;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> slow;</div></pre></td></tr></table></figure>
-<h2 id="24-反转链表"><a href="#24-反转链表" class="headerlink" title="24. 反转链表"></a>24. 反转链表</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">ReverseList</span><span class="params">(ListNode* pHead)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (pHead == <span class="literal">nullptr</span>) &#123;</div><div class="line">              <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">       &#125;</div><div class="line">       ListNode* pre = <span class="literal">nullptr</span>;</div><div class="line">       ListNode* next;</div><div class="line">       ListNode* pNode = pHead;</div><div class="line">       <span class="keyword">while</span> (pNode!=<span class="literal">nullptr</span>) &#123;</div><div class="line">              next = pNode-&gt;next;</div><div class="line">              pNode-&gt;next = pre;</div><div class="line">              pre = pNode;</div><div class="line">              pNode = next;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> pre;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="25-合并两个排序链表"><a href="#25-合并两个排序链表" class="headerlink" title="25. 合并两个排序链表"></a>25. 合并两个排序链表</h2><h3 id="递归-2"><a href="#递归-2" class="headerlink" title="递归"></a>递归</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">Merge</span><span class="params">(ListNode* pHead1, ListNode* pHead2)</span></span></div><div class="line">&#123;</div><div class="line">       <span class="keyword">if</span> (!pHead1) &#123;</div><div class="line">              <span class="keyword">return</span> pHead2;</div><div class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span> (!pHead2) &#123;</div><div class="line">              <span class="keyword">return</span> pHead1;</div><div class="line">       &#125;</div><div class="line">       ListNode* pHead = <span class="literal">nullptr</span>;</div><div class="line">       <span class="keyword">if</span> (pHead1-&gt;val &lt; pHead2-&gt;val) &#123;</div><div class="line">              pHead = pHead1;</div><div class="line">              pHead-&gt;next = Merge(pHead1-&gt;next, pHead2);</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">else</span> &#123;</div><div class="line">              pHead = pHead2;</div><div class="line">              pHead-&gt;next = Merge(pHead1, pHead2-&gt;next);</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> pHead;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="非递归-1"><a href="#非递归-1" class="headerlink" title="非递归"></a>非递归</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">Merge</span><span class="params">(ListNode* pHead1, ListNode* pHead2)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span> (pHead1 == <span class="literal">nullptr</span>) &#123;</div><div class="line">		<span class="keyword">return</span> pHead2;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (pHead2 == <span class="literal">nullptr</span>) &#123;</div><div class="line">		<span class="keyword">return</span> pHead1;</div><div class="line">	&#125;</div><div class="line">	ListNode* newHead;</div><div class="line">	<span class="keyword">if</span> (pHead1-&gt;val &lt; pHead2-&gt;val) &#123;</div><div class="line">		newHead = pHead1;</div><div class="line">		pHead1 = pHead1-&gt;next;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		newHead = pHead2;</div><div class="line">		pHead2 = pHead2-&gt;next;</div><div class="line">	&#125;</div><div class="line">	ListNode* node = newHead;</div><div class="line">	<span class="keyword">while</span> (pHead1 != <span class="literal">nullptr</span> &amp;&amp; pHead2 != <span class="literal">nullptr</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (pHead1-&gt;val &lt; pHead2-&gt;val) &#123;</div><div class="line">			node-&gt;next = pHead1;</div><div class="line">			pHead1 = pHead1-&gt;next;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			node-&gt;next = pHead2;</div><div class="line">			pHead2 = pHead2-&gt;next;</div><div class="line">		&#125;</div><div class="line">		node = node-&gt;next;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (pHead1 != <span class="literal">nullptr</span>) &#123;</div><div class="line">		node-&gt;next = pHead1;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (pHead2 != <span class="literal">nullptr</span>) &#123;</div><div class="line">		node-&gt;next = pHead2;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> newHead;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="35-复杂链表的复制"><a href="#35-复杂链表的复制" class="headerlink" title="35. 复杂链表的复制"></a>35. 复杂链表的复制</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function">RandomListNode* <span class="title">Clone</span><span class="params">(RandomListNode* pHead)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (pHead == <span class="literal">nullptr</span>)</div><div class="line">            <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">        <span class="comment">//插入新节点</span></div><div class="line">        RandomListNode* cur = pHead;</div><div class="line">        <span class="keyword">while</span> (cur != <span class="literal">nullptr</span>) &#123;</div><div class="line">            RandomListNode* clone = <span class="keyword">new</span> RandomListNode(cur-&gt;label);</div><div class="line">            clone-&gt;next = cur-&gt;next;</div><div class="line">            cur-&gt;next = clone;</div><div class="line">            cur = clone-&gt;next;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//建立 random 链接</span></div><div class="line">        cur = pHead;</div><div class="line">        <span class="keyword">while</span> (cur != <span class="literal">nullptr</span>) &#123;</div><div class="line">            RandomListNode* clone = cur-&gt;next;</div><div class="line">            <span class="keyword">if</span> (cur-&gt;random != <span class="literal">nullptr</span>)</div><div class="line">                clone-&gt;random = cur-&gt;random-&gt;next;</div><div class="line">            cur = clone-&gt;next;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//拆分</span></div><div class="line">        cur = pHead;</div><div class="line">        RandomListNode* pCloneHead = pHead-&gt;next;</div><div class="line">        <span class="keyword">while</span> (cur-&gt;next != <span class="literal">nullptr</span>) &#123;</div><div class="line">            RandomListNode* next = cur-&gt;next;</div><div class="line">            cur-&gt;next = next-&gt;next;</div><div class="line">            cur = next;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> pCloneHead;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="36-二叉搜索树与双向链表"><a href="#36-二叉搜索树与双向链表" class="headerlink" title="36. 二叉搜索树与双向链表"></a>36. 二叉搜索树与双向链表</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">TreeNode* last = <span class="literal">nullptr</span>;</div><div class="line">   <span class="function">TreeNode* <span class="title">Convert</span><span class="params">(TreeNode* pRootOfTree)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (pRootOfTree == <span class="literal">nullptr</span>) &#123;</div><div class="line">           <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">       &#125;</div><div class="line">       convertHelper(pRootOfTree);</div><div class="line">       <span class="keyword">while</span> (last != <span class="literal">nullptr</span>&amp;&amp;last-&gt;left != <span class="literal">nullptr</span>) &#123;</div><div class="line">           last = last-&gt;left;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> last;</div><div class="line">   &#125;</div><div class="line">   <span class="function"><span class="keyword">void</span> <span class="title">convertHelper</span><span class="params">(TreeNode* pNode)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (pNode == <span class="literal">nullptr</span>) &#123;</div><div class="line">           <span class="keyword">return</span>;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">if</span> (pNode-&gt;left) &#123;</div><div class="line">           convertHelper(pNode-&gt;left);</div><div class="line">       &#125;</div><div class="line">       pNode-&gt;left = last;</div><div class="line">       <span class="keyword">if</span> (last != <span class="literal">nullptr</span>) &#123;</div><div class="line">           last-&gt;right = pNode;</div><div class="line">       &#125;</div><div class="line">       last = pNode;</div><div class="line">       <span class="keyword">if</span> (pNode-&gt;right) &#123;</div><div class="line">           convertHelper(pNode-&gt;right);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h2 id="52-两个链表的第一个公共节点"><a href="#52-两个链表的第一个公共节点" class="headerlink" title="52. 两个链表的第一个公共节点"></a>52. 两个链表的第一个公共节点</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">FindFirstCommonNode</span><span class="params">(ListNode* pHead1, ListNode* pHead2)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (pHead1 == <span class="literal">nullptr</span> || pHead2 == <span class="literal">nullptr</span>) &#123;</div><div class="line">              <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">int</span> l1 = getLength(pHead1);</div><div class="line">       <span class="keyword">int</span> l2 = getLength(pHead2);</div><div class="line">       <span class="keyword">int</span> diff;</div><div class="line">       <span class="keyword">if</span> (l1 &gt; l2) &#123;</div><div class="line">              diff = l1 - l2;</div><div class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; diff; i++) &#123;</div><div class="line">                     pHead1 = pHead1-&gt;next;</div><div class="line">              &#125;      </div><div class="line">       &#125;</div><div class="line">       <span class="keyword">else</span> &#123;</div><div class="line">              diff = l2 - l1;</div><div class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; diff; i++) &#123;</div><div class="line">                     pHead2 = pHead2-&gt;next;</div><div class="line">              &#125;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">while</span> (pHead1 != <span class="literal">nullptr</span>&amp;&amp;pHead2 != <span class="literal">nullptr</span>&amp;&amp;pHead1-&gt;val != pHead2-&gt;val) &#123;</div><div class="line">              pHead1 = pHead1-&gt;next;</div><div class="line">              pHead2 = pHead2-&gt;next;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> pHead1;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getLength</span><span class="params">(ListNode* pHead)</span> </span>&#123;</div><div class="line">       <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">       <span class="keyword">while</span> (pHead != <span class="literal">nullptr</span>) &#123;</div><div class="line">              count++;</div><div class="line">              pHead = pHead-&gt;next;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> count;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="栈和队列"><a href="#栈和队列" class="headerlink" title="栈和队列"></a>栈和队列</h1><h2 id="9-用两个栈实现队列"><a href="#9-用两个栈实现队列" class="headerlink" title="9. 用两个栈实现队列"></a>9. 用两个栈实现队列</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> node)</span></span></div><div class="line">    &#123;</div><div class="line">        stack1.push(node);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (stack2.size() == <span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">while</span> (stack1.size())</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">int</span> node = stack1.top();</div><div class="line">                stack2.push(node);</div><div class="line">                stack1.pop();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> a = stack2.top();</div><div class="line">        stack2.pop();</div><div class="line">        <span class="keyword">return</span> a;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="30-包含-min-函数的栈"><a href="#30-包含-min-函数的栈" class="headerlink" title="30. 包含 min 函数的栈"></a>30. 包含 min 函数的栈</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; m_data, m_min;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</div><div class="line">	m_data.push(value);</div><div class="line">	<span class="keyword">if</span> (m_min.empty()||value&lt;m_min.top()) &#123;</div><div class="line">		m_min.push(value);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		m_min.push(m_min.top());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</div><div class="line">	m_data.pop();</div><div class="line">	m_min.pop();</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> m_data.top();</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">min</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> m_min.top();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="31-栈的压入、弹出序列"><a href="#31-栈的压入、弹出序列" class="headerlink" title="31. 栈的压入、弹出序列"></a>31. 栈的压入、弹出序列</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">IsPopOrder</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pushV, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; popV)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (pushV.empty() || popV.empty() || pushV.size() != popV.size())</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</div><div class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pushV.size(); i++)</div><div class="line">    &#123;</div><div class="line">        s.push(pushV[i]);</div><div class="line">        <span class="keyword">while</span> (s.size() &amp;&amp; s.top() == popV[j])</div><div class="line">        &#123;</div><div class="line">            s.pop();</div><div class="line">            j++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> s.empty();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="6-从尾到头打印链表"><a href="#6-从尾到头打印链表" class="headerlink" title="6. 从尾到头打印链表"></a>6. 从尾到头打印链表</h2><h3 id="使用栈"><a href="#使用栈" class="headerlink" title="使用栈"></a>使用栈</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
+        vector&lt;int&gt; list;
+        stack&lt;ListNode*&gt; s;
+        while(head!=nullptr){
+            s.push(head);
+            head=head-&gt;next;
+        }
+        while(!s.empty()){
+            ListNode* node;
+            node=s.top();
+            list.push_back(node-&gt;val);
+            s.pop();
+        }
+        return list;
+    }
+</code></pre>
+<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
+        vector&lt;int&gt; list;
+        if(head!=nullptr){
+            list=printListFromTailToHead(head-&gt;next);
+            list.push_back(head-&gt;val);
+        }
+
+        return list;
+    }
+</code></pre>
+<h2 id="18-1-删除链表的节点"><a href="#18-1-删除链表的节点" class="headerlink" title="18.1 删除链表的节点"></a>18.1 删除链表的节点</h2><pre><code class="language-cpp">void DeleteNode(ListNode **pListHead, ListNode *pToBeDeleted) {
+       if (pListHead == nullptr || pToBeDeleted == nullptr) {
+              return;
+       }
+       if (pToBeDeleted-&gt;next != nullptr) {
+              pToBeDeleted-&gt;val = pToBeDeleted-&gt;next-&gt;val;
+              pToBeDeleted-&gt;next = pToBeDeleted-&gt;next-&gt;next;
+       }
+       else if (*pListHead==pToBeDeleted) {
+              delete pToBeDeleted;
+              pToBeDeleted = nullptr;
+              *pListHead = nullptr;
+       }
+       else {
+              ListNode *pNode = *pListHead;
+              while (pNode-&gt;next != pToBeDeleted) {
+                     pNode = pNode-&gt;next;
+              }
+              pNode-&gt;next = nullptr;
+              delete pToBeDeleted;
+              pToBeDeleted = nullptr;
+       }
+}
+</code></pre>
+<h2 id="18-2-删除链表中重复的节点"><a href="#18-2-删除链表中重复的节点" class="headerlink" title="18.2 删除链表中重复的节点"></a>18.2 删除链表中重复的节点</h2><h3 id="递归-1"><a href="#递归-1" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* deleteDuplication(ListNode* pHead){
+     if(pHead==nullptr||pHead-&gt;next==nullptr){
+            return pHead;
+        }
+        ListNode* next=pHead-&gt;next;
+        if(pHead-&gt;val==next-&gt;val){
+            while(next!=nullptr&amp;&amp;pHead-&gt;val==next-&gt;val){
+                 next=next-&gt;next;
+            }
+            return deleteDuplication(next);
+        }else{
+            pHead-&gt;next=deleteDuplication(pHead-&gt;next);
+            return pHead;
+        }
+}
+</code></pre>
+<h3 id="非递归"><a href="#非递归" class="headerlink" title="非递归"></a>非递归</h3><pre><code class="language-cpp"> ListNode* deleteDuplication(ListNode* pHead)
+    {
+        if (pHead == nullptr || pHead-&gt;next == nullptr) {
+            return pHead;
+        }
+        ListNode* newHead = new ListNode(-1);
+        newHead-&gt;next = pHead;
+        ListNode* pNode = pHead;
+        ListNode* preNode = newHead;
+        while (pNode != nullptr) {
+            ListNode* pNext = pNode-&gt;next;
+            if (pNext != nullptr&amp;&amp;pNext-&gt;val == pNode-&gt;val) {
+                int value = pNode-&gt;val;
+                while (pNode != nullptr&amp;&amp;pNode-&gt;val == value) {
+                    pNode = pNode-&gt;next;
+                }
+                preNode-&gt;next=pNode;
+            }    
+            else {
+                preNode = pNode;
+                pNode = pNode-&gt;next;
+            }
+        }
+        return newHead-&gt;next;
+    }
+</code></pre>
+<h2 id="22-链表中倒数第k个节点"><a href="#22-链表中倒数第k个节点" class="headerlink" title="22. 链表中倒数第k个节点"></a>22. 链表中倒数第k个节点</h2><pre><code class="language-cpp">ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+    if (pListHead == nullptr || k == 0) {
+        return nullptr;
+    }
+    ListNode* first = pListHead;
+    ListNode* second = pListHead;
+    for (int i = 0; i &lt; k - 1; i++) {
+        if (second-&gt;next != nullptr) {
+            second = second-&gt;next;
+        }
+        else {
+            return nullptr;
+        }
+    }
+    while (second-&gt;next != nullptr) {
+        first = first-&gt;next;
+        second = second-&gt;next;
+    }
+    return first;
+}
+</code></pre>
+<h2 id="23-链表中环的入口节点"><a href="#23-链表中环的入口节点" class="headerlink" title="23. 链表中环的入口节点"></a>23. 链表中环的入口节点</h2><pre><code class="language-cpp">if (pHead == nullptr || pHead-&gt;next == nullptr || pHead-&gt;next-&gt;next == nullptr)
+              return nullptr;
+       ListNode* fast = pHead-&gt;next-&gt;next;
+       ListNode* slow = pHead-&gt;next;
+       while (fast != slow) {
+              if (fast-&gt;next != nullptr&amp;&amp; fast-&gt;next-&gt;next != nullptr) {
+                     fast = fast-&gt;next-&gt;next;
+                     slow = slow-&gt;next;
+              }
+              else {
+                     return nullptr;
+              }
+       }
+       fast = pHead;
+       while (fast != slow) {
+              fast = fast-&gt;next;
+              slow = slow-&gt;next;
+       }
+       return slow;
+</code></pre>
+<h2 id="24-反转链表"><a href="#24-反转链表" class="headerlink" title="24. 反转链表"></a>24. 反转链表</h2><pre><code class="language-cpp">ListNode* ReverseList(ListNode* pHead) {
+       if (pHead == nullptr) {
+              return nullptr;
+       }
+       ListNode* pre = nullptr;
+       ListNode* next;
+       ListNode* pNode = pHead;
+       while (pNode!=nullptr) {
+              next = pNode-&gt;next;
+              pNode-&gt;next = pre;
+              pre = pNode;
+              pNode = next;
+       }
+       return pre;
+}
+</code></pre>
+<h2 id="25-合并两个排序链表"><a href="#25-合并两个排序链表" class="headerlink" title="25. 合并两个排序链表"></a>25. 合并两个排序链表</h2><h3 id="递归-2"><a href="#递归-2" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+{
+       if (!pHead1) {
+              return pHead2;
+       }else if (!pHead2) {
+              return pHead1;
+       }
+       ListNode* pHead = nullptr;
+       if (pHead1-&gt;val &lt; pHead2-&gt;val) {
+              pHead = pHead1;
+              pHead-&gt;next = Merge(pHead1-&gt;next, pHead2);
+       }
+       else {
+              pHead = pHead2;
+              pHead-&gt;next = Merge(pHead1, pHead2-&gt;next);
+       }
+       return pHead;
+}
+</code></pre>
+<h3 id="非递归-1"><a href="#非递归-1" class="headerlink" title="非递归"></a>非递归</h3><pre><code class="language-cpp">ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+{
+    if (pHead1 == nullptr) {
+        return pHead2;
+    }
+    if (pHead2 == nullptr) {
+        return pHead1;
+    }
+    ListNode* newHead;
+    if (pHead1-&gt;val &lt; pHead2-&gt;val) {
+        newHead = pHead1;
+        pHead1 = pHead1-&gt;next;
+    }
+    else {
+        newHead = pHead2;
+        pHead2 = pHead2-&gt;next;
+    }
+    ListNode* node = newHead;
+    while (pHead1 != nullptr &amp;&amp; pHead2 != nullptr) {
+        if (pHead1-&gt;val &lt; pHead2-&gt;val) {
+            node-&gt;next = pHead1;
+            pHead1 = pHead1-&gt;next;
+        }
+        else {
+            node-&gt;next = pHead2;
+            pHead2 = pHead2-&gt;next;
+        }
+        node = node-&gt;next;
+    }
+    if (pHead1 != nullptr) {
+        node-&gt;next = pHead1;
+    }
+    if (pHead2 != nullptr) {
+        node-&gt;next = pHead2;
+    }
+    return newHead;
+}
+</code></pre>
+<h2 id="35-复杂链表的复制"><a href="#35-复杂链表的复制" class="headerlink" title="35. 复杂链表的复制"></a>35. 复杂链表的复制</h2><pre><code class="language-cpp">RandomListNode* Clone(RandomListNode* pHead)
+    {
+        if (pHead == nullptr)
+            return nullptr;
+        //插入新节点
+        RandomListNode* cur = pHead;
+        while (cur != nullptr) {
+            RandomListNode* clone = new RandomListNode(cur-&gt;label);
+            clone-&gt;next = cur-&gt;next;
+            cur-&gt;next = clone;
+            cur = clone-&gt;next;
+        }
+        //建立 random 链接
+        cur = pHead;
+        while (cur != nullptr) {
+            RandomListNode* clone = cur-&gt;next;
+            if (cur-&gt;random != nullptr)
+                clone-&gt;random = cur-&gt;random-&gt;next;
+            cur = clone-&gt;next;
+        }
+        //拆分
+        cur = pHead;
+        RandomListNode* pCloneHead = pHead-&gt;next;
+        while (cur-&gt;next != nullptr) {
+            RandomListNode* next = cur-&gt;next;
+            cur-&gt;next = next-&gt;next;
+            cur = next;
+        }
+        return pCloneHead;
+    }
+</code></pre>
+<h2 id="36-二叉搜索树与双向链表"><a href="#36-二叉搜索树与双向链表" class="headerlink" title="36. 二叉搜索树与双向链表"></a>36. 二叉搜索树与双向链表</h2><pre><code class="language-cpp"> TreeNode* last = nullptr;
+    TreeNode* Convert(TreeNode* pRootOfTree) {
+        if (pRootOfTree == nullptr) {
+            return nullptr;
+        }
+        convertHelper(pRootOfTree);
+        while (last != nullptr&amp;&amp;last-&gt;left != nullptr) {
+            last = last-&gt;left;
+        }
+        return last;
+    }
+    void convertHelper(TreeNode* pNode) {
+        if (pNode == nullptr) {
+            return;
+        }
+        if (pNode-&gt;left) {
+            convertHelper(pNode-&gt;left);
+        }
+        pNode-&gt;left = last;
+        if (last != nullptr) {
+            last-&gt;right = pNode;
+        }
+        last = pNode;
+        if (pNode-&gt;right) {
+            convertHelper(pNode-&gt;right);
+        }
+    }
+</code></pre>
+<h2 id="52-两个链表的第一个公共节点"><a href="#52-两个链表的第一个公共节点" class="headerlink" title="52. 两个链表的第一个公共节点"></a>52. 两个链表的第一个公共节点</h2><pre><code class="language-cpp">ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
+       if (pHead1 == nullptr || pHead2 == nullptr) {
+              return nullptr;
+       }
+       int l1 = getLength(pHead1);
+       int l2 = getLength(pHead2);
+       int diff;
+       if (l1 &gt; l2) {
+              diff = l1 - l2;
+              for (int i = 0; i &lt; diff; i++) {
+                     pHead1 = pHead1-&gt;next;
+              }      
+       }
+       else {
+              diff = l2 - l1;
+              for (int i = 0; i &lt; diff; i++) {
+                     pHead2 = pHead2-&gt;next;
+              }
+       }
+       while (pHead1 != nullptr&amp;&amp;pHead2 != nullptr&amp;&amp;pHead1-&gt;val != pHead2-&gt;val) {
+              pHead1 = pHead1-&gt;next;
+              pHead2 = pHead2-&gt;next;
+       }
+       return pHead1;
+}
+int getLength(ListNode* pHead) {
+       int count = 0;
+       while (pHead != nullptr) {
+              count++;
+              pHead = pHead-&gt;next;
+       }
+       return count;
+}
+</code></pre>
+<h1 id="栈和队列"><a href="#栈和队列" class="headerlink" title="栈和队列"></a>栈和队列</h1><h2 id="9-用两个栈实现队列"><a href="#9-用两个栈实现队列" class="headerlink" title="9. 用两个栈实现队列"></a>9. 用两个栈实现队列</h2><pre><code class="language-cpp">void push(int node)
+    {
+        stack1.push(node);
+    }
+
+    int pop()
+    {
+        if (stack2.size() == 0)
+        {
+            while (stack1.size())
+            {
+                int node = stack1.top();
+                stack2.push(node);
+                stack1.pop();
+            }
+        }
+        int a = stack2.top();
+        stack2.pop();
+        return a;
+    }
+</code></pre>
+<h2 id="30-包含-min-函数的栈"><a href="#30-包含-min-函数的栈" class="headerlink" title="30. 包含 min 函数的栈"></a>30. 包含 min 函数的栈</h2><pre><code class="language-cpp">stack&lt;int&gt; m_data, m_min;
+void push(int value) {
+    m_data.push(value);
+    if (m_min.empty()||value&lt;m_min.top()) {
+        m_min.push(value);
+    }
+    else {
+        m_min.push(m_min.top());
+    }
+}
+void pop() {
+    m_data.pop();
+    m_min.pop();
+}
+int top() {
+    return m_data.top();
+}
+int min() {
+    return m_min.top();
+}
+</code></pre>
+<h2 id="31-栈的压入、弹出序列"><a href="#31-栈的压入、弹出序列" class="headerlink" title="31. 栈的压入、弹出序列"></a>31. 栈的压入、弹出序列</h2><pre><code class="language-cpp">bool IsPopOrder(vector&lt;int&gt; pushV, vector&lt;int&gt; popV)
+{
+    if (pushV.empty() || popV.empty() || pushV.size() != popV.size())
+    {
+        return false;
+    }
+    stack&lt;int&gt; s;
+    int j = 0;
+    for (int i = 0; i &lt; pushV.size(); i++)
+    {
+        s.push(pushV[i]);
+        while (s.size() &amp;&amp; s.top() == popV[j])
+        {
+            s.pop();
+            j++;
+        }
+    }
+    return s.empty();
+}
+</code></pre>
 <h2 id="59-队列的最大值"><a href="#59-队列的最大值" class="headerlink" title="59. 队列的最大值"></a>59. 队列的最大值</h2>
   </article>
   <div class="random-toc-area">
@@ -280,8 +629,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -289,6 +636,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

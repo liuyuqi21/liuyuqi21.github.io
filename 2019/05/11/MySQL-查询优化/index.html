@@ -31,11 +31,11 @@ show processlist 或开启慢查询 获取有问题的 ...">
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -241,7 +241,15 @@ show processlist 或开启慢查询 获取有问题的 ...">
 <li>尽量避免null，不利于索引，要用特殊字节标注，在磁盘占据的空间更大（mysql5.5对null做了改进）</li>
 <li>ip 地址的存储，用字符串浪费空间。可以用 iptolong 函数转化为整形存储 </li>
 </ul>
-<h2 id="优化长难的查询语句"><a href="#优化长难的查询语句" class="headerlink" title="优化长难的查询语句"></a>优化长难的查询语句</h2><h3 id="切分大查询"><a href="#切分大查询" class="headerlink" title="切分大查询"></a>切分大查询</h3><p>一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。<br>将一个大的查询分解成多个小的相同的查询。<br>一次性删除 1000万的数据要比一次删除1万，暂停一会儿的方案更损耗服务器开销。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> messages <span class="keyword">WHERE</span> <span class="keyword">create</span> &lt; <span class="keyword">DATE_SUB</span>(<span class="keyword">NOW</span>(), <span class="built_in">INTERVAL</span> <span class="number">3</span> <span class="keyword">MONTH</span>);</div><div class="line">//切分后</div><div class="line">rows_affected = 0</div><div class="line"><span class="keyword">do</span> &#123;</div><div class="line">rows_affected = do_query(</div><div class="line"><span class="string">"DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000"</span>)</div><div class="line">&#125; <span class="keyword">while</span> rows_affected &gt; <span class="number">0</span></div></pre></td></tr></table></figure></p>
+<h2 id="优化长难的查询语句"><a href="#优化长难的查询语句" class="headerlink" title="优化长难的查询语句"></a>优化长难的查询语句</h2><h3 id="切分大查询"><a href="#切分大查询" class="headerlink" title="切分大查询"></a>切分大查询</h3><p>一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。<br>将一个大的查询分解成多个小的相同的查询。<br>一次性删除 1000万的数据要比一次删除1万，暂停一会儿的方案更损耗服务器开销。</p>
+<pre><code class="language-sql">DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH);
+//切分后
+rows_affected = 0
+do {
+rows_affected = do_query(
+&quot;DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000&quot;)
+} while rows_affected &gt; 0
+</code></pre>
 <h3 id="分解大连接查询"><a href="#分解大连接查询" class="headerlink" title="分解大连接查询"></a>分解大连接查询</h3><p>将一个大连接查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联。</p>
 <ul>
 <li>让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用。</li>
@@ -475,8 +483,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -484,6 +490,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

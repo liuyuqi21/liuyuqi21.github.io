@@ -10,7 +10,7 @@ $(function(){
   // hide / show content button
   $("#btn-view").on('click', showHideToggle);
 
-  // code highlight
+  //code highlight
   hljs.configure({useBR: true});
   hljs.initHighlightingOnLoad();
   $(".highlight").each(function(i, block) {

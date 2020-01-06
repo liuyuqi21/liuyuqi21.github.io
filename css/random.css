@@ -591,14 +591,13 @@ figure.highlight .line {
   height: 22px;
 }
 code {
-  font-family: Consolas, Monaco, Courier New, Lucida Console;
+  font-family: Source Code Pro, Lucida Console, Consolas, Monaco, Courier New;
   background-color: #ddd;
-  font-style: italic;
   padding-left: 12px;
   padding-right: 12px;
 }
 table .line {
-  font-family: Consolas, Monaco, Courier New, Lucida Console;
+  font-family: Source Code Pro, Lucida Console, Consolas, Monaco, Courier New;
   height: 22px;
 }
 blockquote {

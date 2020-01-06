@@ -31,11 +31,11 @@
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -511,9 +511,11 @@
 <li>非阻塞式 I/O 、信号驱动 I/O 和异步 I/O 在第一阶段不会阻塞。</li>
 </ol>
 <p>★★★ select、poll、epoll 的原理、比较、以及使用场景；epoll 的水平触发与边缘触发。</p>
-<h4 id="select："><a href="#select：" class="headerlink" title="select："></a>select：</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, <span class="keyword">struct</span> timeval      *timeout)</span></span>;</div></pre></td></tr></table></figure>
+<h4 id="select："><a href="#select：" class="headerlink" title="select："></a>select：</h4><pre><code class="language-c">    int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval      *timeout);
+</code></pre>
 <p>有三种类型的描述符类型：readset、writeset、execptset，分别对应读、写、异常条件的描述符集合。fd_set使用数组实现，数组大小使用 FD_SETSIZE 定义。timeout 为超时参数，调用 select 会一直阻塞直到有描述符事件到达或者等待时间超过 timeout。成功调用返回结果大于 0，出错返回结果为 -1，超时返回结果为 0。</p>
-<h4 id="poll："><a href="#poll：" class="headerlink" title="poll："></a>poll：</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(<span class="keyword">struct</span> pollfd*fds,<span class="keyword">unsigned</span> <span class="keyword">int</span> fds, <span class="keyword">int</span> timeout)</span></span></div></pre></td></tr></table></figure>
+<h4 id="poll："><a href="#poll：" class="headerlink" title="poll："></a>poll：</h4><pre><code class="language-c">int poll(struct pollfd*fds,unsigned int fds, int timeout)
+</code></pre>
 <p>pollfd使用链表实现</p>
 <h4 id="select-和-poll-比较："><a href="#select-和-poll-比较：" class="headerlink" title="select 和 poll 比较："></a>select 和 poll 比较：</h4><ul>
 <li>select 会修改描述符，poll不会。</li>
@@ -525,7 +527,10 @@
 <li>select 和 poll 的返回结果中没有声明哪些描述符已经准备好，所以如果返回值大于等于 0 时，应用程序需要使用<strong>轮询</strong>的方式来找到 I/O 完成的描述符。</li>
 <li>可移植性：几乎所有的系统都支持 select。但是只有比较新的系统支持 poll。</li>
 </ul>
-<h4 id="epoll："><a href="#epoll：" class="headerlink" title="epoll："></a>epoll：</h4><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int epoll_create(int size);</div><div class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；</div><div class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);</div></pre></td></tr></table></figure>
+<h4 id="epoll："><a href="#epoll：" class="headerlink" title="epoll："></a>epoll：</h4><pre><code class="language-c">int epoll_create(int size);
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；
+int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);
+</code></pre>
 <p>epoll_ctl() 用于向内核注册新的描述符或者是改变某个文件描述符的状态。已注册的描述符在内核中会被维护在一棵红黑树上，通过回调函数会将 I/O 准备好的描述符加入到另一个链表中管理，进程调用 epoll_wait() 便可以得到事件完成的描述符。<br>从上面的描述可以看出，epoll 只需要<strong>将描述符从进程缓冲区向内核缓冲区拷贝一次</strong>，并且进程<strong>不需要通过轮询来获得时间完成的描述符</strong>。<br>epoll 仅适用于 Liunx OS。<br><strong>epoll 比 select 和 poll 更加灵活而且没有描述符数量限制</strong><br><strong>epoll 对多线程编程更加友好，一个线程调用了 epoll_wait() 另一个线程关闭了同一个描述符也不会产生像 select 和 poll的不确定情况</strong></p>
 <h3 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h3><p>epoll 的描述符事件有两种触发模式：LT（level trigger）水平触发 和 ET（edge trigger）边缘触发</p>
 <ul>
@@ -604,10 +609,11 @@
 <li>在选择封锁粒度时，需要在锁开销和并发程度之间做一个权衡。</li>
 <li>两段锁协议：</li>
 <li>加锁和解锁分为两个阶段进行</li>
-<li>MySQL 隐式与显示锁定：MySQL 的 InnoDB 存储引擎采用两段锁协议，会根据隔离级别在需要的时候自动加锁，并且所有的锁都是在同一时刻被释放，这被称为隐式锁定。InnoDB 也可以使用特定的语句进行显示锁定<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> ... <span class="keyword">LOCK</span> <span class="keyword">In</span> <span class="keyword">SHARE</span> <span class="keyword">MODE</span>;</div><div class="line"><span class="keyword">SELECT</span> ... <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</div></pre></td></tr></table></figure>
-</li>
+<li>MySQL 隐式与显示锁定：MySQL 的 InnoDB 存储引擎采用两段锁协议，会根据隔离级别在需要的时候自动加锁，并且所有的锁都是在同一时刻被释放，这被称为隐式锁定。InnoDB 也可以使用特定的语句进行显示锁定<pre><code class="language-sql">SELECT ... LOCK In SHARE MODE;
+SELECT ... FOR UPDATE;
+</code></pre>
+★★★ 乐观锁与悲观锁。</li>
 </ul>
-<p>★★★ 乐观锁与悲观锁。</p>
 <p>★★★ MVCC 原理，当前读以及快照读，Next-Key Locks 解决幻影读。</p>
 <p>★★☆ 范式理论。</p>
 <p>★★★ SQL 与 NoSQL 的比较。</p>
@@ -817,8 +823,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -826,6 +830,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>

@@ -29,11 +29,11 @@ php 是否重写父类方法只会根据方法名是否一致（5.3以后参数�
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
 <link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
   
 </head>
 
@@ -147,19 +147,19 @@ php 是否重写父类方法只会根据方法名是否一致（5.3以后参数�
 <li>PSR-2 编码风格规范</li>
 <li>PSR-4 自动加载规范</li>
 <li>PSR-7 HTTP消息基础规范<h4 id="代理透传-实际ip的概念"><a href="#代理透传-实际ip的概念" class="headerlink" title="代理透传 实际ip的概念"></a>代理透传 实际ip的概念</h4></li>
-<li>代理一般会在HTTP的Header中输入三个字段<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">REMOTE_ADDR</div><div class="line">HTTP_X_FORWARDED_FOR</div><div class="line">HTTP_VIA</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>REMOTE_ADDR总是发送代理服务器的ip</p>
-<ul>
+<li>代理一般会在HTTP的Header中输入三个字段<pre><code>REMOTE_ADDR
+HTTP_X_FORWARDED_FOR
+HTTP_VIA
+</code></pre>REMOTE_ADDR总是发送代理服务器的ip</li>
 <li>透传代理：真实ip地址会被放在HTTP_X_FORWARDED_FOR里面，HTTP_VIA也会发送，显示正在使用的代理服务器</li>
 <li>匿名代理：匿名代理不会把你的真实IP写在HTTP_X_FORWARDED_FOR头里面。但是HTTP_VIA头还是透露了您正在使用一个代理服务器。</li>
 <li>精英代理：精英代理只发送REMOTE_ADDR头,因此让你看起来像一个普通互联网用户不使用代理<h4 id="如何开启php异常提示"><a href="#如何开启php异常提示" class="headerlink" title="如何开启php异常提示"></a>如何开启php异常提示</h4></li>
 <li>php.ini中开启display_errors设置error_reporting等级</li>
-<li>运行时，使用ini_set(k,v)动态设置<h4 id="如何返回一个301重定向"><a href="#如何返回一个301重定向" class="headerlink" title="如何返回一个301重定向"></a>如何返回一个301重定向</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">http_response_code(<span class="number">301</span>);<span class="comment">//或者header("HTTP/1.1 301 Moved Permanently");</span></div><div class="line">header(<span class="string">'Location: /option-a'</span>);</div><div class="line"><span class="keyword">exit</span>;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制"><a href="#字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制" class="headerlink" title="字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制"></a>字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制</h4><ul>
+<li>运行时，使用ini_set(k,v)动态设置<h4 id="如何返回一个301重定向"><a href="#如何返回一个301重定向" class="headerlink" title="如何返回一个301重定向"></a>如何返回一个301重定向</h4><pre><code class="language-php">http_response_code(301);//或者header(&quot;HTTP/1.1 301 Moved Permanently&quot;);
+header(&#39;Location: /option-a&#39;);
+exit;
+</code></pre>
+<h4 id="字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制"><a href="#字符串、数字比较大小的原理，注意-0-开头的8进制、0x-开头16进制" class="headerlink" title="字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制"></a>字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制</h4></li>
 <li>字符串比较大小，从左(高位)至右，逐个字符 ASCII 比较</li>
 <li>字符串和数字比较，会先把字符串转换成数字类型，比如12se转换成12，abx转换成0，此时就不是字符的ASCII值与数字比较。0与任何不可转换成数字的字符串比较都是true</li>
 <li>两个不同进制的数字比较会转成十进制比较（得出这个结论是因为我在php中直接输出其他进制数字时均显示十进制格式<h4 id="什么是面向对象？主要特征是什么？几大原则是什么？"><a href="#什么是面向对象？主要特征是什么？几大原则是什么？" class="headerlink" title="什么是面向对象？主要特征是什么？几大原则是什么？"></a>什么是面向对象？主要特征是什么？几大原则是什么？</h4></li>
@@ -230,9 +230,17 @@ php 是否重写父类方法只会根据方法名是否一致（5.3以后参数�
 <li>const在当前的命名空间中定义常量， 而define()要实现类似效果必须在定义时传递完整的命名空间名称</li>
 <li>const从PHP5.6版本开始可以把数组用作常量值，而define()在PHP7.0版本开始才支持把数组用作常量值</li>
 <li>因为const是语言结构并且在编译时定义常量所以const会比define() 稍稍快一些</li>
-<li>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FOO</span></span></div><div class="line">&#123;</div><div class="line"><span class="keyword">const</span> BAR = <span class="number">2</span>;<span class="comment">// 正确</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Baz</span></span></div><div class="line">&#123;</div><div class="line">define(<span class="string">'QUX'</span>, <span class="number">2</span>)<span class="comment">// 错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
+<li><p>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量</p>
+<pre><code class="language-php">  class FOO
+  {
+  const BAR = 2;// 正确
+  }
+
+  class Baz
+  {
+  define(&#39;QUX&#39;, 2)// 错误
+  }
+</code></pre>
 <h4 id="如何在页面之间传递变量-至少两种方式"><a href="#如何在页面之间传递变量-至少两种方式" class="headerlink" title="如何在页面之间传递变量(至少两种方式)"></a>如何在页面之间传递变量(至少两种方式)</h4><p>GET,POST,COOKIE,SESSION，隐藏表单</p>
 <h4 id="请问GET-和POST的区别是什么"><a href="#请问GET-和POST的区别是什么" class="headerlink" title="请问GET 和POST的区别是什么?"></a>请问GET 和POST的区别是什么?</h4><p>GET方法传输数据,所有的信息都会出现在URL地址中,最多只能传输1024字节，而POST可以通过表单传输大量数据,最多可以传输2M数据,可以根据需求调节.</p>
 <h4 id="能够使HTML和PHP分离开使用的模板"><a href="#能够使HTML和PHP分离开使用的模板" class="headerlink" title="能够使HTML和PHP分离开使用的模板"></a>能够使HTML和PHP分离开使用的模板</h4><p>Smarty,Dwoo,TinyButStrong,Template Lite,Savant,phemplate,XTemplate</p>
@@ -242,7 +250,7 @@ php 是否重写父类方法只会根据方法名是否一致（5.3以后参数�
 <h4 id="javascript能否定义二维数组，如果不能你如何解决？"><a href="#javascript能否定义二维数组，如果不能你如何解决？" class="headerlink" title="javascript能否定义二维数组，如果不能你如何解决？"></a>javascript能否定义二维数组，如果不能你如何解决？</h4><p>javascript不支持二维数组定义，可以用arr[0] = new array()来解决</p>
 <h4 id="MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么"><a href="#MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么" class="headerlink" title="MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?"></a>MySQL数据库中的字段类型varchar和char的主要区别是什么？那种字段的查找效率要高，为什么?</h4><p>Varchar是变长，节省存储空间，char是固定长度。查找效率要varchar型快，因为varchar是非定长，必须先查找长度，然后进行数据的提取，比char定长类型多了一个步骤，所以效率低一些</p>
 <h4 id="MYSQL取得当前时间的函数是-，格式化日期的函数是"><a href="#MYSQL取得当前时间的函数是-，格式化日期的函数是" class="headerlink" title="MYSQL取得当前时间的函数是?，格式化日期的函数是?"></a>MYSQL取得当前时间的函数是?，格式化日期的函数是?</h4><p>now(),date()</p>
-<h4 id="const和define-定义常量的区别-1"><a href="#const和define-定义常量的区别-1" class="headerlink" title="const和define()定义常量的区别"></a>const和define()定义常量的区别</h4><ul>
+<h4 id="const和define-定义常量的区别-1"><a href="#const和define-定义常量的区别-1" class="headerlink" title="const和define()定义常量的区别"></a>const和define()定义常量的区别</h4></li>
 <li>const在编译时定义常量，define()在运行时定义</li>
 <li>const不能用在if语句中，define()可以</li>
 <li>define()的一个常用场景是先判断常量是否已经定义再定义常量</li>
@@ -250,7 +258,16 @@ php 是否重写父类方法只会根据方法名是否一致（5.3以后参数�
 <li>const在当前的命名空间中定义常量， 而define()要实现类似效果必须在定义时传递完整的命名空间名称</li>
 <li>const从PHP5.6版本开始可以把数组用作常量值，而define()在PHP7.0版本开始才支持把数组用作常量值</li>
 <li>因为const是语言结构并且在编译时定义常量所以const会比define() 稍稍快一些</li>
-<li>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FOO</span></span></div><div class="line">&#123;</div><div class="line"><span class="keyword">const</span> BAR = <span class="number">2</span>;<span class="comment">// 正确</span></div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Baz</span></span></div><div class="line">&#123;</div><div class="line">define(<span class="string">'QUX'</span>, <span class="number">2</span>)<span class="comment">// 错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+<li>const还能被用于在类和接口中定义常量，define()只能被用于在全局命名空间中定义常量<pre><code class="language-php">class FOO
+{
+const BAR = 2;// 正确
+}
+class Baz
+{
+define(&#39;QUX&#39;, 2)// 错误
+}
+</code></pre>
+</li>
 </ul>
 
   </article>
@@ -362,8 +379,6 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
   
     <script src="/js/random.js"></script>
   
-    <script src="/js/highlight.pack.js"></script>
-  
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
     <script src="/js/jquery.fancybox.pack.js"></script>
@@ -371,6 +386,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/jquery.fancybox-thumbs.js"></script>
   
     <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
   
 
 <script>
