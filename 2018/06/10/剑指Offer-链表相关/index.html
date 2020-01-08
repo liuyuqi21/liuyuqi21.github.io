@@ -16,11 +16,12 @@
   
   
   
-    <meta name="description" content="链表6. 从尾到头打印链表使用栈vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
-        vector&lt;int&gt; list;
-        stack&lt;ListNode*&gt; s;
-        while(head!=nullptr){
-            s.push(head);...">
+    <meta name="description" content="链表6. 从尾到头打印链表使用栈vector&lt;int&gt; printListFromTailToHead(ListNode *head){
+    vector&lt;int&gt; list;
+    stack&lt;ListNode *&gt; s;
+    while (head != nullptr){
+        s.push(head);
+        head...">
   
   <title>剑指Offer-链表相关 [ Cellophane ]</title>
   
@@ -158,97 +159,103 @@
       
     </p>
     
-    <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="6-从尾到头打印链表"><a href="#6-从尾到头打印链表" class="headerlink" title="6. 从尾到头打印链表"></a>6. 从尾到头打印链表</h2><h3 id="使用栈"><a href="#使用栈" class="headerlink" title="使用栈"></a>使用栈</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
-        vector&lt;int&gt; list;
-        stack&lt;ListNode*&gt; s;
-        while(head!=nullptr){
-            s.push(head);
-            head=head-&gt;next;
-        }
-        while(!s.empty()){
-            ListNode* node;
-            node=s.top();
-            list.push_back(node-&gt;val);
-            s.pop();
-        }
-        return list;
+    <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="6-从尾到头打印链表"><a href="#6-从尾到头打印链表" class="headerlink" title="6. 从尾到头打印链表"></a>6. 从尾到头打印链表</h2><h3 id="使用栈"><a href="#使用栈" class="headerlink" title="使用栈"></a>使用栈</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode *head){
+    vector&lt;int&gt; list;
+    stack&lt;ListNode *&gt; s;
+    while (head != nullptr){
+        s.push(head);
+        head = head-&gt;next;
     }
+    while (!s.empty()){
+        ListNode *node;
+        node = s.top();
+        list.push_back(node-&gt;val);
+        s.pop();
+    }
+    return list;
+}
 </code></pre>
-<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode* head) {
-        vector&lt;int&gt; list;
-        if(head!=nullptr){
-            list=printListFromTailToHead(head-&gt;next);
-            list.push_back(head-&gt;val);
-        }
-
-        return list;
+<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">vector&lt;int&gt; printListFromTailToHead(ListNode *head){
+    vector&lt;int&gt; list;
+    if (head != nullptr){
+        list = printListFromTailToHead(head-&gt;next);
+        list.push_back(head-&gt;val);
     }
+
+    return list;
+}
 </code></pre>
 <h2 id="18-1-删除链表的节点"><a href="#18-1-删除链表的节点" class="headerlink" title="18.1 删除链表的节点"></a>18.1 删除链表的节点</h2><pre><code class="language-cpp">void DeleteNode(ListNode **pListHead, ListNode *pToBeDeleted) {
-       if (pListHead == nullptr || pToBeDeleted == nullptr) {
-              return;
-       }
-       if (pToBeDeleted-&gt;next != nullptr) {
-              pToBeDeleted-&gt;val = pToBeDeleted-&gt;next-&gt;val;
-              pToBeDeleted-&gt;next = pToBeDeleted-&gt;next-&gt;next;
-       }
-       else if (*pListHead==pToBeDeleted) {
-              delete pToBeDeleted;
-              pToBeDeleted = nullptr;
-              *pListHead = nullptr;
-       }
-       else {
-              ListNode *pNode = *pListHead;
-              while (pNode-&gt;next != pToBeDeleted) {
-                     pNode = pNode-&gt;next;
-              }
-              pNode-&gt;next = nullptr;
-              delete pToBeDeleted;
-              pToBeDeleted = nullptr;
-       }
+    if (pListHead == nullptr || pToBeDeleted == nullptr) {
+        return;
+    }
+    if (pToBeDeleted-&gt;next != nullptr) {
+        pToBeDeleted-&gt;val = pToBeDeleted-&gt;next-&gt;val;
+        pToBeDeleted-&gt;next = pToBeDeleted-&gt;next-&gt;next;
+    }
+    else if (*pListHead==pToBeDeleted) {
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+        *pListHead = nullptr;
+    }
+    else {
+        ListNode *pNode = *pListHead;
+        while (pNode-&gt;next != pToBeDeleted) {
+            pNode = pNode-&gt;next;
+        }
+        pNode-&gt;next = nullptr;
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+    }
 }
 </code></pre>
-<h2 id="18-2-删除链表中重复的节点"><a href="#18-2-删除链表中重复的节点" class="headerlink" title="18.2 删除链表中重复的节点"></a>18.2 删除链表中重复的节点</h2><h3 id="递归-1"><a href="#递归-1" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* deleteDuplication(ListNode* pHead){
-     if(pHead==nullptr||pHead-&gt;next==nullptr){
-            return pHead;
+<h2 id="18-2-删除链表中重复的节点"><a href="#18-2-删除链表中重复的节点" class="headerlink" title="18.2 删除链表中重复的节点"></a>18.2 删除链表中重复的节点</h2><p><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii" target="_blank" rel="external">leetcode 82</a></p>
+<h3 id="递归-1"><a href="#递归-1" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* deleteDuplication(ListNode* pHead){
+    if(pHead==nullptr||pHead-&gt;next==nullptr){
+        return pHead;
+    }
+    ListNode* next=pHead-&gt;next;
+    if(pHead-&gt;val==next-&gt;val){
+        while(next!=nullptr&amp;&amp;pHead-&gt;val==next-&gt;val){
+             next=next-&gt;next;
         }
-        ListNode* next=pHead-&gt;next;
-        if(pHead-&gt;val==next-&gt;val){
-            while(next!=nullptr&amp;&amp;pHead-&gt;val==next-&gt;val){
-                 next=next-&gt;next;
-            }
-            return deleteDuplication(next);
-        }else{
-            pHead-&gt;next=deleteDuplication(pHead-&gt;next);
-            return pHead;
-        }
+        return deleteDuplication(next);
+    }else{
+        pHead-&gt;next=deleteDuplication(pHead-&gt;next);
+        return pHead;
+    }
 }
 </code></pre>
-<h3 id="非递归"><a href="#非递归" class="headerlink" title="非递归"></a>非递归</h3><pre><code class="language-cpp"> ListNode* deleteDuplication(ListNode* pHead)
+<h3 id="非递归"><a href="#非递归" class="headerlink" title="非递归"></a>非递归</h3><pre><code class="language-cpp">ListNode *deleteDuplication(ListNode *pHead)
+{
+    if (pHead == nullptr || pHead-&gt;next == nullptr)
     {
-        if (pHead == nullptr || pHead-&gt;next == nullptr) {
-            return pHead;
-        }
-        ListNode* newHead = new ListNode(-1);
-        newHead-&gt;next = pHead;
-        ListNode* pNode = pHead;
-        ListNode* preNode = newHead;
-        while (pNode != nullptr) {
-            ListNode* pNext = pNode-&gt;next;
-            if (pNext != nullptr&amp;&amp;pNext-&gt;val == pNode-&gt;val) {
-                int value = pNode-&gt;val;
-                while (pNode != nullptr&amp;&amp;pNode-&gt;val == value) {
-                    pNode = pNode-&gt;next;
-                }
-                preNode-&gt;next=pNode;
-            }    
-            else {
-                preNode = pNode;
+        return pHead;
+    }
+    ListNode *newHead = new ListNode(-1);
+    newHead-&gt;next = pHead;
+    ListNode *pNode = pHead;
+    ListNode *preNode = newHead;
+    while (pNode != nullptr)
+    {
+        ListNode *pNext = pNode-&gt;next;
+        if (pNext != nullptr &amp;&amp; pNext-&gt;val == pNode-&gt;val)
+        {
+            int value = pNode-&gt;val;
+            while (pNode != nullptr &amp;&amp; pNode-&gt;val == value)
+            {
                 pNode = pNode-&gt;next;
             }
+            preNode-&gt;next = pNode;
         }
-        return newHead-&gt;next;
+        else
+        {
+            preNode = pNode;
+            pNode = pNode-&gt;next;
+        }
     }
+    return newHead-&gt;next;
+}
 </code></pre>
 <h2 id="22-链表中倒数第k个节点"><a href="#22-链表中倒数第k个节点" class="headerlink" title="22. 链表中倒数第k个节点"></a>22. 链表中倒数第k个节点</h2><pre><code class="language-cpp">ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
     if (pListHead == nullptr || k == 0) {
@@ -271,27 +278,34 @@
     return first;
 }
 </code></pre>
-<h2 id="23-链表中环的入口节点"><a href="#23-链表中环的入口节点" class="headerlink" title="23. 链表中环的入口节点"></a>23. 链表中环的入口节点</h2><pre><code class="language-cpp">if (pHead == nullptr || pHead-&gt;next == nullptr || pHead-&gt;next-&gt;next == nullptr)
-              return nullptr;
-       ListNode* fast = pHead-&gt;next-&gt;next;
-       ListNode* slow = pHead-&gt;next;
-       while (fast != slow) {
-              if (fast-&gt;next != nullptr&amp;&amp; fast-&gt;next-&gt;next != nullptr) {
-                     fast = fast-&gt;next-&gt;next;
-                     slow = slow-&gt;next;
-              }
-              else {
-                     return nullptr;
-              }
-       }
-       fast = pHead;
-       while (fast != slow) {
-              fast = fast-&gt;next;
-              slow = slow-&gt;next;
-       }
-       return slow;
+<h2 id="23-链表中环的入口节点"><a href="#23-链表中环的入口节点" class="headerlink" title="23. 链表中环的入口节点"></a>23. 链表中环的入口节点</h2><p><a href="https://leetcode-cn.com/problems/linked-list-cycle-ii/" target="_blank" rel="external">leetcode 142</a></p>
+<pre><code class="language-java">public ListNode detectCycle(ListNode head) {
+    if(head==null||head.next==null||head.next.next==null){
+        return null;
+    }
+    ListNode fast=head.next.next;
+    ListNode slow=head.next;
+
+    while(fast!=slow){
+        if(fast.next!=null&amp;&amp;fast.next.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }else{
+            return null;
+        }
+    }
+    fast=head;
+    while(fast!=slow){
+        fast=fast.next;
+        slow=slow.next;
+    }
+
+    return slow;
+}
 </code></pre>
-<h2 id="24-反转链表"><a href="#24-反转链表" class="headerlink" title="24. 反转链表"></a>24. 反转链表</h2><pre><code class="language-cpp">ListNode* ReverseList(ListNode* pHead) {
+<p>扩展：<a href="https://leetcode-cn.com/problems/find-the-duplicate-number/" target="_blank" rel="external">leetcode 287</a></p>
+<h2 id="24-反转链表"><a href="#24-反转链表" class="headerlink" title="24. 反转链表"></a>24. 反转链表</h2><p><a href="https://leetcode-cn.com/problems/reverse-linked-list" target="_blank" rel="external">leetcode 206</a></p>
+<pre><code class="language-cpp">ListNode* ReverseList(ListNode* pHead) {
        if (pHead == nullptr) {
               return nullptr;
        }
@@ -307,7 +321,8 @@
        return pre;
 }
 </code></pre>
-<h2 id="25-合并两个排序链表"><a href="#25-合并两个排序链表" class="headerlink" title="25. 合并两个排序链表"></a>25. 合并两个排序链表</h2><h3 id="递归-2"><a href="#递归-2" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+<h2 id="25-合并两个排序链表"><a href="#25-合并两个排序链表" class="headerlink" title="25. 合并两个排序链表"></a>25. 合并两个排序链表</h2><p><a href="https://leetcode-cn.com/problems/merge-two-sorted-lists" target="_blank" rel="external">leetcode 21</a></p>
+<h3 id="递归-2"><a href="#递归-2" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
 {
        if (!pHead1) {
               return pHead2;
@@ -423,7 +438,8 @@
         }
     }
 </code></pre>
-<h2 id="52-两个链表的第一个公共节点"><a href="#52-两个链表的第一个公共节点" class="headerlink" title="52. 两个链表的第一个公共节点"></a>52. 两个链表的第一个公共节点</h2><pre><code class="language-cpp">ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
+<h2 id="52-两个链表的第一个公共节点"><a href="#52-两个链表的第一个公共节点" class="headerlink" title="52. 两个链表的第一个公共节点"></a>52. 两个链表的第一个公共节点</h2><p><a href="https://leetcode-cn.com/problems/intersection-of-two-linked-lists" target="_blank" rel="external">leetcode 160</a></p>
+<pre><code class="language-cpp">ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
        if (pHead1 == nullptr || pHead2 == nullptr) {
               return nullptr;
        }

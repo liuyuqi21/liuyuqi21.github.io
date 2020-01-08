@@ -233,42 +233,38 @@ int countRange(int numbers[], int length, int start, int end) {
         return false;
 }
 </code></pre>
-<h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11. 旋转数组的最小数字"></a>11. 旋转数组的最小数字</h2><pre><code class="language-cpp">int minNumberInRotateArray(vector&lt;int&gt; array)
-{
+<h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11. 旋转数组的最小数字"></a>11. 旋转数组的最小数字</h2><p><a href="https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/" target="_blank" rel="external">leetcode 154</a></p>
+<pre><code class="language-java">public int findMin(int[] array) {
     int left = 0;
-    int right = array.size() - 1;
-    if (array[left] &lt; array[right])
-    {
+    int right = array.length - 1;
+    if (array.length == 1) {
+        return array[0];
+    }
+    if (array[left] &lt; array[right]) {
         return array[left];
     }
-    while (left &lt; right)
-    {
+    while (left &lt; right) {
         int mid = (left + right) / 2;
-        if (array[mid] &gt; array[right])
-        {
-            if (array[mid + 1] &lt; array[mid])
-            {
+        //注意：不能使用左边界值比较
+        if (array[mid] &gt; array[right]) {
+            if (array[mid] &gt; array[mid + 1]) {
                 return array[mid + 1];
             }
             left = mid + 1;
-        }
-        else if (array[mid] &lt; array[right])
-        {
-            if (array[mid] &lt; array[mid - 1])
-            {
+        } else if (array[mid] &lt; array[right]) {
+            if (array[mid - 1] &gt; array[mid]) {
                 return array[mid];
             }
             right = mid - 1;
-        }
-        else
-        {
+        } else {
             right = right - 1;
         }
     }
     return array[left];
 }
 </code></pre>
-<h2 id="21-1-调整数组的顺序使奇数位于偶数前面"><a href="#21-1-调整数组的顺序使奇数位于偶数前面" class="headerlink" title="21.1 调整数组的顺序使奇数位于偶数前面"></a>21.1 调整数组的顺序使奇数位于偶数前面</h2><pre><code class="language-cpp">void reOrderArray(vector&lt;int&gt; &amp;array) {
+<h2 id="21-1-调整数组的顺序使奇数位于偶数前面"><a href="#21-1-调整数组的顺序使奇数位于偶数前面" class="headerlink" title="21.1 调整数组的顺序使奇数位于偶数前面"></a>21.1 调整数组的顺序使奇数位于偶数前面</h2><p><a href="https://leetcode-cn.com/problems/sort-array-by-parity/submissions/" target="_blank" rel="external">leetcode 905</a></p>
+<pre><code class="language-cpp">void reOrderArray(vector&lt;int&gt; &amp;array) {
     if (array.size() &lt;= 1) {
         return;
     }
@@ -311,7 +307,8 @@ int countRange(int numbers[], int length, int start, int end) {
     }    
 }
 </code></pre>
-<h2 id="39-数组中出现的次数超过一半的数字"><a href="#39-数组中出现的次数超过一半的数字" class="headerlink" title="39. 数组中出现的次数超过一半的数字"></a>39. 数组中出现的次数超过一半的数字</h2><pre><code class="language-cpp">int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) {
+<h2 id="39-数组中出现的次数超过一半的数字"><a href="#39-数组中出现的次数超过一半的数字" class="headerlink" title="39. 数组中出现的次数超过一半的数字"></a>39. 数组中出现的次数超过一半的数字</h2><p><a href="https://leetcode-cn.com/problems/majority-element/" target="_blank" rel="external">leetcode 169</a></p>
+<pre><code class="language-cpp">int MoreThanHalfNum_Solution(vector&lt;int&gt; numbers) {
     if (numbers.size() == 1) {
         return numbers[0];
     }
@@ -383,42 +380,17 @@ int partition(vector&lt;int&gt; &amp;nums, int l, int r) {
     return l;
 }
 </code></pre>
-<h2 id="40-最小的k个数"><a href="#40-最小的k个数" class="headerlink" title="40. 最小的k个数"></a>40. 最小的k个数</h2><h3 id="基于堆的解法"><a href="#基于堆的解法" class="headerlink" title="基于堆的解法"></a>基于堆的解法</h3><pre><code class="language-cpp">typedef multiset&lt;int, greater&lt;int&gt;&gt; intSet;
-typedef multiset&lt;int, greater&lt;int&gt;&gt;::iterator setIterator;
-vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
-        if(k&lt;1||input.size()&lt;k){
-            return vector&lt;int&gt;();
+<h2 id="40-最小的k个数"><a href="#40-最小的k个数" class="headerlink" title="40. 最小的k个数"></a>40. 最小的k个数</h2><p><a href="https://leetcode-cn.com/problems/kth-largest-element-in-an-array/" target="_blank" rel="external">leetcode 215</a></p>
+<h3 id="基于堆的解法"><a href="#基于堆的解法" class="headerlink" title="基于堆的解法"></a>基于堆的解法</h3><pre><code class="language-java">public int findKthLargest(int[] nums, int k) {
+    PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;&gt;((o1, o2) -&gt; o1 - o2);
+    for (int num : nums) {
+        queue.add(num);
+        if (queue.size() &gt; k) {
+            queue.poll();
         }
-       //multiset
-        vector&lt;int&gt;::const_iterator iter=input.begin();
-        for(;iter!=input.end();iter++){
-            if(intSet.size()&lt;k){
-                intSet.insert(*iter);
-            }else{
-                setIterator=intSet.begin();
-                if(*iter&lt;*(intSet.begin())){
-                    intSet.erase(setIterator);
-                    intSet.insert(*iter);
-                }
-            }
-        }
-
-        return vector&lt;int&gt;(intSet.begin(),intSet.end());
-
-        //优先队列
-        priority_queue&lt;int&gt; p;
-        for(int i=0;i&lt;input.size();i++){
-            p.push(input[i]);
-            if(p.size()&gt;k){
-                p.pop();
-            }
-        }
-        vector&lt;int&gt; res;
-        for(int i=0;i&lt;k;i++){
-            res.push_back(p.top());
-            p.pop();
-        }
-        return res; 
+    }
+    return queue.peek();
+}
 </code></pre>
 <h3 id="基于-partition-的解法"><a href="#基于-partition-的解法" class="headerlink" title="基于 partition 的解法"></a>基于 partition 的解法</h3><pre><code class="language-cpp">int partition(vector&lt;int&gt;&amp; nums, int start, int end) {
     int pivot = a[start];
@@ -458,7 +430,8 @@ vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
     return res;
 }
 </code></pre>
-<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><pre><code class="language-cpp">int FindGreatestSumOfSubArray(vector&lt;int&gt; array) {
+<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><p><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="external">leetcode</a></p>
+<pre><code class="language-cpp">int FindGreatestSumOfSubArray(vector&lt;int&gt; array) {
     if (array.size() == 0) {
         return 0;
     }
@@ -478,14 +451,16 @@ vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
     return max;
 }
 </code></pre>
-<h2 id="45-把数组排成最小的数"><a href="#45-把数组排成最小的数" class="headerlink" title="45. 把数组排成最小的数"></a>45. 把数组排成最小的数</h2><pre><code class="language-cpp"> string PrintMinNumber(vector&lt;int&gt; numbers) {
-        sort(numbers.begin(),numbers.end(),[](const int&amp; a,const int&amp; b){
-        return to_string(a)+to_string(b)&lt;to_string(b)+to_string(a);});
-        string res;
-        for (auto c:numbers)   
-            res+=to_string(c);
-        return res;
-    }
+<h2 id="45-把数组排成最小的数"><a href="#45-把数组排成最小的数" class="headerlink" title="45. 把数组排成最小的数"></a>45. 把数组排成最小的数</h2><p><a href="https://leetcode-cn.com/problems/largest-number/" target="_blank" rel="external">leetcode 179</a></p>
+<pre><code class="language-cpp">string PrintMinNumber(vector&lt;int&gt; numbers) {
+    sort(numbers.begin(), numbers.end(),[](const int&amp;a,const int&amp;b){
+        return to_string(a) + to_string(b) &lt; to_string(b) + to_string(a);
+    });
+    string res;
+    for (auto c : numbers)
+        res += to_string(c);
+    return res;
+}
 </code></pre>
 <h2 id="51-数组中的逆序对"><a href="#51-数组中的逆序对" class="headerlink" title="51. 数组中的逆序对"></a>51. 数组中的逆序对</h2><pre><code class="language-cpp">
 </code></pre>
@@ -592,7 +567,7 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
     return result;
 }
 </code></pre>
-<h3 id="57-2-和为-s-的连续正数序列"><a href="#57-2-和为-s-的连续正数序列" class="headerlink" title="57.2 和为 s 的连续正数序列"></a>57.2 和为 s 的连续正数序列</h3><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; FindContinuousSequence(int sum) {
+<h2 id="57-2-和为-s-的连续正数序列"><a href="#57-2-和为-s-的连续正数序列" class="headerlink" title="57.2 和为 s 的连续正数序列"></a>57.2 和为 s 的连续正数序列</h2><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; FindContinuousSequence(int sum) {
     vector&lt;vector&lt;int&gt;&gt; res;
     if (sum &lt; 3) {
         return res;
@@ -626,7 +601,7 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-数组中重复的数字"><span class="toc-text">3.1 数组中重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-不修改数组找出重复的数字"><span class="toc-text">3.2 不修改数组找出重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-二维数组中的查找"><span class="toc-text">4. 二维数组中的查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-旋转数组的最小数字"><span class="toc-text">11. 旋转数组的最小数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-1-调整数组的顺序使奇数位于偶数前面"><span class="toc-text">21.1 调整数组的顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-2-保证元素相对位置不变"><span class="toc-text">21.2 保证元素相对位置不变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#39-数组中出现的次数超过一半的数字"><span class="toc-text">39. 数组中出现的次数超过一半的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-解法"><span class="toc-text">基于 partition 解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#40-最小的k个数"><span class="toc-text">40. 最小的k个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于堆的解法"><span class="toc-text">基于堆的解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-的解法"><span class="toc-text">基于 partition 的解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#41-数据流中的中位数"><span class="toc-text">41. 数据流中的中位数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-连续子数组的最大和"><span class="toc-text">42. 连续子数组的最大和</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#45-把数组排成最小的数"><span class="toc-text">45. 把数组排成最小的数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#51-数组中的逆序对"><span class="toc-text">51. 数组中的逆序对</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-1-数字在排序数组中出现的次数"><span class="toc-text">53.1 数字在排序数组中出现的次数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-2-0-n-1-中缺失的数字"><span class="toc-text">53.2 0~n-1 中缺失的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#56-1-数组中只出现一次的两个数字"><span class="toc-text">56.1 数组中只出现一次的两个数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-1-和为-s-的数字"><span class="toc-text">57.1 和为 s 的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#57-2-和为-s-的连续正数序列"><span class="toc-text">57.2 和为 s 的连续正数序列</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-数组中重复的数字"><span class="toc-text">3.1 数组中重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-不修改数组找出重复的数字"><span class="toc-text">3.2 不修改数组找出重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-二维数组中的查找"><span class="toc-text">4. 二维数组中的查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-旋转数组的最小数字"><span class="toc-text">11. 旋转数组的最小数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-1-调整数组的顺序使奇数位于偶数前面"><span class="toc-text">21.1 调整数组的顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-2-保证元素相对位置不变"><span class="toc-text">21.2 保证元素相对位置不变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#39-数组中出现的次数超过一半的数字"><span class="toc-text">39. 数组中出现的次数超过一半的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-解法"><span class="toc-text">基于 partition 解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#40-最小的k个数"><span class="toc-text">40. 最小的k个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于堆的解法"><span class="toc-text">基于堆的解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-的解法"><span class="toc-text">基于 partition 的解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#41-数据流中的中位数"><span class="toc-text">41. 数据流中的中位数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-连续子数组的最大和"><span class="toc-text">42. 连续子数组的最大和</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#45-把数组排成最小的数"><span class="toc-text">45. 把数组排成最小的数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#51-数组中的逆序对"><span class="toc-text">51. 数组中的逆序对</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-1-数字在排序数组中出现的次数"><span class="toc-text">53.1 数字在排序数组中出现的次数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-2-0-n-1-中缺失的数字"><span class="toc-text">53.2 0~n-1 中缺失的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#56-1-数组中只出现一次的两个数字"><span class="toc-text">56.1 数组中只出现一次的两个数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-1-和为-s-的数字"><span class="toc-text">57.1 和为 s 的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-2-和为-s-的连续正数序列"><span class="toc-text">57.2 和为 s 的连续正数序列</span></a></li></ol>
   </div>
 </div>
 

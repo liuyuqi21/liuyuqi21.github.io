@@ -16,12 +16,14 @@
   
   
   
-    <meta name="description" content="7. 重建二叉树 public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
-        if(pre==null||in==null){
-            return null;
-        }
-        return func(pre,0,pre.length-1,in,0,in.length-1);
-...">
+    <meta name="description" content="7. 重建二叉树leetcode 105
+public TreeNode reConstructBinaryTree(int[] pre, int[] in)
+{
+    if (pre == null || in == null)
+    {
+        return null;
+    }
+    return func(pre, 0, pre.length - 1, in, 0, ...">
   
   <title>剑指Offer-二叉树相关 [ Cellophane ]</title>
   
@@ -159,48 +161,54 @@
       
     </p>
     
-    <h2 id="7-重建二叉树"><a href="#7-重建二叉树" class="headerlink" title="7. 重建二叉树"></a>7. 重建二叉树</h2><pre><code class="language-java"> public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
-        if(pre==null||in==null){
-            return null;
-        }
-        return func(pre,0,pre.length-1,in,0,in.length-1);
+    <h2 id="7-重建二叉树"><a href="#7-重建二叉树" class="headerlink" title="7. 重建二叉树"></a>7. 重建二叉树</h2><p><a href="https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" target="_blank" rel="external">leetcode 105</a></p>
+<pre><code class="language-java">public TreeNode reConstructBinaryTree(int[] pre, int[] in)
+{
+    if (pre == null || in == null)
+    {
+        return null;
     }
-    public TreeNode func(int []pre,int startPre,int endPre,int []in,int startIn,int endIn){
-        if(startPre&gt;endPre||startIn&gt;endIn)
-            return null;
-        TreeNode node=new TreeNode(pre[startPre]);
-        for(int i=startIn;i&lt;=endIn;i++){
-            if(in[i]==pre[startPre]){
-                node.left=func(pre,startPre+1,i-startIn+startPre,in,startIn,i-1);
-                node.right=func(pre,i+1-startIn+startPre,endPre,in,i+1,endIn);
-                break;
-            }
+    return func(pre, 0, pre.length - 1, in, 0, in.length - 1);
+}
+public TreeNode func(int[] pre, int startPre, int endPre, int[] in, int startIn, int endIn)
+{
+    if (startPre &gt; endPre || startIn &gt; endIn)
+        return null;
+    TreeNode node = new TreeNode(pre[startPre]);
+    for (int i = startIn; i &lt;= endIn; i++)
+    {
+        if (in[i] == pre[startPre])
+        {
+            node.left = func(pre, startPre + 1, i - startIn + startPre, in, startIn, i - 1);
+            node.right = func(pre, i - startIn + startPre + 1, endPre, in, i + 1, endIn);
+            break;
         }
+    }
 
-       return node;
-    }
+    return node;
+}
 </code></pre>
 <h2 id="8-二叉树的下一个结点"><a href="#8-二叉树的下一个结点" class="headerlink" title="8. 二叉树的下一个结点"></a>8. 二叉树的下一个结点</h2><pre><code class="language-cpp"> TreeLinkNode* GetNext(TreeLinkNode* pNode) {
-        if (pNode == nullptr) {
-            return nullptr;
-        }
-        if (pNode-&gt;right) {
-            pNode = pNode-&gt;right;
-            while (pNode-&gt;left) {
-                pNode = pNode-&gt;left;
-            }
-            return pNode;
-        }
-        else {
-            while (pNode-&gt;next) {
-                if (pNode-&gt;next-&gt;left == pNode) {
-                    return pNode-&gt;next;
-                }    
-                pNode = pNode-&gt;next;
-            }
-            return nullptr;
-        }
+    if (pNode == nullptr) {
+        return nullptr;
     }
+    if (pNode-&gt;right) {
+        pNode = pNode-&gt;right;
+        while (pNode-&gt;left) {
+            pNode = pNode-&gt;left;
+        }
+        return pNode;
+    }
+    else {
+        while (pNode-&gt;next) {
+            if (pNode-&gt;next-&gt;left == pNode) {
+                return pNode-&gt;next;
+            }    
+            pNode = pNode-&gt;next;
+        }
+        return nullptr;
+    }
+}
 </code></pre>
 <h2 id="26-树的子结构"><a href="#26-树的子结构" class="headerlink" title="26. 树的子结构"></a>26. 树的子结构</h2><pre><code class="language-cpp">bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2)
 {
@@ -235,60 +243,62 @@ bool isSubTree(TreeNode* pRoot1, TreeNode* pRoot2) {
     }
 }
 </code></pre>
-<h2 id="27-二叉树的镜像"><a href="#27-二叉树的镜像" class="headerlink" title="27. 二叉树的镜像"></a>27. 二叉树的镜像</h2><pre><code class="language-cpp"> void Mirror(TreeNode *pRoot) {
-        if (pRoot == nullptr) {
-            return;
-        }
-        if (pRoot-&gt;left) {
-            Mirror(pRoot-&gt;left);
-        }
-        if (pRoot-&gt;right) {
-            Mirror(pRoot-&gt;right);
-        }
-        TreeNode* p = pRoot-&gt;left;
-        pRoot-&gt;left = pRoot-&gt;right;
-        pRoot-&gt;right = p;
+<h2 id="27-二叉树的镜像"><a href="#27-二叉树的镜像" class="headerlink" title="27. 二叉树的镜像"></a>27. 二叉树的镜像</h2><p><a href="https://leetcode-cn.com/problems/invert-binary-tree/" target="_blank" rel="external">leetcode 226</a></p>
+<pre><code class="language-cpp"> void Mirror(TreeNode *pRoot) {
+    if (pRoot == nullptr) {
+        return;
     }
-</code></pre>
-<h2 id="28-对称的二叉树"><a href="#28-对称的二叉树" class="headerlink" title="28. 对称的二叉树"></a>28. 对称的二叉树</h2><pre><code class="language-cpp">bool isSymmetrical(TreeNode* pRoot) {
-       if (pRoot == nullptr) {
-              return true;
-       }
-       return isSymmetrical(pRoot-&gt;left, pRoot-&gt;right);
+    if (pRoot-&gt;left) {
+        Mirror(pRoot-&gt;left);
+    }
+    if (pRoot-&gt;right) {
+        Mirror(pRoot-&gt;right);
+    }
+    TreeNode* p = pRoot-&gt;left;
+    pRoot-&gt;left = pRoot-&gt;right;
+    pRoot-&gt;right = p;
 }
-bool isSymmetrical(TreeNode* p1, TreeNode* p2) {
-       if (p1 == nullptr)
-              return p1 == p2;
-       if (p2 == nullptr)
-              return false;
-       if (p1-&gt;val != p2-&gt;val)
-              return false;
-       return isSymmetrical(p1-&gt;left, p2-&gt;right) &amp;&amp; isSymmetrical(p1-&gt;right, 
-p2-&gt;left);
+</code></pre>
+<h2 id="28-对称的二叉树"><a href="#28-对称的二叉树" class="headerlink" title="28. 对称的二叉树"></a>28. 对称的二叉树</h2><p><a href="https://leetcode-cn.com/problems/symmetric-tree/" target="_blank" rel="external">leetcode 101</a></p>
+<pre><code class="language-cpp">bool isSymmetrical(TreeNode*pRoot) {
+    if (pRoot == nullptr) {
+        return true;
+    }
+    return isSymmetrical(pRoot -&gt; left, pRoot -&gt; right);
+}
+bool isSymmetrical(TreeNode*p1, TreeNode*p2) {
+    if (p1 == nullptr)
+        return p1 == p2;
+    if (p2 == nullptr)
+        return false;
+    if (p1 -&gt; val != p2 -&gt; val)
+        return false;
+    return isSymmetrical(p1 -&gt; left, p2 -&gt; right) &amp;&amp; isSymmetrical(p1 -&gt; right, p2 -&gt; left);
 }
 </code></pre>
 <h2 id="32-1-从上往下打印二叉树"><a href="#32-1-从上往下打印二叉树" class="headerlink" title="32.1 从上往下打印二叉树"></a>32.1 从上往下打印二叉树</h2><pre><code class="language-cpp">vector&lt;int&gt; PrintFromTopToBottom(TreeNode* root) {
-        vector&lt;int&gt; list;
-        if (root==nullptr) {
-            return list;
-        }
-        queue&lt;TreeNode*&gt; nodes;
-        nodes.push(root);
-        while (nodes.size()) {
-            TreeNode* p = nodes.front();
-            list.push_back(p-&gt;val);
-            nodes.pop();
-            if (p-&gt;left) {
-                nodes.push(p-&gt;left);
-            }
-            if (p-&gt;right) {
-                nodes.push(p-&gt;right);
-            }
-        }
+    vector&lt;int&gt; list;
+    if (root==nullptr) {
         return list;
     }
+    queue&lt;TreeNode*&gt; nodes;
+    nodes.push(root);
+    while (nodes.size()) {
+        TreeNode* p = nodes.front();
+        list.push_back(p-&gt;val);
+        nodes.pop();
+        if (p-&gt;left) {
+            nodes.push(p-&gt;left);
+        }
+        if (p-&gt;right) {
+            nodes.push(p-&gt;right);
+        }
+    }
+    return list;
+}
 </code></pre>
-<h2 id="32-2-分行从上到下打印二叉树"><a href="#32-2-分行从上到下打印二叉树" class="headerlink" title="32.2 分行从上到下打印二叉树"></a>32.2 分行从上到下打印二叉树</h2><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
+<h2 id="32-2-分行从上到下打印二叉树"><a href="#32-2-分行从上到下打印二叉树" class="headerlink" title="32.2 分行从上到下打印二叉树"></a>32.2 分行从上到下打印二叉树</h2><p><a href="https://leetcode-cn.com/problems/binary-tree-level-order-traversal" target="_blank" rel="external">leetcode 102</a></p>
+<pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
         vector&lt;vector&lt;int&gt;&gt; print;
         if (pRoot == nullptr) {
             return print;
@@ -358,7 +368,8 @@ p2-&gt;left);
     return res;
 }
 </code></pre>
-<h2 id="32-3-之字形打印二叉树"><a href="#32-3-之字形打印二叉树" class="headerlink" title="32.3 之字形打印二叉树"></a>32.3 之字形打印二叉树</h2><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
+<h2 id="32-3-之字形打印二叉树"><a href="#32-3-之字形打印二叉树" class="headerlink" title="32.3 之字形打印二叉树"></a>32.3 之字形打印二叉树</h2><p><a href="https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/comments/" target="_blank" rel="external">leetcode 103</a></p>
+<h3 id="使用两个栈"><a href="#使用两个栈" class="headerlink" title="使用两个栈"></a>使用两个栈</h3><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
     vector&lt;vector&lt;int&gt;&gt; res;
     if (pRoot == nullptr) {
         return res;
@@ -401,30 +412,57 @@ p2-&gt;left);
     return res;
 }
 </code></pre>
+<h3 id="使用一个双向队列"><a href="#使用一个双向队列" class="headerlink" title="使用一个双向队列"></a>使用一个双向队列</h3><pre><code class="language-java">public List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; ret = new LinkedList&lt;&gt;();
+    if (root == null)
+        return ret;
+    LinkedList&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+    queue.push(root);
+    boolean startLeft = true;
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        List&lt;Integer&gt; level = new LinkedList&lt;&gt;();
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode n = queue.removeLast();
+            if (n.left != null)
+                queue.push(n.left);
+            if (n.right != null)
+                queue.push(n.right);
+            if (startLeft)
+                level.add(n.val);
+            else
+                level.add(0, n.val);
+        }
+        ret.add(level);
+        startLeft = !startLeft;
+    }
+    return ret;
+}
+</code></pre>
 <h3 id="33-二叉搜索树的后序遍历序列"><a href="#33-二叉搜索树的后序遍历序列" class="headerlink" title="33. 二叉搜索树的后序遍历序列"></a>33. 二叉搜索树的后序遍历序列</h3><pre><code class="language-cpp">bool VerifySquenceOfBST(vector&lt;int&gt; sequence) {
-        if(sequence.size() == 0){
+    if(sequence.size() == 0){
+        return false;
+    }
+    if(sequence.size() == 1){
+        return true;
+    }
+    return Verify(sequence,0,sequence.size()-1);
+}
+bool Verify(vector&lt;int&gt; sequence,int l,int r){
+    if(l &gt;= r){
+        return true;
+    }
+    int i = l;
+    while(sequence[i] &lt; sequence[r]){
+        i++;
+    }
+    for(int j=i;j&lt;r;j++){
+        if(sequence[j] &lt; sequence[r]){
             return false;
         }
-        if(sequence.size() == 1){
-            return true;
-        }
-        return Verify(sequence,0,sequence.size()-1);
     }
-    bool Verify(vector&lt;int&gt; sequence,int l,int r){
-        if(l &gt;= r){
-            return true;
-        }
-        int i = l;
-        while(sequence[i] &lt; sequence[r]){
-            i++;
-        }
-        for(int j=i;j&lt;r;j++){
-            if(sequence[j] &lt; sequence[r]){
-                return false;
-            }
-        }
-        return Verify(sequence,l,i-1) &amp;&amp; Verify(sequence,i,r-1);
-    }
+    return Verify(sequence,l,i-1) &amp;&amp; Verify(sequence,i,r-1);
+}
 </code></pre>
 <h2 id="34-二叉树中和为某一值的路径"><a href="#34-二叉树中和为某一值的路径" class="headerlink" title="34. 二叉树中和为某一值的路径"></a>34. 二叉树中和为某一值的路径</h2><pre><code class="language-cpp">vector&lt;vector&lt;int&gt;&gt; ret;
 vector&lt;int&gt; trace;
@@ -452,32 +490,31 @@ void path(TreeNode* root, int expectNumber) {
 </code></pre>
 <h2 id="37-序列化二叉树"><a href="#37-序列化二叉树" class="headerlink" title="37. 序列化二叉树"></a>37. 序列化二叉树</h2><pre><code class="language-cpp">
 </code></pre>
-<h2 id="54-二叉搜索树的第K大节点"><a href="#54-二叉搜索树的第K大节点" class="headerlink" title="54. 二叉搜索树的第K大节点"></a>54. 二叉搜索树的第K大节点</h2><h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">    TreeNode* ret = nullptr;
-    int cnt = 0;
-    TreeNode* KthNode(TreeNode* pRoot, int k)
-    {
-        inOrder(pRoot, k);
-        return ret;
+<h2 id="54-二叉搜索树的第K大节点"><a href="#54-二叉搜索树的第K大节点" class="headerlink" title="54. 二叉搜索树的第K大节点"></a>54. 二叉搜索树的第K大节点</h2><h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><pre><code class="language-cpp">TreeNode* ret = nullptr;
+int cnt = 0;
+TreeNode* KthNode(TreeNode* pRoot, int k){
+    inOrder(pRoot, k);
+    return ret;
+}
+void inOrder(TreeNode* pRoot, int k) {
+    if (pRoot == nullptr || k &lt;= 0) {
+        return;
     }
-    void inOrder(TreeNode* pRoot, int k) {
-        if (pRoot == nullptr || k &lt;= 0) {
-            return;
-        }
-        inOrder(pRoot-&gt;left, k);
-        cnt++;
-        if (cnt == k)
-            ret = pRoot;
-        inOrder(pRoot-&gt;right, k);
-    }
+    inOrder(pRoot-&gt;left, k);
+    cnt++;
+    if (cnt == k)
+        ret = pRoot;
+    inOrder(pRoot-&gt;right, k);
+}
 </code></pre>
 <h2 id="55-1-二叉树的深度"><a href="#55-1-二叉树的深度" class="headerlink" title="55.1 二叉树的深度"></a>55.1 二叉树的深度</h2><pre><code class="language-cpp">int TreeDepth(TreeNode* pRoot) {
-        if (pRoot == nullptr) {
-            return 0;
-        }
-        int left = TreeDepth(pRoot-&gt;left);
-        int right = TreeDepth(pRoot-&gt;right);
-        return (left &gt; right) ? (left + 1) : (right + 1);
+    if (pRoot == nullptr) {
+        return 0;
     }
+    int left = TreeDepth(pRoot-&gt;left);
+    int right = TreeDepth(pRoot-&gt;right);
+    return (left &gt; right) ? (left + 1) : (right + 1);
+}
 </code></pre>
 <h2 id="55-2-平衡二叉树"><a href="#55-2-平衡二叉树" class="headerlink" title="55.2 平衡二叉树"></a>55.2 平衡二叉树</h2><pre><code class="language-`cpp">bool res = true;
 bool IsBalanced_Solution(TreeNode *pRoot)
@@ -508,7 +545,7 @@ int isBalance(TreeNode *pRoot)
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-重建二叉树"><span class="toc-text">7. 重建二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-二叉树的下一个结点"><span class="toc-text">8. 二叉树的下一个结点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#26-树的子结构"><span class="toc-text">26. 树的子结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#27-二叉树的镜像"><span class="toc-text">27. 二叉树的镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#28-对称的二叉树"><span class="toc-text">28. 对称的二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-1-从上往下打印二叉树"><span class="toc-text">32.1 从上往下打印二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-2-分行从上到下打印二叉树"><span class="toc-text">32.2 分行从上到下打印二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用两个队列"><span class="toc-text">用两个队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-3-之字形打印二叉树"><span class="toc-text">32.3 之字形打印二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#33-二叉搜索树的后序遍历序列"><span class="toc-text">33. 二叉搜索树的后序遍历序列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#34-二叉树中和为某一值的路径"><span class="toc-text">34. 二叉树中和为某一值的路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#37-序列化二叉树"><span class="toc-text">37. 序列化二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#54-二叉搜索树的第K大节点"><span class="toc-text">54. 二叉搜索树的第K大节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#递归"><span class="toc-text">递归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#55-1-二叉树的深度"><span class="toc-text">55.1 二叉树的深度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#55-2-平衡二叉树"><span class="toc-text">55.2 平衡二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#69-树中两个节点的最低公共祖先"><span class="toc-text">69. 树中两个节点的最低公共祖先</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-重建二叉树"><span class="toc-text">7. 重建二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-二叉树的下一个结点"><span class="toc-text">8. 二叉树的下一个结点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#26-树的子结构"><span class="toc-text">26. 树的子结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#27-二叉树的镜像"><span class="toc-text">27. 二叉树的镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#28-对称的二叉树"><span class="toc-text">28. 对称的二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-1-从上往下打印二叉树"><span class="toc-text">32.1 从上往下打印二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-2-分行从上到下打印二叉树"><span class="toc-text">32.2 分行从上到下打印二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用两个队列"><span class="toc-text">用两个队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-3-之字形打印二叉树"><span class="toc-text">32.3 之字形打印二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用两个栈"><span class="toc-text">使用两个栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用一个双向队列"><span class="toc-text">使用一个双向队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-二叉搜索树的后序遍历序列"><span class="toc-text">33. 二叉搜索树的后序遍历序列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#34-二叉树中和为某一值的路径"><span class="toc-text">34. 二叉树中和为某一值的路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#37-序列化二叉树"><span class="toc-text">37. 序列化二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#54-二叉搜索树的第K大节点"><span class="toc-text">54. 二叉搜索树的第K大节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#递归"><span class="toc-text">递归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#55-1-二叉树的深度"><span class="toc-text">55.1 二叉树的深度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#55-2-平衡二叉树"><span class="toc-text">55.2 平衡二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#69-树中两个节点的最低公共祖先"><span class="toc-text">69. 树中两个节点的最低公共祖先</span></a></li></ol>
   </div>
 </div>
 
