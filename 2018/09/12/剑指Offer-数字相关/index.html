@@ -16,14 +16,14 @@
   
   
   
-    <meta name="description" content="3.1 数组中重复的数字bool duplicate(int numbers[], int length, int* duplication) {
-    if (numbers == nullptr || length &lt;= 0) {
-        return false;
-    }
-    for (int i = 0; i &lt; length; i++) {
-     ...">
+    <meta name="description" content="3.1 数组中重复的数字leetcode 287
+将元素放进对应下标public int findDuplicate(int[] nums) {
+    for (int i = 0; i &lt; nums.length; i++) {
+        while (nums[i] != i) {
+            int temp = nums[i];
+            if...">
   
-  <title>剑指Offer-数组相关 [ Cellophane ]</title>
+  <title>剑指Offer-数字相关 [ Cellophane ]</title>
   
   
     <link rel="shortcut icon" href="/Blinky.ico">
@@ -120,7 +120,7 @@
   
 
   <article id="post">
-    <h1>剑指Offer-数组相关</h1>
+    <h1>剑指Offer-数字相关</h1>
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2018-09-12</span>
       
@@ -159,22 +159,36 @@
       
     </p>
     
-    <h2 id="3-1-数组中重复的数字"><a href="#3-1-数组中重复的数字" class="headerlink" title="3.1 数组中重复的数字"></a>3.1 数组中重复的数字</h2><pre><code class="language-cpp">bool duplicate(int numbers[], int length, int* duplication) {
-    if (numbers == nullptr || length &lt;= 0) {
-        return false;
-    }
-    for (int i = 0; i &lt; length; i++) {
-        if (numbers[i] != i) {
-            int temp = numbers[i];
-            if (numbers[temp] == temp) {
-                *duplication = temp;
-                return true;
+    <h2 id="3-1-数组中重复的数字"><a href="#3-1-数组中重复的数字" class="headerlink" title="3.1 数组中重复的数字"></a>3.1 数组中重复的数字</h2><p><a href="https://leetcode-cn.com/problems/find-the-duplicate-number/submissions/" target="_blank" rel="external">leetcode 287</a></p>
+<h3 id="将元素放进对应下标"><a href="#将元素放进对应下标" class="headerlink" title="将元素放进对应下标"></a>将元素放进对应下标</h3><pre><code class="language-java">public int findDuplicate(int[] nums) {
+    for (int i = 0; i &lt; nums.length; i++) {
+        while (nums[i] != i) {
+            int temp = nums[i];
+            if (temp == nums[temp]) {
+                return temp;
             }
-            numbers[i] = numbers[temp];
-            numbers[temp] = temp;
+            nums[i] = nums[temp];
+            nums[temp] = temp;
         }
     }
-    return false;
+    return 0;
+}
+</code></pre>
+<h3 id="使用快慢指针抽象成环形链表问题"><a href="#使用快慢指针抽象成环形链表问题" class="headerlink" title="使用快慢指针抽象成环形链表问题"></a>使用快慢指针抽象成环形链表问题</h3><pre><code class="language-java">public int findDuplicate(int[] nums) {
+    int tortoise = nums[0];
+    int hare = nums[0];
+    do {
+        tortoise = nums[tortoise];
+        hare = nums[nums[hare]];
+    } while (tortoise != hare);
+
+    int ptr1 = nums[0];
+    int ptr2 = tortoise;
+    while (ptr1 != ptr2) {
+        ptr1 = nums[ptr1];
+        ptr2 = nums[ptr2];
+    }
+    return ptr1;
 }
 </code></pre>
 <h2 id="3-2-不修改数组找出重复的数字"><a href="#3-2-不修改数组找出重复的数字" class="headerlink" title="3.2 不修改数组找出重复的数字"></a>3.2 不修改数组找出重复的数字</h2><pre><code class="language-cpp">bool duplicate(int numbers[], int length, int* duplication) {
@@ -215,7 +229,8 @@ int countRange(int numbers[], int length, int start, int end) {
     return count;
 }
 </code></pre>
-<h2 id="4-二维数组中的查找"><a href="#4-二维数组中的查找" class="headerlink" title="4. 二维数组中的查找"></a>4. 二维数组中的查找</h2><pre><code class="language-cpp">bool Find(int target, vector&lt;vector&lt;int&gt;&gt; array) {
+<h2 id="4-二维数组中的查找"><a href="#4-二维数组中的查找" class="headerlink" title="4. 二维数组中的查找"></a>4. 二维数组中的查找</h2><p><a href="https://leetcode-cn.com/problems/search-a-2d-matrix/" target="_blank" rel="external">leetcode 74</a></p>
+<pre><code class="language-cpp">bool Find(int target, vector&lt;vector&lt;int&gt;&gt; array) {
     int rows = array.size();
     int cols = array[0].size();
     int row = 0;
@@ -230,7 +245,33 @@ int countRange(int numbers[], int length, int start, int end) {
         else {
             return true;
         }
-        return false;
+    return false;
+}
+</code></pre>
+<h2 id="10-斐波那契数列"><a href="#10-斐波那契数列" class="headerlink" title="10. 斐波那契数列"></a>10. 斐波那契数列</h2><p><a href="https://leetcode-cn.com/problems/fibonacci-number/submissions/" target="_blank" rel="external">leetcode 509</a></p>
+<pre><code class="language-java">public int fib(int N) {
+    if (N &lt; 2) {
+        return N;
+    }
+    int a = 1;
+    int b = 0;
+    int res = 0;
+    for (int i = 2; i &lt;= N; i++) {
+        res = a + b;
+        b = a;
+        a = res;
+    }
+    return res;
+}
+</code></pre>
+<h2 id="15-二进制中-1-的个数"><a href="#15-二进制中-1-的个数" class="headerlink" title="15. 二进制中 1 的个数"></a>15. 二进制中 1 的个数</h2><p><a href="https://leetcode-cn.com/problems/number-of-1-bits/description/" target="_blank" rel="external">leetcode 191</a></p>
+<pre><code class="language-java">public int hammingWeight(int n) {
+    int res = 0;
+    while (n != 0) {
+        res++;
+        n = n &amp; (n - 1);
+    }
+    return res;
 }
 </code></pre>
 <h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11. 旋转数组的最小数字"></a>11. 旋转数组的最小数字</h2><p><a href="https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/" target="_blank" rel="external">leetcode 154</a></p>
@@ -430,7 +471,33 @@ vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
     return res;
 }
 </code></pre>
-<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><p><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="external">leetcode</a></p>
+<h2 id="41-数据流中的中位数"><a href="#41-数据流中的中位数" class="headerlink" title="41. 数据流中的中位数"></a>41. 数据流中的中位数</h2><p><a href="https://leetcode-cn.com/problems/find-median-from-data-stream/solution/shu-ju-liu-de-zhong-wei-shu-by-leetcode/" target="_blank" rel="external">leetcode 295</a></p>
+<pre><code class="language-java">PriorityQueue&lt;Integer&gt; left;
+PriorityQueue&lt;Integer&gt; right;
+boolean isOdd=false;
+public MedianFinder() {
+    left = new PriorityQueue&lt;&gt;((o1, o2) -&gt; o2 - o1);
+    right = new PriorityQueue&lt;&gt;();
+}
+public void addNum(int num) {
+    if(isOdd){
+        right.add(num);
+        left.add(right.poll());
+    }else{
+        left.add(num);
+        right.add(left.poll());
+    }
+    isOdd=!isOdd;
+}
+public double findMedian() {
+    if(isOdd){
+        return right.peek();
+    }else{
+        return (left.peek()+right.peek())/2.0;
+    }
+}
+</code></pre>
+<h2 id="42-连续子数组的最大和"><a href="#42-连续子数组的最大和" class="headerlink" title="42. 连续子数组的最大和"></a>42. 连续子数组的最大和</h2><p><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="external">leetcode 53</a></p>
 <pre><code class="language-cpp">int FindGreatestSumOfSubArray(vector&lt;int&gt; array) {
     if (array.size() == 0) {
         return 0;
@@ -462,7 +529,74 @@ vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; input, int k) {
     return res;
 }
 </code></pre>
-<h2 id="51-数组中的逆序对"><a href="#51-数组中的逆序对" class="headerlink" title="51. 数组中的逆序对"></a>51. 数组中的逆序对</h2><pre><code class="language-cpp">
+<h2 id="49-丑数"><a href="#49-丑数" class="headerlink" title="49.丑数"></a>49.丑数</h2><p><a href="https://leetcode-cn.com/problems/ugly-number-ii/" target="_blank" rel="external">leetcode 264</a></p>
+<pre><code class="language-java">public int nthUglyNumber(int n) {
+    if (n &lt;= 6) {
+        return n;
+    }
+    int i2 = 0, i3 = 0, i5 = 0;
+    int[] dp = new int[n];
+    dp[0] = 1;
+    for (int i = 1; i &lt; n; i++) {
+        int next2 = dp[i2] * 2, next3 = dp[i3] * 3, next5 = dp[i5] * 5;
+        dp[i] = Math.min(next2, Math.min(next3, next5));
+        if (dp[i] == next2) {
+            i2++;
+        }
+        if (dp[i] == next3) {
+            i3++;
+        }
+        if (dp[i] == next5) {
+            i5++;
+        }
+    }
+    return dp[n - 1];
+}
+</code></pre>
+<h2 id="51-数组中的逆序对"><a href="#51-数组中的逆序对" class="headerlink" title="51. 数组中的逆序对"></a>51. 数组中的逆序对</h2><p><a href="https://www.nowcoder.com/practice/96bd6684e04a44eb80e6a68efc0ec6c5?tpId=13&amp;tqId=11188&amp;tPage=1&amp;rp=1&amp;ru=/ta/coding-interviews&amp;qru=/ta/coding-interviews/question-ranking&amp;from=cyc_github" target="_blank" rel="external">牛客</a></p>
+<pre><code class="language-java">private long cnt = 0;
+int[] tmp;
+int InversePairs(int[] data) {
+    if (data.length &lt;= 1) {
+        return 0;
+    }
+    tmp = new int[data.length];
+    mergeSort(data, 0, data.length - 1);
+    return (int) (cnt % 1000000007);
+}
+void mergeSort(int[] data, int start, int end) {
+    if (start &gt;= end) {
+        return;
+    }
+    int mid = (start + end) / 2;
+    mergeSort(data, start, mid);
+    mergeSort(data, mid + 1, end);
+    merge(data, start, mid, end);
+}
+void merge(int[] data, int start, int mid, int end) {
+    int l = mid, r = end, index = end;
+    //排序并统计个数
+    while (l &gt;= start &amp;&amp; r &gt;= mid + 1) {
+        if (data[l] &gt; data[r]) {
+            tmp[index--] = data[l--];
+            cnt += r - mid;
+        } else {
+            tmp[index--] = data[r--];
+        }
+    }
+    //处理左边剩余数据
+    for (; l &gt;= start; l--) {
+        tmp[index--] = data[l];
+    }
+    //处理右边剩余数据
+    for (; r &gt;= mid + 1; r--) {
+        tmp[index--] = data[r];
+    }
+    //将数据复制到原数组
+    for (int i = start; i &lt;= end; i++) {
+        data[i] = tmp[i];
+    }
+}
 </code></pre>
 <h2 id="53-1-数字在排序数组中出现的次数"><a href="#53-1-数字在排序数组中出现的次数" class="headerlink" title="53.1 数字在排序数组中出现的次数"></a>53.1 数字在排序数组中出现的次数</h2><pre><code class="language-cpp">int GetNumberOfK(vector&lt;int&gt; data, int k) {
     if (data.size() == 0 || k &lt;= 0) {
@@ -532,7 +666,10 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
     return -1;
 }
 </code></pre>
-<h2 id="56-1-数组中只出现一次的两个数字"><a href="#56-1-数组中只出现一次的两个数字" class="headerlink" title="56.1 数组中只出现一次的两个数字"></a>56.1 数组中只出现一次的两个数字</h2><pre><code class="language-cpp">void FindNumsAppearOnce(vector&lt;int&gt; data,int* num1,int *num2) {
+<h2 id="53-3-数组中数值和下标相等的元素"><a href="#53-3-数组中数值和下标相等的元素" class="headerlink" title="53.3 数组中数值和下标相等的元素"></a>53.3 数组中数值和下标相等的元素</h2><pre><code class="language-java">
+</code></pre>
+<h2 id="56-1-数组中只出现一次的两个数字"><a href="#56-1-数组中只出现一次的两个数字" class="headerlink" title="56.1 数组中只出现一次的两个数字"></a>56.1 数组中只出现一次的两个数字</h2><p><a href="https://leetcode-cn.com/problems/single-number-iii/description/" target="_blank" rel="external">leetcode 260</a></p>
+<h3 id="使用哈希表"><a href="#使用哈希表" class="headerlink" title="使用哈希表"></a>使用哈希表</h3><pre><code class="language-cpp">void FindNumsAppearOnce(vector&lt;int&gt; data,int* num1,int *num2) {
        if(data.size()&lt;2){
             return;
         }     
@@ -546,11 +683,38 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
         *num1 = v[0]; *num2 = v[1];
     }
 </code></pre>
-<h2 id="57-1-和为-s-的数字"><a href="#57-1-和为-s-的数字" class="headerlink" title="57.1 和为 s 的数字"></a>57.1 和为 s 的数字</h2><pre><code class="language-cpp">vector&lt;int&gt; FindNumbersWithSum(vector&lt;int&gt; array, int sum) {
+<h3 id="使用异或"><a href="#使用异或" class="headerlink" title="使用异或"></a>使用异或</h3><pre><code class="language-java">public int[] singleNumber(int[] nums) {
+    int bitmask = 0;
+    for (int num : nums) {
+        bitmask ^= num;
+    }
+    int diff = bitmask &amp; (-bitmask);
+    int x = 0, y = 0;
+    for (int num : nums) {
+        if ((num &amp; diff) == 0) {
+            x ^= num;
+        } else {
+            y ^= num;
+        }
+    }
+    return new int[]{x, y};
+}
+</code></pre>
+<h2 id="56-2-数组中唯一只出现一次的数字"><a href="#56-2-数组中唯一只出现一次的数字" class="headerlink" title="56.2 数组中唯一只出现一次的数字"></a>56.2 数组中唯一只出现一次的数字</h2><p><a href="https://leetcode-cn.com/problems/single-number-ii/description/" target="_blank" rel="external">leetcode 137</a></p>
+<pre><code class="language-java">public int singleNumber(int[] nums) {
+    int a = 0, b = 0;
+    for (int num : nums) {
+        b = (b ^ num) &amp; ~a;
+        a = (a ^ num) &amp; ~b;
+    }
+    return b;
+}
+</code></pre>
+<h2 id="57-1-和为-s-的两个数字"><a href="#57-1-和为-s-的两个数字" class="headerlink" title="57.1 和为 s 的两个数字"></a>57.1 和为 s 的两个数字</h2><p><a href="https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/submissions/" target="_blank" rel="external">leetcode 167</a></p>
+<pre><code class="language-cpp">vector&lt;int&gt; FindNumbersWithSum(vector&lt;int&gt; array, int sum) {
     vector&lt;int&gt; result;
-    int length = array.size();
     int left = 0;
-    int right = length - 1;
+    int right = array.size() - 1;
     while (left &lt; right) {
         if (array[left] + array[right] == sum) {
             result.push_back(array[left]);
@@ -594,6 +758,11 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
     return res;
 }
 </code></pre>
+<h2 id="59-滑动窗口的最大值"><a href="#59-滑动窗口的最大值" class="headerlink" title="59. 滑动窗口的最大值"></a>59. 滑动窗口的最大值</h2><p><a href="https://leetcode-cn.com/problems/sliding-window-maximum/" target="_blank" rel="external">leetcode 239</a></p>
+<h3 id="使用队列"><a href="#使用队列" class="headerlink" title="使用队列"></a>使用队列</h3><pre><code class="language-java">
+</code></pre>
+<h3 id="使用堆"><a href="#使用堆" class="headerlink" title="使用堆"></a>使用堆</h3><pre><code class="language-java">
+</code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -601,7 +770,7 @@ int getLastK(vector&lt;int&gt; data, int k, int l, int r) {
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-数组中重复的数字"><span class="toc-text">3.1 数组中重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-不修改数组找出重复的数字"><span class="toc-text">3.2 不修改数组找出重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-二维数组中的查找"><span class="toc-text">4. 二维数组中的查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-旋转数组的最小数字"><span class="toc-text">11. 旋转数组的最小数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-1-调整数组的顺序使奇数位于偶数前面"><span class="toc-text">21.1 调整数组的顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-2-保证元素相对位置不变"><span class="toc-text">21.2 保证元素相对位置不变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#39-数组中出现的次数超过一半的数字"><span class="toc-text">39. 数组中出现的次数超过一半的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-解法"><span class="toc-text">基于 partition 解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#40-最小的k个数"><span class="toc-text">40. 最小的k个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于堆的解法"><span class="toc-text">基于堆的解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-的解法"><span class="toc-text">基于 partition 的解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#41-数据流中的中位数"><span class="toc-text">41. 数据流中的中位数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-连续子数组的最大和"><span class="toc-text">42. 连续子数组的最大和</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#45-把数组排成最小的数"><span class="toc-text">45. 把数组排成最小的数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#51-数组中的逆序对"><span class="toc-text">51. 数组中的逆序对</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-1-数字在排序数组中出现的次数"><span class="toc-text">53.1 数字在排序数组中出现的次数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-2-0-n-1-中缺失的数字"><span class="toc-text">53.2 0~n-1 中缺失的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#56-1-数组中只出现一次的两个数字"><span class="toc-text">56.1 数组中只出现一次的两个数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-1-和为-s-的数字"><span class="toc-text">57.1 和为 s 的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-2-和为-s-的连续正数序列"><span class="toc-text">57.2 和为 s 的连续正数序列</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-数组中重复的数字"><span class="toc-text">3.1 数组中重复的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#将元素放进对应下标"><span class="toc-text">将元素放进对应下标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用快慢指针抽象成环形链表问题"><span class="toc-text">使用快慢指针抽象成环形链表问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-不修改数组找出重复的数字"><span class="toc-text">3.2 不修改数组找出重复的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-二维数组中的查找"><span class="toc-text">4. 二维数组中的查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-斐波那契数列"><span class="toc-text">10. 斐波那契数列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-二进制中-1-的个数"><span class="toc-text">15. 二进制中 1 的个数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-旋转数组的最小数字"><span class="toc-text">11. 旋转数组的最小数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-1-调整数组的顺序使奇数位于偶数前面"><span class="toc-text">21.1 调整数组的顺序使奇数位于偶数前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-2-保证元素相对位置不变"><span class="toc-text">21.2 保证元素相对位置不变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#39-数组中出现的次数超过一半的数字"><span class="toc-text">39. 数组中出现的次数超过一半的数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-解法"><span class="toc-text">基于 partition 解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#40-最小的k个数"><span class="toc-text">40. 最小的k个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于堆的解法"><span class="toc-text">基于堆的解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于-partition-的解法"><span class="toc-text">基于 partition 的解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#41-数据流中的中位数"><span class="toc-text">41. 数据流中的中位数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-连续子数组的最大和"><span class="toc-text">42. 连续子数组的最大和</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#45-把数组排成最小的数"><span class="toc-text">45. 把数组排成最小的数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#49-丑数"><span class="toc-text">49.丑数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#51-数组中的逆序对"><span class="toc-text">51. 数组中的逆序对</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-1-数字在排序数组中出现的次数"><span class="toc-text">53.1 数字在排序数组中出现的次数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-2-0-n-1-中缺失的数字"><span class="toc-text">53.2 0~n-1 中缺失的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-3-数组中数值和下标相等的元素"><span class="toc-text">53.3 数组中数值和下标相等的元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#56-1-数组中只出现一次的两个数字"><span class="toc-text">56.1 数组中只出现一次的两个数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用哈希表"><span class="toc-text">使用哈希表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用异或"><span class="toc-text">使用异或</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#56-2-数组中唯一只出现一次的数字"><span class="toc-text">56.2 数组中唯一只出现一次的数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-1-和为-s-的两个数字"><span class="toc-text">57.1 和为 s 的两个数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#57-2-和为-s-的连续正数序列"><span class="toc-text">57.2 和为 s 的连续正数序列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#59-滑动窗口的最大值"><span class="toc-text">59. 滑动窗口的最大值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用队列"><span class="toc-text">使用队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用堆"><span class="toc-text">使用堆</span></a></li></ol></li></ol>
   </div>
 </div>
 

@@ -17,13 +17,11 @@
   
   
     <meta name="description" content="7. 重建二叉树leetcode 105
-public TreeNode reConstructBinaryTree(int[] pre, int[] in)
-{
-    if (pre == null || in == null)
-    {
+public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
+    if (pre == null || in == null) {
         return null;
     }
-    return func(pre, 0, pre.length - 1, in, 0, ...">
+    return func(pre, 0, pre.length - 1, in, 0, in.l...">
   
   <title>剑指Offer-二叉树相关 [ Cellophane ]</title>
   
@@ -45,11 +43,11 @@ public TreeNode reConstructBinaryTree(int[] pre, int[] in)
 <div class="side-navigate hide-area">
   
     <div class="item prev">
-      <a href="/2018/09/12/剑指Offer-数组相关/">
+      <a href="/2018/09/12/剑指Offer-数字相关/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        剑指Offer-数组相关
+        剑指Offer-数字相关
       </div>
     </div>
   
@@ -162,29 +160,23 @@ public TreeNode reConstructBinaryTree(int[] pre, int[] in)
     </p>
     
     <h2 id="7-重建二叉树"><a href="#7-重建二叉树" class="headerlink" title="7. 重建二叉树"></a>7. 重建二叉树</h2><p><a href="https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" target="_blank" rel="external">leetcode 105</a></p>
-<pre><code class="language-java">public TreeNode reConstructBinaryTree(int[] pre, int[] in)
-{
-    if (pre == null || in == null)
-    {
+<pre><code class="language-java">public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
+    if (pre == null || in == null) {
         return null;
     }
     return func(pre, 0, pre.length - 1, in, 0, in.length - 1);
 }
-public TreeNode func(int[] pre, int startPre, int endPre, int[] in, int startIn, int endIn)
-{
+public TreeNode func(int[] pre, int startPre, int endPre, int[] in, int startIn, int endIn) {
     if (startPre &gt; endPre || startIn &gt; endIn)
         return null;
     TreeNode node = new TreeNode(pre[startPre]);
-    for (int i = startIn; i &lt;= endIn; i++)
-    {
-        if (in[i] == pre[startPre])
-        {
+    for (int i = startIn; i &lt;= endIn; i++) {
+        if (in[i] == pre[startPre]) {
             node.left = func(pre, startPre + 1, i - startIn + startPre, in, startIn, i - 1);
             node.right = func(pre, i - startIn + startPre + 1, endPre, in, i + 1, endIn);
             break;
         }
     }
-
     return node;
 }
 </code></pre>
@@ -299,32 +291,32 @@ bool isSymmetrical(TreeNode*p1, TreeNode*p2) {
 </code></pre>
 <h2 id="32-2-分行从上到下打印二叉树"><a href="#32-2-分行从上到下打印二叉树" class="headerlink" title="32.2 分行从上到下打印二叉树"></a>32.2 分行从上到下打印二叉树</h2><p><a href="https://leetcode-cn.com/problems/binary-tree-level-order-traversal" target="_blank" rel="external">leetcode 102</a></p>
 <pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
-        vector&lt;vector&lt;int&gt;&gt; print;
-        if (pRoot == nullptr) {
-            return print;
-        }
-        vector&lt;int&gt; line;
-        queue&lt;TreeNode*&gt; nodes;
-        nodes.push(pRoot);
-        while (nodes.size()) {
-            int size = nodes.size();
-            while (size != 0) {
-                TreeNode* p = nodes.front();
-                line.push_back(p-&gt;val);
-                nodes.pop();
-                size--;
-                if (p-&gt;left) {
-                    nodes.push(p-&gt;left);
-                }
-                if (p-&gt;right) {
-                    nodes.push(p-&gt;right);
-                }
-            }
-            print.push_back(line);
-            line.clear();
-        }
+    vector&lt;vector&lt;int&gt;&gt; print;
+    if (pRoot == nullptr) {
         return print;
     }
+    vector&lt;int&gt; line;
+    queue&lt;TreeNode*&gt; nodes;
+    nodes.push(pRoot);
+    while (nodes.size()) {
+        int size = nodes.size();
+        while (size != 0) {
+            TreeNode* p = nodes.front();
+            line.push_back(p-&gt;val);
+            nodes.pop();
+            size--;
+            if (p-&gt;left) {
+                nodes.push(p-&gt;left);
+            }
+            if (p-&gt;right) {
+                nodes.push(p-&gt;right);
+            }
+        }
+        print.push_back(line);
+        line.clear();
+    }
+    return print;
+}
 </code></pre>
 <h3 id="用两个队列"><a href="#用两个队列" class="headerlink" title="用两个队列"></a>用两个队列</h3><pre><code class="language-cpp">vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
     vector&lt;vector&lt;int&gt; &gt; res;
@@ -379,7 +371,6 @@ bool isSymmetrical(TreeNode*p1, TreeNode*p2) {
     vector&lt;int&gt; line;
     s1.push(pRoot);
     while (s1.size() || s2.size()) {
-
         while (s1.size()) {
             TreeNode* p = s1.top();
             if (p-&gt;left) {
@@ -466,8 +457,7 @@ bool Verify(vector&lt;int&gt; sequence,int l,int r){
 }
 </code></pre>
 <h2 id="34-二叉树中和为某一值的路径"><a href="#34-二叉树中和为某一值的路径" class="headerlink" title="34. 二叉树中和为某一值的路径"></a>34. 二叉树中和为某一值的路径</h2><p><a href="https://leetcode-cn.com/problems/path-sum-ii/submissions/" target="_blank" rel="external">leetcode 113</a></p>
-<pre><code class="language-cpp">
-vector&lt;vector&lt;int&gt;&gt; ret;
+<pre><code class="language-cpp">vector&lt;vector&lt;int&gt;&gt; ret;
 vector&lt;int&gt; trace;
 vector&lt;vector&lt;int&gt; &gt; FindPath(TreeNode* root,int expectNumber) {
     if(root){
@@ -591,23 +581,19 @@ void inOrder(TreeNode* pRoot, int k) {
 }
 </code></pre>
 <h2 id="55-2-平衡二叉树"><a href="#55-2-平衡二叉树" class="headerlink" title="55.2 平衡二叉树"></a>55.2 平衡二叉树</h2><p><a href="https://leetcode-cn.com/problems/balanced-binary-tree/" target="_blank" rel="external">leetcode 110</a></p>
-<pre><code class="language-`cpp">bool res = true;
-bool IsBalanced_Solution(TreeNode *pRoot)
-{
+<pre><code class="language-cpp">bool res = true;
+bool IsBalanced_Solution(TreeNode *pRoot){
     isBalance(pRoot);
     return res;
 }
-int isBalance(TreeNode *pRoot)
-{
-    if (pRoot == nullptr)
-    {
+int isBalance(TreeNode *pRoot){
+    if (pRoot == nullptr){
         return 0;
     }
     int left = isBalance(pRoot-&gt;left);
     int right = isBalance(pRoot-&gt;right);
     int diff = left - right;
-    if (diff &gt; 1 || diff &lt; -1)
-    {
+    if (diff &gt; 1 || diff &lt; -1){
         res = false;
     }
     return left &gt; right ? left + 1 : right + 1;
@@ -660,7 +646,7 @@ int isBalance(TreeNode *pRoot)
   
 <nav id="pagination">
   
-    <a href="/2018/09/12/剑指Offer-数组相关/" class="prev">&larr; 上一篇 剑指Offer-数组相关</a>
+    <a href="/2018/09/12/剑指Offer-数字相关/" class="prev">&larr; 上一篇 剑指Offer-数字相关</a>
   
 
   

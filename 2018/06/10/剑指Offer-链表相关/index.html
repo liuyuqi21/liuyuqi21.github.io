@@ -445,31 +445,48 @@ int getLength(ListNode* pHead) {
        return count;
 }
 </code></pre>
-<h1 id="栈和队列"><a href="#栈和队列" class="headerlink" title="栈和队列"></a>栈和队列</h1><h2 id="9-用两个栈实现队列"><a href="#9-用两个栈实现队列" class="headerlink" title="9. 用两个栈实现队列"></a>9. 用两个栈实现队列</h2><pre><code class="language-cpp">void push(int node)
-    {
-        stack1.push(node);
+<h1 id="栈和队列"><a href="#栈和队列" class="headerlink" title="栈和队列"></a>栈和队列</h1><h2 id="9-用两个栈实现队列"><a href="#9-用两个栈实现队列" class="headerlink" title="9. 用两个栈实现队列"></a>9. 用两个栈实现队列</h2><p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks/comments/" target="_blank" rel="external">leetcode 232</a></p>
+<pre><code class="language-java">class MyQueue {
+    private Stack&lt;Integer&gt; s1;
+    private Stack&lt;Integer&gt; s2;
+
+    public MyQueue() {
+        s1 = new Stack&lt;&gt;();
+        s2 = new Stack&lt;&gt;();
     }
 
-    int pop()
-    {
-        if (stack2.size() == 0)
-        {
-            while (stack1.size())
-            {
-                int node = stack1.top();
-                stack2.push(node);
-                stack1.pop();
+    public void push(int x) {
+        s2.push(x);
+    }
+
+    public int pop() {
+        if (s1.isEmpty()) {
+            while (!s2.isEmpty()) {
+                s1.push(s2.pop());
             }
         }
-        int a = stack2.top();
-        stack2.pop();
-        return a;
+        return s1.pop();
     }
+
+    public int peek() {
+        if (s1.isEmpty()) {
+            while (!s2.isEmpty()) {
+                s1.push(s2.pop());
+            }
+        }
+        return s1.peek();
+    }
+
+    public boolean empty() {
+        return s1.isEmpty() &amp;&amp; s2.isEmpty();
+    }
+}
 </code></pre>
-<h2 id="30-包含-min-函数的栈"><a href="#30-包含-min-函数的栈" class="headerlink" title="30. 包含 min 函数的栈"></a>30. 包含 min 函数的栈</h2><pre><code class="language-cpp">stack&lt;int&gt; m_data, m_min;
+<h2 id="30-包含-min-函数的栈"><a href="#30-包含-min-函数的栈" class="headerlink" title="30. 包含 min 函数的栈"></a>30. 包含 min 函数的栈</h2><p><a href="https://leetcode-cn.com/problems/min-stack/submissions/" target="_blank" rel="external">leetcode 115</a></p>
+<pre><code class="language-cpp">stack&lt;int&gt; m_data, m_min;
 void push(int value) {
     m_data.push(value);
-    if (m_min.empty()||value&lt;m_min.top()) {
+    if (m_min.empty() || value&lt;m_min.top()) {
         m_min.push(value);
     }
     else {
@@ -487,19 +504,16 @@ int min() {
     return m_min.top();
 }
 </code></pre>
-<h2 id="31-栈的压入、弹出序列"><a href="#31-栈的压入、弹出序列" class="headerlink" title="31. 栈的压入、弹出序列"></a>31. 栈的压入、弹出序列</h2><pre><code class="language-cpp">bool IsPopOrder(vector&lt;int&gt; pushV, vector&lt;int&gt; popV)
-{
-    if (pushV.empty() || popV.empty() || pushV.size() != popV.size())
-    {
+<h2 id="31-栈的压入、弹出序列"><a href="#31-栈的压入、弹出序列" class="headerlink" title="31. 栈的压入、弹出序列"></a>31. 栈的压入、弹出序列</h2><p><a href="https://leetcode-cn.com/problems/validate-stack-sequences/" target="_blank" rel="external">leetcode 946</a></p>
+<pre><code class="language-cpp">bool IsPopOrder(vector&lt;int&gt; pushV, vector&lt;int&gt; popV){
+    if (pushV.empty() || popV.empty() || pushV.size() != popV.size()){
         return false;
     }
     stack&lt;int&gt; s;
     int j = 0;
-    for (int i = 0; i &lt; pushV.size(); i++)
-    {
+    for (int i = 0; i &lt; pushV.size(); i++){
         s.push(pushV[i]);
-        while (s.size() &amp;&amp; s.top() == popV[j])
-        {
+        while (s.size() &amp;&amp; s.top() == popV[j]){
             s.pop();
             j++;
         }
