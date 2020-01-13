@@ -168,14 +168,16 @@
 <p>★★☆ 常见进程同步问题。</p>
 <p>★★★ 进程通信方法的特点以及使用场景。</p>
 <ul>
-<li>管道：只支持半双工通信，只能在父子进程中使用。</li>
-<li>FIFO：也称命名管道，去除了管道只能在父子进程中使用的限制。FIFO 常用于客户-服务器应用程序中，FIFO 用作汇聚点，在客户进程和服务器进程之间传递数据。</li>
-<li>消息队列：相比于 FIFO，消息队列具有以下优点：</li>
-<li>消息队列可以独立于读写进程存在，从而避免了<br>FIFO 中同步管道的打开和关闭时可能产生的困难。</li>
+<li>管道：无名管道是一种特殊的文件，只存在于内存中，只支持半双工通信，只能在父子进程中使用。</li>
+<li>FIFO：命名管道，是 FIFO 文件，存在于文件系统中，去除了管道只能在父子进程中使用的限制。FIFO 常用于客户-服务器应用程序中，FIFO 用作汇聚点，在客户进程和服务器进程之间传递数据。</li>
+<li>消息队列：相比于 FIFO，消息队列具有以下优点：<ul>
+<li>消息队列可以独立于读写进程存在，从而避免了FIFO 中同步管道的打开和关闭时可能产生的困难。</li>
 <li>避免了 FIFO 的同步阻塞问题，不需要进程自己提供同步方法</li>
 <li>读进程可以根据消息类型有选择地接收消息，而不像 FIFO 那样只能默认地接收</li>
-<li>信号量：它是一个计数器，用于为多个进程提供共享数据对象的访问</li>
+</ul>
+</li>
 <li>共享数据：允许多个进程共享一个给定的存储区。因为数据不需要在进程之间复制，所以这是最快的一种 IPC。需要使用信号量用来同步对共享存储的访问。多个进程可以将同一个文件映射到它们的地址空间从而实现共享内存。另外 XSI 共享内存不是使用文件，而是使用使用内存的匿名段。</li>
+<li>信号量：它是一个计数器，用于为多个进程提供共享数据对象的访问。</li>
 <li>套接字：与其它通信机制不同的是，它可用于不同机器间的进程通信。</li>
 </ul>
 <p>★★★ 死锁必要条件、解决死锁策略，能写出和分析死锁的代码，能说明在数据库管理系统或者 Java 中如何解决死锁。</p>
@@ -314,14 +316,10 @@
 </li>
 <li>连接建立以后，ACK 都置为 1</li>
 <li>第三次握手可以携带数据，如果不携带数据则不消耗序号</li>
-<li>三次握手的原因<ul>
-<li>表因：第三次握手是为了防止失效的连接请求到达服务器，让服务器打开连接。客户端发送的连接请求如果在网络中滞留，那么就会隔很长一段时间才能收到服务器端发回的连接确认，客户端等待一个超时重传时间之后，就会重新请求连接。但是这个滞留的连接最后还是会到达服务器，如果不进行三次握手，那么服务器就会打开两个连接。如果有第三次握手，客户端会忽略服务器之后发送的对滞留请求的连接确认，不进行第三次握手，因此就不会再次打开连接。</li>
-<li>本质：TCP 需要 seq 序列号来做可靠重传或接收，而避免连接复用时无法分辨出 seq 是延迟或者是旧链接的 seq，因此需要三次握手来约定确定双方的 ISN（初始 seq 序列号）。</li>
-</ul>
-</li>
+<li>三次握手的原因<br>  对于握手：握手只需要确认双方通信时的初始化序号，保证通信不会乱序。（第三次握手必要性：假设服务端的确认丢失，连接并未断开，客户机超时重发连接请求，这样服务器会对同一个客户机保持多个连接，造成资源浪费。）</li>
 <li>四次挥手：<ul>
 <li>客户端发送释放报文 FIN</li>
-<li>服务器收到 FIN 后发出确认 ACK，此时 TCP 属于半关闭状态，服务器能向客户端发送数据但是客户端不能向服务器发送数据</li>
+<li>服务器收到 FIN 后发出确认 ACK，此时 TCP 属于半关闭状态（CLOSED_WAIT），服务器能向客户端发送数据但是客户端不能向服务器发送数据</li>
 <li>当服务器不再需要连接时，发送连接释放报文 FIN</li>
 <li>客户端收到 FIN 后发出确认 ACK，进入 TIME-WAIT 状态，等待 2 倍的 MSL（最大报文存活时间）后释放连接</li>
 <li>服务器收到 ACK 后释放连接</li>
@@ -336,23 +334,37 @@
 </ul>
 <p>★★★ 可靠传输原理，并设计可靠 UDP 协议。</p>
 <ul>
-<li>将数据断截为合理的长度</li>
-<li>超时重传：如果一个已经发送的报文段在超时间内没有收到确认，那么就重传这个报文段</li>
-<li>对于收到的请求，给出确认响应</li>
-<li>校验包出错，丢弃报文段，不给出响应，超时重发</li>
-<li>对失序数据进行重新排序，然后才交给应用层</li>
-<li>对于重复数据，能够丢弃重复数据</li>
-<li>流量控制，防止较快主机致使较慢主机的缓冲区溢出</li>
+<li>建立连接（标志位）：通信前确认通信实体存在</li>
+<li>序号机制（序号、确认号）：确保了数据是按序、完整到达</li>
+<li>数据校验（校验和）：CRC 校验全部数据，校验包出错，丢弃报文段，不给出响应，超时重发</li>
+<li>超时重传（定时器）：保证因链路故障未能到达数据能够被多次重发。<ul>
+<li>RTT：数据从发送到接收到对方响应之间的时间间隔，即数据报在网络中一个往返用时。大小不稳定。</li>
+<li>RTO：重传间隔，通常每次重传 RTO 是前一次重传间隔的两倍，重传次数达到上限后停止重传。RTO = RTTs + 4*RTTd</li>
+</ul>
+</li>
+<li>流量控制（流量窗口）：避免发送过量<ul>
+<li>目的是接收方通过 TCP 头窗口字段告知发送方本方可接收的最大数据量，用以解决发送速率过快导致接收方不能接收的问题。</li>
+<li>发送方和接收方各有一个窗口，接收方通过 TCP 报文段中的窗口字段来告诉发送方自己的窗口大小，发送方根据这个值来设置自己窗口大小。如果发送窗口左部的字节已经发送并且收到了确认，那么就将发送窗口向右滑动一定距离，直到左部第一个字节不是已发送并且已确认的状态，接收窗口类似。</li>
+<li>TCP 是流数据，发送出去的数据流可以被分为以下四部分：已发送且被确认部分 | 已发送未被确认部分 | 未发送但可发送部分 | 不可发送部分，其中发送窗 = 已发送未确认部分 + 未发但可发送部分。接收到的数据流可分为：已接收 | 未接收但准备接收 | 未接收不准备接收。接收窗 = 未接收但准备接收部分。</li>
+<li>发送窗内的数据只有当收到接收端某段发送数据的 ACK 响应时才移动发送窗。接收窗口只会对窗口最后一个<strong>按序</strong>到达的字节进行确认。</li>
+</ul>
+</li>
+<li>拥塞控制（拥塞窗口）</li>
 </ul>
 <p>★★☆ TCP 拥塞控制的作用，理解具体原理。</p>
 <ul>
 <li>为了降低整个网络的拥塞程度。</li>
-<li>TCP 主要通过四个算法来进行拥塞控制：慢开始、拥塞避免、快重传、快恢复。</li>
+<li>拥塞控制使用拥塞窗口。TCP 主要通过四个算法来进行拥塞控制：慢开始、拥塞避免、快重传、快恢复。</li>
 <li>慢开始：发送的最初执行慢开始，令 cwnd = 1，发送方只能发送一个报文段，当收到确认后，将 cwnd 加倍。</li>
-<li>拥塞避免：设置一个慢开始门限 ssthresh ，当cwnd &gt;= ssthresh 时，进入拥塞避免，每个轮次只将 cwnd 加1。如果出现了超时，则令 ssthresh = cwnd / 2，然后重新执行慢开始。</li>
-<li>快重传：在发送方，如果收到3个重复确认，那么知道下一个报文段丢失，此时执行快重传，立刻重传下一个报文段。</li>
+<li>拥塞避免：设置一个慢开始门限 ssthresh ，当cwnd &gt;= ssthresh 时，进入拥塞避免，每个轮次只将 cwnd 加 1。如果出现了超时，则令 ssthresh = cwnd / 2，然后重新执行慢开始。</li>
+<li>快重传：在发送方，如果收到 3 个重复确认，那么知道下一个报文段丢失，此时执行快重传，立刻重传下一个报文段。</li>
 <li>快恢复：快重传之后执行快恢复，令 ssthresh = cwnd / 2，cwnd = ssthresh，此时直接进入拥塞避免。</li>
 <li>慢开始和快恢复的快慢指的是 cwnd 的设定值，而不是 cwnd 的增长速率。慢开始 cwnd 设定为 1，而快恢复 cwnd 设定为 ssthresh。</li>
+<li>流量控制和拥塞控制：<ul>
+<li>流量控制属于通信双方协商，拥塞控制涉及通信链路全局</li>
+<li>实际最终发送窗口 = min{流量控制发送窗口,拥塞窗口}</li>
+</ul>
+</li>
 </ul>
 <p>★★☆ DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</p>
 <ul>
@@ -496,7 +508,7 @@
 <li>控制连接：服务器打开端口号 21 等待客户端的连接，客户端主动建立连接后，使用这个连接将客户端的命令传送给服务器，并传回服务器的应答</li>
 <li>数据连接：用来传送一个文件数据</li>
 </ul>
-<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><p>★★☆ 五种 IO 模型的特点以及比较。</p>
+<h2 id="Socket-网络-I-O模型"><a href="#Socket-网络-I-O模型" class="headerlink" title="Socket 网络 I/O模型"></a>Socket 网络 I/O模型</h2><p>★★☆ 五种 IO 模型的特点以及比较。</p>
 <ul>
 <li>阻塞式 I/O：应用进程被阻塞，直到数据复制到应用进程缓冲池中才被返回。</li>
 <li>非阻塞式 I/O：应用进程执行系统调用后，内核返回一个错误码。应用进程可以继续执行，但是需要不断地执行系统调用来获知 I/O是否完成，这种方式成为轮询（polling）。</li>
@@ -713,6 +725,9 @@ SELECT ... FOR UPDATE;
 <li>多态<br>★☆☆ 设计原则</li>
 </ul>
 <h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><p>★★☆ 设计模式的作用。<br>★★★ 手写单例模式，特别是双重检验锁以及静态内部类。<br>★★★ 手写工厂模式。<br>★★★ 理解 MVC，结合 SpringMVC 回答。<br>★★★ 理解代理模式，结合 Spring 中的 AOP 回答。<br>★★★ 分析 JDK 中常用的设计模式，例如装饰者模式、适配器模式、迭代器模式等。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://github.com/linw7/Skill-Tree/blob/master/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.md" target="_blank" rel="external">Skill-Tree 操作系统</a></li>
+</ul>
 
   </article>
   <div class="random-toc-area">
@@ -720,7 +735,7 @@ SELECT ... FOR UPDATE;
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#💻操作系统"><span class="toc-text">💻操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#☁️网络"><span class="toc-text">☁️网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础-1"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP"><span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket"><span class="toc-text">Socket</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比较"><span class="toc-text">比较:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#select："><span class="toc-text">select：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#poll："><span class="toc-text">poll：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#select-和-poll-比较："><span class="toc-text">select 和 poll 比较：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#epoll："><span class="toc-text">epoll：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作模式："><span class="toc-text">工作模式：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#应用场景"><span class="toc-text">应用场景</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#💾数据库"><span class="toc-text">💾数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统原理"><span class="toc-text">系统原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL"><span class="toc-text">MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#🎨面向对象"><span class="toc-text">🎨面向对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#思想"><span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式"><span class="toc-text">设计模式</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#💻操作系统"><span class="toc-text">💻操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#☁️网络"><span class="toc-text">☁️网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础-1"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP"><span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket-网络-I-O模型"><span class="toc-text">Socket 网络 I/O模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比较"><span class="toc-text">比较:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#select："><span class="toc-text">select：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#poll："><span class="toc-text">poll：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#select-和-poll-比较："><span class="toc-text">select 和 poll 比较：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#epoll："><span class="toc-text">epoll：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作模式："><span class="toc-text">工作模式：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#应用场景"><span class="toc-text">应用场景</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#💾数据库"><span class="toc-text">💾数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统原理"><span class="toc-text">系统原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL"><span class="toc-text">MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#🎨面向对象"><span class="toc-text">🎨面向对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#思想"><span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式"><span class="toc-text">设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol></li></ol>
   </div>
 </div>
 
