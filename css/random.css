@@ -594,12 +594,12 @@ pre[class*="language-"] {
   margin: 0.5em -10px 0px -10px !important;
 }
 code {
-  font-family: Consolas, Source Code Pro, Monaco, Lucida Console, Courier New;
+  font-family: Monaco, Consolas, Source Code Pro, Lucida Console, Courier New;
   color: #277188;
   background: #fbf7f8;
 }
 table .line {
-  font-family: Consolas, Source Code Pro, Monaco, Lucida Console, Courier New;
+  font-family: Monaco, Consolas, Source Code Pro, Lucida Console, Courier New;
   height: 22px;
 }
 td,
