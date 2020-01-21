@@ -237,11 +237,11 @@
 <li>批量写入日志。日志并不是直接写入文件，而是先写入 redo log buffer。当需要将日志刷新到磁盘时(如事务提交)，将许多日志一起写入磁盘。</li>
 <li>并发的事务共享 Redo Log 的存储空间，它们的 Redo Log 按语句的执行顺序，依次交替的记录在一起，以减少日志占用的空间。例如,Redo Log 中的记录内容可能是这样的：</li>
 </ol>
-<pre class="line-numbers language-none"><code class="language-none">记录1: <trx1, insert …>
-记录2: <trx2, update …>
-记录3: <trx1, delete …>
-记录4: <trx3, update …>
-记录5: <trx2, insert …>
+<pre class="line-numbers language-sql"><code class="language-sql">记录<span class="token number">1</span>: <span class="token operator">&lt;</span>trx1<span class="token punctuation">,</span> <span class="token keyword">insert</span> …<span class="token operator">></span>
+记录<span class="token number">2</span>: <span class="token operator">&lt;</span>trx2<span class="token punctuation">,</span> <span class="token keyword">update</span> …<span class="token operator">></span>
+记录<span class="token number">3</span>: <span class="token operator">&lt;</span>trx1<span class="token punctuation">,</span> <span class="token keyword">delete</span> …<span class="token operator">></span>
+记录<span class="token number">4</span>: <span class="token operator">&lt;</span>trx3<span class="token punctuation">,</span> <span class="token keyword">update</span> …<span class="token operator">></span>
+记录<span class="token number">5</span>: <span class="token operator">&lt;</span>trx2<span class="token punctuation">,</span> <span class="token keyword">insert</span> …<span class="token operator">></span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol>
 <li>因为 3 的原因,当一个事务将 Redo Log 写入磁盘时，也会将其他未提交的事务的日志写入磁盘。</li>

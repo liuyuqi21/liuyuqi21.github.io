@@ -155,7 +155,7 @@ boolean 可以使用 1 bit来存储，JVM 会在编译时期将 boolean 类型�
 <li>new Integer(123) 每次都会新建一个对象</li>
 <li>Integer.valueOf(123) 会使用缓存池中的对象，多次调用取得同一个对象的引用</li>
 <li>valueOf() 方法会先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容</li>
-<li>在 Java 8 中，Integer 缓存池的大小默认为 -128~127，但是上界是可调的，在启动 jvm 的时候，通过 -XX:AutoBoxCacheMax=<size> 来指定这个缓冲池的大小</size></li>
+<li>在 Java 8 中，Integer 缓存池的大小默认为 -128~127，但是上界是可调的，在启动 jvm 的时候，通过 <code>-XX:AutoBoxCacheMax=&lt;size&gt;</code> 来指定这个缓冲池的大小</li>
 <li>编译器会在自动装箱过程调用 valueOf() 方法，因此多个值相同且值在缓存池范围内的 Integer 实例使用自动装箱来创建，那么就会引用相同的对象。</li>
 </ul>
 <pre class="line-numbers language-java"><code class="language-java">Integer x <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//装箱 调用了 Integer.valueOf(2)</span>
@@ -313,20 +313,20 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li>泛型不能是基本类型</li>
 </ul>
 <h2 id="编写泛型"><a href="#编写泛型" class="headerlink" title="编写泛型"></a>编写泛型</h2><ul>
-<li>编写泛型时，需要定义泛型类型 <t></t></li>
-<li>静态方法不能引用泛型类型 <t>，必须定义其他类型<k>来实现泛型</k></t></li>
-<li>泛型可以同时定义多种类型 &lt;T,K&gt;</li>
+<li>编写泛型时，需要定义泛型类型 <code>&lt;T&gt;</code></li>
+<li>静态方法不能引用泛型类型 <code>&lt;T&gt;</code>，必须定义其他类型 <code>&lt;K&gt;</code> 来实现泛型</li>
+<li>泛型可以同时定义多种类型 <code>&lt;T,K&gt;</code></li>
 </ul>
 <h2 id="擦拭法"><a href="#擦拭法" class="headerlink" title="擦拭法"></a>擦拭法</h2><ul>
 <li>Java 泛型采用擦拭法实现</li>
 </ul>
 <h2 id="extends通配符"><a href="#extends通配符" class="headerlink" title="extends通配符"></a>extends通配符</h2><ul>
-<li>使用类似 &lt;? extends Number&gt; 通配符作为方法参数时表示方法内部可以调用获取 Number 引用的方法，无法传入</li>
-<li>使用类似 <t extends="" number=""> 定义泛型类时表示泛型类型限定为Number或其子类</t></li>
+<li>使用类似 <code>&lt;? extends Number&gt;</code> 通配符作为方法参数时表示方法内部可以调用获取 Number 引用的方法，无法传入</li>
+<li>使用类似 <code>&lt;T extends Number&gt;</code> 定义泛型类时表示泛型类型限定为Number或其子类</li>
 </ul>
 <h2 id="super通配符"><a href="#super通配符" class="headerlink" title="super通配符"></a>super通配符</h2><ul>
-<li>使用类似 &lt;?super super Integer&gt; 通配符作为方法参数时表示方法内部可以传入获取 Integer 引用的方法，无法调用</li>
-<li>使用类似 <t super="" integer=""> 定义泛型类时表示泛型类型限定为Integer或其超类</t></li>
+<li>使用类似 <code>&lt;?super super Integer&gt;</code> 通配符作为方法参数时表示方法内部可以传入获取 Integer 引用的方法，无法调用</li>
+<li>使用类似 <code>&lt;T super Integer&gt;</code> 定义泛型类时表示泛型类型限定为Integer或其超类</li>
 </ul>
 <h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><h2 id="有三种实现线程的方法"><a href="#有三种实现线程的方法" class="headerlink" title="有三种实现线程的方法"></a>有三种实现线程的方法</h2><ol>
 <li>继承 Thread 类</li>
@@ -356,23 +356,25 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <p>PrintStream 继承了OutputStream类，并且实现了方法write()。这样，write()也可以用来往控制台写操作。</p>
 <h2 id="File对象"><a href="#File对象" class="headerlink" title="File对象"></a>File对象</h2><ul>
 <li>表示文件系统的一个文件或目录</li>
-<li>创建File对象本身不涉及IO操作<pre class="line-numbers language-java"><code class="language-java">File f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/java/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<li>创建File对象本身不涉及IO操作</li>
+</ul>
+<pre class="line-numbers language-java"><code class="language-java">File f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/java/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
+<ul>
 <li>mkdir() 可以创建一个文件夹，mkdirs() 创建一个文件夹和它所有的父文件夹</li>
 </ul>
 <h2 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h2><ul>
 <li>定义了所有输入流的超类</li>
 <li>FileInputSteam 实现了文件流的输入</li>
 <li>ByteArrayInputStream 在内存中模拟一个字节流输入</li>
-<li>使用 try(resource) 保证 InputStrean 正确关闭<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">//使用字符串类型的文件名来创建一个输入流对象来读取文件</span>
+<li>使用 try(resource) 保证 InputStrean 正确关闭</li>
+</ul>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">//使用字符串类型的文件名来创建一个输入流对象来读取文件</span>
 InputStream f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"C:/java/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment" spellcheck="true">//也可以使用一个文件对象来创建一个输入流对象来读取文件。</span>
 File f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/java/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 InputStream f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
 <h2 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h2><p>如果 FileOutputStream 在打开文件进行输出前，目标文件不存在，那么该流会创建该文件。</p>
 <h2 id="Scanner-类"><a href="#Scanner-类" class="headerlink" title="Scanner 类"></a>Scanner 类</h2><p>可以通过 Scanner 类来获取用户的输入。</p>
 <pre class="line-numbers language-java"><code class="language-java">Scanner s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>

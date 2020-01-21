@@ -344,7 +344,7 @@ show processlist 或开启慢查询 获取有问题...">
 <li>like 查询，% 在前，索引失效，可以使用全文索引</li>
 <li>如果 MySQL 估计使用索引比全表扫描更慢,会放弃使用索引</li>
 <li>or 条件中的列有索引，后面的没有,索引不会被用到</li>
-<li>负向条件(!=、&lt;&gt;、not in、not exists、not like 等)查询不能使用索引，可以优化为 in 查询。</li>
+<li>负向条件 <code>!=、&lt;&gt;、not in、not exists、not like</code> 等查询不能使用索引，可以优化为 in 查询。</li>
 <li>索引列不能是表达式的一部分，也不能是函数的参数</li>
 <li>建立索引的列不允许为 null，column is null 可以命中索引，is not null 不能命中。</li>
 <li>列的值是字符串，查询时一定要给值加引号,否则索引失效</li>
