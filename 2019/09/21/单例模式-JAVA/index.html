@@ -31,6 +31,7 @@
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
@@ -159,90 +160,99 @@
 </ul>
 <h2 id="懒汉式-线程不安全"><a href="#懒汉式-线程不安全" class="headerlink" title="懒汉式-线程不安全"></a>懒汉式-线程不安全</h2><p>私有静态变量 instance 被延迟实例化，这样做的好处是，如果没有用到该类，那么就不会实例化 instance，从而节约资源。</p>
 <p>这个实现在多线程环境下不安全，如果有多个线程同时进入 <code>if (uniqueInstance == null)</code>，并且此时 uniqueInstance 为 null，那么会有多个线程执行 <code>uniqueInstance = new Singleton();</code>语句，这将导致实例化多次 uniqueInstance。</p>
-<pre><code class="language-java">public class Singleton {
-    private static Singleton instance;
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> Singleton instance<span class="token punctuation">;</span>
 
-    private Singleton() {
-    }
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
 
-    public static Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="饿汉式-线程安全"><a href="#饿汉式-线程安全" class="headerlink" title="饿汉式-线程安全"></a>饿汉式-线程安全</h2><p>直接实例化 instance 就不会产生线程不安全问题。</p>
-<pre><code class="language-java">private static Singleton instance = new Singleton();
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> Singleton instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="懒汉式-线程安全"><a href="#懒汉式-线程安全" class="headerlink" title="懒汉式-线程安全"></a>懒汉式-线程安全</h2><p>对 getInstance() 方法加锁。会让线程阻塞时间过长，因此该方法有性能问题，不推荐使用</p>
-<pre><code class="language-java">public class Singleton {
-    private static Singleton instance;
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> Singleton instance<span class="token punctuation">;</span>
 
-    private Singleton() {
-    }
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
 
-    public static synchronized Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">synchronized</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="双重校验锁-线程安全"><a href="#双重校验锁-线程安全" class="headerlink" title="双重校验锁-线程安全"></a>双重校验锁-线程安全</h2><p>一定要使用两个 if 语句<br>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
-<pre><code class="language-java">public class Singleton {
-    private volatile static Singleton instance;
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> Singleton instance<span class="token punctuation">;</span>
 
-    private Singleton() {
-    }
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
 
-    public static Singleton getInstance() {
-        if (instance == null) {
-            synchronized (Singleton.class) {
-                if (instance == null) {
-                    instance = new Singleton();
-                }
-            }
-        }
-        return instance;
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>Singleton<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><p>优点：</p>
 <ul>
 <li>延迟初始化：外部类加载时并不需要立即加载内部类，就不会去初始化 instance</li>
 <li>线程安全：JVM在执行类的初始化阶段，会获得一个可以同步多个线程对同一个类的初始化的锁</li>
 </ul>
-<pre><code class="language-java">public class Singleton {
-    private Singleton() {
-    }
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
 
-    private static class SingletonHolder {
-        private static final Singleton INSTANCE = new Singleton();
-    }
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">SingletonHolder</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Singleton INSTANCE <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public static Singleton getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Singleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> SingletonHolder<span class="token punctuation">.</span>INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>可以防止反射攻击</p>
-<pre><code class="language-java">public enum Singleton{
-    INSTANCE;
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> Singleton<span class="token punctuation">{</span>
+    INSTANCE<span class="token punctuation">;</span>
 
-    private String objName;
+    <span class="token keyword">private</span> String objName<span class="token punctuation">;</span>
 
-    public String getObjName() {
-        return objName;
-    }
+    <span class="token keyword">public</span> String <span class="token function">getObjName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> objName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setObjName(String objName) {
-        this.objName = objName;
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setObjName</span><span class="token punctuation">(</span>String objName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>objName <span class="token operator">=</span> objName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -352,6 +362,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/vegas.min.js"></script>
   
     <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
   
     <script src="/js/jquery.mousewheel.pack.js"></script>
   

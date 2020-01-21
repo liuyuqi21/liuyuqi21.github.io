@@ -1,0 +1,449 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="百度一面一面面试官人真的很好，我项目介绍这块真的太垃圾了，他都叫我慢慢说，画张图理清思路，我画完图说了一遍他都觉得我这个项目没啥特点，他就随便问，好多地方我就是没过脑子随便乱说，他就说我不能这么说，面试完了他还跟我说了很多建议，说我学一个东西不能就随便学一下，要去了解他的原理，还说很多中小型企业的人，都是停留在写业务代码的阶段，写个十几年都跟两三年没什么区别，哎。一共聊了一个多小时，估计我是...">
+  
+  <title>秋招面经 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+  
+    <div class="item next">
+      <a href="/2020/01/19/JAVA-集合框架/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        JAVA 集合框架
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>秋招面经</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2020-01-20</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/面经/">面经</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/面试/">面试</a>
+      
+      </span>
+      
+    </p>
+    
+    <h2 id="百度"><a href="#百度" class="headerlink" title="百度"></a>百度</h2><h3 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h3><p>一面面试官人真的很好，我项目介绍这块真的太垃圾了，他都叫我慢慢说，画张图理清思路，我画完图说了一遍他都觉得我这个项目没啥特点，他就随便问，好多地方我就是没过脑子随便乱说，他就说我不能这么说，面试完了他还跟我说了很多建议，说我学一个东西不能就随便学一下，要去了解他的原理，还说很多中小型企业的人，都是停留在写业务代码的阶段，写个十几年都跟两三年没什么区别，哎。一共聊了一个多小时，估计我是他最后一个面试的人他也不着急，有时间就多说会儿吧。</p>
+<ul>
+<li>自我介绍，介绍项目</li>
+<li>项目中es的使用，写了一条sql语句，让我转换为es</li>
+<li>项目的难点</li>
+<li>在项目中学到了什么</li>
+<li>定时发送邮件怎么实现的 我说框架里的，但是最终会转换为 shell 脚本，他问我crontab 用过吗，我。学过，没怎么用，我就记得他那个分时日月周</li>
+<li>队列怎么实现的，除了redis有用过其他的队列吗 我，没用过，知道一点，比如 RabbitMQ 他问我，RabbitMQ又是怎么实现队列的呢</li>
+<li>redis 有什么特点</li>
+<li>zset 怎么使用</li>
+<li>数据库中什么时候要建立索引</li>
+<li>乐观锁和悲观锁，读锁是乐观锁还是悲观锁</li>
+<li>mysql 主从复制</li>
+<li>binlog 里存的是什么</li>
+<li>项目中数据库的量级多少 我脑袋一片空白，说了句不大，他说我不能这么说。</li>
+<li>tcp 和 udp 介绍一下</li>
+<li>进程间通信的方式，并说出每一种的特点</li>
+<li>大小堆了解吗 用在什么地方</li>
+<li>linux 内存泄漏怎么解决</li>
+<li>c 语言学的如何</li>
+<li>算法 链表中倒数第k个节点，只能遍历一次 </li>
+<li>算法 跳台阶</li>
+<li>单元测试了解吗</li>
+<li>在生活中和别人遇到冲突怎么解决</li>
+<li>觉得自己的表现怎么样</li>
+<li>给我提了一些建议</li>
+<li>有什么想问他的</li>
+</ul>
+<h3 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h3><p>二面面试官拿到我的简历看了几秒就在笑，我？？？，他说你这怎么是群众，我，没交团费吧，我也不知道是团员还是群众了，反正不入党都一样，他说，24岁以后没入党才会变为群众，或者没交团费。</p>
+<ul>
+<li>又是介绍项目，我巴拉巴拉说完了，他。。啥也没问，估计他觉得这项目太没意思了</li>
+<li>redis 里的数据结构 zset 底层是怎么样的</li>
+<li>链表怎么插入和删除</li>
+<li>b+ 树是怎么样的</li>
+<li>b+ 树的根节点是怎么存放索引的，我。。不知道，瞎扯了半天开始说聚簇索引非聚簇。。。他又笑我然后不问了</li>
+<li>nginx 和 php 怎么通信的</li>
+<li>tcp 和 udp</li>
+<li>linux 问一个日志文件里，每行都是 key=xxx，如何计算出每一种key的数量，我在纸上先写了gerp。。然后写了个awk。。我是真不会写。他就说我用grep但是不知道xxx是什么，所以要先得到xxx，我说用awk，awk可以得到第几列的字段，但是他怎么写我忘了，反正能这么做，他说好，可以。那么得到以后如何去重呢，我想了会儿，说linux应该是有一个命令去重的，看过来着，他说有，但是我可以用别的方式，我就说，那php就是放到数组里，然后用一个函数去重吧。ok。</li>
+<li>他盯着我的简历，突然像发现了什么宝贝，说，诶，发现一个有意思的了，然后又问我es。。。match和match_parse有什么区别，match和term有什么区别。</li>
+<li>算法 反转二叉树</li>
+<li>算法 蓄水池问题  哎，这个我看到过但是不记得怎么做了，临时想了半天给他解释了好久思路，最后他认可了，说了句挺聪明，然后就结束面试了，然后我就被小姐姐带走，小姐姐告诉我出门左转</li>
+</ul>
+<h2 id="奇安信"><a href="#奇安信" class="headerlink" title="奇安信"></a>奇安信</h2><p>不想吐槽这个辣鸡公司，0好感，面试觉得自己像个犯人被拷问。后来又被拉起来面了一次，那次的一二面面试官态度都不错但是没问什么东西，最后开价太低拒了。</p>
+<ul>
+<li>Mvc 解释</li>
+<li>面向对象</li>
+<li>单例模式</li>
+<li>闭包</li>
+<li>yield </li>
+<li>Self 和 static 区别 </li>
+<li>MySQL int 类型可以存多大的数字</li>
+<li>Linux 命令 crontab ps </li>
+<li>Xss csrf </li>
+<li>Redis 怎么查看内存占用</li>
+<li>rdb aof，rdb磁盘上怎么写</li>
+<li>Redis数据类型</li>
+<li>32 位是多少字节</li>
+<li>Nginx</li>
+<li>Php 怎么起一个进程后台运行</li>
+<li>Php 怎么返回一个状态码</li>
+<li>Curl 怎么用的，怎么得到状态码</li>
+<li>Php 怎么下载扩展</li>
+<li>Redis 内部结构动态字符串</li>
+<li>Redis 过期策略：惰性过期和定期过期</li>
+<li>nginx 禁止访问目录</li>
+<li>git 撤销暂存</li>
+</ul>
+<h2 id="美团一面"><a href="#美团一面" class="headerlink" title="美团一面"></a>美团一面</h2><p>转 Java 后的第一面，开头就跟面试官说我学 Java 才两个多月。。然后他问了挺多 Java 的问题，好多我就说没学到，最后他问我在不在北京，下周去现场面。然后两天后又告诉我没 hc 了。</p>
+<ul>
+<li>介绍项目</li>
+<li>分布式锁的实现</li>
+<li>分布式锁过期解决</li>
+<li>分布式数据库主从复制</li>
+<li>前缀树是什么 前缀树的使用场景</li>
+<li>MySQL 死锁发生的原因和解决</li>
+<li>MySQL 分别建立索引 a,b,c ，语句 select …where b=x,c=x,a=x 能不能用到索引，建立联合索引能不能用到，a=x,b&gt;x，能不能用到，用到几个索引</li>
+<li>B 树和 b+ 树的区别 b+ 树的优点</li>
+<li>MVCC 怎么实现的</li>
+<li>Linux cpu满了怎么排查</li>
+<li>怎么查看占 cpu 最多的线程</li>
+<li>Linux怎么搜索文件中的字符串，写到另一个文件中</li>
+<li>liunx 网络相关命令</li>
+<li>Java = 和equals</li>
+<li>Java contentMap线程安全怎么实现</li>
+<li>哈希冲突解决的方法</li>
+<li>Java异常</li>
+<li>Java 类加载</li>
+<li>什么是泛型 泛型的使用场景</li>
+<li>面向过程和面向对象</li>
+<li>多态 父类如何调用子类的方法</li>
+<li>单例模式的用途 静态内部类实现单例模式的方式</li>
+<li>工厂模式的用途</li>
+<li>策略模式的用途</li>
+<li>Get 和 post请求的区别</li>
+<li>网页请求的整个过程</li>
+<li>说说自己的优缺点，对缺点的改进</li>
+</ul>
+<h2 id="字节跳动"><a href="#字节跳动" class="headerlink" title="字节跳动"></a>字节跳动</h2><p>最想去的公司，没想到投简历后不到半天就约面试了，1.5 号约的 1.16 又被我改到 1.19。一面结束的时候以为自己凉凉，因为算法题没想出来，没想到第二天 hr 约了年后二面。</p>
+<h3 id="一面-1"><a href="#一面-1" class="headerlink" title="一面"></a>一面</h3><ul>
+<li>介绍项目</li>
+<li>分布式锁的实现 如果判断锁是不是自己的（value = 线程 ID来判断，面试官说线程 ID 不可以，问我线程 ID 长啥样， 不知道，你们实际用的是什么，记不清）</li>
+<li>java 有什么数据类型</li>
+<li>float 和 double 分别占用多少字节</li>
+<li>java 有哪些集合 map 有几种</li>
+<li>hashMap 怎么实现的</li>
+<li>hashMap 怎么插入的，只是插入到链表不会变吗（大于8变成红黑树），怎么哈希的，怎么扩容的</li>
+<li>ConcurrentHashMap 怎么实现的，分段锁怎么实现的</li>
+<li>数据库 索引怎么实现的 为什么用 b+ 树</li>
+<li>b+ 树为什么左右节点用指针连接 我：b 树没有左右指针需要中序遍历 面试官：什么时候需要中序遍历</li>
+<li>为什么二级索引存主键 ID 不直接存数据位置</li>
+<li>sql 语句怎么执行的，比如 select</li>
+<li>索引覆盖是什么</li>
+<li>tcp 如何建立连接</li>
+<li>为什么三次握手 第二次握手后没有回复会怎么样 重发 会一直重发吗，我：有一定次数（不确定）</li>
+<li>tcp 怎么保证可靠性</li>
+<li>拥塞控制的详细过程 在现代网络环境中，拥塞控制有什么问题</li>
+<li>设计可靠 udp</li>
+<li>如何判断一个字符串是否合法，括号配对问题，如 (() 非法<ul>
+<li>时间复杂度 空间复杂度（我用栈 O(n)）</li>
+<li>空间复杂度优化（用变量计数） </li>
+<li>如果 * 可以代表 ( 或者 ) 或者空怎么做 <a href="https://leetcode-cn.com/problems/valid-parenthesis-string/" target="_blank" rel="external">原题链接</a></li>
+</ul>
+</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#百度"><span class="toc-text">百度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一面"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二面"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#奇安信"><span class="toc-text">奇安信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#美团一面"><span class="toc-text">美团一面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字节跳动"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一面-1"><span class="toc-text">一面</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+
+  
+
+  
+    <a href="/2020/01/19/JAVA-集合框架/" class="next">下一篇 JAVA 集合框架 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

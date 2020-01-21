@@ -1,0 +1,435 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="表MySQL 使用 InnoDB 存储表时，会将表的定义和数据索引等信息分开存储，其中前者存储在 .frm 文件中，后者存储在 .ibd 文件中。
+索引索引工作原理索引存储了指向表中某一行的指针
+当某个 SQL 语句运行时，数据库会检查在查询的列上是否有索引，如果有索引，数据库会接着检查使用这个索引做查询是否合理，因为有些场景下，使用索引比全表扫描更加低效。
+可以强制数据库使用索引
+哈希索引...">
+  
+  <title>MySQL 底层原理 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/08/25/图解 HTTP 笔记/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        图解 HTTP 笔记
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/07/18/linux-常见问题/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        linux 常见问题
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>MySQL 底层原理</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-08-14</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/MySQL/">MySQL</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/MySQL/">MySQL</a>
+      
+        
+          /
+        
+        
+        <a href="/tags/面试/">面试</a>
+      
+      </span>
+      
+    </p>
+    
+    <h1 id="表"><a href="#表" class="headerlink" title="表"></a>表</h1><p>MySQL 使用 InnoDB 存储表时，会将表的定义和数据索引等信息分开存储，其中前者存储在 .frm 文件中，后者存储在 .ibd 文件中。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="索引工作原理"><a href="#索引工作原理" class="headerlink" title="索引工作原理"></a>索引工作原理</h2><p>索引存储了指向表中某一行的指针</p>
+<p>当某个 SQL 语句运行时，数据库会检查在查询的列上是否有索引，如果有索引，数据库会接着检查使用这个索引做查询是否合理，因为有些场景下，使用索引比全表扫描更加低效。</p>
+<p>可以强制数据库使用索引</p>
+<h2 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a>哈希索引</h2><p>虽然查找数据是 O(1)，但是对于比如分组、排序、比较，时间复杂度会退化为 O(n)，而树形的能够保持 O(log(n))。</p>
+<p>InnoDB 不支持哈希索引</p>
+<h2 id="B-Tree-索引"><a href="#B-Tree-索引" class="headerlink" title="B+Tree 索引"></a>B+Tree 索引</h2><h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>B Tree 指的是 Balance Tree，也就是平衡树。平衡树是一颗查找树，并且所有叶子节点位于同一层。每个节点由 key 和 data 组成。</p>
+<p>B+ Tree 是基于 B Tree 和叶子节点顺序访问指针进行实现，它具有 B Tree 的平衡性，并且通过顺序访问指针来提高区间查询的性能。<br>每颗 B+ 数由很多页面组成，数据库系统将索引的一个节点的大小设置为页的大小。B+ 数的页面可分为</p>
+<ul>
+<li>叶子节点：存储记录的所有内容。</li>
+<li>非叶子节点：存储索引值和对应的页号</li>
+</ul>
+<p>b+ 树结构：</p>
+<ul>
+<li>相同层次的页面是一个双向链表连接起来的。</li>
+<li>页内数据是按索引键排序的。</li>
+<li>页面的任一记录的索引键值不小于其左兄弟页面的任何记录。</li>
+</ul>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><ul>
+<li>进行查找操作时，首先在根节点进行二分查找，找到一个 key 所在的指针，然后递归地在指针所指向的节点进行查找。直到查找到叶子节点，然后在叶子节点上进行二分查找，找出 key 所对应的 data。</li>
+<li>插入删除操作会破坏平衡树的平衡性，因此在插入删除操作之后，需要对树进行一个分裂、合并、旋转等操作来维护平衡性。</li>
+</ul>
+<h3 id="与-b-树的比较"><a href="#与-b-树的比较" class="headerlink" title="与 b 树的比较"></a>与 b 树的比较</h3><ol>
+<li>b+ 树只在叶子节点存储数据，b 树的非叶子节点也会存储数据，需要中序遍历获得所有节点。</li>
+<li>叶子节点之间增加了链表，获取所有节点不再需要中序遍历</li>
+</ol>
+<p>优点：</p>
+<ol>
+<li>范围查找，定位 min 与 max 之后，中间叶子节点就是结果集，不用中序回溯</li>
+<li>叶子节点存储实际记录行，适合大数据量磁盘存储，非叶子节点存储记录的 PK，用于查询加速，适合内存存储</li>
+<li>非叶子节点不存储实际记录只存储 key，在相同内存下，b+ 树能够存储更多索引</li>
+</ol>
+<h3 id="与红黑树的比较"><a href="#与红黑树的比较" class="headerlink" title="与红黑树的比较"></a>与红黑树的比较</h3><p>红黑树等平衡树也可以用来实现索引，但是文件系统及数据库系统普遍采用 B+ Tree 作为索引结构，主要有以下两个原因：</p>
+<ol>
+<li>更少的查找次数</li>
+</ol>
+<ul>
+<li>平衡树查找操作的时间复杂度和树高 h 相关，O(h)=O(logdN)，其中 d 为每个节点的出度。</li>
+<li>红黑树的出度为 2，而 B+ Tree 的出度一般都非常大，所以红黑树的树高 h 很明显比 B+ Tree 大非常多，查找的次数也就更多。</li>
+</ul>
+<ol>
+<li>利用磁盘预读特性</li>
+</ol>
+<ul>
+<li>为了减少磁盘 I/O 操作，磁盘往往不是严格按需读取，而是每次都会预读。预读过程中，磁盘进行顺序读取，顺序读取不需要进行磁盘寻道，并且只需要很短的旋转时间，速度会非常快。</li>
+<li>操作系统一般将内存和磁盘分割成固定大小的块，每一块称为一页，内存与磁盘以页为单位交换数据。数据库系统将索引的一个节点的大小设置为页的大小，使得一次 I/O 就能完全载入一个节点。并且可以利用预读特性，相邻的节点也能够被预先载入。</li>
+</ul>
+<h1 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h1><p>show engine innodb status; 可以查看InnoDB的锁情况，也可以调试死锁</p>
+<h2 id="锁的种类"><a href="#锁的种类" class="headerlink" title="锁的种类"></a>锁的种类</h2><ul>
+<li>读锁：共享，不堵塞 <code>select ... lock in share mode</code></li>
+<li>写锁: 排他，堵塞 <code>select ... for update</code></li>
+<li>InnoDB 引擎中的 update，delete，insert 语句自动加排他锁</li>
+</ul>
+<h2 id="并发控制机制（乐观锁和悲观锁）"><a href="#并发控制机制（乐观锁和悲观锁）" class="headerlink" title="并发控制机制（乐观锁和悲观锁）"></a>并发控制机制（乐观锁和悲观锁）</h2><ul>
+<li>悲观锁：共享资源每次只给一个线程使用，其他线程阻塞，用完后再把资源转让给其他线程。传统关系型数据库里边就用到了很多这种锁机制，行锁表锁读锁写锁，都是在操作前先上锁。</li>
+<li>乐观锁：在更新时判断在此期间别人有没有去更新这个数据，可以使用版本号机制和 CAS 算法实现。乐观锁适用于多读的应用类型，这样可以提供吞吐量。</li>
+</ul>
+<h3 id="乐观锁实现方式：版本号机制"><a href="#乐观锁实现方式：版本号机制" class="headerlink" title="乐观锁实现方式：版本号机制"></a>乐观锁实现方式：版本号机制</h3><p>一般是在数据表中加上一个数据版本号version字段，表示数据被修改的次数，当数据被修改时，version值会加一。当线程A要更新数据值时，在读取数据的同时也会读取version值，在提交更新时，若刚才读取到的version值为当前数据库中的version值相等时才更新，否则重试更新操作，直到更新成功。</p>
+<h3 id="乐观锁实现方式：CAS-算法"><a href="#乐观锁实现方式：CAS-算法" class="headerlink" title="乐观锁实现方式：CAS 算法"></a>乐观锁实现方式：CAS 算法</h3><p>即<strong>compare and swap（比较与交换）</strong>，是一种有名的<strong>无锁算法</strong>。<br>CAS算法涉及到三个操作数：</p>
+<ul>
+<li>需要读写的内存值 V</li>
+<li>进行比较的值 A</li>
+<li>拟写入的新值 B<br>当且仅当 V 的值等于 A时，CAS通过原子方式用新值B来更新V的值，否则不会执行任何操作（比较和替换是一个原子操作）。一般情况下是一个自旋操作，即不断的重试。</li>
+</ul>
+<h3 id="乐观锁的缺点"><a href="#乐观锁的缺点" class="headerlink" title="乐观锁的缺点"></a>乐观锁的缺点</h3><ul>
+<li>ABA 问题：不能保证一个值 A 被改为 B 后又改为 A，CAS 认为他没有被修改过</li>
+<li>循环时间开销大：如果长时间不成功，会给 CPU 带来非常大的执行开销</li>
+<li>只能保证一个共享变量的原子操作</li>
+</ul>
+<h2 id="锁的粒度"><a href="#锁的粒度" class="headerlink" title="锁的粒度"></a>锁的粒度</h2><ul>
+<li>表锁：系统性能开销最小，会锁定整张表,<strong>MyISAM</strong> 使用表锁</li>
+</ul>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>最大程度的支持并发处理,但是也带来最大的锁开销，<strong>InnoDB</strong> 使用行级锁<br>为了支持多粒度锁定，InnoDB 引入了意向锁，意向锁是一种表级锁。</p>
+<p>InnoDB 的行锁是实现在索引上的，而不是锁在物理行记录上，如果访问没有命中索引，也无法使用行锁，将退化为表锁</p>
+<ul>
+<li>意向共享锁：事务想要在获得表中某些记录的共享锁，需要在表上先加意向共享锁；</li>
+<li>意向互斥锁：事务想要在获得表中某些记录的互斥锁，需要在表上先加意向互斥锁；</li>
+</ul>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span> <span class="token keyword">for</span> <span class="token keyword">update</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//加锁</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//快照读，不加锁（MVCC）</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://blog.csdn.net/xiangwanpeng/article/details/54310955" target="_blank" rel="external">数据库索引是怎样工作的？</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/23624390" target="_blank" rel="external">深入浅出数据库索引原理</a></li>
+<li><a href="http://www.uml.org.cn/sjjm/201107145.asp" target="_blank" rel="external">MySQl 索引背后的数据结构及算法原理</a></li>
+<li><a href="http://tencentdba.com/blog/innodb%E9%A1%B5%E9%9D%A2%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84-1/" target="_blank" rel="external">innodb页面存储结构-1</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961428&amp;idx=1&amp;sn=31a9eb967941d888fbd4bb2112e9602b&amp;chksm=bd2d0d888a5a849e7ebaa7756a8bc1b3d4e2f493f3a76383fc80f7e9ce7657e4ed2f6c01777d&amp;scene=21#wechat_redirect" target="_blank" rel="external">InnoDB，5项最佳实践，知其所以然？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961471&amp;idx=1&amp;sn=da257b4f77ac464d5119b915b409ba9c&amp;chksm=bd2d0da38a5a84b5fc1417667fe123f2fbd2d7610b89ace8e97e3b9f28b794ad147c1290ceea&amp;scene=21#wechat_redirect" target="_blank" rel="external">InnoDB，select为啥会阻塞insert？</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#表"><span class="toc-text">表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引工作原理"><span class="toc-text">索引工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#哈希索引"><span class="toc-text">哈希索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Tree-索引"><span class="toc-text">B+Tree 索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构"><span class="toc-text">数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作"><span class="toc-text">操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与-b-树的比较"><span class="toc-text">与 b 树的比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与红黑树的比较"><span class="toc-text">与红黑树的比较</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#锁机制"><span class="toc-text">锁机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的种类"><span class="toc-text">锁的种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发控制机制（乐观锁和悲观锁）"><span class="toc-text">并发控制机制（乐观锁和悲观锁）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁实现方式：版本号机制"><span class="toc-text">乐观锁实现方式：版本号机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁实现方式：CAS-算法"><span class="toc-text">乐观锁实现方式：CAS 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁的缺点"><span class="toc-text">乐观锁的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的粒度"><span class="toc-text">锁的粒度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行锁"><span class="toc-text">行锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/08/25/图解 HTTP 笔记/" class="prev">&larr; 上一篇 图解 HTTP 笔记</a>
+  
+
+  
+
+  
+    <a href="/2019/07/18/linux-常见问题/" class="next">下一篇 linux 常见问题 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

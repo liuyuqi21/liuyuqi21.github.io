@@ -590,15 +590,32 @@ figure.highlight td.gutter {
 figure.highlight .line {
   height: 22px;
 }
+pre[class*="language-"] {
+  margin: 0.5em -10px 0px -10px !important;
+}
 code {
-  font-family: Source Code Pro, Lucida Console, Consolas, Monaco, Courier New;
-  background-color: #ddd;
-  padding-left: 12px;
-  padding-right: 12px;
+  font-family: Consolas, Source Code Pro, Monaco, Lucida Console, Courier New;
+  color: #277188;
+  background: #fbf7f8;
 }
 table .line {
-  font-family: Source Code Pro, Lucida Console, Consolas, Monaco, Courier New;
+  font-family: Consolas, Source Code Pro, Monaco, Lucida Console, Courier New;
   height: 22px;
+}
+td,
+th {
+  padding: 6px 13px;
+  border: 1px solid #c0c0c0;
+}
+article>table {
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+th {
+  background-color: #ddd;
+}
+table tr:nth-child(even) {
+  background-color: #f5f5f5;
 }
 blockquote {
   background-color: #eee;

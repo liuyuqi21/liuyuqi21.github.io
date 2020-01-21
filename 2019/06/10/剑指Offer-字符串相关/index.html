@@ -20,10 +20,10 @@
 public String replaceSpace(StringBuffer str) {
     int blank = 0;
     for (int i = 0; i &lt; str.length(); i++) {
-        if (str.charAt(i) == &#39; &#39;)
+        if (str.charAt(i) == ' ')
             blank++;
     }
-    ...">
+    int len ...">
   
   <title>剑指Offer-字符串相关 [ Cellophane ]</title>
   
@@ -33,6 +33,7 @@ public String replaceSpace(StringBuffer str) {
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
@@ -162,144 +163,140 @@ public String replaceSpace(StringBuffer str) {
     </p>
     
     <h2 id="5-替换空格"><a href="#5-替换空格" class="headerlink" title="5. 替换空格"></a>5. 替换空格</h2><p><a href="https://www.nowcoder.com/practice/4060ac7e3e404ad1a894ef3e17650423?tpId=13&amp;tqId=11155&amp;tPage=1&amp;rp=1&amp;ru=/ta/coding-interviews&amp;qru=/ta/coding-interviews/question-ranking&amp;from=cyc_github" target="_blank" rel="external">牛客</a></p>
-<pre><code class="language-java">public String replaceSpace(StringBuffer str) {
-    int blank = 0;
-    for (int i = 0; i &lt; str.length(); i++) {
-        if (str.charAt(i) == &#39; &#39;)
-            blank++;
-    }
-    int len = str.length();
-    int newLen = len + blank * 2;
-    str.setLength(newLen);
-    newLen--;
-    len--;
-    while (len &gt;= 0 &amp;&amp; newLen &gt; len) {
-        char c = str.charAt(len--);
-        if (c == &#39; &#39;) {
-            str.setCharAt(newLen--, &#39;0&#39;);
-            str.setCharAt(newLen--, &#39;2&#39;);
-            str.setCharAt(newLen--, &#39;%&#39;);
-        } else {
-            str.setCharAt(newLen--, c);
-        }
-    }
-    return str.toString();
-}
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> String <span class="token function">replaceSpace</span><span class="token punctuation">(</span>StringBuffer str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> blank <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">' '</span><span class="token punctuation">)</span>
+            blank<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> newLen <span class="token operator">=</span> len <span class="token operator">+</span> blank <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    str<span class="token punctuation">.</span><span class="token function">setLength</span><span class="token punctuation">(</span>newLen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    newLen<span class="token operator">--</span><span class="token punctuation">;</span>
+    len<span class="token operator">--</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>len <span class="token operator">>=</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> newLen <span class="token operator">></span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">char</span> c <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>len<span class="token operator">--</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> <span class="token string">' '</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            str<span class="token punctuation">.</span><span class="token function">setCharAt</span><span class="token punctuation">(</span>newLen<span class="token operator">--</span><span class="token punctuation">,</span> <span class="token string">'0'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            str<span class="token punctuation">.</span><span class="token function">setCharAt</span><span class="token punctuation">(</span>newLen<span class="token operator">--</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            str<span class="token punctuation">.</span><span class="token function">setCharAt</span><span class="token punctuation">(</span>newLen<span class="token operator">--</span><span class="token punctuation">,</span> <span class="token string">'%'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            str<span class="token punctuation">.</span><span class="token function">setCharAt</span><span class="token punctuation">(</span>newLen<span class="token operator">--</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> str<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="38-字符串的排列"><a href="#38-字符串的排列" class="headerlink" title="38. 字符串的排列"></a>38. 字符串的排列</h2><h2 id="46-把数字翻译成字符串"><a href="#46-把数字翻译成字符串" class="headerlink" title="46. 把数字翻译成字符串"></a>46. 把数字翻译成字符串</h2><p><a href="https://leetcode-cn.com/problems/decode-ways/" target="_blank" rel="external">leetcide 91</a></p>
-<pre><code class="language-java">public int numDecodings(String s) {
-        if (s == null || s.length() == 0) {
-            return 0;
-        }
-        int len = s.length();
-        int[] dp = new int[len + 1];
-        dp[len] = 1;
-        if (s.charAt(len - 1) == &#39;0&#39;) {
-            dp[len - 1] = 0;
-        } else {
-            dp[len - 1] = 1;
-        }
-        for (int i = len - 2; i &gt;= 0; i--) {
-            if (s.charAt(i) == &#39;0&#39;) {
-                dp[i] = 0;
-                continue;
-            }
-            if ((s.charAt(i) - &#39;0&#39;) * 10 + (s.charAt(i + 1) - &#39;0&#39;) &lt;= 26) {
-                dp[i] = dp[i + 1] + dp[i + 2];
-            } else {
-                dp[i] = dp[i + 1];
-            }
-        }
-        return dp[0];
-    }
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">numDecodings</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>s <span class="token operator">==</span> null <span class="token operator">||</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">int</span> len <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> dp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">int</span><span class="token punctuation">[</span>len <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        dp<span class="token punctuation">[</span>len<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>len <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">'0'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            dp<span class="token punctuation">[</span>len <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            dp<span class="token punctuation">[</span>len <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> len <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">'0'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                dp<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token keyword">continue</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token string">'0'</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span> <span class="token operator">+</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token string">'0'</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">26</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                dp<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> dp<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> dp<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                dp<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> dp<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> dp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="48-最长不含重复字符的子字符串"><a href="#48-最长不含重复字符的子字符串" class="headerlink" title="48. 最长不含重复字符的子字符串"></a>48. 最长不含重复字符的子字符串</h2><p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="external">leetcode 3</a></p>
-<pre><code class="language-java">public int lengthOfLongestSubstring(String s) {
-    int count = 0;
-    int i = 0, j = 0, res = 0;
-    Set&lt;Character&gt; set = new HashSet&lt;&gt;();
-    while (i &lt; s.length() &amp;&amp; j &lt; s.length()) {
-        if (!set.contains(s.charAt(j))) {
-            set.add(s.charAt(j++));
-            res = Math.max(res, j - i);
-        } else {
-            set.remove(s.charAt(i++));
-        }
-    }
-    return res;
-}
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">lengthOfLongestSubstring</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> res <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    Set<span class="token operator">&lt;</span>Character<span class="token operator">></span> set <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>set<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>j<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            res <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> j <span class="token operator">-</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            set<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="50-第一个只出现一次的字符位置"><a href="#50-第一个只出现一次的字符位置" class="headerlink" title="50. 第一个只出现一次的字符位置"></a>50. 第一个只出现一次的字符位置</h2><p><a href="https://leetcode-cn.com/problems/first-unique-character-in-a-string/" target="_blank" rel="external">leetcode 387</a></p>
-<pre><code class="language-java">public int firstUniqChar(String s) {
-    if (s == null || s.length() == 0) {
-        return -1;
-    }
-    if (s.length() == 1) {
-        return 0;
-    }
-    int[] c = new int[256];
-    for (int i = 0; i &lt; s.length(); i++) {
-        c[s.charAt(i)]++;
-    }
-    for (int i = 0; i &lt; s.length(); i++) {
-        if (c[s.charAt(i)] == 1) {
-            return i;
-        }
-    }
-    return -1;
-}
-</code></pre>
-<h2 id="58-1-翻转单词顺序列"><a href="#58-1-翻转单词顺序列" class="headerlink" title="58.1 翻转单词顺序列"></a>58.1 翻转单词顺序列</h2><p><a href="https://leetcode-cn.com/problems/reverse-words-in-a-string/description/" target="_blank" rel="external">leetcode 151</a></p>
-<pre><code class="language-java">public String reverseWords(String s) {
-    if (s.length() &lt; 2) {
-        return s;
-    }
-    s = s.trim();
-    int length = s.length();
-    char[] c = s.toCharArray();
-    int start = 0, end = 0;
-    reverse(c, start, length - 1);
-    while (end &lt;= length) {
-        if (end == length || c[end] == &#39; &#39;) {
-            reverse(c, start, end - 1);
-            start = end + 1;
-        }
-        end++;
-    }
-    return new String(c);
-}
-public void reverse(char[] c, int start, int end) {
-    while (start &lt; end) {
-        char temp = c[start];
-        c[start] = c[end];
-        c[end] = temp;
-        start++;
-        end--;
-    }
-}
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">firstUniqChar</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>s <span class="token operator">==</span> null <span class="token operator">||</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> c <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">int</span><span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        c<span class="token punctuation">[</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c<span class="token punctuation">[</span>s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> i<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="58-1-翻转单词顺序列"><a href="#58-1-翻转单词顺序列" class="headerlink" title="58.1 翻转单词顺序列"></a>58.1 翻转单词顺序列</h2><p><a href="https://www.nowcoder.com/practice/3194a4f4cf814f63919d0790578d51f3?tpId=13&amp;tqId=11197&amp;tPage=1&amp;rp=1&amp;ru=/ta/coding-interviews&amp;qru=/ta/coding-interviews/question-ranking&amp;from=cyc_github" target="_blank" rel="external">牛客</a></p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> String <span class="token function">ReverseSentence</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> n <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> c <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">toCharArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> start <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> start<span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">' '</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> start<span class="token punctuation">,</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            start <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> start<span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> c<span class="token punctuation">,</span> <span class="token keyword">int</span> i<span class="token punctuation">,</span> <span class="token keyword">int</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">char</span> t <span class="token operator">=</span> c<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        c<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> c<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        c<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> t<span class="token punctuation">;</span>
+        i<span class="token operator">++</span><span class="token punctuation">;</span>
+        j<span class="token operator">--</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="58-2-左旋转字符串"><a href="#58-2-左旋转字符串" class="headerlink" title="58.2 左旋转字符串"></a>58.2 左旋转字符串</h2><p><a href="https://www.nowcoder.com/practice/12d959b108cb42b1ab72cef4d36af5ec?tpId=13&amp;tqId=11196&amp;tPage=1&amp;rp=1&amp;ru=/ta/coding-interviews&amp;qru=/ta/coding-interviews/question-ranking&amp;from=cyc_github" target="_blank" rel="external">牛客</a></p>
-<pre><code class="language-java">public String LeftRotateString(String str, int n) {
-    if (str == null || str.length() == 0 || n &lt;= 0) {
-        return str;
-    }
-    char[] c = str.toCharArray();
-    reverse(c, 0, n - 1);
-    reverse(c, n, str.length() - 1);
-    //只能最后翻转整体
-    reverse(c, 0, str.length() - 1);
-    return new String(c);
-}
-public void reverse(char[] c, int start, int end) {
-    while (start &lt; end) {
-        char temp = c[start];
-        c[start] = c[end];
-        c[end] = temp;
-        start++;
-        end--;
-    }
-}
-</code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> String <span class="token function">LeftRotateString</span><span class="token punctuation">(</span>String str<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>str <span class="token operator">==</span> null <span class="token operator">||</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">||</span> n <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> str<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> c <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">toCharArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> n<span class="token punctuation">,</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//只能最后翻转整体</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> c<span class="token punctuation">,</span> <span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>start <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">char</span> temp <span class="token operator">=</span> c<span class="token punctuation">[</span>start<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        c<span class="token punctuation">[</span>start<span class="token punctuation">]</span> <span class="token operator">=</span> c<span class="token punctuation">[</span>end<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        c<span class="token punctuation">[</span>end<span class="token punctuation">]</span> <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+        start<span class="token operator">++</span><span class="token punctuation">;</span>
+        end<span class="token operator">--</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -409,6 +406,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/vegas.min.js"></script>
   
     <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
   
     <script src="/js/jquery.mousewheel.pack.js"></script>
   

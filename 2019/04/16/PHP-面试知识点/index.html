@@ -32,6 +32,7 @@
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
@@ -136,47 +137,57 @@
       </span>
       
       
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/面试/">面试</a>
+      
+      </span>
+      
     </p>
     
     <h1 id="引用变量"><a href="#引用变量" class="headerlink" title="引用变量"></a>引用变量</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在 php 中意味着用不同的名字访问同一个变量内容</p>
 <h2 id="定义方式"><a href="#定义方式" class="headerlink" title="定义方式"></a>定义方式</h2><p>使用 &amp; 符号 </p>
 <h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>COW（Copy On Write）机制：只有在 $a 或者 $b 进行修改操作，才会新开辟一块空间</p>
-<pre><code class="language-php">    $a = range(0,1000);
-    var_dump(memory_get_usage());//查看内存使用情况
-    //定义变量b，将a的值赋值给b
-    //COW机制 Copy On Write 只有在$a或者$b进行修改操作，才会新开辟一块空间
-    $b = $a;//此时a,b指向同一块内存空间
-    $b = &amp;$a;//此时修改$a也不会开辟新的空间。a，b始终指向同一块内存
-    var_dump(memory_get_usage());
-    $a = range(0,1000);//a指向新开辟了空间
-    var_dump(menory_get_usage());
-</code></pre>
+<pre class="line-numbers language-php"><code class="language-php">    <span class="token variable">$a</span> <span class="token operator">=</span> <span class="token function">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token function">memory_get_usage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//查看内存使用情况</span>
+    <span class="token comment" spellcheck="true">//定义变量b，将a的值赋值给b</span>
+    <span class="token comment" spellcheck="true">//COW机制 Copy On Write 只有在$a或者$b进行修改操作，才会新开辟一块空间</span>
+    <span class="token variable">$b</span> <span class="token operator">=</span> <span class="token variable">$a</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//此时a,b指向同一块内存空间</span>
+    <span class="token variable">$b</span> <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token variable">$a</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//此时修改$a也不会开辟新的空间。a，b始终指向同一块内存</span>
+    <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token function">memory_get_usage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$a</span> <span class="token operator">=</span> <span class="token function">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//a指向新开辟了空间</span>
+    <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token function">menory_get_usage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="zval-变量容器"><a href="#zval-变量容器" class="headerlink" title="zval 变量容器"></a>zval 变量容器</h2><p><code>xdebug_debug_zval(&#39;a&#39;);</code> 打印出变量a的结构</p>
 <ul>
 <li>refcount = 1 代表有一个对象指向这个内存空间</li>
 <li>is_ref = 0 表示是不是引用，0 代表 false</li>
 </ul>
-<h2 id="unset-只会取消引用，不会销毁空间"><a href="#unset-只会取消引用，不会销毁空间" class="headerlink" title="unset 只会取消引用，不会销毁空间"></a>unset 只会取消引用，不会销毁空间</h2><pre><code class="language-php">    $a=1;
-    $b=&amp;$a;
-    unset($b);//取消b的引用
-    echo $a;
-</code></pre>
-<h2 id="对象本身就是引用传递-不会进行空间复制，如果要复制，用-clone"><a href="#对象本身就是引用传递-不会进行空间复制，如果要复制，用-clone" class="headerlink" title="对象本身就是引用传递,不会进行空间复制，如果要复制，用 clone()"></a>对象本身就是引用传递,不会进行空间复制，如果要复制，用 clone()</h2><pre><code class="language-php">    class Person
-    {
-        public $name=&#39;a&#39;;
-    }
-    $p1=new Person;
-    xdebug_debug_zval(&#39;p1&#39;);
-    $p2=$p1;
-    xdebug_debug_zval(&#39;p1&#39;);//refcount=2,if_ref=0
-    $p2-&gt;name=&#39;b&#39;;
-    xdebug_debug_zval(&#39;p1&#39;);//p1的值已经被改变为b，refcount=2
-</code></pre>
-<h2 id="写出如下程序运行的结果-bcc"><a href="#写出如下程序运行的结果-bcc" class="headerlink" title="写出如下程序运行的结果 bcc"></a>写出如下程序运行的结果 bcc</h2><pre><code class="language-php">    $data=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;];
-    foreach($data as $key =&gt; $val){
-        $val=&amp;$data[$key];
-    }
-</code></pre>
+<h2 id="unset-只会取消引用，不会销毁空间"><a href="#unset-只会取消引用，不会销毁空间" class="headerlink" title="unset 只会取消引用，不会销毁空间"></a>unset 只会取消引用，不会销毁空间</h2><pre class="line-numbers language-php"><code class="language-php">    <span class="token variable">$a</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token variable">$b</span><span class="token operator">=</span><span class="token operator">&amp;</span><span class="token variable">$a</span><span class="token punctuation">;</span>
+    <span class="token function">unset</span><span class="token punctuation">(</span><span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//取消b的引用</span>
+    <span class="token keyword">echo</span> <span class="token variable">$a</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="对象本身就是引用传递-不会进行空间复制，如果要复制，用-clone"><a href="#对象本身就是引用传递-不会进行空间复制，如果要复制，用-clone" class="headerlink" title="对象本身就是引用传递,不会进行空间复制，如果要复制，用 clone()"></a>对象本身就是引用传递,不会进行空间复制，如果要复制，用 clone()</h2><pre class="line-numbers language-php"><code class="language-php">    <span class="token keyword">class</span> <span class="token class-name">Person</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token variable">$name</span><span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token variable">$p1</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">;</span>
+    <span class="token function">xdebug_debug_zval</span><span class="token punctuation">(</span><span class="token string">'p1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$p2</span><span class="token operator">=</span><span class="token variable">$p1</span><span class="token punctuation">;</span>
+    <span class="token function">xdebug_debug_zval</span><span class="token punctuation">(</span><span class="token string">'p1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//refcount=2,if_ref=0</span>
+    <span class="token variable">$p2</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">name</span><span class="token operator">=</span><span class="token string">'b'</span><span class="token punctuation">;</span>
+    <span class="token function">xdebug_debug_zval</span><span class="token punctuation">(</span><span class="token string">'p1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//p1的值已经被改变为b，refcount=2</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="写出如下程序运行的结果-bcc"><a href="#写出如下程序运行的结果-bcc" class="headerlink" title="写出如下程序运行的结果 bcc"></a>写出如下程序运行的结果 bcc</h2><pre class="line-numbers language-php"><code class="language-php">    <span class="token variable">$data</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'a'</span><span class="token punctuation">,</span><span class="token string">'b'</span><span class="token punctuation">,</span><span class="token string">'c'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">foreach</span><span class="token punctuation">(</span><span class="token variable">$data</span> <span class="token keyword">as</span> <span class="token variable">$key</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$val</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token variable">$val</span><span class="token operator">=</span><span class="token operator">&amp;</span><span class="token variable">$data</span><span class="token punctuation">[</span><span class="token variable">$key</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="常量及数据类型"><a href="#常量及数据类型" class="headerlink" title="常量及数据类型"></a>常量及数据类型</h1><h2 id="php的字符串的定义方式及各自区别"><a href="#php的字符串的定义方式及各自区别" class="headerlink" title="php的字符串的定义方式及各自区别"></a>php的字符串的定义方式及各自区别</h2><ul>
 <li>定义方式：单引号，双引号，heredoc 和 newdoc</li>
 <li>单引号不能解析变量，不能解析转义字符，效率更高</li>
@@ -210,14 +221,16 @@
 </ul>
 <h1 id="自定义函数及内部函数"><a href="#自定义函数及内部函数" class="headerlink" title="自定义函数及内部函数"></a>自定义函数及内部函数</h1><ul>
 <li>变量的作用域即它定义的上下文背景，包含了 include 和 require 引入的文件</li>
-<li>函数体内部的变量是内部变量，函数体内可以用 global 关键字来使用外部变量<pre><code class="language-php">  $outer = &quot;str&quot;;
-  function fun(){
-      global $outer;//使用外部变量
-      $GLOBALS[&#39;outer&#39;];也可以用这种方式
-  echo $outer;
-  }
-</code></pre>
-</li>
+<li>函数体内部的变量是内部变量，函数体内可以用 global 关键字来使用外部变量</li>
+</ul>
+<pre class="line-numbers language-php"><code class="language-php">    <span class="token variable">$outer</span> <span class="token operator">=</span> <span class="token string">"str"</span><span class="token punctuation">;</span>
+    <span class="token keyword">function</span> <span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">global</span> <span class="token variable">$outer</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//使用外部变量</span>
+        <span class="token variable">$GLOBALS</span><span class="token punctuation">[</span><span class="token string">'outer'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>也可以用这种方式
+    <span class="token keyword">echo</span> <span class="token variable">$outer</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
 <li>默认情况下函数通过值传递，如果允许函数修改它的值，必须通过引用传递</li>
 <li>include/require 语句包含文件，如果没有给出路径名，就会从 include_path 来查找，如果没找到，就从调用脚本文件所在的目录和当前工作目录下寻找</li>
 <li>加载过程中未找到文件 include 会发出一条警告，require 会发出致命错误</li>
@@ -230,64 +243,64 @@
 <li>可以记录函数的调用次数，从而在某些条件下终止递归</li>
 </ol>
 <h2 id="后期静态绑定"><a href="#后期静态绑定" class="headerlink" title="后期静态绑定"></a>后期静态绑定</h2><p>使用 self 对当前类的静态引用，取决于定义当前方法所在的类</p>
-<pre><code class="language-php">&lt;?php
-class A {
-    public static function who() {
-        echo __CLASS__;
-    }
-    public static function test() {
-        self::who();
-    }
-}
+<pre class="line-numbers language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">echo</span> <span class="token constant">__CLASS__</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-class B extends A {
-    public static function who() {
-        echo __CLASS__;
-    }
-}
+<span class="token keyword">class</span> <span class="token class-name">B</span> <span class="token keyword">extends</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">echo</span> <span class="token constant">__CLASS__</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-B::test();
-//输出 A
-</code></pre>
+B<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//输出 A</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>后期静态绑定本想通过引入一个新的关键字表示运行时最初调用的类来绕过限制。简单地说，这个关键字能够让你在上述例子中调用 test() 时引用的类是 B 而不是 A。最终决定不引入新的关键字，而是使用已经预留的 static 关键字。</p>
-<pre><code class="language-php">&lt;?php
-class A {
-    public static function who() {
-        echo __CLASS__;
-    }
-    public static function test() {
-        static::who(); // 后期静态绑定从这里开始
-    }
-}
+<pre class="line-numbers language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">echo</span> <span class="token constant">__CLASS__</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">static</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 后期静态绑定从这里开始</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-class B extends A {
-    public static function who() {
-        echo __CLASS__;
-    }
-}
+<span class="token keyword">class</span> <span class="token class-name">B</span> <span class="token keyword">extends</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">who</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">echo</span> <span class="token constant">__CLASS__</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-B::test();
-//输出 B
-</code></pre>
+B<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//输出 B</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="文件及目录处理"><a href="#文件及目录处理" class="headerlink" title="文件及目录处理"></a>文件及目录处理</h1><ul>
 <li>fopen()函数 用来打开一个文件,打开时需要指定打开模式</li>
 <li>写入函数 fwrite() fputs()</li>
 <li>读取函数 fread() fgets() fgetc()</li>
 <li>关闭函数 fclose() </li>
-<li>遍历目录<pre><code class="language-php">  function loopDir($dir){
-  $handle=opendit($dir);
-  while(false!==($file=readdir($handle))){
-      if($file!=&#39;.&#39;&amp;&amp;$file!=&#39;..&#39;){
-          echo $file;
-          if(filetype($dir.&#39;/&#39;.$file)==&#39;dir&#39;){
-              loopDir(filetype($dir.&#39;/&#39;.$file);
-              }
-          }
-      }
-  }
-</code></pre>
-</li>
+<li>遍历目录</li>
 </ul>
+<pre class="line-numbers language-php"><code class="language-php">    <span class="token keyword">function</span> <span class="token function">loopDir</span><span class="token punctuation">(</span><span class="token variable">$dir</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token variable">$handle</span><span class="token operator">=</span><span class="token function">opendit</span><span class="token punctuation">(</span><span class="token variable">$dir</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token operator">!==</span><span class="token punctuation">(</span><span class="token variable">$file</span><span class="token operator">=</span><span class="token function">readdir</span><span class="token punctuation">(</span><span class="token variable">$handle</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$file</span><span class="token operator">!=</span><span class="token string">'.'</span><span class="token operator">&amp;&amp;</span><span class="token variable">$file</span><span class="token operator">!=</span><span class="token string">'..'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">echo</span> <span class="token variable">$file</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">filetype</span><span class="token punctuation">(</span><span class="token variable">$dir</span><span class="token punctuation">.</span><span class="token string">'/'</span><span class="token punctuation">.</span><span class="token variable">$file</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token string">'dir'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                <span class="token function">loopDir</span><span class="token punctuation">(</span><span class="token function">filetype</span><span class="token punctuation">(</span><span class="token variable">$dir</span><span class="token punctuation">.</span><span class="token string">'/'</span><span class="token punctuation">.</span><span class="token variable">$file</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="php-运行原理"><a href="#php-运行原理" class="headerlink" title="php 运行原理"></a>php 运行原理</h1><ul>
 <li>CGI：解决 php 解释器和服务器之间通信</li>
 <li>FastCGI：是一种协议每次处理完进程不会 kill 掉，而是保留，使这个进程一次处理多个请求</li>
@@ -303,14 +316,16 @@ B::test();
 <li>$_SESSION</li>
 <li>删除session $_SESSION=[]</li>
 <li>销毁session  session_destory()</li>
-<li><p>配置 </p>
-<pre><code>  //垃圾回收
-  session.gc_probability=1
-  session.gc_divisor=100
-  session.gc_maxlifetime=1440
+<li>配置 </li>
+</ul>
+<pre class="line-numbers language-conf"><code class="language-conf">    //垃圾回收
+    session.gc_probability=1
+    session.gc_divisor=100
+    session.gc_maxlifetime=1440
 
-  session.save_handler//可以配置存储句柄 redis memcached
-</code></pre></li>
+    session.save_handler//可以配置存储句柄 redis memcached
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
 <li>如果cookie被禁用 <code>&lt;a href=&quot;1.php?&lt;?php echo SID;?&gt;&quot;&gt;下个页面&lt;/a&gt;</code></li>
 </ul>
 <h1 id="框架原理"><a href="#框架原理" class="headerlink" title="框架原理"></a>框架原理</h1><ul>
@@ -455,6 +470,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/vegas.min.js"></script>
   
     <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
   
     <script src="/js/jquery.mousewheel.pack.js"></script>
   

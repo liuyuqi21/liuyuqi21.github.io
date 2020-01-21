@@ -30,6 +30,7 @@ Integer[] what = Arra...">
   
   <link rel="stylesheet" href="/css/random.css">
 <link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
 <link rel="stylesheet" href="/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/css/iconfont/iconfont.css">
 <link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
@@ -40,6 +41,15 @@ Integer[] what = Arra...">
 
 <body>
 <div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/15/Java-基础/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 基础
+      </div>
+    </div>
   
   
     <div class="item next">
@@ -138,17 +148,17 @@ Integer[] what = Arra...">
     </p>
     
     <p>使用 <code>Arrays.asList()</code> 时，必须使用包装类型，写算法题的时候题目给出的是 <code>int[]</code>，所以得先转换为 <code>Integer[]</code>。<br>网上给出的大部分方法都是遍历，但是仔细找了半天看到了一个 Java8 的方法感觉不错，在这里做个笔记。</p>
-<pre><code class="language-java">int[] data = {1,2,3,4,5,6,7,8,9,10};
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-// To boxed array
-Integer[] what = Arrays.stream(data).boxed().toArray(Integer[]::new);
-Integer[] ever = IntStream.of(data).boxed().toArray(Integer[]::new);
+<span class="token comment" spellcheck="true">// To boxed array</span>
+Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> what <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span>Integer<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">:</span><span class="token operator">:</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> ever <span class="token operator">=</span> IntStream<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span>Integer<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">:</span><span class="token operator">:</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-// To boxed list
+<span class="token comment" spellcheck="true">// To boxed list</span>
 
-List&lt;Integer&gt; you = Arrays.stream(data).boxed().collect(Collectors.toList());
-List&lt;Integer&gt; like = IntStream.of(data).boxed().collect(Collectors.toList());
-</code></pre>
+List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> you <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> like <span class="token operator">=</span> IntStream<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -162,6 +172,8 @@ List&lt;Integer&gt; like = IntStream.of(data).boxed().collect(Collectors.toList(
 
   
 <nav id="pagination">
+  
+    <a href="/2020/01/15/Java-基础/" class="prev">&larr; 上一篇 Java 基础</a>
   
 
   
@@ -256,6 +268,8 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
     <script src="/js/vegas.min.js"></script>
   
     <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
   
     <script src="/js/jquery.mousewheel.pack.js"></script>
   
