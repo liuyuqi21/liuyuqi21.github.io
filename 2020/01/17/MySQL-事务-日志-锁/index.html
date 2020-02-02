@@ -1,0 +1,536 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="事务是并发控制的基本单位。事务要做到 可靠性 和 并发处理。
+原子性要么全部都执行，要都不执行。
+原子性通过回滚日志实现。
+持久性当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』，这也是事务持久性的体现之一。
+事务的持久性通过重做日志实现。在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）。...">
+  
+  <title>MySQL 事务 日志 锁 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/19/JAVA-集合框架/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        JAVA 集合框架
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/15/Java-基础/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 基础
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>MySQL 事务 日志 锁</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2020-01-17</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/MySQL/">MySQL</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/MySQL/">MySQL</a>
+      
+        
+          /
+        
+        
+        <a href="/tags/面试/">面试</a>
+      
+      </span>
+      
+    </p>
+    
+    <p>事务是<strong>并发控制的基本单位</strong>。事务要做到 <strong>可靠性</strong> 和 <strong>并发处理</strong>。</p>
+<h1 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h1><p>要么全部都执行，要都不执行。</p>
+<p>原子性通过回滚日志实现。</p>
+<h1 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h1><p>当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』，这也是事务持久性的体现之一。</p>
+<p>事务的持久性通过重做日志实现。在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）。</p>
+<h1 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h1><h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><ul>
+<li>READ UNCOMMITED (未提交读)：使用查询语句不会加锁，可能会读到未提交的行（Dirty Read/脏读），好处是提升并发处理性能，能做到<strong>读写并行</strong></li>
+<li>READ COMMITED (提交读)：只对记录加记录锁，而不会在记录之间加间隙锁，所以允许新的记录插入到被锁定记录的附近，所以再多次使用查询语句时，可能- 得到不同的结果（Non-Repeatable Read）。大多数数据库默认的隔离级别 使用排它锁,读取数据不加锁而是使用了MVCC机制。或者换句话说他采用了读写分离机制，该级别会产生<strong>不可重读</strong>以及<strong>幻读</strong>问题。</li>
+<li>REPEATABLE READ (可重复读)：多次读取同一范围的数据会返回第一次查询的快照，不会返回不同的数据行，但是可能发生幻读（Phantom Read）。</li>
+<li>SERIALIZABLE (可串行化)：InnoDB 隐式地将全部的查询语句加上共享锁，解决了幻读的问题。</li>
+</ul>
+<p>以上的所有的事务隔离级别都不允许脏写入（Dirty Write），也就是当前事务更新了另一个事务已经更新但是还未提交的数据，大部分的数据库中都使用了 READ COMMITED 作为默认的事务隔离级别，但是 <strong>MySQL 使用了 REPEATABLE READ</strong> 作为默认配置。MySQL 的 REPEATABLE READ 可以禁止<strong>幻读</strong>发生。</p>
+<h2 id="隔离级别的实现"><a href="#隔离级别的实现" class="headerlink" title="隔离级别的实现"></a>隔离级别的实现</h2><h3 id="未提交读"><a href="#未提交读" class="headerlink" title="未提交读"></a>未提交读</h3><p>select 语句不加锁</p>
+<h3 id="串行化"><a href="#串行化" class="headerlink" title="串行化"></a>串行化</h3><p>所有 select 语句被隐式转化为 select … in share mode.</p>
+<p>如果有未提交的事务正在修改某些行，所有读取这些行的 select 都会被阻塞住。</p>
+<h3 id="可重复读"><a href="#可重复读" class="headerlink" title="可重复读"></a>可重复读</h3><ul>
+<li>普通 select 使用快照读，底层用 MVCC 实现</li>
+<li>加锁的语句（select … in share mode / select … for update），他们的锁，依赖于他们是否在唯一索引上使用了唯一的查询条件，或者范围查询条件<ul>
+<li>在唯一索引上使用唯一的查询条件会使用记录锁，不会使用间隙锁和临键锁。</li>
+<li>范围查询条件会使用间隙锁和临键锁，所著索引之间的范围，避免范围间插入记录，以避免产生幻影行记录，以及避免不可重复的读</li>
+</ul>
+</li>
+</ul>
+<h3 id="提交读"><a href="#提交读" class="headerlink" title="提交读"></a>提交读</h3><ul>
+<li>普通的读是快照读</li>
+<li>加锁的语句，除了在外键约束检查以及重复键检查时会封锁区间，其他时刻只使用记录锁。此时，其他事务的插入依然可以执行，就可能导致读取到幻影记录。</li>
+</ul>
+<h1 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h1><p>通过原子性，持久性，隔离性来实现</p>
+<h1 id="多版本和快照隔离（MVCC）"><a href="#多版本和快照隔离（MVCC）" class="headerlink" title="多版本和快照隔离（MVCC）"></a>多版本和快照隔离（MVCC）</h1><p>InnoDB 是基于 MVCC 的存储引擎，利用 undo 日志（旧版本数据）提高并发</p>
+<p>通过维护多个版本的数据，数据库可以允许事务在数据被其他事务更新时对旧版本的数据进行读取。MySQL 通过<strong>回滚日志</strong>（存储旧数据）实现了 MVCC，保证事务并行执行时能够不等待互斥锁的释放直接获取数据。</p>
+<ol>
+<li>写任务发生时，将数据克隆一份，以版本号区分。</li>
+<li>写任务操作新克隆的数据，直至提交。</li>
+<li>并发读任务可以继续读取旧版本的数据，不至于阻塞。</li>
+</ol>
+<p>InnoDB 对所有的 row 数据增加三个内部属性</p>
+<ol>
+<li>DB_TRX_ID 记录每一行最近一次修改它的事务 ID</li>
+<li>DB_ROLL_PTR 记录指向回滚段的 undo 日志的指针</li>
+<li>DB_ROW_ID 单调递增的行 ID</li>
+</ol>
+<p>除非显式加锁，普通的 select 语句都是快照读。update，delete，insert 是当前读</p>
+<p>普通锁串行，读写锁读读并行，数据多版本读写并行；</p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>在一个事务中，我们并不会将整个数据库都加锁，而是只会锁住那些需要访问的数据项。</p>
+<h2 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h2><p>使用时间戳实现事务的隔离性时，往往都会使用乐观锁，先对数据进行修改，在写回时再去判断当前值，也就是时间戳是否改变过，如果没有改变过，就写入，否则，生成一个新的时间戳并再次更新数据。</p>
+<h1 id="两阶段事务提交"><a href="#两阶段事务提交" class="headerlink" title="两阶段事务提交"></a>两阶段事务提交</h1><p>MySQL采用了两阶段事务提交(Two-Phase Commit Protocol)协议，当操作完成后，首先 prepare 事务，在 binlog 中实际只是 fake 一下，不做任何事情，而是 innodb 层需要将 prepare 写入 redolog 中。然后执行 commit 事务，首先在 binlog 文件中写入这些操作的 binlog 日志，完成之后在 innodb 的 redolog 写入 commit 日志。</p>
+<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><table>
+<thead>
+<tr>
+<th>undo log</th>
+<th>redo log</th>
+<th>binlog</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逻辑日志</td>
+<td>物理日志</td>
+<td>逻辑日志 </td>
+</tr>
+</tbody>
+</table>
+<h2 id="回滚日志（Undo-Log）"><a href="#回滚日志（Undo-Log）" class="headerlink" title="回滚日志（Undo Log）"></a>回滚日志（Undo Log）</h2><p>用于实现事务的原子性，还有多版本并发控制（MVCC）</p>
+<ul>
+<li>是<strong>逻辑日志</strong>，跟据回滚日志做逆向操作，比如 delete 的逆向操作为 insert，insert 的逆向操作为 delete，update 的逆向为 update等。</li>
+<li>每条数据变更 (insert/update/delete) 操作都伴随一条 undo log 的生成<br>回滚日志除了能够在发生错误或者用户执行 ROLLBACK 时提供回滚相关的信息，它还能够在整个系统发生崩溃、数据库进程直接被杀死后，当用户再次启动数据库进程时，还能够立刻通过查询回滚日志将之前未完成的事务进行回滚，这也就需要回滚日志必须先于数据持久化到磁盘上，是我们需要<strong>先写日志后写数据库</strong>的主要原因。</li>
+</ul>
+<h2 id="重做日志（Redo-Log）"><a href="#重做日志（Redo-Log）" class="headerlink" title="重做日志（Redo Log）"></a>重做日志（Redo Log）</h2><p>重做日志由两部分组成。</p>
+<ul>
+<li>内存中的重做日志缓冲区</li>
+<li>磁盘上的重做日志文件<br>当我们在一个事务中尝试对数据进行修改时，它会先将数据从磁盘读入内存，并更新内存中缓存的数据，然后生成一条重做日志并写入重做日志缓存，当事务真正提交时，MySQL 会将重做日志缓存中的内容刷新到重做日志文件，再将内存中的数据更新到磁盘上。</li>
+</ul>
+<p>在 InnoDB 中，重做日志都是以 512 字节的块的形式进行存储的，同时因为块的大小与磁盘扇区大小相同，所以重做日志的写入可以保证原子性，不会由于机器断电导致重做日志仅写入一半并留下脏数据。</p>
+<p>除了所有对数据库的修改会产生重做日志，因为回滚日志也是需要持久存储的，它们也会创建对应的重做日志，在发生错误后，数据库重启时会从重做日志中找出未被更新到数据库磁盘中的日志重新执行以满足事务的持久性。</p>
+<p>InnoDB 为了提升性能提供了缓冲池（Buffer Pool），缓冲池中的数据定期同步到磁盘。</p>
+<p>redo log 记录的是新数据的备份。在事务提交前，只要将 Redo Log 持久化即可，不需要将数据持久化。当系统崩溃时，虽然数据没有持久化，但是 Redo Log 已经持久化。系统可以根据 Redo Log 的内容，将所有数据恢复到最新的状态。</p>
+<p>可用于<strong>崩溃恢复</strong></p>
+<ul>
+<li>为了保证持久性，必须在事务提交前将 Redo Log 持久化。</li>
+<li>数据不需要在事务提交前写入磁盘，而是<strong>缓存在内存</strong>中。</li>
+<li>数据必须要晚于 redo log 写入持久存储。</li>
+</ul>
+<h3 id="IO-性能"><a href="#IO-性能" class="headerlink" title="IO 性能"></a>IO 性能</h3><p>既然 redo log 也涉及磁盘 IO，为什么还要用？</p>
+<ol>
+<li>Redo Log 会尽量存储在一段连续的空间上，因此在系统第一次启动时就会将日志文件的空间完全分配，以顺序追加的方式记录 Redo Log，而缓存同步是随机操作。</li>
+<li>缓存同步是以数据页为单位的，每次传输的数据小于 redo log。</li>
+<li>批量写入日志。日志并不是直接写入文件，而是先写入 redo log buffer。当需要将日志刷新到磁盘时(如事务提交)，将许多日志一起写入磁盘。</li>
+<li>并发的事务共享 Redo Log 的存储空间，它们的 Redo Log 按语句的执行顺序，依次交替的记录在一起，以减少日志占用的空间。例如,Redo Log 中的记录内容可能是这样的：</li>
+</ol>
+<pre class="line-numbers language-sql"><code class="language-sql">记录<span class="token number">1</span>: <span class="token operator">&lt;</span>trx1<span class="token punctuation">,</span> <span class="token keyword">insert</span> …<span class="token operator">></span>
+记录<span class="token number">2</span>: <span class="token operator">&lt;</span>trx2<span class="token punctuation">,</span> <span class="token keyword">update</span> …<span class="token operator">></span>
+记录<span class="token number">3</span>: <span class="token operator">&lt;</span>trx1<span class="token punctuation">,</span> <span class="token keyword">delete</span> …<span class="token operator">></span>
+记录<span class="token number">4</span>: <span class="token operator">&lt;</span>trx3<span class="token punctuation">,</span> <span class="token keyword">update</span> …<span class="token operator">></span>
+记录<span class="token number">5</span>: <span class="token operator">&lt;</span>trx2<span class="token punctuation">,</span> <span class="token keyword">insert</span> …<span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>因为 3 的原因,当一个事务将 Redo Log 写入磁盘时，也会将其他未提交的事务的日志写入磁盘。</li>
+<li>Redo Log 上只进行顺序追加的操作，当一个事务需要回滚时，它的 Redo Log 记录也不会从 Redo Log 中删除掉。</li>
+</ol>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><p>进行恢复时，重做所有事务包括未提交的事务和回滚了的事务。然后通过 Undo Log 回滚那些提交的事务。</p>
+<p>使用这种策略进行恢复就必须要将 Undo Log 持久化，而且必须要在写 Redo Log 之前将对应的 Undo Log 写入磁盘。Undo 和 Redo Log 的这种关联，使得持久化变得复杂起来。为了降低复杂度，InnoDB 将 Undo Log 看作数据，因此记录 Undo Log 的操作也会记录到 redo log 中。这样 undo log 就可以象数据一样缓存起来，而不用在 redo log 之前写入磁盘了。</p>
+<p>redo 日志会把事务在执行过程中对数据库所做的所有修改都记录下来，在之后系统崩溃重启后可以把事务所做的任何修改都恢复出来。</p>
+<p>由两部分组成：</p>
+<ol>
+<li>内存中的重做日志缓冲</li>
+<li>重做日志文件</li>
+</ol>
+<h3 id="二进制日志（binlog）"><a href="#二进制日志（binlog）" class="headerlink" title="二进制日志（binlog）"></a>二进制日志（binlog）</h3><p>binlog是Mysql sever层维护的一种二进制日志，与innodb引擎中的redo/undo log是完全不同的日志；其主要是用来记录对mysql数据更新或潜在发生更新的SQL语句，并以”事务”的形式保存在磁盘中</p>
+<p>作用:</p>
+<ol>
+<li>复制：MySQL Replication在Master端开启binlog，Master把它的二进制日志传递给slaves并回放来达到master-slave数据一致的目的</li>
+<li>数据恢复：通过mysqlbinlog工具恢复数据</li>
+<li>增量备份</li>
+</ol>
+<ul>
+<li>内容：<strong>逻辑格式</strong> 的日志，可以简单认为就是执行过的事务中的sql语句。</li>
+</ul>
+<h3 id="redo-log-和-binlog："><a href="#redo-log-和-binlog：" class="headerlink" title="redo log 和 binlog："></a>redo log 和 binlog：</h3><ol>
+<li>作用不同：redo log 是保证事务的持久性的，是事务层面的，binlog 作为还原的功能，是数据库层面的（当然也可以精确到事务层面的），虽然都有还原的意思，但是其保护数据的层次是不一样的。</li>
+<li>内容不同：redo log 是<strong>物理日志</strong>，是数据页面的修改之后的物理记录，binlog 是<strong>逻辑日志</strong>，可以简单认为记录的就是sql语句</li>
+<li>另外，两者日志产生的时间，可以释放的时间，在可释放的情况下清理机制，都是完全不同的。</li>
+<li>恢复数据时候的效率，基于物理日志的 redo log 恢复数据的效率要高于语句逻辑日志的 binlog</li>
+</ol>
+<h1 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h1><p>show engine innodb status; 可以查看InnoDB的锁情况，也可以调试死锁</p>
+<h2 id="并发控制机制（乐观锁和悲观锁）"><a href="#并发控制机制（乐观锁和悲观锁）" class="headerlink" title="并发控制机制（乐观锁和悲观锁）"></a>并发控制机制（乐观锁和悲观锁）</h2><ul>
+<li>悲观锁：共享资源每次只给一个线程使用，其他线程阻塞，用完后再把资源转让给其他线程。传统关系型数据库里边就用到了很多这种锁机制，行锁表锁读锁写锁，都是在操作前先上锁。</li>
+<li>乐观锁：在更新时判断在此期间别人有没有去更新这个数据，可以使用版本号机制和 CAS 算法实现。乐观锁适用于多读的应用类型，这样可以提供吞吐量。</li>
+</ul>
+<h3 id="乐观锁实现方式：版本号机制"><a href="#乐观锁实现方式：版本号机制" class="headerlink" title="乐观锁实现方式：版本号机制"></a>乐观锁实现方式：版本号机制</h3><p>一般是在数据表中加上一个数据版本号version字段，表示数据被修改的次数，当数据被修改时，version值会加一。当线程A要更新数据值时，在读取数据的同时也会读取version值，在提交更新时，若刚才读取到的version值为当前数据库中的version值相等时才更新，否则重试更新操作，直到更新成功。</p>
+<h3 id="乐观锁实现方式：CAS-算法"><a href="#乐观锁实现方式：CAS-算法" class="headerlink" title="乐观锁实现方式：CAS 算法"></a>乐观锁实现方式：CAS 算法</h3><p>即<strong>compare and swap（比较与交换）</strong>，是一种有名的<strong>无锁算法</strong>。<br>CAS算法涉及到三个操作数：</p>
+<ul>
+<li>需要读写的内存值 V</li>
+<li>进行比较的值 A</li>
+<li>拟写入的新值 B<br>当且仅当 V 的值等于 A时，CAS通过原子方式用新值B来更新V的值，否则不会执行任何操作（比较和替换是一个原子操作）。一般情况下是一个自旋操作，即不断的重试。</li>
+</ul>
+<h3 id="乐观锁的缺点"><a href="#乐观锁的缺点" class="headerlink" title="乐观锁的缺点"></a>乐观锁的缺点</h3><ul>
+<li>ABA 问题：不能保证一个值 A 被改为 B 后又改为 A，CAS 认为他没有被修改过</li>
+<li>循环时间开销大：如果长时间不成功，会给 CPU 带来非常大的执行开销</li>
+<li>只能保证一个共享变量的原子操作</li>
+</ul>
+<h2 id="锁的粒度"><a href="#锁的粒度" class="headerlink" title="锁的粒度"></a>锁的粒度</h2><h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p>系统性能开销最小，会锁定整张表,<strong>MyISAM</strong> 使用表锁</p>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>最大程度的支持并发处理,但是也带来最大的锁开销，<strong>InnoDB</strong> 使用行级锁<br>为了支持多粒度锁定，InnoDB 引入了意向锁，意向锁是一种表级锁。</p>
+<p>InnoDB 的行锁是实现在索引上的，而不是锁在物理行记录上，如果访问没有命中索引，也无法使用行锁，将退化为表锁</p>
+<h1 id="InnoDB-的七种锁"><a href="#InnoDB-的七种锁" class="headerlink" title="InnoDB 的七种锁"></a>InnoDB 的七种锁</h1><h2 id="共享-排他锁"><a href="#共享-排他锁" class="headerlink" title="共享/排他锁"></a>共享/排他锁</h2><ul>
+<li>多个事务可以拿到一把共享锁，读读并行</li>
+<li>只有一个事务可以拿到排他锁，写写/读写并行</li>
+<li>读锁：共享，不堵塞 <code>select ... lock in share mode</code></li>
+<li>写锁: 排他，堵塞 <code>select ... for update</code></li>
+<li>InnoDB 引擎中的 update，delete，insert 语句自动加排他锁</li>
+</ul>
+<h2 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h2><p>意向锁是一个表级的锁。</p>
+<ul>
+<li>意向共享锁（IS）：事务有意向对表中的某些行加 S 锁</li>
+<li>意向排他锁（IX）：事务有意向对表中的某些行加 X 锁</li>
+</ul>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">lock</span> <span class="token operator">in</span> <span class="token keyword">share mode</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//要设置 IS 锁</span>
+<span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">for</span> <span class="token keyword">update</span>；<span class="token comment" spellcheck="true">//要设置IX锁</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>意向锁的意义：</p>
+<ol>
+<li>IX，IS 是表级锁，不会和行级的 X，S 锁发生冲突。只会和表级的 X，S 发生冲突</li>
+<li>意向锁是在添加行锁之前添加。</li>
+<li>如果没有意向锁，当向一个表添加表级X锁时，就需要遍历整张表来判断是否存行锁，以免发生冲突</li>
+<li>如果有了意向锁，只需要判断该意向锁与表级锁是否兼容即可。</li>
+</ol>
+<h2 id="记录锁"><a href="#记录锁" class="headerlink" title="记录锁"></a>记录锁</h2><p>对单条索引记录进行加锁，锁住的是索引记录而非记录本身，即使表中没有任何索引，MySQL会自动创建一个隐式的row_id作为聚集索引来进行加锁。</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>它会在 <code>id = 1</code> 的索引上加锁，以防止其他事务插入、更新、删除 id = 1 的这一行。</p>
+<h2 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h2><p>封锁索引记录中的间隔，如</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id <span class="token operator">between</span> <span class="token number">8</span> <span class="token operator">and</span> <span class="token number">15</span> <span class="token keyword">for</span> <span class="token keyword">update</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>会封锁区间，阻止 8-15 之间的记录插入。</p>
+<p>如果事务为提交读，间隙锁会自动失效</p>
+<h2 id="插入意向锁"><a href="#插入意向锁" class="headerlink" title="插入意向锁"></a>插入意向锁</h2><p>是间隙锁的一种，所以也是实施在索引上的，专门针对 insert 操作。</p>
+<p>多个事务，在同一个索引，同一个范围区间插入记录时，如果插入的位置不冲突，不会阻塞彼此。</p>
+<h2 id="临键锁"><a href="#临键锁" class="headerlink" title="临键锁"></a>临键锁</h2><p>临键锁是记录锁与间隙锁的组合，会封锁索引记录本身以及索引记录之前的区间。</p>
+<p>目的是为了避免幻读，如果把事务的隔离级别降级为提交读，临键锁会失效。</p>
+<h2 id="自增锁"><a href="#自增锁" class="headerlink" title="自增锁"></a>自增锁</h2><p>是一种表级别的锁，专门针对事务插入 AUTO_INCREAMENT 类型的列。如果一个事务正在往表中插入记录，所有其他事务必须等待，一边第一个事务插入的行，是连续的主键值。</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">『浅入深出』MySQL 中事务的实现</a></li>
+<li><a href="https://juejin.im/post/5cb2e3b46fb9a0686e40c5cb#heading-1" target="_blank" rel="external">MySQL 事务实现原理</a></li>
+<li><a href="https://www.qiancheng.me/post/coding/mysql-001" target="_blank" rel="external">https://www.qiancheng.me/post/coding/mysql-001</a></li>
+<li><a href="http://mysql.taobao.org/monthly/2018/12/04/" target="_blank" rel="external">MySQL · 原理介绍 · 再议MySQL的故障恢复</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961498&amp;idx=1&amp;sn=058097f882ff9d32f5cdf7922644d083&amp;chksm=bd2d0d468a5a845026b7d2c211330a6bc7e9ebdaa92f8060265f60ca0b166f8957cbf3b0182c&amp;scene=21#wechat_redirect" target="_blank" rel="external">4种事务的隔离级别，InnoDB如何巧妙实现？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961428&amp;idx=1&amp;sn=31a9eb967941d888fbd4bb2112e9602b&amp;chksm=bd2d0d888a5a849e7ebaa7756a8bc1b3d4e2f493f3a76383fc80f7e9ce7657e4ed2f6c01777d&amp;scene=21#wechat_redirect" target="_blank" rel="external">InnoDB，5项最佳实践，知其所以然？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961471&amp;idx=1&amp;sn=da257b4f77ac464d5119b915b409ba9c&amp;chksm=bd2d0da38a5a84b5fc1417667fe123f2fbd2d7610b89ace8e97e3b9f28b794ad147c1290ceea&amp;scene=21#wechat_redirect" target="_blank" rel="external">InnoDB，select为啥会阻塞insert？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961461&amp;idx=1&amp;sn=b73293c71d8718256e162be6240797ef&amp;chksm=bd2d0da98a5a84bfe23f0327694dbda2f96677aa91fcfc1c8a5b96c8a6701bccf2995725899a&amp;scene=21#wechat_redirect" target="_blank" rel="external">InnoDB并发插入，居然使用意向锁？</a></li>
+<li><a href="https://yq.aliyun.com/articles/646976" target="_blank" rel="external">浅谈MySQL的七种锁</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#原子性"><span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持久性"><span class="toc-text">持久性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隔离性"><span class="toc-text">隔离性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的隔离级别"><span class="toc-text">事务的隔离级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#隔离级别的实现"><span class="toc-text">隔离级别的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#未提交读"><span class="toc-text">未提交读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#串行化"><span class="toc-text">串行化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可重复读"><span class="toc-text">可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#提交读"><span class="toc-text">提交读</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一致性"><span class="toc-text">一致性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多版本和快照隔离（MVCC）"><span class="toc-text">多版本和快照隔离（MVCC）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#读写锁"><span class="toc-text">读写锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间戳"><span class="toc-text">时间戳</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#两阶段事务提交"><span class="toc-text">两阶段事务提交</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#日志"><span class="toc-text">日志</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#回滚日志（Undo-Log）"><span class="toc-text">回滚日志（Undo Log）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重做日志（Redo-Log）"><span class="toc-text">重做日志（Redo Log）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IO-性能"><span class="toc-text">IO 性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#恢复"><span class="toc-text">恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制日志（binlog）"><span class="toc-text">二进制日志（binlog）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redo-log-和-binlog："><span class="toc-text">redo log 和 binlog：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#锁机制"><span class="toc-text">锁机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#并发控制机制（乐观锁和悲观锁）"><span class="toc-text">并发控制机制（乐观锁和悲观锁）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁实现方式：版本号机制"><span class="toc-text">乐观锁实现方式：版本号机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁实现方式：CAS-算法"><span class="toc-text">乐观锁实现方式：CAS 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁的缺点"><span class="toc-text">乐观锁的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁的粒度"><span class="toc-text">锁的粒度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表锁"><span class="toc-text">表锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行锁"><span class="toc-text">行锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#InnoDB-的七种锁"><span class="toc-text">InnoDB 的七种锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#共享-排他锁"><span class="toc-text">共享/排他锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#意向锁"><span class="toc-text">意向锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#记录锁"><span class="toc-text">记录锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#间隙锁"><span class="toc-text">间隙锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入意向锁"><span class="toc-text">插入意向锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#临键锁"><span class="toc-text">临键锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自增锁"><span class="toc-text">自增锁</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2020/01/19/JAVA-集合框架/" class="prev">&larr; 上一篇 JAVA 集合框架</a>
+  
+
+  
+
+  
+    <a href="/2020/01/15/Java-基础/" class="next">下一篇 Java 基础 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
