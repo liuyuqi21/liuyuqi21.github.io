@@ -197,15 +197,15 @@
 <ul>
 <li>三次握手：<ul>
 <li>服务器处于 LISTEN 状态，等待来自客户端的连接请求</li>
-<li>客户端向服务器发送连接请求报文 SYN=1</li>
-<li>服务器收到客服端发来的 SYN，如果同意建立连接，则向客户端发送确认报文 SYN=1，ACK=1</li>
-<li>客户端收到 SYN ACK 后，还要向服务器发出确认报文 ACK</li>
+<li>客户端向服务器发送连接请求报文 SYN 段，并指明客户端的初始序列号 ISN(c)</li>
+<li>服务器收到客服端发来的 SYN，如果同意建立连接，则向客户端发送确认报文 SYN = ISN(s)，并将 ISN(c)+1 作为 ACK 数值，这样每发送一个 SYN，序列号加1，如果有丢失的情况，就会重传。</li>
+<li>客户端收到 SYN ACK 后，还要向服务器发出确认报文 ACK，ACK 的值为 ISN(s)+1。</li>
 <li>服务器收到 ACK 后，连接建立</li>
 </ul>
 </li>
 <li>连接建立以后，ACK 都置为 1</li>
 <li>第三次握手可以携带数据，如果不携带数据则不消耗序号</li>
-<li>三次握手的原因<br>  对于握手：握手只需要确认双方通信时的初始化序号，保证通信不会乱序。（第三次握手必要性：假设服务端的确认丢失，连接并未断开，客户机超时重发连接请求，这样服务器会对同一个客户机保持多个连接，造成资源浪费。）</li>
+<li>三次握手的原因<br>  对于握手：握手只需要确认双方通信时的初始化序号（ISN 是随机的，防止攻击者猜出确认号和防止同一个连接的不同实例），保证通信不会乱序。（第三次握手必要性：假设服务端的确认丢失，连接并未断开，客户机超时重发连接请求，这样服务器会对同一个客户机保持多个连接，造成资源浪费。）</li>
 <li>四次挥手：<ul>
 <li>客户端发送释放报文 FIN</li>
 <li>服务器收到 FIN 后发出确认 ACK，此时 TCP 属于半关闭状态（CLOSED_WAIT），服务器能向客户端发送数据但是客户端不能向服务器发送数据</li>
@@ -406,6 +406,8 @@
 </ol>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
 <li><a href="https://juejin.im/post/5ce37660f265da1bb13f05f0" target="_blank" rel="external">什么是队头阻塞以及如何解决</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a></li>
+<li><a href="https://www.cnblogs.com/qcrao-2018/p/10182185.html" target="_blank" rel="external">“三次握手，四次挥手”你真的懂吗？</a></li>
 </ul>
 
   </article>
