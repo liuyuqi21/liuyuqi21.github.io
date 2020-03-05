@@ -20,9 +20,9 @@
 
 对于频繁使用的对象，可以省略创建对象所花费的时间
 由于 new 操作的次数减少，因而对系统内存的使用频率也会降低，这将减轻 GC 压力，缩短 GC 停顿时间
+有一些对象其实我们只需要一个，比方说：线程池、缓存。这些类对象只能有一个实例。单例模式常常被用来管理共享资源，例如数据库连接或者线程池。
 
-懒汉式-线程不安全私有静态变量 instance 被延迟实例化，这样做的好处是，如果没有用到该类，那么就不会实例化 instance，从而节约资源。
-这个实现在多线程环境下不安全，如...">
+懒汉式-线程不安全私有静态变量 instan...">
   
   <title>单例模式 JAVA [ Cellophane ]</title>
   
@@ -45,21 +45,21 @@
 <div class="side-navigate hide-area">
   
     <div class="item prev">
-      <a href="/2020/01/05/random-主题归档页问题/">
+      <a href="/2019/12/22/Sharing-JDBC-中间件学习/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        random 主题归档页问题
+        Sharing-JDBC 中间件学习
       </div>
     </div>
   
   
     <div class="item next">
-      <a href="/2019/08/25/图解 HTTP 笔记/">
+      <a href="/2019/09/14/基于-Redis-实现分布式锁/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        图解 HTTP 笔记
+        基于 Redis 实现分布式锁
       </div>
     </div>
   
@@ -143,13 +143,13 @@
       
         
         
-        <a href="/tags/JAVA/">JAVA</a>
+        <a href="/tags/设计模式/">设计模式</a>
       
         
           /
         
         
-        <a href="/tags/设计模式/">设计模式</a>
+        <a href="/tags/JAVA/">JAVA</a>
       
       </span>
       
@@ -159,6 +159,7 @@
 <ul>
 <li>对于频繁使用的对象，可以省略创建对象所花费的时间</li>
 <li>由于 new 操作的次数减少，因而对系统内存的使用频率也会降低，这将减轻 GC 压力，缩短 GC 停顿时间</li>
+<li>有一些对象其实我们只需要一个，比方说：线程池、缓存。这些类对象只能有一个实例。单例模式常常被用来管理共享资源，例如数据库连接或者线程池。</li>
 </ul>
 <h2 id="懒汉式-线程不安全"><a href="#懒汉式-线程不安全" class="headerlink" title="懒汉式-线程不安全"></a>懒汉式-线程不安全</h2><p>私有静态变量 instance 被延迟实例化，这样做的好处是，如果没有用到该类，那么就不会实例化 instance，从而节约资源。</p>
 <p>这个实现在多线程环境下不安全，如果有多个线程同时进入 <code>if (uniqueInstance == null)</code>，并且此时 uniqueInstance 为 null，那么会有多个线程执行 <code>uniqueInstance = new Singleton();</code>语句，这将导致实例化多次 uniqueInstance。</p>
@@ -269,13 +270,13 @@
   
 <nav id="pagination">
   
-    <a href="/2020/01/05/random-主题归档页问题/" class="prev">&larr; 上一篇 random 主题归档页问题</a>
+    <a href="/2019/12/22/Sharing-JDBC-中间件学习/" class="prev">&larr; 上一篇 Sharing-JDBC 中间件学习</a>
   
 
   
 
   
-    <a href="/2019/08/25/图解 HTTP 笔记/" class="next">下一篇 图解 HTTP 笔记 &rarr;</a>
+    <a href="/2019/09/14/基于-Redis-实现分布式锁/" class="next">下一篇 基于 Redis 实现分布式锁 &rarr;</a>
   
 </nav>
 

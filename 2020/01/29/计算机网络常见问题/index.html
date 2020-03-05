@@ -17,8 +17,7 @@
   
   
     <meta name="description" content="什么是队头阻塞TCP 队头阻塞TCP 要求数据严格按照序号顺序，如果第一个 TCP 分节丢失了，客户端将一直等待丢失的分节重传成功，这样就延缓了后面数据的接收。
-
-如何解决：不使用 TCP 协议，比如 google 推出的 quic 协议，它是在 UDP 基础上实现的可靠传输。还有一个 SCTP（流控制传输协议），它是和 TCP，UDP 在同一层次的传输协议。SCTP 的多流特性也可以尽可能...">
+如何解决：不使用 TCP 协议，比如 google 推出的 quic 协议，它是在 UDP 基础上实现的可靠传输。还有一个 SCTP（流控制传输协议），它是和 TCP，UDP 在同一层次的传输协议。SCTP 的多流特性也可以尽可能的...">
   
   <title>计算机网络常见问题 [ Cellophane ]</title>
   
@@ -40,13 +39,22 @@
 <body>
 <div class="side-navigate hide-area">
   
-  
-    <div class="item next">
-      <a href="/2020/01/20/秋招面经/">
+    <div class="item prev">
+      <a href="/2020/02/19/Head First设计模式阅读笔记/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        秋招面经
+        Head First设计模式阅读笔记
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/28/Java-虚拟机/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 虚拟机
       </div>
     </div>
   
@@ -119,7 +127,7 @@
       
         
         
-        <a href="/categories/计算机网络/">计算机网络</a>
+        <a href="/categories/基础/">基础</a>
       
       </span>
       
@@ -130,20 +138,17 @@
       
         
         
-        <a href="/tags/面试/">面试</a>
+        <a href="/tags/计算机网络/">计算机网络</a>
       
       </span>
       
     </p>
     
     <h2 id="什么是队头阻塞"><a href="#什么是队头阻塞" class="headerlink" title="什么是队头阻塞"></a>什么是队头阻塞</h2><h3 id="TCP-队头阻塞"><a href="#TCP-队头阻塞" class="headerlink" title="TCP 队头阻塞"></a>TCP 队头阻塞</h3><p>TCP 要求数据严格按照序号顺序，如果第一个 TCP 分节丢失了，客户端将一直等待丢失的分节重传成功，这样就延缓了后面数据的接收。</p>
-<ul>
-<li>如何解决：不使用 TCP 协议，比如 google 推出的 quic 协议，它是在 UDP 基础上实现的可靠传输。还有一个 SCTP（流控制传输协议），它是和 TCP，UDP 在同一层次的传输协议。SCTP 的多流特性也可以尽可能的避免队头阻塞的情况。<h3 id="HTTP-1-1-队头阻塞"><a href="#HTTP-1-1-队头阻塞" class="headerlink" title="HTTP 1.1 队头阻塞"></a>HTTP 1.1 队头阻塞</h3>HTTP 1.1 允许在持久连接上可选的使用管道化（pipeline）特性。管道化允许客户端在已发送的请求收到服务端的响应之前发送下一个请求，，借此来减少等待时间提高吞吐；如果多个请求能在同一个TCP分节发送的话，还能提高网络利用率。</li>
-</ul>
+<p>如何解决：不使用 TCP 协议，比如 google 推出的 quic 协议，它是在 UDP 基础上实现的可靠传输。还有一个 SCTP（流控制传输协议），它是和 TCP，UDP 在同一层次的传输协议。SCTP 的多流特性也可以尽可能的避免队头阻塞的情况。</p>
+<h3 id="HTTP-1-1-队头阻塞"><a href="#HTTP-1-1-队头阻塞" class="headerlink" title="HTTP 1.1 队头阻塞"></a>HTTP 1.1 队头阻塞</h3><p>HTTP 1.1 允许在持久连接上可选的使用管道化（pipeline）特性。管道化允许客户端在已发送的请求收到服务端的响应之前发送下一个请求，，借此来减少等待时间提高吞吐；如果多个请求能在同一个TCP分节发送的话，还能提高网络利用率。</p>
 <p>但是管道化要求服务端按照请求发送的顺序返回响应，因为 HTTP 请求和响应没有序号标识，无法将乱序的响应与请求关联起来。所以一个响应返回延迟了，后续的响应都会被延迟，直到队头的响应送达。</p>
-<ul>
-<li>如何解决：使用 HTTP 2.0。HTTP 2.0 采用二进制分帧，将阐述信息分割为更小的消息和帧，对他们采用二进制格式编码。比如 header 帧，Data 帧。这些帧可以打散乱序发送，然后根据每个帧首部的流标识符重新组装，并且可以根据优先级，决定优先处理哪个流的数据。</li>
-</ul>
+<p>如何解决：使用 HTTP 2.0。HTTP 2.0 采用二进制分帧，将阐述信息分割为更小的消息和帧，对他们采用二进制格式编码。比如 header 帧，Data 帧。这些帧可以打散乱序发送，然后根据每个帧首部的流标识符重新组装，并且可以根据优先级，决定优先处理哪个流的数据。</p>
 <h2 id="各层协议的作用，以及-TCP-IP-协议的特点。"><a href="#各层协议的作用，以及-TCP-IP-协议的特点。" class="headerlink" title="各层协议的作用，以及 TCP/IP 协议的特点。"></a>各层协议的作用，以及 TCP/IP 协议的特点。</h2><ul>
 <li>应用层：为特定应用程序提供数据传输服务。 HTTP、DNS。</li>
 <li>传输层：为进程提供通用数据传输服务。运输层包括两种协议：传输控制协议 TCP，提供面向连接、可靠的数据传输服务，数据单位为报文段；用户数据报协议 UDP，提供无连接、尽最大努力的数据传输服务，数据单位为用户数据报。TCP 主要提供完整性服务，UDP 主要提供及时性服务。</li>
@@ -159,7 +164,7 @@
 <li>数据：长度在 46-1500 之间秒如果太小则需要填充；</li>
 <li>FCS：帧检验序列，使用的是 CRC 检验方法；</li>
 </ul>
-<h2 id="集线器、交换机、路由器的作用，以及所属的网络层。-https-www-tianmaying-com-tutorial-NetWorkInstrument"><a href="#集线器、交换机、路由器的作用，以及所属的网络层。-https-www-tianmaying-com-tutorial-NetWorkInstrument" class="headerlink" title="集线器、交换机、路由器的作用，以及所属的网络层。(https://www.tianmaying.com/tutorial/NetWorkInstrument)"></a>集线器、交换机、路由器的作用，以及所属的网络层。(<a href="https://www.tianmaying.com/tutorial/NetWorkInstrument" target="_blank" rel="external">https://www.tianmaying.com/tutorial/NetWorkInstrument</a>)</h2><ul>
+<h2 id="集线器、交换机、路由器的作用，以及所属的网络层"><a href="#集线器、交换机、路由器的作用，以及所属的网络层" class="headerlink" title="集线器、交换机、路由器的作用，以及所属的网络层"></a><a href="https://www.tianmaying.com/tutorial/NetWorkInstrument" target="_blank" rel="external">集线器、交换机、路由器的作用，以及所属的网络层</a></h2><ul>
 <li>集线器：物理层设备。作用于比特而不是帧，当一个比特到达接口时，集线器重新生成这个比特，并将其能量强度放大，从而扩大网络的传输距离，之后再将这个比特发送到其他所有接口。如果集线器同时收到两个不同接口的帧，那么就发生了碰撞。</li>
 <li>交换机：链路层设备。是一种基于 MAC 识别，能完成封装转发数据包功能的网络设备。它不会发生碰撞，能根据 MAC 地址进行存储转发。</li>
 <li>路由器：网络层设备。是一种连接多个网络或网段的网络设备，根据 IP 进行转发。</li>
@@ -193,20 +198,29 @@
 <li>传输控制协议 TCP：是面向连接的，提供可靠交付，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。TCP 主要提供完整性服务。</li>
 <li>用户数据报协议 UDP：是无连接的，尽最大可能交付，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。。主要提供及时性服务。</li>
 </ul>
-<h2 id="理解三次握手以及四次挥手具体过程，三次握手的原因-https-www-jianshu-com-p-7d0f91345483-、四次挥手原因、TIME-WAIT-的作用。"><a href="#理解三次握手以及四次挥手具体过程，三次握手的原因-https-www-jianshu-com-p-7d0f91345483-、四次挥手原因、TIME-WAIT-的作用。" class="headerlink" title="理解三次握手以及四次挥手具体过程，三次握手的原因(https://www.jianshu.com/p/7d0f91345483)、四次挥手原因、TIME_WAIT 的作用。"></a>理解三次握手以及四次挥手具体过程，<a href="https://www.jianshu.com/p/e7f45779008a" target="_blank" rel="external">三次握手的原因</a>(<a href="https://www.jianshu.com/p/7d0f91345483)、四次挥手原因、TIME_WAIT" target="_blank" rel="external">https://www.jianshu.com/p/7d0f91345483)、四次挥手原因、TIME_WAIT</a> 的作用。</h2><p><a href="https://www.zhihu.com/question/24853633" target="_blank" rel="external">https://www.zhihu.com/question/24853633</a></p>
+<h2 id="理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。"><a href="#理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。" class="headerlink" title="理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。"></a>理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。</h2><p><img src="/images/sanciwoshou.jpg" alt=""></p>
 <ul>
-<li>三次握手：<ul>
+<li><p>三次握手过程：</p>
+<ol>
 <li>服务器处于 LISTEN 状态，等待来自客户端的连接请求</li>
 <li>客户端向服务器发送连接请求报文 SYN 段，并指明客户端的初始序列号 ISN(c)</li>
-<li>服务器收到客服端发来的 SYN，如果同意建立连接，则向客户端发送确认报文 SYN = ISN(s)，并将 ISN(c)+1 作为 ACK 数值，这样每发送一个 SYN，序列号加1，如果有丢失的情况，就会重传。</li>
+<li>服务器收到客服端发来的 SYN，如果同意建立连接，则向客户端发送确认报文 SYN = ISN(s)，并将 ISN(c)+1 作为ACK 数  值，这样每发送一个 SYN，序列号加1，如果有丢失的情况，就会重传。</li>
 <li>客户端收到 SYN ACK 后，还要向服务器发出确认报文 ACK，ACK 的值为 ISN(s)+1。</li>
 <li>服务器收到 ACK 后，连接建立</li>
-</ul>
+</ol>
 </li>
-<li>连接建立以后，ACK 都置为 1</li>
-<li>第三次握手可以携带数据，如果不携带数据则不消耗序号</li>
-<li>三次握手的原因<br>  对于握手：握手只需要确认双方通信时的初始化序号（ISN 是随机的，防止攻击者猜出确认号和防止同一个连接的不同实例），保证通信不会乱序。（第三次握手必要性：假设服务端的确认丢失，连接并未断开，客户机超时重发连接请求，这样服务器会对同一个客户机保持多个连接，造成资源浪费。）</li>
-<li>四次挥手：<ul>
+<li><p>连接建立以后，ACK 都置为 1</p>
+</li>
+<li><p>第三次握手可以携带数据，如果不携带数据则不消耗序号</p>
+</li>
+<li><p>三次握手的原因：<br>三次握手是为了确认客户端的接收能力。</p>
+</li>
+</ul>
+<p>如果是两次，客户端发送的连接请求如果在网络中滞留，那么就会隔很长一段时间才能收到服务器端发回的连接确认，客户端超时重发连接请求，这样服务器会对同一个客户端保持多个连接，造成资源浪费。</p>
+<p>握手只需要确认双方通信时的初始化序号（ISN 是随机的，防止攻击者猜出确认号和防止同一个连接的不同实例），保证通信不会乱序。<br><img src="/images/sicihuishou.jpg" alt=""></p>
+<ul>
+<li><p>四次挥手：</p>
+<ul>
 <li>客户端发送释放报文 FIN</li>
 <li>服务器收到 FIN 后发出确认 ACK，此时 TCP 属于半关闭状态（CLOSED_WAIT），服务器能向客户端发送数据但是客户端不能向服务器发送数据</li>
 <li>当服务器不再需要连接时，发送连接释放报文 FIN</li>
@@ -214,10 +228,28 @@
 <li>服务器收到 ACK 后释放连接</li>
 </ul>
 </li>
-<li>四次挥手的原因：客户端发送了 FIN 连接释放报文之后，服务器收到了这个报文，就进入了 CLOSE-WAIT 状态。这个状态是为了让服务器发送还为传送完毕的数据，传送完毕后，服务器会发送 FIN 连接释放报文。</li>
-<li>TIME_WAIT：客户端收到服务端的 FIN 报文址后进入此状态，此时并不是直接进入 CLOSED 状态，还需要等待一个时间计时器设置的时间 2MSL。这么做有两个理由：<ol>
+<li><p>四次挥手的原因：客户端发送了 FIN 连接释放报文之后，服务器收到了这个报文，就进入了 CLOSE-WAIT 状态。这个状态是为了让服务器发送还为传送完毕的数据，传送完毕后，服务器会发送 FIN 连接释放报文。</p>
+</li>
+<li><p>TIME_WAIT：客户端收到服务端的 FIN 报文址后进入此状态，此时并不是直接进入 CLOSED 状态，还需要等待一个时间计时器设置的时间 2MSL。这么做有两个理由：</p>
+<ol>
 <li>确保最后一个报文能够到达。如果 B 没收到 A 发送来的确认报文，那么就会重新发送连接释放请求报文，A 等待一段时间就是为了处理这种情况的发生。</li>
 <li>等待一段时间是为了让本连接持续时间内所产生的所有报文都从网络中消失，是的下一个连接不会出现九的连接请求报文。</li>
+</ol>
+</li>
+</ul>
+<h2 id="说说半连接队列和-SYN-Flood-攻击的关系"><a href="#说说半连接队列和-SYN-Flood-攻击的关系" class="headerlink" title="说说半连接队列和 SYN Flood 攻击的关系"></a>说说半连接队列和 SYN Flood 攻击的关系</h2><p>三次握手前，服务端的状态从CLOSED变为LISTEN, 同时在内部创建了两个队列：半连接队列和全连接队列，即SYN队列和ACCEPT队列。</p>
+<ul>
+<li>半连接队列：当客户端发送SYN到服务端，服务端收到以后回复ACK和SYN，状态由LISTEN变为SYN_RCVD，此时这个连接就被推入了SYN队列，也就是半连接队列。</li>
+<li>全连接队列：当客户端返回ACK, 服务端接收后，三次握手完成。这个时候连接等待被具体的应用取走，在被取走之前，它会被推入另外一个 TCP 维护的队列，也就是全连接队列(Accept Queue)。</li>
+<li>SYN Flood 攻击原理：SYN Flood 属于典型的 DoS/DDoS 攻击。其攻击的原理很简单，就是用客户端在短时间内伪造大量不存在的 IP 地址，并向服务端疯狂发送SYN。对于服务端而言，会产生两个危险的后果:<ol>
+<li>处理大量的SYN包并返回对应ACK, 势必有大量连接处于SYN_RCVD状态，从而占满整个半连接队列，无法处理正常的请求。</li>
+<li>由于是不存在的 IP，服务端长时间收不到客户端的ACK，会导致服务端不断重发数据，直到耗尽服务端的资源。</li>
+</ol>
+</li>
+<li>如何应对：<ol>
+<li>增加 SYN 连接，也就是增加半连接队列的容量。</li>
+<li>减少 SYN + ACK 重试次数，避免大量的超时重发。</li>
+<li>利用 SYN Cookie 技术，在服务端接收到SYN后不立即分配连接资源，而是根据这个SYN计算出一个Cookie，连同第二次握手回复给客户端，在客户端回复ACK的时候带上这个Cookie值，服务端验证 Cookie 合法之后才分配连接资源。</li>
 </ol>
 </li>
 </ul>
@@ -255,22 +287,22 @@
 </ul>
 </li>
 </ul>
-<h2 id="DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><a href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。" class="headerlink" title="DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。"></a>DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</h2><ul>
-<li>DNS可以使用 UDP 和 TCP 进行传输，使用的端口号都为53.大多数情况下 DNS 使用 UDP 进行传输，这就要求域名解析器和域名服务器都必须自己处理超市和重传来保证可靠性。在两种情况下会使用 TCP 进行传输：<ol>
+<h2 id="DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><a href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。" class="headerlink" title="DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。"></a>DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</h2><p>DNS可以使用 UDP 和 TCP 进行传输，使用的端口号都为53。大多数情况下 DNS 使用 UDP 进行传输，这就要求域名解析器和域名服务器都必须自己处理超市和重传来保证可靠性。在两种情况下会使用 TCP 进行传输：</p>
+<ol>
 <li>如果返回的响应超过 512 字节（UDP 最大只支持 512 字节的数据）。</li>
 <li>区域传送（区域传送是主域名服务器向辅助域名服务器传送变化的那部分数据）。</li>
 </ol>
-</li>
-</ul>
 <h2 id="GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><a href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。" class="headerlink" title="GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。"></a>GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</h2><ul>
 <li>作用：GET 用于获取资源，而 POST 用于传输实体主体。</li>
 <li>参数：GET 和 POST 的请求都能使用额外的参数，但是 GET 的 参数是以查询字符串出现在 URL 中，而 POST 的参数存储在实体主体中。因为 URL 只支持 ASCII 码，因此 GET 的参数中如果存在中文等字符就需要先进行编码。例如 <code>中文</code> 会转换为 <code>%E4%B8%AD%E6%96%87</code>，而空格会转换为<code>%20</code>。POST 参考支持标准字符集。</li>
 <li>安全性：安全的 HTTP 方法不会改变服务器状态，也就是说他只是可读的。GET 方法是安全的，而 POST 却不是，因为 POST 的目的是传送实体主体内容，这个内容可能是用户上传的表单数据，上传成功之后，服务器可能把这个数据存储到数据库中，因此状态也就发生了改变。安全的方法除了 GET 之外还有：HEAD、OPTIONS。不安全的方法除了 POST 之外还有 PUT、DELETE。</li>
 <li>幂等性：幂等的 HTTP 方法，同样的请求被执行一次与连续执行多次的效果是一样的，服务器的状态也是一样的。换句话说就是，幂等方法不应该具有副作用（统计用途除外）。所有的安全方法也都是幂等的。在正确实现的条件下，GET，HEAD，PUT 和 DELETE 等方法都是幂等的，而 POST 方法不是。</li>
-<li>可缓存：如果要对响应进行缓存，需要满足以下条件：</li>
+<li>可缓存：如果要对响应进行缓存，需要满足以下条件：<ul>
 <li>请求报文的 HTTP 方法本身是可缓存的，包括 GET 和 HEAD，但是 PUT 和 DELETE 不可缓存，POST 在多数情况下不可缓存的。</li>
 <li>响应报文的状态码是可缓存的，包括：200, 203, 204, 206, 300, 301, 404, 405, 410, 414, and 501。</li>
 <li>响应报文的 Cache-Control 首部字段没有指定不进行缓存。</li>
+</ul>
+</li>
 </ul>
 <h2 id="HTTP-状态码。"><a href="#HTTP-状态码。" class="headerlink" title="HTTP 状态码。"></a>HTTP 状态码。</h2><table>
 <thead>
@@ -367,12 +399,15 @@
 <li>客户端需要使用多个连接才能实现并发和缩短延迟</li>
 <li>不会压缩请求和响应首部，从而导致不必要的网络流量</li>
 <li>不支持有效的资源优先级，导致底层 TCP 连接的利用率低下</li>
+<li>客户端需要主动请求</li>
+<li>队头阻塞</li>
 </ul>
 </li>
 <li>HTTP/2：<ul>
-<li>二进制分帧层：HTTP/2.0将报文分成 HEADERS 帧和 DATA 帧，它们嗾使二进制格式的。在通信过程中，只会有一个 TCP 连接存在，它承载力任意数量的数据流。</li>
+<li>二进制分帧层：HTTP 2 是二进制协议，他下用二进制格式传输数据而不是 1.x 的文本格式。它将报文分成 HEADERS 帧和 DATA 帧，它们都是二进制格式的。在通信过程中，只会有一个 TCP 连接存在，它承载力任意数量的数据流。</li>
 <li>服务器推送：HTTP/2.0 在客户端请求一个资源时，会把相关的资源一起发送给客户端，客户端就不需要再次发起请求了。例如客户端请求 page.html 页面，服务端就把 script.js 和 style.css 等与之相关的资源一起发给客户端。</li>
 <li>首部压缩：HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见过的首部字段表，从而避免了重复传输。不仅如此，HTTP/2.0 也使用 Huffman 编码对首部字段进行压缩。</li>
+<li>多路复用：HTTP2 让所有的通信都在一个 TCP 连接上完成，实现了请求并发，后面的请求不用再等待，解决了队头阻塞。</li>
 </ul>
 </li>
 </ul>
@@ -408,6 +443,7 @@
 <li><a href="https://juejin.im/post/5ce37660f265da1bb13f05f0" target="_blank" rel="external">什么是队头阻塞以及如何解决</a></li>
 <li><a href="https://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a></li>
 <li><a href="https://www.cnblogs.com/qcrao-2018/p/10182185.html" target="_blank" rel="external">“三次握手，四次挥手”你真的懂吗？</a></li>
+<li><a href="https://juejin.im/post/5e527c58e51d4526c654bf41" target="_blank" rel="external">TCP协议灵魂之问，巩固你的网路底层基础</a></li>
 </ul>
 
   </article>
@@ -416,18 +452,20 @@
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是队头阻塞"><span class="toc-text">什么是队头阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-队头阻塞"><span class="toc-text">TCP 队头阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1-队头阻塞"><span class="toc-text">HTTP 1.1 队头阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各层协议的作用，以及-TCP-IP-协议的特点。"><span class="toc-text">各层协议的作用，以及 TCP/IP 协议的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以太网的特点，以及帧结构。"><span class="toc-text">以太网的特点，以及帧结构。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器、交换机、路由器的作用，以及所属的网络层。-https-www-tianmaying-com-tutorial-NetWorkInstrument"><span class="toc-text">集线器、交换机、路由器的作用，以及所属的网络层。(https://www.tianmaying.com/tutorial/NetWorkInstrument)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据数据报常见字段的作用。"><span class="toc-text">IP 数据数据报常见字段的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP-协议的作用，以及维护-ARP-缓存的过程。"><span class="toc-text">ARP 协议的作用，以及维护 ARP 缓存的过程。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。"><span class="toc-text">ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。"><span class="toc-text">UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解三次握手以及四次挥手具体过程，三次握手的原因-https-www-jianshu-com-p-7d0f91345483-、四次挥手原因、TIME-WAIT-的作用。"><span class="toc-text">理解三次握手以及四次挥手具体过程，三次握手的原因(https://www.jianshu.com/p/7d0f91345483)、四次挥手原因、TIME_WAIT 的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠传输原理，并设计可靠-UDP-协议。"><span class="toc-text">可靠传输原理，并设计可靠 UDP 协议。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-拥塞控制的作用，理解具体原理。"><span class="toc-text">TCP 拥塞控制的作用，理解具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><span class="toc-text">DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><span class="toc-text">GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-状态码。"><span class="toc-text">HTTP 状态码。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-作用、安全性问题、和-Session-的比较。"><span class="toc-text">Cookie 作用、安全性问题、和 Session 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。"><span class="toc-text">缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#长连接与短连接原理以及使用场景，流水线。"><span class="toc-text">长连接与短连接原理以及使用场景，流水线。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。"><span class="toc-text">HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-x-的缺陷，以及-HTTP-2-的特点。"><span class="toc-text">HTTP/1.x 的缺陷，以及 HTTP/2 的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-1-的特性。"><span class="toc-text">HTTP/1.1 的特性。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-与-FTP-的比较。"><span class="toc-text">HTTP 与 FTP 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket-网络-I-O模型"><span class="toc-text">Socket 网络 I/O模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比较"><span class="toc-text">比较:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是队头阻塞"><span class="toc-text">什么是队头阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-队头阻塞"><span class="toc-text">TCP 队头阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1-队头阻塞"><span class="toc-text">HTTP 1.1 队头阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各层协议的作用，以及-TCP-IP-协议的特点。"><span class="toc-text">各层协议的作用，以及 TCP/IP 协议的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以太网的特点，以及帧结构。"><span class="toc-text">以太网的特点，以及帧结构。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器、交换机、路由器的作用，以及所属的网络层"><span class="toc-text">集线器、交换机、路由器的作用，以及所属的网络层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据数据报常见字段的作用。"><span class="toc-text">IP 数据数据报常见字段的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP-协议的作用，以及维护-ARP-缓存的过程。"><span class="toc-text">ARP 协议的作用，以及维护 ARP 缓存的过程。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。"><span class="toc-text">ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。"><span class="toc-text">UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。"><span class="toc-text">理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#说说半连接队列和-SYN-Flood-攻击的关系"><span class="toc-text">说说半连接队列和 SYN Flood 攻击的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠传输原理，并设计可靠-UDP-协议。"><span class="toc-text">可靠传输原理，并设计可靠 UDP 协议。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-拥塞控制的作用，理解具体原理。"><span class="toc-text">TCP 拥塞控制的作用，理解具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><span class="toc-text">DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><span class="toc-text">GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-状态码。"><span class="toc-text">HTTP 状态码。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-作用、安全性问题、和-Session-的比较。"><span class="toc-text">Cookie 作用、安全性问题、和 Session 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。"><span class="toc-text">缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#长连接与短连接原理以及使用场景，流水线。"><span class="toc-text">长连接与短连接原理以及使用场景，流水线。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。"><span class="toc-text">HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-x-的缺陷，以及-HTTP-2-的特点。"><span class="toc-text">HTTP/1.x 的缺陷，以及 HTTP/2 的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-1-的特性。"><span class="toc-text">HTTP/1.1 的特性。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-与-FTP-的比较。"><span class="toc-text">HTTP 与 FTP 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socket-网络-I-O模型"><span class="toc-text">Socket 网络 I/O模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比较"><span class="toc-text">比较:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
   </div>
 </div>
 
   
 <nav id="pagination">
   
-
+    <a href="/2020/02/19/Head First设计模式阅读笔记/" class="prev">&larr; 上一篇 Head First设计模式阅读笔记</a>
   
 
   
-    <a href="/2020/01/20/秋招面经/" class="next">下一篇 秋招面经 &rarr;</a>
+
+  
+    <a href="/2020/01/28/Java-虚拟机/" class="next">下一篇 Java 虚拟机 &rarr;</a>
   
 </nav>
 

@@ -1,0 +1,551 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="分布式锁需满足的条件
+多进程可⻅：多进程可⻅，否则就⽆法实现分布式效果
+互斥：同⼀时刻，只能有⼀个进程获得锁，执⾏任务后释放锁
+可重⼊（可选）：同⼀个任务再次获取改锁不会被死锁
+阻塞锁（可选）：获取失败时，具备重试机制，尝试再次获取锁
+性能好（可选）：效率⾼，应对⾼并发场景
+⾼可⽤：避免锁服务宕机或处理好宕机的补救措施 
+
+基于数据库
+获得锁时向表中插入一条记录，释放锁时删除这条记录。唯一索...">
+  
+  <title>分布式锁 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/09/21/单例模式-JAVA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        单例模式 JAVA
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/09/10/分布式事务/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        分布式事务
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>分布式锁</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-09-14</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/分布式/">分布式</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/Redis/">Redis</a>
+      
+      </span>
+      
+    </p>
+    
+    <h1 id="分布式锁需满足的条件"><a href="#分布式锁需满足的条件" class="headerlink" title="分布式锁需满足的条件"></a>分布式锁需满足的条件</h1><ul>
+<li>多进程可⻅：多进程可⻅，否则就⽆法实现分布式效果</li>
+<li>互斥：同⼀时刻，只能有⼀个进程获得锁，执⾏任务后释放锁</li>
+<li>可重⼊（可选）：同⼀个任务再次获取改锁不会被死锁</li>
+<li>阻塞锁（可选）：获取失败时，具备重试机制，尝试再次获取锁</li>
+<li>性能好（可选）：效率⾼，应对⾼并发场景</li>
+<li>⾼可⽤：避免锁服务宕机或处理好宕机的补救措施 </li>
+</ul>
+<h1 id="基于数据库"><a href="#基于数据库" class="headerlink" title="基于数据库"></a>基于数据库</h1><ul>
+<li>获得锁时向表中插入一条记录，释放锁时删除这条记录。唯一索引可以保证该记录只被插入一次，那么就可以用这个记录是否存在来判断是否处于锁定状态。</li>
+<li>比如一个订单，那么我们可以用<code>select * from order_table where id = &#39;xxx&#39; for update</code>进行加行锁，那么其他的事务就不能对其进行修改。</li>
+</ul>
+<h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><ul>
+<li>锁没有失效时间，解锁失败的话其它进程无法再获得该锁；</li>
+<li>只能是非阻塞锁，插入失败直接就报错了，无法重试；</li>
+<li>不可重入，已经获得锁的进程也必须重新获取锁。</li>
+<li>一般对比缓存来说性能较低。对于高并发的场景并不是很适合。</li>
+</ul>
+<h1 id="基于-Redis"><a href="#基于-Redis" class="headerlink" title="基于 Redis"></a>基于 Redis</h1><p>使用 setnx 加锁 <code>SET resource_name random_value NX PX 30000</code>，如果执行成功，则客户端成功获取到了锁，如果执行失败，说明获取锁失败。</p>
+<ul>
+<li><code>random_value</code> 是由客户端生成的一个随机字符串，保证所有客户端的所有获取锁的请求中都是唯一的。</li>
+<li><code>NX</code> 表示只有当 <code>resource_name</code> 对应的 key 值不存在才能 SET 成功。这保证了只有第一个请求的客户端才能获得锁，而其它客户端在锁被释放之前都无法获得锁。</li>
+<li><code>PX 30000</code> 表示这个锁有一个 30 秒的自动过期时间。</li>
+</ul>
+<p>使用 del 释放锁，执行 Redis Lua 脚本来释放锁。</p>
+<pre class="line-numbers language-lua"><code class="language-lua"><span class="token keyword">if</span> redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"get"</span><span class="token punctuation">,</span>KEYS<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">==</span> ARGV<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">then</span>
+    <span class="token keyword">return</span> redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"del"</span><span class="token punctuation">,</span>KEYS<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span>
+    <span class="token keyword">return</span> <span class="token number">0</span>
+<span class="token keyword">end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="锁超时"><a href="#锁超时" class="headerlink" title="锁超时"></a>锁超时</h2><p>如果一个得到锁的线程在执行任务的过程中挂掉，来不及显式地释放锁，这块资源将会永远被锁住，别的线程再也别想进来。所以 key 必需设置超时时间，以保证即使没有被显式释放，这把锁也要在一定时间后自动释放。</p>
+<h2 id="del-导致误删"><a href="#del-导致误删" class="headerlink" title="del 导致误删"></a>del 导致误删</h2><ol>
+<li>线程 A 得到锁，设置的超时时间是 30 秒</li>
+<li>线程 A 执行超过 30 秒，</li>
+<li>锁自动释放</li>
+<li>线程 B 得到了锁</li>
+<li>之后 A 执行完了任务，删除了 B 的锁。</li>
+</ol>
+<p>所以释放锁的时候必须要判断是不是自己的锁，通过设置值 <code>random_value</code> 来保证唯一。</p>
+<h2 id="使用-Lua-脚本"><a href="#使用-Lua-脚本" class="headerlink" title="使用 Lua 脚本"></a>使用 Lua 脚本</h2><p>判断和释放是两个独立操作，不是<strong>原子性</strong>，这一块要用 Lua 脚本来实现。</p>
+<h2 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h2><p>同⼀个线程再次进⼊同步代码时，可以使⽤⾃⼰已获取到的锁。可重⼊锁可以避免因同⼀线程中多次获取锁⽽导致死锁发⽣。</p>
+<ul>
+<li>获取锁：⾸先尝试获取锁，如果获取失败，判断这个锁是否是⾃⼰的，如果是则允许再次获取，⽽且必须记录重复获取锁的次数。</li>
+<li>释放锁：释放锁不能直接删除了，因为锁是可重⼊的，如果锁进⼊了多次，在最内层直接删除锁，导致外部的业务在没有锁的情况下执⾏，会有安全问题。因此必须获取锁时累计重⼊的次数，释放时则减去重⼊次数，如果减到0，则可以删除锁.</li>
+</ul>
+<h2 id="出现并发"><a href="#出现并发" class="headerlink" title="出现并发"></a>出现并发</h2><p>当两个线程同时访问，一个线程执行时间超过过期时间，可以让获得锁的线程开启一个<strong>守护线程</strong>，用来给快要过期的锁“续航”。</p>
+<h1 id="乐观锁实现"><a href="#乐观锁实现" class="headerlink" title="乐观锁实现"></a>乐观锁实现</h1><p>乐观锁：大多数是基于数据版本（version）的记录机制实现的。即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个<code>version</code>字段来实现读取出数据时，将此版本号一同读出，之后更新时，对此版本号加 1。此时，将提交数据的版本号与数据库表对应记录的当前版本号进行比对，如果提交的数据版本号大于数据库当前版本号，则予以更新，否则认为是过期数据。</p>
+<p>Redis 中可以使用 <code>watch</code> 命令会监视给定的 <code>key</code>，当 <code>exec</code> 时候如果监视的 <code>key</code> 从调用 <code>watch</code> 后发生过变化，则整个事务会失败。也可以调用 <code>watch</code> 多次监视多个 <code>key</code>。这样就可以对指定的 <code>key</code> 加乐观锁了。注意 <code>watch</code> 的 <code>key</code> 是对整个连接有效的，事务也一样。如果连接断开，监视和事务都会被自动清除。当然了 <code>exec，discard，unwatch</code> 命令都会清除连接中的所有监视。</p>
+<p>Redis 中的事务(transaction)是一组命令的集合。事务同命令一样都是 Redis 最小的执行单位，一个事务中的命令要么都执行，要么都不执行。Redis 事务的实现需要用到 <code>MULTI</code> 和 <code>EXEC</code> 两个命令，事务开始的时候先向 Redis 服务器发送 <code>MULTI</code> 命令，然后依次发送需要在本次事务中处理的命令，最后再发送 <code>EXEC</code> 命令表示事务命令结束。Redis 的事务是下面 4 个命令来实现：</p>
+<ol>
+<li>multi：开启 Redis 的事务，置客户端为事务态。</li>
+<li>exec：提交事务，执行从 multi 到此命令前的命令队列，置客户端为非事务态。</li>
+<li>discard：取消事务，置客户端为非事务态。</li>
+<li>watch：监视键值对，作用时如果事务提交 exec 时发现监视的监视对发生变化，事务将被取消。 </li>
+</ol>
+<p>使用redis来实现乐观锁，以秒杀系统为例</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>distribute<span class="token punctuation">.</span>lock<span class="token punctuation">.</span>redis<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Set<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>ExecutorService<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>Executors<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> redis<span class="token punctuation">.</span>clients<span class="token punctuation">.</span>jedis<span class="token punctuation">.</span>Jedis<span class="token punctuation">;</span>
+<span class="token keyword">import</span> redis<span class="token punctuation">.</span>clients<span class="token punctuation">.</span>jedis<span class="token punctuation">.</span>Transaction<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * redis乐观锁实例
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OptimisticLockTest</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> InterruptedException <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> starTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">initPrduct</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">initClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">long</span> endTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">long</span> Time <span class="token operator">=</span> endTime <span class="token operator">-</span> starTime<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"程序运行时间： "</span> <span class="token operator">+</span> Time <span class="token operator">+</span> <span class="token string">"ms"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 输出结果
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Jedis jedis <span class="token operator">=</span> RedisUtil<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Set<span class="token operator">&lt;</span>String<span class="token operator">></span> set <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">smembers</span><span class="token punctuation">(</span><span class="token string">"clientList"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>String value <span class="token operator">:</span> set<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"第"</span> <span class="token operator">+</span> i<span class="token operator">++</span> <span class="token operator">+</span> <span class="token string">"个抢到商品，"</span> <span class="token operator">+</span> value <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        RedisUtil<span class="token punctuation">.</span><span class="token function">returnResource</span><span class="token punctuation">(</span>jedis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/*
+     * 初始化顾客开始抢商品
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">initClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ExecutorService cachedThreadPool <span class="token operator">=</span> Executors<span class="token punctuation">.</span><span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> clientNum <span class="token operator">=</span> <span class="token number">10000</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 模拟客户数目</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> clientNum<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            cachedThreadPool<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ClientThread</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        cachedThreadPool<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>cachedThreadPool<span class="token punctuation">.</span><span class="token function">isTerminated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"所有的线程都结束了！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 初始化商品个数
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">initPrduct</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> prdNum <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 商品个数</span>
+        String key <span class="token operator">=</span> <span class="token string">"prdNum"</span><span class="token punctuation">;</span>
+        String clientList <span class="token operator">=</span> <span class="token string">"clientList"</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 抢购到商品的顾客列表</span>
+        Jedis jedis <span class="token operator">=</span> RedisUtil<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>jedis<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            jedis<span class="token punctuation">.</span><span class="token function">del</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>jedis<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span>clientList<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            jedis<span class="token punctuation">.</span><span class="token function">del</span><span class="token punctuation">(</span>clientList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        jedis<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> String<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>prdNum<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 初始化</span>
+        RedisUtil<span class="token punctuation">.</span><span class="token function">returnResource</span><span class="token punctuation">(</span>jedis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">/**
+ * 顾客线程
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name">ClientThread</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+    Jedis jedis <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    String key <span class="token operator">=</span> <span class="token string">"prdNum"</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 商品主键</span>
+    String clientList <span class="token operator">=</span> <span class="token string">"clientList"</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//// 抢购到商品的顾客列表主键</span>
+    String clientName<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">ClientThread</span><span class="token punctuation">(</span><span class="token keyword">int</span> num<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        clientName <span class="token operator">=</span> <span class="token string">"编号="</span> <span class="token operator">+</span> num<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 随机睡眠一下</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"顾客:"</span> <span class="token operator">+</span> clientName <span class="token operator">+</span> <span class="token string">"开始抢商品"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            jedis <span class="token operator">=</span> RedisUtil<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                jedis<span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">int</span> prdNum <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>jedis<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 当前商品个数</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>prdNum <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    Transaction transaction <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">multi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    transaction<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> String<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>prdNum <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    List<span class="token operator">&lt;</span>Object<span class="token operator">></span> result <span class="token operator">=</span> transaction<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>result <span class="token operator">==</span> null <span class="token operator">||</span> result<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"顾客:"</span> <span class="token operator">+</span> clientName <span class="token operator">+</span> <span class="token string">"没有抢到商品"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 可能是watch-key被外部修改，或者是数据操作被驳回</span>
+                    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                        jedis<span class="token punctuation">.</span><span class="token function">sadd</span><span class="token punctuation">(</span>clientList<span class="token punctuation">,</span> clientName<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 抢到商品记录一下</span>
+                        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"顾客:"</span> <span class="token operator">+</span> clientName <span class="token operator">+</span> <span class="token string">"抢到商品"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"库存为0，顾客:"</span> <span class="token operator">+</span> clientName <span class="token operator">+</span> <span class="token string">"没有抢到商品"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+                jedis<span class="token punctuation">.</span><span class="token function">unwatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                RedisUtil<span class="token punctuation">.</span><span class="token function">returnResource</span><span class="token punctuation">(</span>jedis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="Redisson"><a href="#Redisson" class="headerlink" title="Redisson"></a>Redisson</h1><p>Redisson 是⼀个在 Redis 的基础上实现的 Java 驻内存数据⽹格（In-Memory Data Grid）。它不仅提供了⼀系列的分布式的 Java 常⽤对象，还<br>提供了许多分布式服务。Redisson 提供了使⽤ Redis 的最简单和最便捷的⽅法。Redisson 的宗旨是促进使⽤者对 Redis 的关注分离（Separation of Concern），从⽽让使⽤者能够将精⼒更集中地放在处理业务逻辑上。</p>
+<ul>
+<li>优点：实现简单，性能好，并发能⼒强，如果对并发能⼒有要求，推荐使⽤</li>
+<li>缺点：可靠性有争议，极端情况会出现锁失效问题，如果对安全要求较⾼，不建议使⽤</li>
+</ul>
+<h1 id="基于-ZooKeeper"><a href="#基于-ZooKeeper" class="headerlink" title="基于 ZooKeeper"></a>基于 ZooKeeper</h1><p>ZooKeeper 是⼀个分布式的，开放源码的分布式应⽤程序协调服务，是 Hadoop 和 Hbase 的重要组件。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>在 Zookeeper 中，znode 是⼀个跟 Unix ⽂件系统路径相似的节点，可以往这个节点存储或获取数据</li>
+<li>通过客户端可对 znode 进⾏增删改查的操作，还可以注册 watcher 监控 znode 的变化。</li>
+</ul>
+<h2 id="ZooKeeper-节点类型"><a href="#ZooKeeper-节点类型" class="headerlink" title="ZooKeeper 节点类型"></a>ZooKeeper 节点类型</h2><ul>
+<li>持久节点（PERSISTENT）</li>
+<li>持久顺序节点（PERSISTENT_SEQUENTIAL）</li>
+<li>临时节点（EPHEMERAL）</li>
+<li>临时顺序节点（EPHEMERAL_SEQUENTIAL）</li>
+</ul>
+<p>实现分布式锁的基础：<strong>对于持久节点和临时节点，同⼀个 znode 下，节点的名称是唯⼀的。</strong></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://juejin.im/post/5b16148a518825136137c8db" target="_blank" rel="external">什么是分布式锁？</a></li>
+<li><a href="http://zhangtielei.com/posts/blog-redlock-reasoning.html" target="_blank" rel="external">基于Redis的分布式锁到底安全吗（上）</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分布式锁需满足的条件"><span class="toc-text">分布式锁需满足的条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于数据库"><span class="toc-text">基于数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#存在的问题"><span class="toc-text">存在的问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于-Redis"><span class="toc-text">基于 Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#锁超时"><span class="toc-text">锁超时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#del-导致误删"><span class="toc-text">del 导致误删</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-Lua-脚本"><span class="toc-text">使用 Lua 脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可重入锁"><span class="toc-text">可重入锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#出现并发"><span class="toc-text">出现并发</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#乐观锁实现"><span class="toc-text">乐观锁实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redisson"><span class="toc-text">Redisson</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于-ZooKeeper"><span class="toc-text">基于 ZooKeeper</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特性"><span class="toc-text">特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper-节点类型"><span class="toc-text">ZooKeeper 节点类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/09/21/单例模式-JAVA/" class="prev">&larr; 上一篇 单例模式 JAVA</a>
+  
+
+  
+
+  
+    <a href="/2019/09/10/分布式事务/" class="next">下一篇 分布式事务 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

@@ -43,11 +43,11 @@ Integer[] what = Arra...">
 <div class="side-navigate hide-area">
   
     <div class="item prev">
-      <a href="/2020/01/15/Java-基础/">
+      <a href="/2020/01/11/扫码登录实现原理/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        Java 基础
+        扫码登录实现原理
       </div>
     </div>
   
@@ -155,10 +155,12 @@ Integer<span class="token punctuation">[</span><span class="token punctuation">]
 Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> ever <span class="token operator">=</span> IntStream<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span>Integer<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">:</span><span class="token operator">:</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// To boxed list</span>
-
 List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> you <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> like <span class="token operator">=</span> IntStream<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">boxed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>List 转 int[]</p>
+<pre class="line-numbers language-java"><code class="language-java">list<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">mapToInt</span><span class="token punctuation">(</span>Integer<span class="token operator">:</span><span class="token operator">:</span>intValue<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -173,7 +175,7 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
   
 <nav id="pagination">
   
-    <a href="/2020/01/15/Java-基础/" class="prev">&larr; 上一篇 Java 基础</a>
+    <a href="/2020/01/11/扫码登录实现原理/" class="prev">&larr; 上一篇 扫码登录实现原理</a>
   
 
   

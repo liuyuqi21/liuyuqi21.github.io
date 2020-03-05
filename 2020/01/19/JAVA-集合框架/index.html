@@ -183,10 +183,10 @@ HashSet：基于哈希表实现，支持快速查找，但不支持有序性操.
 <li>element/peek 从队首获取元素但不删除</li>
 </ul>
 <p>Queue 是个接口，它提供的 add, offer 方法初衷是希望子类能够禁止添加元素为 null，这样可以避免在查询时返回 null 究竟是正确还是错误。<br>事实上大多数 Queue 的实现类的确响应了 Queue 接口的规定，比如 ArrayBlockingQueue，PriorityBlockingQueue 等等。<br>但还是有一些实现类没有这样要求，比如 LinkedList。<br>虽然 LinkedList 没有禁止添加 null，但是一般情况下 Queue 的实现类都不允许添加 null 元素，为啥呢？因为 poll(), peek() 方法在异常的时候会返回 null，你添加了 null　以后，当获取时不好分辨究竟是否正确返回。<br>add() 方法在添加失败（比如队列已满）时会报 一些运行时错误 错；而 offer() 方法即使在添加失败时也不会奔溃，只会返回 false。</p>
-<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>底层数据结构是数组加链表。</p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>底层数据结构是数组加链表。默认容量是 16。</p>
 <p>从 JDK 1.8 开始，一个桶存储的链表长度大于等于 8 时会将链表转换为红黑树。</p>
 <h3 id="put"><a href="#put" class="headerlink" title="put"></a>put</h3><p>新来的 Entry 节点插入链表时，JDK 1.7 之前使用头插法、JDK 1.8 使用尾插法。</p>
-<p>HashMap 最多只允许一条记录的键为null，允许多条记录的值为null。但是无法调用 null 的 hashCode() 方法。所以使用第 0 个桶存放 null 的键值对。</p>
+<p>HashMap 最多只允许一条记录的键为 null，允许多条记录的值为 null。但是无法调用 null 的 hashCode() 方法。所以使用第 0 个桶存放 null 的键值对。</p>
 <h3 id="resize"><a href="#resize" class="headerlink" title="resize"></a>resize</h3><p>resize 方法负责初始化和扩容，衡量 HashMap 是否进行 Resize 的条件 <code>HashMap.Size &gt;= Capacity * LoadFactor</code></p>
 <ul>
 <li>扩容：创建一个新的 Entry 空数组，长度是原数组的 2 倍。</li>
@@ -200,7 +200,7 @@ y       : 10110010
 x-1     : 00001111
 y&(x-1) : 00000010 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>令一个数 y 与 x-1 做与运算，可以去除 y 位级表示的第 4 位以上数，这个性质和 y 对 x 取模是一样的。</p>
+<p>令一个数 y 与 x-1 做与运算，可以去除 y 位级表示的第 4 位以上数，这个效果和 y 对 x 取模是一样的。</p>
 <p>桶的数量，总容量默认值是 16，只有保证 capacity 为 2 的 n 次方，才能将这个操作转换为位运算。</p>
 <p>允许用户传入的容量不是 2 的 n 次方，它可以自动的将传入的容量转换成 2 的 n 次方。</p>
 <h3 id="负载系数（load-factor）"><a href="#负载系数（load-factor）" class="headerlink" title="负载系数（load factor）"></a>负载系数（load factor）</h3><ul>

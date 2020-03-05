@@ -52,11 +52,11 @@ boolean 可以使用 1 bit来存储，JVM 会在编译时期将 boolean 类型�
   
   
     <div class="item next">
-      <a href="/2020/01/09/int[]转Integer[]/">
+      <a href="/2020/01/11/扫码登录实现原理/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        int[] 转 Integer[]
+        扫码登录实现原理
       </div>
     </div>
   
@@ -241,7 +241,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 </ul>
 <h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ul>
 <li>静态变量又称为类变量，这个变量属于类，类的所有实例都共享静态变量，可以直接通过类名访问，静态变量在内存中只有一份。</li>
-<li>静态方法：静态方法在类加载时就存在，所有静态方法必须有实现，不能是抽象方法。只能访问所属类的静态字段和静态方法，方法中不能有 this 和 super 关键字，因此这两个关键字与具体对象关联</li>
+<li>静态方法：静态方法在类加载时就存在，所有静态方法必须有实现，不能是抽象方法。只能访问所属类的<strong>静态字段和静态方法</strong>，方法中不能有 this 和 super 关键字，因此这两个关键字与具体对象关联</li>
 <li>静态语句块只在类初始化时运行一次</li>
 <li>静态内部类不依赖于外部类实例，非静态内部类需要先创建外部实例再用这个实例去创建非静态内部类。静态内部类不能访问外部类的非静态的变量和方法</li>
 <li>静态变量和静态语句块优先于实例变量和普通语句块，在构造函数之前。静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。</li>
@@ -262,7 +262,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li>实现了 clone() 方法的类必须实现 Cloneable 接口，否则会抛出 CloneNotSupportedException 异常</li>
 </ul>
 <h1 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h1><h2 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h2><ul>
-<li>默认的，也称为dfault，在同一包内可见，不使用任何修饰符。</li>
+<li>默认的，也称为default，在同一包内可见，不使用任何修饰符。</li>
 <li>私有的，以 private 修饰符指定，在同一类内可见。</li>
 <li>共有的，以 public 修饰符指定，对所有类可见。</li>
 <li>受保护的，以 protected 修饰符指定，对同一包内的类和所有子类可见。</li>
@@ -271,6 +271,13 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口不能有任何的方法实现。接口的字段和方法默认是 public 的，并且不允许定义为 private 或者 protected，接口的字段默认是 static 和 final 的。</p>
 <p>Java 只支持单继承，可以实现多个接口</p>
 <p>从 Java 8 开始，接口也可以有默认的方法实现。</p>
+<h3 id="和抽象类的区别"><a href="#和抽象类的区别" class="headerlink" title="和抽象类的区别"></a>和抽象类的区别</h3><ul>
+<li>从设计层面来说，抽象是对类的抽象，提供了一种 IS-A 的关系，是一种模板设计，接口是行为的抽象，是一种 LIKE-A 关系，是一种行为的规范。</li>
+<li>从使用上来看，一个类可以实现多个接口，但是不能继承多个类</li>
+<li>接口的字段只能是 static 和 final 类型的，而抽象类的字段没有这种限制。</li>
+<li>接口的成员只能是 public 的，而抽象类的成员可以有多种访问权限。</li>
+</ul>
+<p>需要让不相关的类都实现一个方法的时候，可以使用接口。<br>需要在几个相关的类中共享代码使用抽象类。</p>
 <h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><p>如果子类重写了父类的某个方法，可以通过使用 super 关键字来引用父类的方法实现。</p>
 <h2 id="重写"><a href="#重写" class="headerlink" title="重写"></a>重写</h2><p>为了满足里氏替换原则，重写有三个限制</p>
 <ul>
@@ -333,12 +340,28 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li>实现 Runnable 接口</li>
 <li>实现 Callable 接口，可以有返回值</li>
 </ol>
+<p>推荐使用 Runnable 接口，因为 Java 不支持多继承。<br>Callable 接口中的 call() 方法有单绘制，是一个泛型，和 Future，FutureTask 配合用来获取异步执行的结果。</p>
 <h2 id="sleep-和-wait"><a href="#sleep-和-wait" class="headerlink" title="sleep() 和 wait()"></a>sleep() 和 wait()</h2><ul>
 <li>sleep 没有释放锁，wait 释放了锁</li>
 <li>wait 通常被用于线程间的交互/通信，sleep 通常被用于暂停执行</li>
 <li>wait() 方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的 notify() 或者 notifyAll() 方法。sleep() 方法执行完成后，线程会自动苏醒。或者可以使用 wait(long timeout) 超时后线程会自动苏醒。</li>
 </ul>
-<h2 id="为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><a href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法" class="headerlink" title="为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法"></a>为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</h2><p>调用 start 方法方可启动线程并使线程进入就绪状态，而 run 方法只是 thread 的一个普通方法调用，还是在主线程里执行。</p>
+<h2 id="为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><a href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法" class="headerlink" title="为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法"></a>为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</h2><p>调用 start 方法方可启动线程并使线程进入就绪状态，start 内部调用了 run 方法，直接调用 run 方法还是在主线程里执行，没有新的线程启动。</p>
+<h2 id="守护线程和非守护线程"><a href="#守护线程和非守护线程" class="headerlink" title="守护线程和非守护线程"></a>守护线程和非守护线程</h2><p>程序运行完毕，JVM 会等待非守护线程完成后关闭，但是 JVM 不会等待守护线程，比如 GC 线程就是守护线程。</p>
+<h2 id="什么是多线程上下文切换"><a href="#什么是多线程上下文切换" class="headerlink" title="什么是多线程上下文切换"></a>什么是多线程上下文切换</h2><p>多线程的上下文切换是指 CPU 控制权由一个已经正在运行的线程切换到另外一个就绪并等待获取 CPU 执行权的线程的过程。</p>
+<h2 id="什么导致线程阻塞"><a href="#什么导致线程阻塞" class="headerlink" title="什么导致线程阻塞"></a>什么导致线程阻塞</h2><ul>
+<li>sleep()：sleep 允许指定以毫秒为单位的一段时间作为参数，使得线程在指定的时间进入阻塞状态，不能得到 CPU 时间，指定的时间一过，线程重新进入可执行状态。阻塞时不会释放占用的锁。</li>
+<li>yield()：yield 使当前线程放弃已经分得的 CPU 时间，但不使当前线程阻塞，即线程仍处于可执行状态，随时可能再次分得 CPU 时间。</li>
+<li>suspend() 和 resume()：suspend 使得线程进入阻塞状态，不会自动恢复，只有 resume 被调用，才能使得线程重新进入可执行状态。</li>
+<li>wait() 和 notify()：wait 可以指定毫秒单位的时间作为参数，也可以不指定，当超出时间或者调用 notify 方法时，线程进入可执行状态。这一对方法必须在 synchorized 方法或者块中调用，只有在 synchronized 方法或块中当前线程才占有锁，才有锁可以释放。</li>
+</ul>
+<h2 id="synchronized-和-ReentrantLock"><a href="#synchronized-和-ReentrantLock" class="headerlink" title="synchronized 和 ReentrantLock"></a>synchronized 和 ReentrantLock</h2><ul>
+<li>ReentrantLock 是一个接口，而 synchorized 是关键字</li>
+<li>都是可重入锁</li>
+<li>ReentrantLock 需要显示的加锁和释放锁，synchorized 是自动的</li>
+<li>ReentrantLock 支持公平锁和非公平锁</li>
+<li>ReentrantLock 可相应中断、可轮回，synchorized 不可以</li>
+</ul>
 <h1 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h1><ul>
 <li>IO 流是一种顺序读写数据的模式</li>
 <li>二进制数据以 byte 为最小单位在 InputStream/OuputStream 中单向流动（字节流）</li>
@@ -391,6 +414,7 @@ InputStream f <span class="token operator">=</span> <span class="token keyword">
 </ul>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a href="https://cyc2018.github.io/CS-Notes/#/notes/Java%20%E5%9F%BA%E7%A1%80" target="_blank" rel="external">Java 基础</a></li>
+<li><a href="https://juejin.im/post/5b57b81af265da0f4b7a9ae5" target="_blank" rel="external">bat等大公司常考java多线程面试题</a></li>
 </ul>
 
   </article>
@@ -399,7 +423,7 @@ InputStream f <span class="token operator">=</span> <span class="token keyword">
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本类型和包装类型"><span class="toc-text">基本类型和包装类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String"><span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不可变的好处"><span class="toc-text">不可变的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-Pool-字符串常量池"><span class="toc-text">String Pool 字符串常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#new-String-“abc”"><span class="toc-text">new String(“abc”)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参数传递"><span class="toc-text">参数传递</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隐式类型转换"><span class="toc-text">隐式类型转换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#局部变量"><span class="toc-text">局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例变量"><span class="toc-text">实例变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类变量（静态变量）"><span class="toc-text">类变量（静态变量）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字"><span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#final"><span class="toc-text">final</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static"><span class="toc-text">static</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">volatile</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Object-通用方法"><span class="toc-text">Object 通用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#equals"><span class="toc-text">equals()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashCode"><span class="toc-text">hashCode()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone"><span class="toc-text">clone()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#面向对象"><span class="toc-text">面向对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-text">访问权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类"><span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-text">接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super"><span class="toc-text">super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重写"><span class="toc-text">重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载"><span class="toc-text">重载</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反射"><span class="toc-text">反射</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#异常"><span class="toc-text">异常</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型"><span class="toc-text">泛型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编写泛型"><span class="toc-text">编写泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#擦拭法"><span class="toc-text">擦拭法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extends通配符"><span class="toc-text">extends通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super通配符"><span class="toc-text">super通配符</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多线程"><span class="toc-text">多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#有三种实现线程的方法"><span class="toc-text">有三种实现线程的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep-和-wait"><span class="toc-text">sleep() 和 wait()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><span class="toc-text">为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO"><span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#读取控制台输入"><span class="toc-text">读取控制台输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File对象"><span class="toc-text">File对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InputStream"><span class="toc-text">InputStream</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OutputStream"><span class="toc-text">OutputStream</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanner-类"><span class="toc-text">Scanner 类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-与-C-的区别"><span class="toc-text">Java 与 C++ 的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本类型和包装类型"><span class="toc-text">基本类型和包装类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String"><span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不可变的好处"><span class="toc-text">不可变的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-Pool-字符串常量池"><span class="toc-text">String Pool 字符串常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#new-String-“abc”"><span class="toc-text">new String(“abc”)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参数传递"><span class="toc-text">参数传递</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隐式类型转换"><span class="toc-text">隐式类型转换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#局部变量"><span class="toc-text">局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例变量"><span class="toc-text">实例变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类变量（静态变量）"><span class="toc-text">类变量（静态变量）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字"><span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#final"><span class="toc-text">final</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static"><span class="toc-text">static</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">volatile</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Object-通用方法"><span class="toc-text">Object 通用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#equals"><span class="toc-text">equals()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashCode"><span class="toc-text">hashCode()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone"><span class="toc-text">clone()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#面向对象"><span class="toc-text">面向对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-text">访问权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类"><span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#和抽象类的区别"><span class="toc-text">和抽象类的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super"><span class="toc-text">super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重写"><span class="toc-text">重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载"><span class="toc-text">重载</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反射"><span class="toc-text">反射</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#异常"><span class="toc-text">异常</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型"><span class="toc-text">泛型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编写泛型"><span class="toc-text">编写泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#擦拭法"><span class="toc-text">擦拭法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extends通配符"><span class="toc-text">extends通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super通配符"><span class="toc-text">super通配符</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多线程"><span class="toc-text">多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#有三种实现线程的方法"><span class="toc-text">有三种实现线程的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep-和-wait"><span class="toc-text">sleep() 和 wait()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><span class="toc-text">为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#守护线程和非守护线程"><span class="toc-text">守护线程和非守护线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是多线程上下文切换"><span class="toc-text">什么是多线程上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么导致线程阻塞"><span class="toc-text">什么导致线程阻塞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-和-ReentrantLock"><span class="toc-text">synchronized 和 ReentrantLock</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO"><span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#读取控制台输入"><span class="toc-text">读取控制台输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File对象"><span class="toc-text">File对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InputStream"><span class="toc-text">InputStream</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OutputStream"><span class="toc-text">OutputStream</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanner-类"><span class="toc-text">Scanner 类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-与-C-的区别"><span class="toc-text">Java 与 C++ 的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
   </div>
 </div>
 
@@ -412,7 +436,7 @@ InputStream f <span class="token operator">=</span> <span class="token keyword">
   
 
   
-    <a href="/2020/01/09/int[]转Integer[]/" class="next">下一篇 int[] 转 Integer[] &rarr;</a>
+    <a href="/2020/01/11/扫码登录实现原理/" class="next">下一篇 扫码登录实现原理 &rarr;</a>
   
 </nav>
 

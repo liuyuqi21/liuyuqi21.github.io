@@ -1,7 +1,7 @@
 body {
   background-color: #34495e;
   margin: 0px;
-  font-family: Lato, "Microsoft Jhenghei", "Hiragino Sans GB", sans-serif;
+  font-family: Roboto, "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Naskh Arabic", "Noto Sans Thai", "Noto Sans Hebrew", "Noto Sans Bengali", Lato, "Microsoft Jhenghei", "Hiragino Sans GB", sans-serif;
   font-size: 16px;
 }
 @media (max-width: 860px) {

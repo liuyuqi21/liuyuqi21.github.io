@@ -136,7 +136,7 @@
       
         
         
-        <a href="/categories/Linux/">Linux</a>
+        <a href="/categories/基础/">基础</a>
       
       </span>
       
@@ -147,13 +147,13 @@
       
         
         
-        <a href="/tags/面试/">面试</a>
+        <a href="/tags/Linux/">Linux</a>
       
         
           /
         
         
-        <a href="/tags/Linux/">Linux</a>
+        <a href="/tags/题目/">题目</a>
       
       </span>
       
@@ -241,7 +241,13 @@
 <li><code>sed -n &#39;/100/&#39;p hello.txt</code> 打印 hello.txt 中 正则匹配 100 的行</li>
 <li><code>sed &#39;/100/&#39;i\ &quot;new line&quot; hello.txt</code></li>
 </ul>
-<h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><h1 id="磁盘相关"><a href="#磁盘相关" class="headerlink" title="磁盘相关"></a>磁盘相关</h1><h2 id="du-和-df"><a href="#du-和-df" class="headerlink" title="du 和 df"></a>du 和 df</h2><ul>
+<h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><h2 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h2><p>sort 和 uniq 经常配对使用。<br>sort 可以使用 -t 指定分隔符，使用 -k 指定要排序的列。</p>
+<p>下面这个命令输出 nginx 日志的 ip 和每个 ip 的 pv，pv 最高的前10</p>
+<pre class="line-numbers language-shell"><code class="language-shell">#2019-06-26T10:01:57+08:00|nginx001.server.ops.pro.dc|100.116.222.80|10.31.150.232:41021|0.014|0.011|0.000|200|200|273|-|/visit|sign=91CD1988CE8B313B8A0454A4BBE930DF|-|-|http|POST|112.4.238.213
+
+awk -F"|" '{print $3}' access.log | sort | uniq -c | sort -nk1 -r | head -n10
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="磁盘相关"><a href="#磁盘相关" class="headerlink" title="磁盘相关"></a>磁盘相关</h1><h2 id="du-和-df"><a href="#du-和-df" class="headerlink" title="du 和 df"></a>du 和 df</h2><ul>
 <li>du 通过搜索文件来计算每个文件的大小然后累加得到值。</li>
 <li>df 通过文件系统来获取空间大小信息。</li>
 </ul>
@@ -254,6 +260,7 @@
 <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961108&amp;idx=1&amp;sn=3fccc94c4307fa2306bae680d8570c18&amp;chksm=bd2d02c88a5a8bde8944e383a3fb9b6d24461cf07ed5a65dbf774a2382bf1f318aca18df5572&amp;scene=21#wechat_redirect" target="_blank" rel="external">一分钟了解nohup和&amp;的功效</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=205216499&amp;idx=1&amp;sn=656b5403f3be045772bb539c873e6bd0&amp;scene=21#wechat_redirect" target="_blank" rel="external">linux下追查线上问题常用命令</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651963003&amp;idx=1&amp;sn=fdf4c9a54dbc03568c5d5ad7a0c2112b&amp;chksm=bd2d0ba78a5a82b132d5968a147f13ccd4c81cd1da4fc0a9de1228f505191b2357b17488e00d&amp;scene=21#wechat_redirect" target="_blank" rel="external">线上问题排查，这些命令你一定用得到！</a></li>
+<li><a href="https://mp.weixin.qq.com/s/9RbTGQ4k4s92mrSf2xJ5TQ" target="_blank" rel="external">Linux上，最常用的一批命令解析（10年精选）</a></li>
 </ul>
 
   </article>
@@ -262,7 +269,7 @@
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#进程相关"><span class="toc-text">进程相关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何让一个进程在后台运行"><span class="toc-text">如何让一个进程在后台运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何查看日志"><span class="toc-text">如何查看日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询线程数"><span class="toc-text">查询线程数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查最耗-cpu-的进程"><span class="toc-text">查最耗 cpu 的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查最耗-cpu-的线程"><span class="toc-text">查最耗 cpu 的线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看堆栈"><span class="toc-text">查看堆栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查出进程号对应的服务名"><span class="toc-text">查出进程号对应的服务名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看某个端口的连接情况"><span class="toc-text">查看某个端口的连接情况</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文本处理"><span class="toc-text">文本处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#awk"><span class="toc-text">awk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed"><span class="toc-text">sed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grep"><span class="toc-text">grep</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#磁盘相关"><span class="toc-text">磁盘相关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#du-和-df"><span class="toc-text">du 和 df</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何查看已删除文件"><span class="toc-text">如何查看已删除文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#进程相关"><span class="toc-text">进程相关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何让一个进程在后台运行"><span class="toc-text">如何让一个进程在后台运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何查看日志"><span class="toc-text">如何查看日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询线程数"><span class="toc-text">查询线程数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查最耗-cpu-的进程"><span class="toc-text">查最耗 cpu 的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查最耗-cpu-的线程"><span class="toc-text">查最耗 cpu 的线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看堆栈"><span class="toc-text">查看堆栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查出进程号对应的服务名"><span class="toc-text">查出进程号对应的服务名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看某个端口的连接情况"><span class="toc-text">查看某个端口的连接情况</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文本处理"><span class="toc-text">文本处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#awk"><span class="toc-text">awk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed"><span class="toc-text">sed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grep"><span class="toc-text">grep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#统计"><span class="toc-text">统计</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#磁盘相关"><span class="toc-text">磁盘相关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#du-和-df"><span class="toc-text">du 和 df</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何查看已删除文件"><span class="toc-text">如何查看已删除文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
   </div>
 </div>
 

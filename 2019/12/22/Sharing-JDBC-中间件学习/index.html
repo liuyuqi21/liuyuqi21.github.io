@@ -1,0 +1,551 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="什么是分布式中间件数据库分布式中间件是一款专门针对分布式数据库集群而设计的中间件软件，它是以 MySQL 为底层存储来实现关系型数据的统一管理与访问的平台。分布式中间件可将应用发起的 SQL 语句经过解析、转换、再根据路由算法下推到集群系统中的各个MySQL数据库节点上，MySQL 数据库节点获得了正确且能够有效执行的分段 SQL 语句，执行之后将结果返还到中间件，由中间件对查询结果进行汇总...">
+  
+  <title>Sharing-JDBC 中间件学习 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/05/random-主题归档页问题/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        random 主题归档页问题
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/09/21/单例模式-JAVA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        单例模式 JAVA
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>Sharing-JDBC 中间件学习</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-12-22</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/中间件/">中间件</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/MySQL/">MySQL</a>
+      
+      </span>
+      
+    </p>
+    
+    <h1 id="什么是分布式中间件"><a href="#什么是分布式中间件" class="headerlink" title="什么是分布式中间件"></a>什么是分布式中间件</h1><p>数据库分布式中间件是一款专门针对分布式数据库集群而设计的中间件软件，它是以 MySQL 为底层存储来实现关系型数据的统一管理与访问的平台。分布式中间件可将应用发起的 SQL 语句经过解析、转换、再根据路由算法下推到集群系统中的各个MySQL数据库节点上，MySQL 数据库节点获得了正确且能够有效执行的分段 SQL 语句，执行之后将结果返还到中间件，由中间件对查询结果进行汇总、计算、合并成应用服务所需的执行结果。</p>
+<p>从最终用户的角度，分布式中间件可以认为就是一个传统的关系型数据库，支持通过标准的 SQL 语句进行数据操作，对前端业务系统来说，可以大幅降低开发难度，提升开发速度。用户可以将表定义为任何一种中间件支持的存储方式，比如Innodb。</p>
+<h1 id="为什么需要分布式中间件"><a href="#为什么需要分布式中间件" class="headerlink" title="为什么需要分布式中间件"></a>为什么需要分布式中间件</h1><p>引入分布式中间件的目的是为了解决高并发+海量数据存储的问题。</p>
+<h2 id="直连数据库模式"><a href="#直连数据库模式" class="headerlink" title="直连数据库模式"></a>直连数据库模式</h2><p><img src="/images/db-1.png" alt=""><br>优点：</p>
+<ul>
+<li>中间消耗最低，对于低并发，少量存储来说，请求响应时间极短。</li>
+<li>由于调用链简单，排障比较容易。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>无法承载高并发访问</li>
+<li>无法承载海量数据</li>
+</ul>
+<h2 id="读写分离模式"><a href="#读写分离模式" class="headerlink" title="读写分离模式"></a>读写分离模式</h2><p><img src="/images/db-2.png" alt=""><br>优点：解决了高并发问题</p>
+<p>缺点：</p>
+<ul>
+<li>增大了应用到存储之间的距离，无法获取最优的请求响应时间</li>
+<li>无法解决海量数据存储问题</li>
+</ul>
+<h2 id="数据分片模式"><a href="#数据分片模式" class="headerlink" title="数据分片模式"></a>数据分片模式</h2><p><img src="/images/db-3.png" alt=""><br>优点：</p>
+<ul>
+<li>解决了高并发的问题</li>
+<li>解决了海量存储的问题</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>增大了应用到存储之间的距离，无法获取最优的请求响应时间</li>
+<li>加大运维难度</li>
+<li>分布式事务管理难度增加</li>
+</ul>
+<h3 id="分库分表后的问题"><a href="#分库分表后的问题" class="headerlink" title="分库分表后的问题"></a>分库分表后的问题</h3><ul>
+<li>分布式事务问题</li>
+<li>表关联问题</li>
+<li>分页、排序比较复杂</li>
+<li>需要生产全局唯一主键，叫做分布式 ID。</li>
+</ul>
+<h1 id="是否分库分表"><a href="#是否分库分表" class="headerlink" title="是否分库分表"></a>是否分库分表</h1><p>如何计算当前表的理论上分表的最大值</p>
+<p>在开始这一块之前，我们需要了解以下几个信息：</p>
+<ol>
+<li>每一个节点在数据库中都是一个页，页是 innodb 磁盘管理最小的单位，innodb 每个页的大小是 16K，且不可更改。常见的类型有：数据页 B-tree Node；undo 页 Undo Log Page；系统页 System Page；事务数据页 Transaction system Page；插入缓冲位图页 Insert Buffer Bitmap；插入缓冲空闲列表页 Insert Buffer freeBitmap；未压缩的二进制大对象页Uncompressed BLOB Page；压缩的二进制大对象页 Compressed BLOB Page。</li>
+<li>每个key后有个页号4B，还有6B的其他数据（参考《MySQL技术内幕：InnoDB存储引擎》P193的页面数据）</li>
+<li>装载因子（InnoDB 默认为15/16）</li>
+</ol>
+<p>以下是针对单行数据在 300bit 大小的数据计算步骤：</p>
+<ol>
+<li>索引节点：<code>(16000/(8+4+6))*15/16=833.33</code>个</li>
+<li>叶子节点：假设单行数据<code>1218byte</code>,计算为<code>(16000/（1218*8+8+4+6）)*15/16=1.54</code></li>
+<li>总共三层B+树可存储数据量为：<code>833.33*833.33*1.54=1067054</code>条数据</li>
+</ol>
+<p>所以一个表的数据在 1067054 条时，B+ 树会膨胀到四层，影响 sql 的性能（可能数据库有会压缩数据之类的优化操作，但是数量级应该不会差很多）</p>
+<h1 id="手动分表的方式"><a href="#手动分表的方式" class="headerlink" title="手动分表的方式"></a>手动分表的方式</h1><h2 id="根据取值范围"><a href="#根据取值范围" class="headerlink" title="根据取值范围"></a>根据取值范围</h2><p>可以根据时间区间或者 ID 区间来切分。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>单表数据量可控</li>
+<li>水平扩展只需要增加节点即可，无需对其他分片的数据进行迁移</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>由于连续分片可能存在数据热点，如果按时间字段分片，有些分片存储最近时间段内的数据，可能会被频繁的读写，而有些分片存储的历史数据，则很少被查询.</p>
+<h2 id="哈希取模"><a href="#哈希取模" class="headerlink" title="哈希取模"></a>哈希取模</h2><p>数据分片相对比较均匀，不易出现某个库并发访问的问题。</p>
+<p>例如：以 messageEntry 表的 to_uid 字段为依据，除 1024 取余作为后缀。<br><code>$tableName = &quot;messageEntry&quot;. messageEntry[&#39;to_uid&#39;]% 1024;</code><br>消息模块 messageEntry_ 表根据 user_id 手动将表分为 1024 张表，使用表前自己根据计算规则<code>(user_id % 1024)</code>计算得到需要访问的表名。</p>
+<h1 id="使用中间件分表"><a href="#使用中间件分表" class="headerlink" title="使用中间件分表"></a>使用中间件分表</h1><ol>
+<li>sql 解析</li>
+<li>路由：提前配置分库分表规则，给业务方提供一个虚 ip:port, 业务方不再感知分库分表规则。</li>
+<li>组装数据：将返回结果根据需求组装后返回给业务方。</li>
+</ol>
+<h2 id="从手动分表改造成中间件分表的步骤"><a href="#从手动分表改造成中间件分表的步骤" class="headerlink" title="从手动分表改造成中间件分表的步骤"></a>从手动分表改造成中间件分表的步骤</h2><ol>
+<li>DBA 配置中间件</li>
+<li>表 messageEntry 按照原有分表方式(按照 user_id 分表标准)、表总数(仍 1024 张)等不变,</li>
+<li>给业务方一个虚 ip，业务方使用虚 ip 统一访问 messageEntry 表，不再直接操作具体一张表(messageEntry_xx).</li>
+<li>中间过渡(支持两种连接方式，既可以根据规则计算得到表名，也可以通过中间件方式路由到真实访问的表)</li>
+<li>业务方修改读写的 table: 将原来的使用的 messageEntry_xxx 统一替换为 messageEntry。此后，业务方不再感知分表分库等细节。</li>
+</ol>
+<p>sharding-JDBC 在后端将数据量较大的数据表水平拆分到后端的每个 MySQL 数据库中，这些拆分到 MySQL 中的数据库被称为分库，分库中的表称为分表。</p>
+<p>拆分后，每个分库负责每一份数据的读写操作，从而有效的分散了整体访问压力。在系统扩容时，只需要水平增加分库的数量，并且迁移相关数据，就可以提高 MySQL 系统的总体容量。</p>
+<h1 id="Sharding-JDBC简介"><a href="#Sharding-JDBC简介" class="headerlink" title="Sharding-JDBC简介"></a>Sharding-JDBC简介</h1><p>Sharding-JDBC 是当当应用框架 ddframe 中，从关系型数据库模块 dd-rdb 中分离出来的数据库水平分片框架，实现透明化数据库分库分表访问。Sharding-JDBC 是继 dubbox 和 elastic-job 之后，ddframe 系列开源的第3个项目。</p>
+<p><strong>Sharding-JDBC 直接封装 JDBC API，可以理解为增强版的 JDBC 驱动，旧代码迁移成本几乎为零</strong>。</p>
+<p>可适用于任何基于 Java 的 ORM 框架，如 JPA、Hibernate、Mybatis、Spring JDBC Template 或直接使用 JDBC。<br>可基于任何第三方的数据库连接池，如 DBCP、C3P0、 BoneCP、Druid 等。<br>Sharding-JDBC 定位为轻量 Java 框架，使用客户端直连数据库，以 jar 包形式提供服务，无 proxy 代理层，无需额外部署，无其他依赖，DBA 也无需改变原有的运维方式。</p>
+<p>Sharding-JDBC 分片策略灵活，可支持等号、between、in 等多维度分片，也可支持多分片键。</p>
+<p>SQL解析功能完善，支持聚合、分组、排序、limit、or 等查询，并支持 Binding Table 以及笛卡尔积表查询。</p>
+<h2 id="与常见开源产品对比"><a href="#与常见开源产品对比" class="headerlink" title="与常见开源产品对比"></a>与常见开源产品对比</h2><p>Cobar 属于中间层方案，在应用程序和 MySQL 之间搭建一层 Proxy。中间层介于应用程序与数据库间，需要做一次转发，而基于JDBC协议并无额外转发，直接由应用程序连接数据库，性能上有些许优势。这里并非说明中间层一定不如客户端直连，除了性能，需要考虑的因素还有很多，中间层更便于实现监控、数据迁移、连接管理等功能。</p>
+<p>Cobar-Client、TDDL 和 Sharding-JDBC 均属于客户端直连方案。此方案的优势在于轻便、兼容性、性能以及对 DBA 影响小。其中 Cobar-Client 的实现方式基于 ORM（Mybatis）框架，其兼容性与扩展性不如基于 JDBC 协议的后两者。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>前文已介绍了 Sharding-JDBC 是实现了 JDBC 协议的 jar 文件。基于 JDBC 协议的实现与基于 MySQL 等数据库协议实现的中间层略有差别。</p>
+<p>无论使用哪种架构，核心逻辑均极为相似，除了协议实现层不同（JDBC或数据库协议），都会分为分片规则配置、SQL 解析、SQL 改写、SQL 路由、SQL 执行以及结果归并等模块。</p>
+<p><img src="/images/sharding.png" alt="Sharding-JDBC的整体架构图"></p>
+<h2 id="分片规则配置"><a href="#分片规则配置" class="headerlink" title="分片规则配置"></a>分片规则配置</h2><p>Sharding-JDBC 的分片逻辑非常灵活，支持分片策略自定义、复数分片键、多运算符分片等功能。</p>
+<p>如：根据用户 ID 分库，根据订单 ID 分表这种分库分表结合的分片策略；或根据年分库，月份 + 用户区域 ID 分表这样的多片键分片。</p>
+<p>Sharding-JDBC 除了支持等号运算符进行分片，还支持 in/between 运算符分片，提供了更加强大的分片功能。</p>
+<h2 id="SQL-解析"><a href="#SQL-解析" class="headerlink" title="SQL 解析"></a>SQL 解析</h2><p>SQL 解析作为分库分表类产品的核心，性能和兼容性是最重要的衡量指标。目前常见的SQL解析器主要有 fdb/jsqlparser 和 Druid。Sharding-JDBC 使用 Druid 作为 SQL 解析器，经实际测试，Druid 解析速度是另外两个解析器的几十倍。</p>
+<p>目前 Sharding-JDBC 支持 join、aggregation（包括avg）、order by、 group by、limit 甚至 or 查询等复杂 SQL 的解析。目前不支持 union、部分子查询、函数内分片等不太应在分片场景中出现的 SQL 解析。</p>
+<h2 id="SQL改写"><a href="#SQL改写" class="headerlink" title="SQL改写"></a>SQL改写</h2><p>SQL改写分为两部分，一部分是将分表的逻辑表名称替换为真实表名称。另一部分是根据 SQL 解析结果替换一些在分片环境中不正确的功能。这里具两个例子：</p>
+<ol>
+<li>avg计算。在分片的环境中，以 <code>avg1 +avg2+avg3/3</code> 计算平均值并不正确，需要改写为<code>(sum1+sum2+sum3)/(count1+count2+ count3)</code>。这就需要将包含 <code>avg</code> 的 <code>SQL</code> 改写为 <code>sum</code> 和 <code>count</code>，然后再结果归并时重新计算平均值。</li>
+<li>分页。假设每 10 条数据为一页，取第 2 页数据。在分片环境下获取 <code>limit 10, 10</code>，归并之后再根据排序条件取出前 10 条数据是不正确的结果。正确的做法是将分条件改写为 <code>limit 0, 20</code>，取出所有前 2 页数据，再结合排序条件算出正确的数据。可以看到越是靠后的 Limit 分页效率就会越低，也越浪费内存。有很多方法可避免使用 limit 进行分页，比如构建记录行记录数和行偏移量的二级索引，或使用上次分页数据结尾 ID 作为下次查询条件的分页方式。</li>
+</ol>
+<h2 id="SQL路由"><a href="#SQL路由" class="headerlink" title="SQL路由"></a>SQL路由</h2><p>SQL 路由是根据分片规则配置，将 SQL 定位至真正的数据源。主要分为单表路由、Binding 表路由和笛卡尔积路由。</p>
+<p>单表路由最为简单，但路由结果不一定落入唯一库（表），因为支持根据 between 和 in 这样的操作符进行分片，所以最终结果仍然可能落入多个库（表）。</p>
+<p>Binding 表可理解为分库分表规则完全一致的主从表。举例说明：订单表和订单详情表都根据订单 ID 作为分片键，任意时刻分片逻辑均相同。这样的关联查询和单表查询难度和性能相当。</p>
+<p>笛卡尔积查询最为复杂，因为无法根据 Binding 关系定位分片规则的一致性，所以非 Binding 表的关联查询需要拆解为笛卡尔积组合执行。查询性能较低，而且数据库连接数较高，需谨慎使用。</p>
+<h2 id="SQL执行"><a href="#SQL执行" class="headerlink" title="SQL执行"></a>SQL执行</h2><p>路由至真实数据源后，Sharding-JDBC 将采用多线程并发执行 SQL，并完成对 addBatch 等批量方法的处理。</p>
+<h2 id="结果归并"><a href="#结果归并" class="headerlink" title="结果归并"></a>结果归并</h2><p>结果归并包括 4 类：普通遍历类、排序类、聚合类和分组类。每种类型都会先根据分页结果跳过不需要的数据。</p>
+<p>普通遍历类最为简单，只需按顺序遍历 ResultSet 的集合即可。</p>
+<p>排序类结果将结果先排序再输出，因为各分片结果均按照各自条件完成排序，所以采用归并排序算法整合最终结果。</p>
+<p>聚合类分为3种类型，比较型、累加型和平均值型。比较型包括 max 和 min，只返回最大（小）结果。累加型包括 sum 和 count，需要将结果累加后返回。平均值则是通过 SQL 改写的 sum 和 count 计算，相关内容已在 SQL 改写涵盖，不再赘述。</p>
+<p>分组类最为复杂，需要将所有的 ResultSet 结果放入内存，使用 map-reduce 算法分组，最后根据排序和聚合条件做相关处理。最消耗内存，最损失性能的部分即是此，可以考虑使用 limit 合理的限制分组数据大小。</p>
+<p>结果归并部分目前并未采用管道解析的方式，之后会针对这里做更多改进。 </p>
+<h2 id="Sharding-JDBC-具体使用"><a href="#Sharding-JDBC-具体使用" class="headerlink" title="Sharding-JDBC 具体使用"></a>Sharding-JDBC 具体使用</h2><p>先做一个最简单的试用，不做分库，仅做分表。选择数据表 operate_history，这个数据表记录所有的操作历史，是整个系统中数据量最大的一个数据表。</p>
+<p>希望将这个表拆分为四个数据表，分别是 operate_history_0、operate_history_1、operate_history_2 、operate_history_3。数据能够分配保存到四个数据表中，降低单表的数据量。同时，为了尽量减少跨表的查询操作，决定使用字段 entity_key 为分表依据，这样同一个 entity 对象的所有操作，将会记录在同一个数据表中。</p>
+<p>以下是针对JPA项目的修改过程。其他项目请参考官方网站的文档。</p>
+<ol>
+<li>修改 pom.xml 增加 dependency，需要添加两个 jar，sharding-jdbc-core 和 sharding-jdbc-config-spring。</li>
+</ol>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.dangdang<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.dangdang<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-config-spring<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>修改 Spring 中 Database 部分的配置</li>
+</ol>
+<p>原 Database 配置</p>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;bean id="dataSource"class="org.apache.tomcat.jdbc.pool.DataSource"destroy-method="close">
+
+  &lt;propertyname="driverClassName"value="com.mysql.jdbc.Driver"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="url" value="jdbc:mysql://localhost:3306/sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="username" value="root"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="password" value="sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>修改后的配置</p>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;beanid="db-node-0"class="org.apache.tomcat.jdbc.pool.DataSource"destroy-method="close">
+
+ &lt;property name="driverClassName"value="com.mysql.jdbc.Driver"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="url"value="jdbc:mysql://localhost:3306/sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="username"value="root"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="password"value="sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+
+&lt;rdb:strategyid="historyTableStrategy"
+
+ sharding-columns="entity_key"
+
+ algorithm-class="cn.codestory.sharding.SingleKeyTableShardingAlgorithm"/>
+
+&lt;rdb:data-sourceid="dataSource">
+
+ &lt;rdb:sharding-ruledata-sources="db-node-0"default-data-source="db-node-0">
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">rdb:</span>table-rules</span><span class="token punctuation">></span></span>
+
+   &lt;rdb:table-rulelogic-table="operate_history"
+
+   actual-tables="operate_history_0,operate_history_1,operate_history_2,operate_history_3"
+
+   table-strategy="historyTableStrategy" />
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>table-rules</span><span class="token punctuation">></span></span>
+
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>sharding-rule</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>data-source</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>编写类 SingleKeyTableShardingAlgorithm，这个类用来根据 entity_key 值确定使用的分表名。参考 sharding 提供的示例代码进行修改。核心代码如下</li>
+</ol>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">doInSharding</span><span class="token punctuation">(</span>Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> availableTargetNames<span class="token punctuation">,</span> ShardingValue<span class="token operator">&lt;</span>Long<span class="token operator">></span> shardingValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//这是一个简单的实现，对 entity_key 进行求模，用余数确定数据表名。</span>
+    <span class="token keyword">int</span> targetCount <span class="token operator">=</span> availableTargetNames<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> result <span class="token operator">=</span> newLinkedHashSet <span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>targetCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Collection<span class="token operator">&lt;</span>Long<span class="token operator">></span> values <span class="token operator">=</span> shardingValue<span class="token punctuation">.</span><span class="token function">getValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>Long value <span class="token operator">:</span> values<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>String tableNames <span class="token operator">:</span> availableTargetNames<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>tableNames<span class="token punctuation">.</span><span class="token function">endsWith</span><span class="token punctuation">(</span>value <span class="token operator">%</span> targetCount <span class="token operator">+</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>tableNames<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="4">
+<li>修改主键生成方法：因为数据分表保存，不能使用 identify 方式生成数据表主键。如果主键是 String 类型，可以考虑使用 uuid 生成方法，但它查询效率会相对比较低。如果使用 long 型主键，可以使用其他方式，一定要确保各个子表中的主键不重复。</li>
+<li>历史数据的处理：根据数据分表的规则，需要对原有数据包的数据进行迁移，分别移动到四个数据表中。如果不做这一步，或者数据迁移到了错误的数据表，后续将会查询不到这些数据。</li>
+<li>至此，对项目的修改基本完成，重新启动项目并增加 operate_history 数据，就会看到新添加的数据，已经根据我们的分表规则，插入到了某一个数据表中。查询的时候，能够同时查询到多个实际数据表中的数据。</li>
+</ol>
+<h2 id="数据分表规则的一些考虑"><a href="#数据分表规则的一些考虑" class="headerlink" title="数据分表规则的一些考虑"></a>数据分表规则的一些考虑</h2><p>前面的例子，演示的是根据 entity_key 进行分表，也可以使用其他字段如主键进行分表。</p>
+<ul>
+<li>根据主键进行分配：这种方式能够实现最平均的分配方法，每生成一条新数据，会依次保存到下一个数据表中。</li>
+<li>根据用户ID进行分配：这种方式能够确保同一个用户的所有数据保存在同一个数据表中。如果经常按用户id查询数据，这是比较经济的一种做法。</li>
+<li>根据某一个外键的值进行分配：前面的例子采用的就是这种方法，因为这个数据可能会经常根据这个外键进行查询。</li>
+<li>根据时间进行分配：适用于一些经常按时间段进行查询的数据，将一个时间段内的数据保存在同一个数据表中。比如订单系统，缺省查询一个月之内的数据。</li>
+</ul>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://juejin.im/entry/5905ac37a22b9d0065e1199c" target="_blank" rel="external">深度认识 Sharding-JDBC：做最轻量级的数据库中间层</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是分布式中间件"><span class="toc-text">什么是分布式中间件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么需要分布式中间件"><span class="toc-text">为什么需要分布式中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#直连数据库模式"><span class="toc-text">直连数据库模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读写分离模式"><span class="toc-text">读写分离模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据分片模式"><span class="toc-text">数据分片模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分库分表后的问题"><span class="toc-text">分库分表后的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#是否分库分表"><span class="toc-text">是否分库分表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#手动分表的方式"><span class="toc-text">手动分表的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#根据取值范围"><span class="toc-text">根据取值范围</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#哈希取模"><span class="toc-text">哈希取模</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用中间件分表"><span class="toc-text">使用中间件分表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#从手动分表改造成中间件分表的步骤"><span class="toc-text">从手动分表改造成中间件分表的步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Sharding-JDBC简介"><span class="toc-text">Sharding-JDBC简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#与常见开源产品对比"><span class="toc-text">与常见开源产品对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现原理"><span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分片规则配置"><span class="toc-text">分片规则配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-解析"><span class="toc-text">SQL 解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL改写"><span class="toc-text">SQL改写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL路由"><span class="toc-text">SQL路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL执行"><span class="toc-text">SQL执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结果归并"><span class="toc-text">结果归并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sharding-JDBC-具体使用"><span class="toc-text">Sharding-JDBC 具体使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据分表规则的一些考虑"><span class="toc-text">数据分表规则的一些考虑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2020/01/05/random-主题归档页问题/" class="prev">&larr; 上一篇 random 主题归档页问题</a>
+  
+
+  
+
+  
+    <a href="/2019/09/21/单例模式-JAVA/" class="next">下一篇 单例模式 JAVA &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
