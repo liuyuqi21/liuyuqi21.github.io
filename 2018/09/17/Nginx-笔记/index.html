@@ -16,46 +16,20 @@
   
   
   
-    <meta name="description" content="Nginx
+    <meta name="description" content="Nginx (“engine x”) 是一个高性能的 HTTP 和 反向代理 服务器，也是一个 IMAP/POP3/SMTP 代理服务器。Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的。
+目录结构
 conf 配置文件
 html 网页文件
 logs 日志文件
 sbin 主要二进制程序
 
-信号量
+信号控制与进程控制
 kill 信号量 进程号
 
 
 
 
-信号量
-作用
-
-
-
-
-TERM，INT
-立刻停止
-
-
-QUIT
-优雅停止
-
-
-HUP
-改变配置文件，平滑的加载配置文件
-
-
-USR1
-重读日志文件，在日志按月/日分割时有用
-
-
-USR2
-平滑升级
-
-
-WINCH
-优雅关闭旧的进程(配合 USR2 来进...">
+信号...">
   
   <title>Nginx 笔记 [ Cellophane ]</title>
   
@@ -159,13 +133,15 @@ WINCH
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2018-09-17</span>
       
+        <span id = "post-title-updated">修改于 2020-03-22</span>
+      
       
       <span id = "post-title-categories">分类
       
       
         
         
-        <a href="/categories/Nginx/">Nginx</a>
+        <a href="/categories/基础/">基础</a>
       
       </span>
       
@@ -182,13 +158,14 @@ WINCH
       
     </p>
     
-    <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><ul>
+    <p>Nginx (“engine x”) 是一个高性能的 HTTP 和 反向代理 服务器，也是一个 IMAP/POP3/SMTP 代理服务器。Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的。</p>
+<h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><ul>
 <li>conf 配置文件</li>
 <li>html 网页文件</li>
 <li>logs 日志文件</li>
 <li>sbin 主要二进制程序</li>
 </ul>
-<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><ul>
+<h1 id="信号控制与进程控制"><a href="#信号控制与进程控制" class="headerlink" title="信号控制与进程控制"></a>信号控制与进程控制</h1><ul>
 <li>kill 信号量 进程号</li>
 </ul>
 <table>
@@ -227,153 +204,214 @@ WINCH
 </table>
 <p>如何获得进程号：</p>
 <ol>
-<li>通过 ps aux|grep nginx</li>
-<li>通过 nginx 配置文件查看 pid 写在哪个文件 （如kill -HUP <code>cat logs/nginx.pid</code>）</li>
+<li>通过 <code>ps aux|grep nginx</code></li>
+<li>通过 nginx  配置文件查看 pid 写在哪个文件 （如 <code>cat /run/nginx.pid</code>） </li>
 </ol>
-<h2 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h2><ul>
-<li>-s s 代表 signal（信号量）</li>
-<li>nginx -s stop 立刻停止（INT）</li>
-<li>nginx -s quit 优雅停止（QUIT）</li>
-<li>nginx -s reload 平滑的加载配置文件（HUP）</li>
-<li>nginx -s reopen 重读日志文件（USR1）</li>
-<li>nginx -t 测试配置文件是否出错</li>
+<h2 id="控制命令"><a href="#控制命令" class="headerlink" title="控制命令"></a>控制命令</h2><p>s 代表 signal（信号量）</p>
+<ul>
+<li><code>nginx -s stop</code> 立刻停止（INT）</li>
+<li><code>nginx -s quit</code> 优雅停止（QUIT）</li>
+<li><code>nginx -s reload</code> 平滑的加载配置文件（HUP）</li>
+<li><code>nginx -s reopen</code> 重读日志文件（USR1）</li>
+<li><code>nginx -t</code> 测试配置文件是否出错</li>
 </ul>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre class="line-numbers language-conf"><code class="language-conf">worker-process 1;//指有一个工作的子进程，可以自行修改,一般设置为 CPU 数*核数
-Event{
-//一般配置 nginx 连接特性
-worker——connections 1024; //指一个子进程最大允许 1024 个连接
-}
-http{
-    //配置 http 服务器的主要段
-    server{
-    //虚拟主机段
-    listen 80;//监听端口
-    server_name xxx.com;//监听的域名或者ip
-    location / {
-    root 文件路径，相对于 nginx 根路径
-    }
-    access_log logs/host.access.log main;//该 server，访问的日志文件是 logs/host.access.log，格式是 main 格式，可以自定义其他格式
-    }
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Location-段"><a href="#Location-段" class="headerlink" title="Location 段"></a>Location 段</h3><p>location = patt{} 精准匹配<br>location patt{} 一般匹配<br>location ~ patt{} 正则匹配<br>首先看看有没有精准匹配，如果有停止匹配过程</p>
-<h2 id="Rewrite-语法"><a href="#Rewrite-语法" class="headerlink" title="Rewrite 语法"></a>Rewrite 语法</h2><pre class="line-numbers language-conf"><code class="language-conf">//注意 if 后要加空格
-if 空格 (条件){
-重写模式
-}
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token comment" spellcheck="true"># 定义 Nginx 运行的用户和用户组</span>
+<span class="token keyword">user</span> www www<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true"># 指有一个工作的子进程，可以自行修改,一般设置为 CPU 数*核数</span>
+<span class="token keyword">worker_processes</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+Event<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true"># 单个进程最大连接数（最大连接数=连接数+进程数）</span>
+    <span class="token keyword">worker_connections</span> <span class="token number">1024</span><span class="token punctuation">;</span> 
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># 配置 http 服务器</span>
+<span class="token keyword">http</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true"># 虚拟主机配置</span>
+    <span class="token keyword">server</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true"># 监听端口</span>
+           <span class="token keyword">listen</span> <span class="token number">80</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true"># 监听的域名或者 ip</span>
+        <span class="token keyword">server_name</span> xxx<span class="token punctuation">.</span>com<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true"># 文件路径，相对于 nginx 根路径</span>
+        <span class="token keyword">root</span> <span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token punctuation">;</span>
+    <span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+    <span class="token keyword">access_log</span> logs<span class="token operator">/</span>host<span class="token punctuation">.</span>access<span class="token punctuation">.</span>log<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h2><p>location 有“定位” 的意思，根据 URI 来进行不同的定位。</p>
+<p>在虚拟主机的配置中，location 可以把网站的不同部分定位到不同的处理方式上。</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token punctuation">[</span><span class="token operator">=</span><span class="token operator">|</span><span class="token operator">~</span><span class="token operator">|</span><span class="token operator">~</span><span class="token operator">*</span><span class="token operator">|</span><span class="token operator">^</span><span class="token operator">~</span><span class="token punctuation">]</span> patt <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><p><code>location = patt{}</code> 精准匹配</p>
+</li>
+<li><p><code>location patt{}</code> 一般匹配</p>
+</li>
+<li><p><code>location ~ patt{}</code> 正则匹配</p>
+</li>
+</ul>
+<p>首先看看有没有精准匹配，如果有停止匹配过程。</p>
+<h2 id="Rewrite"><a href="#Rewrite" class="headerlink" title="Rewrite"></a>Rewrite</h2><p>rewrite 用来实现 URL 重写，让网站中的 URL 达到某种状态时则定向/跳转到某个规则，但是服务器内部的 rewrite 和 302 跳转不一样，内部的 rewrite 上下文没变。</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token comment" spellcheck="true"># 注意 if 后要加空格</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true"># 重写模式</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>条件的写法：</p>
 <ul>
-<li>‘=’来判断是否相等，用于字符串比较</li>
-<li>‘~’用来判断正则匹配（区分大小写），’~*’不区分大小写</li>
-<li>-f -d -e 来判断是否为文件，为目录，是否存在<br>例子：</li>
+<li><code>=</code>来判断是否相等，用于字符串比较</li>
+<li><code>~</code>用来判断正则匹配（区分大小写），<code>~*</code> 不区分大小写</li>
+<li><code>-f -d -e</code> 来判断是否为文件，为目录，是否存在</li>
 </ul>
-<pre class="line-numbers language-conf"><code class="language-conf">if ($request_mothed=POST){
-return 403;
-}
-//判断浏览器是否是 IE
-if ($http_user_agent ~* msie){
-rewrite ^.*$ ie.html;
-break;//防止循环重定向
-}
-//如果访问不存在的路径
-if (!-e $document_root$fastcgi_script_name){
-rewrite ^.*$ 404.html;
-break;//仍然要加 break
-//或者 rewrite ^.*$ 404.html break;
-}
-ps：服务器内部的 rewrite 和 302 跳转不一样，内部的 rewrite 上下文没变。
-set 是设置变量用的,可以用来达到多条件判断时作标志用。达到 apache 下的 rewrite_condition 的效果
-if ($http_user_agent ~* msie){
-set $isie 1;/
-}
-if ($fastcgi_scrip_name = ie.html){
-set $isie 0;
-}
-if ($isie = 1){
-rewrite ^.*$ ie.html;//如果是ie浏览器且访问的不是 ie.html 则重定向，作用同上面的 break
-}
-//url 重写
-location /ecshop{
-rewrite "goods-(\d{1,7})\.html" /ecshop/goods.php?id=$1;
-}
-//将其他图片格式结尾的全部变成gif
-location ~* \.(jpg|jpeg|png)${
-rewrite '(.*?).(jpg|jpeg|png)$' $1.gif
-}
-ps:正则里如果有{}，正则要用""包括
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="整合-PHP"><a href="#整合-PHP" class="headerlink" title="整合 PHP"></a>整合 PHP</h2><p>Apache 一般是把 PHP 当作自己的模块来启动。<br>而 Nginx 则是把 HTTP 请求变量（如 get，user_agent 等）转发给 php 进程，与 Nginx 进行通信，称为 fastcgi 运行方式<br>编译后的php以 fpm（fastcgi）方式运行<br>把请求的信息转发给 9000 端口的 PHP 进程，让 PHP 处理，指定目录下的 PHP 文件</p>
-<pre class="line-numbers language-conf"><code class="language-conf">location ~ \.php$ {
-root html;
-fastcgi_pass 127.0.0.1:9000;
-fastcgi_index index.php
-fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-include fastcgi_params;
-}
+<p>正则里如果有{}，正则要用 “” 包括。</p>
+<p>例子：</p>
+<h3 id="根据方法重写"><a href="#根据方法重写" class="headerlink" title="根据方法重写"></a>根据方法重写</h3><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$request_mothed</span><span class="token operator">=</span>POST<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token number">403</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="根据浏览器重写"><a href="#根据浏览器重写" class="headerlink" title="根据浏览器重写"></a>根据浏览器重写</h3><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$http_user_agent</span> <span class="token operator">~</span><span class="token operator">*</span> msie<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">rewrite</span> <span class="token operator">^</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>$ ie<span class="token punctuation">.</span>html<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true"># 防止循环重定向</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="访问不存在的路径"><a href="#访问不存在的路径" class="headerlink" title="访问不存在的路径"></a>访问不存在的路径</h3><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">-</span>e <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">rewrite</span> <span class="token operator">^</span><span class="token punctuation">.</span><span class="token operator">*</span>$ <span class="token number">404</span><span class="token punctuation">.</span>html<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true"># 仍然要加 break</span>
+    <span class="token comment" spellcheck="true"># 或者 rewrite ^.*$ 404.html break;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span> 
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="set-使用示例"><a href="#set-使用示例" class="headerlink" title="set 使用示例"></a>set 使用示例</h3><p>set 是设置变量用的,可以用来达到多条件判断时作标志用。达到 apache 下的 rewrite_condition 的效果</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$http_user_agent</span> <span class="token operator">~</span><span class="token operator">*</span> msie<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">set</span> <span class="token variable">$isie</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$fastcgi_scrip_name</span> <span class="token operator">=</span> ie<span class="token punctuation">.</span>html<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">set</span> <span class="token variable">$isie</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$isie</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true"># 如果是ie浏览器且访问的不是 ie.html 则重定向，作用同上面的 break</span>
+    <span class="token keyword">rewrite</span> <span class="token operator">^</span><span class="token punctuation">.</span><span class="token operator">*</span>$ ie<span class="token punctuation">.</span>html<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="url-重写"><a href="#url-重写" class="headerlink" title="url 重写"></a>url 重写</h3><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">/</span>ecshop<span class="token punctuation">{</span>
+    <span class="token keyword">rewrite</span> <span class="token string">"goods-(\d{1,7})\.html"</span> <span class="token operator">/</span>ecshop<span class="token operator">/</span>goods<span class="token punctuation">.</span>php<span class="token operator">?</span>id<span class="token operator">=</span>$<span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="将其他图片格式结尾的全部变成gif"><a href="#将其他图片格式结尾的全部变成gif" class="headerlink" title="将其他图片格式结尾的全部变成gif"></a>将其他图片格式结尾的全部变成gif</h3><pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">~</span><span class="token operator">*</span> \<span class="token punctuation">.</span><span class="token punctuation">(</span>jpg<span class="token operator">|</span>jpeg<span class="token operator">|</span>png<span class="token punctuation">)</span>$<span class="token punctuation">{</span>
+<span class="token keyword">rewrite</span> <span class="token string">'(.*?).(jpg|jpeg|png)$'</span> $<span class="token number">1</span><span class="token punctuation">.</span>gif
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="整合-PHP"><a href="#整合-PHP" class="headerlink" title="整合 PHP"></a>整合 PHP</h1><p>Apache 一般是把 PHP 当作自己的模块来启动。<br>而 Nginx 则是把 HTTP 请求变量（如 get，user_agent 等）转发给 php 进程，与 Nginx 进行通信，称为 fastcgi 运行方式。<br>编译后的 php 以 fpm（fastcgi）方式运行<br>把请求的信息转发给 9000 端口的 PHP 进程，让 PHP 处理，指定目录下的 PHP 文件。</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">~</span> \<span class="token punctuation">.</span>php$ <span class="token punctuation">{</span>
+    <span class="token keyword">root</span> html<span class="token punctuation">;</span>
+    <span class="token keyword">fastcgi_pass</span> <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9000</span><span class="token punctuation">;</span>
+    <span class="token keyword">fastcgi_index</span> <span class="token keyword">index</span><span class="token punctuation">.</span>php
+    <span class="token keyword">fastcgi_param</span> SCRIPT_FILENAME <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">;</span>
+    <span class="token keyword">include</span> fastcgi_params<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>请求过程：</p>
 <ol>
-<li>碰到 php 文件</li>
+<li>遇到 php 结尾的文件</li>
 <li>把根目录定位到 html</li>
 <li>把请求上下文转交给 php 进程</li>
 <li>并告诉 php 进程，当前的脚本是 $document_root$fastcgi_script_name，php 就会去找这个脚本并处理</li>
 </ol>
-<h3 id="pathifo-支持"><a href="#pathifo-支持" class="headerlink" title="pathifo 支持"></a>pathifo 支持</h3><pre class="line-numbers language-conf"><code class="language-conf">location ~ \.php(.*)${
-...
-fastcgi_param PATH_INFO $1;//后向引用
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="url-重写"><a href="#url-重写" class="headerlink" title="url 重写"></a>url 重写</h3><pre class="line-numbers language-conf"><code class="language-conf">使用 rewrite
-location / {
-if (!-e $request_filename){
-rewrite ^(.*)$ /index.php?s=$1
-}
-}//配合上面的 phthinfo
-//使用 try_files
-location / {
-try_files $uri /index.php?$uri;
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="gzip-压缩"><a href="#gzip-压缩" class="headerlink" title="gzip 压缩"></a>gzip 压缩</h2><p>常用参数</p>
-<pre class="line-numbers language-conf"><code class="language-conf">gzip on|off; #是否开启gzip
-gzip_buffers 32 4K| 16 8K #缓冲(压缩在内存中缓冲几块? 每块多大?)
-gzip_comp_level [1-9] #推荐6 压缩级别(级别越高,压的越小,越浪费CPU计算资源)
-gzip_disable #正则匹配UA 什么样的Uri不进行gzip
-gzip_min_length 4000 # 开始压缩的最小长度(再小就不要压缩了,意义不在)
-gzip_http_version 1.0|1.1 # 开始压缩的http协议版本(可以不设置,目前几乎全是1.1协议)
-gzip_proxied # 设置请求者代理服务器,该如何缓存内容
-gzip_types text/plain application/xml # 对哪些类型的文件用压缩 如txt,xml,html ,css
-gzip_vary on|off # 是否传输gzip压缩标志
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以写在 http，server，location 里<br>ps：图片，MP3 这样的二进制文件不必压缩，因为压缩比比价小</p>
-<h2 id="expire-缓存设置-提高网站性能"><a href="#expire-缓存设置-提高网站性能" class="headerlink" title="expire 缓存设置 提高网站性能"></a>expire 缓存设置 提高网站性能</h2><p>在 location 或 if 段里写<br>格式：expires 30s(30m,2h,30d);</p>
-<pre class="line-numbers language-conf"><code class="language-conf">locaion ~* \.(jpg|jpeg|gif|png)$ {
-root html;
-expire 2d;//图片在两天内缓存在浏览器中
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>(注意:服务器的日期要准确,如果服务器的日期落后于实际日期,可能导致缓存失效)<br>另: 304 也是一种很好的缓存手段<br>原理是: 服务器响应文件内容是,同时响应etag标签(内容的签名,内容一变,他也变), 和 last_modified_since 2个标签值<br>浏览器下次去请求时,头信息发送这两个标签, 服务器检测文件有没有发生变化,如无,直接头信息返回 etag,last_modified_since<br>浏览器知道内容无改变,于是直接调用本地缓存.<br>这个过程,也请求了服务器,但是传着的内容极少.</p>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><pre><code>proxy_pass http://localhost:8080//写在localtion里
-</code></pre><p>反向代理的后端有多台服务器，可以形成负载均衡，把多台服务器用 up_stream 绑定成一台服务器<br>upstream imgserver{<br>server 127.0.0.1:81 weight=1 max_fails=2 fail_timeout=3;<br>server 127.0.0.1:82 weight=1 max_fails=2 fail_timeout=3;<br>}<br>upstream 做负载均衡不可以用 localhost<br>location ~* .(png|jpg|jpeg)$ {<br>proxy_pass <a href="http://imgserver" target="_blank" rel="external">http://imgserver</a>;<br>}<br>默认地负载均衡算法就是针对后端服务器的顺序，逐个请求。也有其他负载均衡算法,如一致性哈希,需要安装第3方模块.<br>反向代理导致后端服务器 IP，为前端服务器的 IP，而不是客户真正的 IP，使用 x-forword</p>
-<pre><code>proxy_set_header X-Forwarded-For $remote_addr;
-</code></pre><h2 id="整合-mencached"><a href="#整合-mencached" class="headerlink" title="整合 mencached"></a>整合 mencached</h2><pre><code>location / {
-set $memcached_key &quot;$uri&quot;;
-memcached_pass 127.0.0.1:11211;
-error_page 404 /callback.php;
-}
-</code></pre><h2 id="使用第三方模块实现一致性哈希"><a href="#使用第三方模块实现一致性哈希" class="headerlink" title="使用第三方模块实现一致性哈希"></a>使用第三方模块实现一致性哈希</h2><p>如 <a href="http://wiki.nginx.org/NginxHttpUpstreamConsistentHash" target="_blank" rel="external">http://wiki.nginx.org/NginxHttpUpstreamConsistentHash</a><br>这个模块就是用一致性hash来请求后端结节,并且其算法,与PHP中的memcache模块的一致性hash算法,兼容.<br>安装后</p>
-<pre class="line-numbers language-conf"><code class="language-conf">upstream memserver {
-consistent_hash $request_uri;
-server 127.0.0.1:11211;
-server 127.0.0.1:11212;
-}
+<h2 id="支持-pathinfo"><a href="#支持-pathinfo" class="headerlink" title="支持 pathinfo"></a>支持 pathinfo</h2><ul>
+<li>方法一</li>
+</ul>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true"># 当请求的文件不存在</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">-</span>e <span class="token variable">$request_filename</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">rewrite</span> <span class="token operator">^</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>$ <span class="token operator">/</span><span class="token keyword">index</span><span class="token punctuation">.</span>php<span class="token operator">?</span>s<span class="token operator">=</span>$<span class="token number">1</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在PHP.ini中,如下配置<br>memcache.hash_strategy = consistent<br>这样: nginx与PHP即可完成对memcached的集群与负载均衡算法.</p>
-<h2 id="大访问量优化"><a href="#大访问量优化" class="headerlink" title="大访问量优化"></a>大访问量优化</h2><ul>
-<li>开发人员：合并 css，背景图片，减少 mysql 查询</li>
-<li>运维人员：nginx 的 expires，利用浏览器缓存减少查询</li>
-<li>利用 cdn 来响应请求</li>
-<li>不可避免地请求：服务器集群+负载均衡</li>
+<ul>
+<li>方法二</li>
+</ul>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try_files</span> <span class="token variable">$uri</span> <span class="token operator">/</span><span class="token keyword">index</span><span class="token punctuation">.</span>php<span class="token operator">?</span><span class="token variable">$uri</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>方法三</li>
+</ul>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">~</span> \<span class="token punctuation">.</span><span class="token function">php</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token operator">*</span><span class="token punctuation">)</span>$<span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">fastcgi_param</span> PATH_INFO $<span class="token number">1</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true"># 后向引用</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="传输速度优化"><a href="#传输速度优化" class="headerlink" title="传输速度优化"></a>传输速度优化</h1><h2 id="gzip-压缩"><a href="#gzip-压缩" class="headerlink" title="gzip 压缩"></a>gzip 压缩</h2><p>常用参数</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">gzip</span> on<span class="token operator">|</span>off<span class="token punctuation">;</span> <span class="token comment" spellcheck="true"># 是否开启gzip</span>
+<span class="token keyword">gzip_buffers</span> <span class="token number">32</span> 4K<span class="token operator">|</span> <span class="token number">16</span> 8K <span class="token comment" spellcheck="true"># 缓冲(压缩在内存中缓冲几块? 每块多大?)</span>
+<span class="token keyword">gzip_comp_level</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">-</span><span class="token number">9</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true"># 推荐 6 压缩级别(级别越高,压的越小,越浪费 CPU 计算资源)</span>
+<span class="token keyword">gzip_disable</span> <span class="token comment" spellcheck="true"># 正则匹配 UA 什么样的 Uri 不进行 gzip</span>
+<span class="token keyword">gzip_min_length</span> <span class="token number">4000</span> <span class="token comment" spellcheck="true"># 开始压缩的最小长度(再小就不要压缩了,意义不在)</span>
+<span class="token keyword">gzip_http_version</span> <span class="token number">1.0</span><span class="token operator">|</span><span class="token number">1.1</span> <span class="token comment" spellcheck="true"># 开始压缩的http协议版本(可以不设置,目前几乎全是1.1协议)</span>
+<span class="token keyword">gzip_proxied</span> <span class="token comment" spellcheck="true"># 设置请求者代理服务器,该如何缓存内容</span>
+<span class="token keyword">gzip_types</span> text<span class="token operator">/</span>plain application<span class="token operator">/</span>xml <span class="token comment" spellcheck="true"># 对哪些类型的文件用压缩 如txt,xml,html ,css</span>
+<span class="token keyword">gzip_vary</span> on<span class="token operator">|</span>off <span class="token comment" spellcheck="true"># 是否传输gzip压缩标志</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以写在 http，server，location 里。<br>ps：图片，MP3 这样的二进制文件不必压缩，因为压缩比较小。</p>
+<h2 id="expire-缓存"><a href="#expire-缓存" class="headerlink" title="expire 缓存"></a>expire 缓存</h2><p>写在 location 或 if 里面。<br>格式：<code>expires 30s(30m,2h,30d);</code></p>
+<pre class="line-numbers language-nginx"><code class="language-nginx">locaion <span class="token operator">~</span><span class="token operator">*</span> \<span class="token punctuation">.</span><span class="token punctuation">(</span>jpg<span class="token operator">|</span>jpeg<span class="token operator">|</span>gif<span class="token operator">|</span>png<span class="token punctuation">)</span>$ <span class="token punctuation">{</span>
+    <span class="token keyword">root</span> html<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true"># 图片在两天内缓存在浏览器中</span>
+    expire 2d<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>服务器的日期要准确，如果服务器的日期落后于实际日期，可能导致缓存失效。</strong></p>
+<h1 id="反向代理和负载均衡"><a href="#反向代理和负载均衡" class="headerlink" title="反向代理和负载均衡"></a>反向代理和负载均衡</h1><h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>用 Nginx 做反向代理用 <code>proxy_pass</code>。比如，Nginx 不自己处理图片相关的请求，而是把图片的请求转发给 Apache 来处理。</p>
+<p>反向代理反导致后端服务器接收到的客户端 IP为前端服务器的 IP，而不是客户真正的 IP，可以通过设置 <code>X-Forwarded-For</code> 头信息将用户 IP 传到后台服务器。</p>
+<p>配置：</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">location</span> <span class="token operator">~</span> \<span class="token punctuation">.</span><span class="token punctuation">(</span>jpg<span class="token operator">|</span>jpeg<span class="token operator">|</span>png<span class="token operator">|</span>gif<span class="token punctuation">)</span>$ <span class="token punctuation">{</span>
+    <span class="token keyword">proxy_pass</span> <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>IP<span class="token punctuation">:</span>port<span class="token punctuation">;</span>
+    <span class="token keyword">proxy_set_header</span> X<span class="token operator">-</span>Forwarded<span class="token operator">-</span>For <span class="token variable">$remote_addr</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>把多台服务器用 upstream 加入到一个组。</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">upstream</span> imgserver<span class="token punctuation">{</span>
+    <span class="token keyword">server</span> <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">81</span> weight<span class="token operator">=</span><span class="token number">1</span> max_fails<span class="token operator">=</span><span class="token number">2</span> fail_timeout<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">;</span>
+    <span class="token keyword">server</span> <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">82</span> weight<span class="token operator">=</span><span class="token number">1</span> max_fails<span class="token operator">=</span><span class="token number">2</span> fail_timeout<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">upstream</span> <span class="token comment" spellcheck="true"># 做负载均衡不可以用 localhost</span>
+<span class="token keyword">location</span> <span class="token operator">~</span><span class="token operator">*</span> \<span class="token punctuation">.</span><span class="token punctuation">(</span>png<span class="token operator">|</span>jpg<span class="token operator">|</span>jpeg<span class="token punctuation">)</span>$ <span class="token punctuation">{</span>
+    <span class="token keyword">proxy_pass</span> <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>imgserver<span class="token punctuation">;</span>
+    <span class="token keyword">proxy_set_header</span> X<span class="token operator">-</span>Forwarded<span class="token operator">-</span>For <span class="token variable">$remote_addr</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>默认地负载均衡算法就是针对后端服务器的顺序，逐个请求。也有其他负载均衡算法，如一致性哈希，需要安装第三方模块。</p>
+<h4 id="使用第三方模块实现一致性哈希"><a href="#使用第三方模块实现一致性哈希" class="headerlink" title="使用第三方模块实现一致性哈希"></a>使用第三方模块实现一致性哈希</h4><p>如 <a href="http://wiki.nginx.org/NginxHttpUpstreamConsistentHash" target="_blank" rel="external">http://wiki.nginx.org/NginxHttpUpstreamConsistentHash</a><br>这个模块就是用一致性 hash 来请求后端节点，并且其算法与 PHP 中的 memcache 模块的一致性hash算法兼容。<br>安装后</p>
+<pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">upstream</span> memserver <span class="token punctuation">{</span>
+    consistent_hash <span class="token variable">$request_uri</span><span class="token punctuation">;</span>
+    <span class="token keyword">server</span> <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">11211</span><span class="token punctuation">;</span>
+    <span class="token keyword">server</span> <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">11212</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在 PHP.ini 中，如下配置</p>
+<pre class="line-numbers language-ini"><code class="language-ini"><span class="token constant">inimemcache.hash_strategy</span> <span class="token attr-value"><span class="token punctuation">=</span> consistent</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="定时任务实现日志按日期存储"><a href="#定时任务实现日志按日期存储" class="headerlink" title="定时任务实现日志按日期存储"></a>定时任务实现日志按日期存储</h1><p>凌晨00:00:01，把昨天的日志重命名，放在相应的目录下。<br>再用 USR1 信息号控制 nginx 重新生成新的日志文件。</p>
+<pre class="line-numbers language-shell"><code class="language-shell">#!/bin/bash
+base_path='/usr/local/nginx/logs'
+log_path=$(date -d yesterday +"%Y%m")
+day=$(date -d yesterday +"%d")
+mkdir -p $base_path/$log_path
+mv $base_path/access.log $base_path/$log_path/access_$day.log
+kill -USR1 `cat /usr/local/nginx/logs/nginx.pid`
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Crontab 编辑定时任务</p>
+<pre class="line-numbers language-shell"><code class="language-shell">01 00 * * * /xxx/path/b.sh # 每天 0 时 1 分(建议在 02-04 点之间,系统负载小)
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://www.jianshu.com/p/bed000e1830b" target="_blank" rel="external">WEB请求处理二：Nginx请求反向代理</a></li>
 </ul>
 
   </article>
@@ -382,7 +420,7 @@ server 127.0.0.1:11212;
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#信号量"><span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制命令"><span class="toc-text">控制命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Location-段"><span class="toc-text">Location 段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rewrite-语法"><span class="toc-text">Rewrite 语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整合-PHP"><span class="toc-text">整合 PHP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pathifo-支持"><span class="toc-text">pathifo 支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#url-重写"><span class="toc-text">url 重写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gzip-压缩"><span class="toc-text">gzip 压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#expire-缓存设置-提高网站性能"><span class="toc-text">expire 缓存设置 提高网站性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整合-mencached"><span class="toc-text">整合 mencached</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用第三方模块实现一致性哈希"><span class="toc-text">使用第三方模块实现一致性哈希</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大访问量优化"><span class="toc-text">大访问量优化</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#目录结构"><span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#信号控制与进程控制"><span class="toc-text">信号控制与进程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#控制命令"><span class="toc-text">控制命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Location"><span class="toc-text">Location</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rewrite"><span class="toc-text">Rewrite</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#根据方法重写"><span class="toc-text">根据方法重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#根据浏览器重写"><span class="toc-text">根据浏览器重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问不存在的路径"><span class="toc-text">访问不存在的路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-使用示例"><span class="toc-text">set 使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#url-重写"><span class="toc-text">url 重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将其他图片格式结尾的全部变成gif"><span class="toc-text">将其他图片格式结尾的全部变成gif</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#整合-PHP"><span class="toc-text">整合 PHP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#支持-pathinfo"><span class="toc-text">支持 pathinfo</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#传输速度优化"><span class="toc-text">传输速度优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gzip-压缩"><span class="toc-text">gzip 压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#expire-缓存"><span class="toc-text">expire 缓存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反向代理和负载均衡"><span class="toc-text">反向代理和负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#负载均衡"><span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用第三方模块实现一致性哈希"><span class="toc-text">使用第三方模块实现一致性哈希</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#定时任务实现日志按日期存储"><span class="toc-text">定时任务实现日志按日期存储</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
   </div>
 </div>
 

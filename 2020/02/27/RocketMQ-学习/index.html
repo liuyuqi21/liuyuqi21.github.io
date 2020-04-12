@@ -42,6 +42,15 @@
 <body>
 <div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2020/03/08/IOC-与-AOP/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        IOC 与 AOP
+      </div>
+    </div>
+  
   
     <div class="item next">
       <a href="/2020/02/19/Head First设计模式阅读笔记/">
@@ -115,6 +124,8 @@
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2020-02-27</span>
       
+        <span id = "post-title-updated">修改于 2020-03-10</span>
+      
       
       
       <span id = "post-title-tags">
@@ -149,7 +160,7 @@
 <h2 id="Name-Server"><a href="#Name-Server" class="headerlink" title="Name Server"></a>Name Server</h2><p>提供服务发现和注册，这里主要是管理 Broker，NameSrv 接受来自 Broker 的注册，并通过心跳机制来检测Broker服务的健康性。</p>
 <p>提供路由功能，集群(这里是指以集群方式部署的 NameSrv)中的每个 NameSrv 都保存了 Broke r集群(这里是指以集群方式部署的 Broker)中整个的路由信息和队列信息。这里需要注意，在 NameSrv 集群中，每个 NameSrv 都是相互独立的，所以每个 Broker 需要连接所有的 NameSrv，每创建一个新的 topic  都要同步到所的 NameSrv 上</p>
 <p>Name Server 是一个几乎无状态节点，可集群部署，节点之间无任何信息同步。</p>
-<h2 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a>Broker</h2><p>主要是负责消息的存储、传递、查询以及高可用(HA)保证等。其由如下几个子模块（源码总体上也是这么拆分的）构成：</p>
+<h2 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a>Broker</h2><p>消息中转角色，负责消息的存储、传递、查询以及高可用(HA)保证等。其由如下几个子模块（源码总体上也是这么拆分的）构成：</p>
 <ul>
 <li>remoting：是 Broker 的服务入口，负责客户端的接入（Producer 和 Consumer）和请求处理。</li>
 <li>client：管理客户端和维护消费者对于 Topic 的订阅。</li>
@@ -423,7 +434,6 @@ sh mqadmin consumerConnection -n 100.73.41.56:9876 -g S_JIAOYI_CG_T_JDB_CONTRACT
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3NDY4NzQwNQ==&amp;mid=2247484461&amp;idx=1&amp;sn=72794d12ffe3c8ec3520fdba1c87c3b3&amp;chksm=fd2fd5efca585cf955d240bbabd99b24262d255a3880454297f10a84e4c38445bc7b9d3ba339&amp;scene=21#wechat_redirect" target="_blank" rel="external">【分布式事务】基于RocketMQ搭建生产级消息集群？</a></li>
 <li><a href="http://jm.taobao.org/2017/01/12/rocketmq-quick-start-in-10-minutes/" target="_blank" rel="external">十分钟入门RocketMQ</a></li>
 <li><a href="https://www.cnblogs.com/rjzheng/p/8994962.html" target="_blank" rel="external">【原创】分布式之消息队列复习精讲</a></li>
-<li><a href="https://www.javazhiyin.com/31853.html" target="_blank" rel="external">分布式事务之如何基于RocketMQ的事务消息特性实现分布式系统的最终一致性？</a></li>
 </ul>
 
   </article>
@@ -438,6 +448,8 @@ sh mqadmin consumerConnection -n 100.73.41.56:9876 -g S_JIAOYI_CG_T_JDB_CONTRACT
 
   
 <nav id="pagination">
+  
+    <a href="/2020/03/08/IOC-与-AOP/" class="prev">&larr; 上一篇 IOC 与 AOP</a>
   
 
   

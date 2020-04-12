@@ -1,0 +1,491 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="Elasticsearch 是一个分布式可扩展的实时搜索和分析引擎，建立在 Apache Lucene。
+基础概念Elasticsearch 是面向文档型数据库，一条数据就是一个文档。用 JSON 作为文档序列化的格式。
+
+
+
+Mysql
+Elasticsearch
+
+
+
+
+数据库（Database）
+索引（Index）
+
+
+表（table）
+类型（Type）
+
+
+记录（low）
+文档（Do...">
+  
+  <title>Elasticsearch 相关 [ Cellophane ]</title>
+  
+  
+    <link rel="shortcut icon" href="/Blinky.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/styles/railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+<link rel="stylesheet" href="/css/prism.css">
+  
+</head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/08/25/图解 HTTP 笔记/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        图解 HTTP 笔记
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/08/14/MySQL-索引/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        MySQL 索引
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/images/me3.jpg"/>
+          <div id="homelink">Cellophane</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">标签</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">分类</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>Elasticsearch 相关</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2019-08-21</span>
+      
+        <span id = "post-title-updated">修改于 2020-04-12</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/中间件/">中间件</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/Elasticsearch/">Elasticsearch</a>
+      
+      </span>
+      
+    </p>
+    
+    <p>Elasticsearch 是一个分布式可扩展的实时搜索和分析引擎，建立在 Apache Lucene。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>Elasticsearch 是面向文档型数据库，一条数据就是一个文档。用 JSON 作为文档序列化的格式。</p>
+<table>
+<thead>
+<tr>
+<th>Mysql</th>
+<th>Elasticsearch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库（Database）</td>
+<td>索引（Index）</td>
+</tr>
+<tr>
+<td>表（table）</td>
+<td>类型（Type）</td>
+</tr>
+<tr>
+<td>记录（low）</td>
+<td>文档（Document）</td>
+</tr>
+<tr>
+<td>字段（Columns）</td>
+<td>字段（Fields）</td>
+</tr>
+</tbody>
+</table>
+<p>一个索引只放一个类型</p>
+<h1 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h1><p>传统的我们的检索是通过文章，逐个遍历找到对应关键词的位置。而倒排索引，是通过分词策略，形成了词和文章的映射关系表，这种词典 + 映射表即为倒排索引。</p>
+<p>倒排索引底层实现是基于 FST。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p><code>curl -XPUT http://localhost:9200/products?pretty</code> pretty 代表格式化</p>
+<h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><p><code>curl -X DELTE &#39;localhost:9200/weather&#39;</code></p>
+<h2 id="创建类型"><a href="#创建类型" class="headerlink" title="创建类型"></a>创建类型</h2><pre class="line-numbers language-none"><code class="language-none">$ curl -H'Content-Type: application/json' -XPUT http://localhost:9200/test_index/_mapping/_doc?pretty -d'{
+  "properties": {
+    "title": { "type": "text", "analyzer": "ik_smart" }, 
+    "description": { "type": "text", "analyzer": "ik_smart" },
+    "price": { "type": "scaled_float", "scaling_factor": 100 }
+  }
+}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>“_doc” 是索引名称</li>
+<li>提交数据中的 <code>properties</code> 代表这个类型中各个字段的定义，其中 key 为字段名称，value 是字段的类型定义；</li>
+<li>“analyzer”: <code>ik_smart</code> 代表这个字段需要使用 IK 中文分词器分词</li>
+</ul>
+<h2 id="创建文档"><a href="#创建文档" class="headerlink" title="创建文档"></a>创建文档</h2><pre class="line-numbers language-none"><code class="language-none">$ curl -X POST 'localhost:9200/accounts/person/1' -d '
+{
+  "user": "李四",
+  "title": "工程师",
+  "desc": "系统管理"
+}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>/accounts/person/1，最后的1是该条记录的 Id。它不一定是数字，任意字符串（比如abc）都可以。新增记录的时候，也可以不指定 Id，这时要改成 POST 请求。服务器返回的 json 对象里，_id 就是一个随机字符串</p>
+<h2 id="查看记录"><a href="#查看记录" class="headerlink" title="查看记录"></a>查看记录</h2><p><code>$ curl &#39;localhost:9200/accounts/person/1?pretty=true&#39;</code><br>返回的数据中，found字段表示查询成功，_source字段返回原始记录。果 Id 不正确，就查不到数据，found字段就是false。</p>
+<h2 id="删除记录"><a href="#删除记录" class="headerlink" title="删除记录"></a>删除记录</h2><p><code>$ curl -X DELETE &#39;localhost:9200/accounts/person/1&#39;</code></p>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>更新记录就是使用 PUT 请求，重新发送一次数据。<br>记录的 Id 没变，但是版本（version）从1变成2，操作类型（result）从created变成updated，created字段变成false，因为这次不是新建记录。</p>
+<h2 id="返回所有记录"><a href="#返回所有记录" class="headerlink" title="返回所有记录"></a>返回所有记录</h2><p>使用 GET 方法，直接请求/Index/Type/_search，就会返回所有记录。<br><code>$ curl &#39;localhost:9200/accounts/person/_search&#39;</code><br>返回结果的 took字段表示该操作的耗时（单位为毫秒），timed_out字段表示是否超时，hits字段表示命中的记录，里面子字段的含义如下。</p>
+<ul>
+<li>total：返回记录数</li>
+<li>max_score：最高的匹配程度</li>
+<li>hits：返回的记录组成的数组</li>
+</ul>
+<h1 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h1><h2 id="全文搜索"><a href="#全文搜索" class="headerlink" title="全文搜索"></a>全文搜索</h2><pre class="line-numbers language-none"><code class="language-none">$ curl 'localhost:9200/accounts/person/_search'  -d '
+{
+  "query" : { "match" : { "desc" : "软件" }}
+  "from": 1,
+  "size": 1
+}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面代码使用 match 查询，指定的匹配条件是desc字段里面包含”软件”这个词。<br>Elastic 默认一次返回10条结果，可以通过size字段改变这个设置。<br>还可以通过from字段，指定位移。</p>
+<h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><p>如果有多个搜索关键词， Elastic 认为它们是 or 关系。</p>
+<pre class="line-numbers language-none"><code class="language-none">$ curl 'localhost:9200/accounts/person/_search'  -d '
+{
+  "query" : { "match" : { "desc" : "软件 系统" }}
+}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面代码搜索的是软件 or 系统。<br>如果要执行多个关键词的 and 搜索，必须使用布尔查询。</p>
+<pre class="line-numbers language-none"><code class="language-none">$ curl 'localhost:9200/accounts/person/_search'  -d '
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "desc": "软件" } },
+        { "match": { "desc": "系统" } }
+      ]
+    }
+  }
+}'
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="短语搜索"><a href="#短语搜索" class="headerlink" title="短语搜索"></a>短语搜索</h2><pre class="line-numbers language-none"><code class="language-none">GET /megacorp/employee/_search
+{
+    "query" : {
+        "match_phrase" : {
+            "about" : "rock climbing"
+        }
+    }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>match_prase 直接搜索 rock climing 不分词</p>
+<h2 id="布尔查询"><a href="#布尔查询" class="headerlink" title="布尔查询"></a>布尔查询</h2><p><code>filter</code>/<code>must</code>/<code>should</code>/<code>must_not</code></p>
+<ul>
+<li>filter 和 must 与 SQL 中的 and 类似，must 下的条件会参与 <strong>打分</strong>，而 filter 不会。</li>
+<li>must_not 和 must 相反，查询的文档必需不符合此类下的条件</li>
+<li>should 下的条件不需要全部满足，默认情况下只需要满足 should 下的一个条件即可，也可以通过 minimum_should_match 参数来改变需要满足的个数，满足的 should 条件越多，对应的文档的打分就越高，打分高的文档排序会靠前。</li>
+</ul>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
+<li><code>&#39;sort&#39;=&gt;[&#39;price&#39;=&gt;&#39;desc&#39;]</code></li>
+</ul>
+<h2 id="多字段匹配查询"><a href="#多字段匹配查询" class="headerlink" title="多字段匹配查询"></a>多字段匹配查询</h2><pre class="line-numbers language-none"><code class="language-none">'must' => [
+    [
+        'multi_match' => [
+            'query'  => 'iPhone',
+            'fields' => [
+                'title^3',
+                'long_title^2',
+                'description',
+            ],
+        ],
+    ],
+],
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>query 代表要查询的关键字，fields代表要查询的字段，^代表字段的权重</li>
+</ul>
+<h2 id="多字段匹配查询支持-Nested-对象"><a href="#多字段匹配查询支持-Nested-对象" class="headerlink" title="多字段匹配查询支持 Nested 对象"></a>多字段匹配查询支持 Nested 对象</h2><ul>
+<li><p>定义索引时使用 copy_to 参数</p>
+</li>
+<li><p>“keyword” 是字符串类型的一种，告诉 Elasticsearch 不需要对这个字段做分词，通常用于邮箱、标签、属性等字段。</p>
+</li>
+<li>scaled_float 代表一个小数位固定的浮点型字段，与 Mysql 的 decimal 类型类似，后面的 scaling_factor 用来指定小数位精度，100 就代表精确到小数点后两位。</li>
+<li>“nested” 代表这个字段是一个复杂对象，由下一级的 properties 字段定义这个对象的字段。</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础概念"><span class="toc-text">基础概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#倒排索引"><span class="toc-text">倒排索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建索引"><span class="toc-text">创建索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除索引"><span class="toc-text">删除索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建类型"><span class="toc-text">创建类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建文档"><span class="toc-text">创建文档</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看记录"><span class="toc-text">查看记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除记录"><span class="toc-text">删除记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新记录"><span class="toc-text">更新记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回所有记录"><span class="toc-text">返回所有记录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据查询"><span class="toc-text">数据查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#全文搜索"><span class="toc-text">全文搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑运算"><span class="toc-text">逻辑运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短语搜索"><span class="toc-text">短语搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#布尔查询"><span class="toc-text">布尔查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#排序"><span class="toc-text">排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多字段匹配查询"><span class="toc-text">多字段匹配查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多字段匹配查询支持-Nested-对象"><span class="toc-text">多字段匹配查询支持 Nested 对象</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2019/08/25/图解 HTTP 笔记/" class="prev">&larr; 上一篇 图解 HTTP 笔记</a>
+  
+
+  
+
+  
+    <a href="/2019/08/14/MySQL-索引/" class="next">下一篇 MySQL 索引 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/images/me3.jpg">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="https://www.zhihu.com/people/ding-wei-33-1/activities">
+        
+          <i class="icon iconfont zhihu">&#xe60b;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://chensd.com">
+        
+          <i class="icon iconfont rss">&#xe60e;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+    <script src="/js/prism.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

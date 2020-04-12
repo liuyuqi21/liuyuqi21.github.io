@@ -122,6 +122,8 @@ RocketMQ 是一种最终一致性的分布式事务。
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2019-02-17</span>
       
+        <span id = "post-title-updated">修改于 2020-03-10</span>
+      
       
       <span id = "post-title-categories">分类
       
@@ -154,12 +156,20 @@ RocketMQ 是一种最终一致性的分布式事务。
     <p>在 RocketMQ 中生产者有三种角色 NormalProducer(普通)、OrderProducer(顺序)、TransactionProducer(事务)。</p>
 <p>RocketMQ 是一种<strong>最终一致性</strong>的分布式事务。</p>
 <p>分布式事务中，如果使用消息中间件来实现最终一致性的分布式事务，是先更新数据库再发消息还是先发消息再更新数据库，这两个操作不是原子的，无论谁先谁后都是有问题的。为了解决该问题，RocketMQ 提出了“事务消息的概念”。</p>
-<h2 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h2><p><img src="/images/200226.jpg" alt=""></p>
+<h1 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h1><p>CAP 原理中，有三个要素：</p>
 <ul>
-<li>更新数据库的消息状态和投递消息到 MQ，这两个操作要放在一个方法里并且要开启本地事务。</li>
-<li>如果上游服务操作完本地数据库之后，通知可靠消息服务出现问题。可靠消息后台会有一个定时运行的线程不停的检查各个消息的状态。如果一直是“待确认”状态，就可以回调上有服务提供的一个接口来查询上游服务是否执行成功。</li>
+<li>一致性（Consistency）：意思是，写操作之后的读操作，必须返回该值。举例来说，某条记录是 v0，用户向 G1 发起一个写操作，将其改为 v1。接下来，用户的读操作就会得到 v1。这就叫一致性。问题是，用户有可能向 G2 发起读操作，由于 G2 的值没有发生变化，因此返回的是 v0。G1 和 G2 读操作的结果不一致，这就不满足一致性了。为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。这样的话，用户向 G2 发起读操作，也能得到 v1。</li>
+<li>可用性（Availability）：意思是只要收到用户的请求，服务器就必须给出回应。用户可以选择向 G1 或 G2 发起读操作。不管是哪台服务器，只要收到请求，就必须告诉用户，到底是 v0 还是 v1，否则就不满足可用性。</li>
+<li>分区容错性（Partition tolerance）：大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信。</li>
 </ul>
-<p>RocketMQ，就实现了可靠消息服务的所有功能，核心思想跟上面类似。</p>
+<p>CAP 原理是指，这三个要素最多同时只能实现两点。对于大多数 web 应用，并不需要强一致，所以牺牲一致性换取高可用性，最求最终一致性，是目前多数分布式数据库产品的方向。</p>
+<h1 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h1><p><img src="/images/200226.jpg" alt=""><br>发送消息时涉及两个操作：</p>
+<ol>
+<li>上游服务处理本地事务</li>
+<li>发送消息到消息队列<br>当这两个操作有一个失败的而情况下就会出现数据不一致。所以可靠消息要将消息的状态存进数据库，后台会有一个定时运行的线程不停的检查各个消息的状态。如果一直是“待确认”状态，就可以回调上游服务提供的一个接口来查询上游服务是否执行成功。</li>
+</ol>
+<h2 id="为什么不能把业务处理和发送消息到-MQ-放到一个本地事务？"><a href="#为什么不能把业务处理和发送消息到-MQ-放到一个本地事务？" class="headerlink" title="为什么不能把业务处理和发送消息到 MQ 放到一个本地事务？"></a>为什么不能把业务处理和发送消息到 MQ 放到一个本地事务？</h2><p>如果本地事务处理成功，消息存储成功，MQ 处理超时，ACK 确认失败，会导致本地事务回滚。然而消息却已经发出去，下游就会消费这条消息，就会导致数据不一致。</p>
+<p>RocketMQ 的事务消息，就实现了可靠消息服务的所有功能，核心思想跟上面类似。</p>
 <h1 id="Half-Message-半消息"><a href="#Half-Message-半消息" class="headerlink" title="Half Message 半消息"></a>Half Message 半消息</h1><p>指暂不能被 Consumer 消费的消息。Producer 已经把消息成功发送到了 Broker 端，但此消息被标记为暂不能投递状态，处于该种状态下的消息称为半消息。需要 Producer</p>
 <p>对消息的<strong>二次确认</strong>后，Consumer才能去消费它。</p>
 <h2 id="为什么要先发送-Half-Message"><a href="#为什么要先发送-Half-Message" class="headerlink" title="为什么要先发送 Half Message"></a>为什么要先发送 Half Message</h2><ol>
@@ -181,7 +191,15 @@ RocketMQ 是一种最终一致性的分布式事务。
 <li>如果因为网络等原因迟迟没有返回失败还是成功，那么会执行 RocketMQ 的回调接口,来进行事务的回查。</li>
 </ol>
 <p>只有 A 服务本地事务执行成功，B 服务才能消费该 message。</p>
-<h2 id="当-MQ-故障时怎么办"><a href="#当-MQ-故障时怎么办" class="headerlink" title="当 MQ 故障时怎么办"></a>当 MQ 故障时怎么办</h2><p>使用基于 KV 存储的队列支持高可用降级方案。</p>
+<h1 id="为什么不在业务成功之后再发送消息？"><a href="#为什么不在业务成功之后再发送消息？" class="headerlink" title="为什么不在业务成功之后再发送消息？"></a>为什么不在业务成功之后再发送消息？</h1><p>如果业务成功，再去发消息，还没来得及发送消息，业务系统就宕机了，根本没有记录之前是否发送过消息，这样就会导致业务执行成功，消息最终没发出去的情况。</p>
+<h1 id="如果-consumer-消费失败，是否需要-producer-做回滚呢？"><a href="#如果-consumer-消费失败，是否需要-producer-做回滚呢？" class="headerlink" title="如果 consumer 消费失败，是否需要 producer 做回滚呢？"></a>如果 consumer 消费失败，是否需要 producer 做回滚呢？</h1><p>这里的事务消息，producer 不会因为 consumer 消费失败而做回滚，采用事务消息的应用，其所追求的是高可用和最终一致性，消息消费失败的话，MQ 自己会负责重推消息，直到消费成功。因此，事务消息是针对生产端而言的，而消费端，消费端的一致性是通过MQ的重试机制来完成的。</p>
+<h1 id="如何保证下游服务的可靠接收"><a href="#如何保证下游服务的可靠接收" class="headerlink" title="如何保证下游服务的可靠接收"></a>如何保证下游服务的可靠接收</h1><ol>
+<li>在可靠消息服务里开发一个后台线程，不断的检查消息状态。</li>
+<li>如果消息状态一直是“已发送”，始终没有变成“已完成”，那么就说明下游服务始终没有处理成功。</li>
+<li>此时可靠消息服务就可以再次尝试重新投递消息到 MQ，让下游服务来再次处理。</li>
+<li>只要下游服务的接口逻辑实现<strong>幂等性</strong>，保证多次处理一个消息，不会插入重复数据即可。</li>
+</ol>
+<h1 id="当-MQ-故障时怎么办"><a href="#当-MQ-故障时怎么办" class="headerlink" title="当 MQ 故障时怎么办"></a>当 MQ 故障时怎么办</h1><p>使用基于 KV 存储的队列支持高可用降级方案。</p>
 <ol>
 <li>封装 MQ 客户端组件与故障感知，连续 n 次重试尝试投递消息到 MQ 都报错，说明 MQ 故障，此时可以自动感知记忆自动触发降级开关。</li>
 <li>通过 zookeeper 触发降级开关。</li>
@@ -192,8 +210,11 @@ RocketMQ 是一种最终一致性的分布式事务。
 </ol>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
 <li><a href="https://www.cnblogs.com/qdhxhz/p/11191399.html" target="_blank" rel="external">分布式事务(3)—RocketMQ实现分布式事务原理</a></li>
-<li><a href="https://www.javazhiyin.com/31853.html" target="_blank" rel="external">分布式事务之如何基于RocketMQ的事务消息特性实现分布式系统的最终一致性？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzU3NDY4NzQwNQ==&amp;mid=2247484545&amp;idx=1&amp;sn=107192bd8e5ce3e40cf01c2c598cdf67&amp;chksm=fd2fd543ca585c55efc7032e49bedfc28abd59753b42fc99f1307561739e8ed887d9ef207261&amp;mpshare=1&amp;scene=1&amp;srcid=0310aB2Xzg0FJP4newiZ0Fp0&amp;sharer_sharetime=1583774285457&amp;sharer_shareid=da3c4e6d38e0827ddba7900a4fab3cd4#rd" target="_blank" rel="external">分布式事务之如何基于RocketMQ的事务消息特性实现分布式系统的最终一致性？</a></li>
 <li><a href="http://www.tianshouzhi.com/api/tutorials/distributed_transaction/389" target="_blank" rel="external">7.0 柔性事务：可靠消息最终一致性</a></li>
+<li><a href="https://juejin.im/post/5bf2c6b6e51d456693549af4" target="_blank" rel="external">【坑爹呀！】最终一致性分布式事务如何保障实际生产中99.99%高可用？</a></li>
+<li><a href="https://juejin.im/post/5d8882bdf265da03c9273821#heading-5" target="_blank" rel="external">MQ消息最终一致性解决方案</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25933039" target="_blank" rel="external">分布式事务？No, 最终一致性</a></li>
 </ul>
 
   </article>
@@ -202,7 +223,7 @@ RocketMQ 是一种最终一致性的分布式事务。
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#最终一致性"><span class="toc-text">最终一致性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Half-Message-半消息"><span class="toc-text">Half Message 半消息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要先发送-Half-Message"><span class="toc-text">为什么要先发送 Half Message</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#消息回查"><span class="toc-text">消息回查</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况会会查"><span class="toc-text">什么情况会会查</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分布式事务交互流程"><span class="toc-text">分布式事务交互流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#当-MQ-故障时怎么办"><span class="toc-text">当 MQ 故障时怎么办</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CAP"><span class="toc-text">CAP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最终一致性"><span class="toc-text">最终一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么不能把业务处理和发送消息到-MQ-放到一个本地事务？"><span class="toc-text">为什么不能把业务处理和发送消息到 MQ 放到一个本地事务？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Half-Message-半消息"><span class="toc-text">Half Message 半消息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要先发送-Half-Message"><span class="toc-text">为什么要先发送 Half Message</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#消息回查"><span class="toc-text">消息回查</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况会会查"><span class="toc-text">什么情况会会查</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分布式事务交互流程"><span class="toc-text">分布式事务交互流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么不在业务成功之后再发送消息？"><span class="toc-text">为什么不在业务成功之后再发送消息？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如果-consumer-消费失败，是否需要-producer-做回滚呢？"><span class="toc-text">如果 consumer 消费失败，是否需要 producer 做回滚呢？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如何保证下游服务的可靠接收"><span class="toc-text">如何保证下游服务的可靠接收</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#当-MQ-故障时怎么办"><span class="toc-text">当 MQ 故障时怎么办</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
   </div>
 </div>
 

@@ -136,6 +136,8 @@
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2020-01-28</span>
       
+        <span id = "post-title-updated">修改于 2020-03-10</span>
+      
       
       <span id = "post-title-categories">分类
       
@@ -241,7 +243,7 @@
 <li>空间整合：整体来看是基于“标记 - 整理”算法实现的收集器，从局部（两个 Region 之间）上来看是基于“复制”算法实现的，这意味着运行期间不会产生内存空间碎片。</li>
 <li>可预测的停顿：能让使用者明确指定在一个长度为 M 毫秒的时间片段内，消耗在 GC 上的时间不得超过 N 毫秒。</li>
 </ul>
-<h1 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h1><p>加载-验证-准备-解析-初始化-使用-卸载</p>
+<h1 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h1><p><img src="/images/classload.png" alt=""><br>类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载-验证-准备-解析-初始化-使用-卸载七个阶段。其中<strong>验证、准备、解析</strong>三个部分统称为<strong>连接</strong>。</p>
 <h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><ul>
 <li>通过类的完全限定名称获取定义该类的二进制字节流</li>
 <li>将该字节流表示的静态存储结构转换为方法去的运行时存储结构</li>
@@ -264,6 +266,36 @@
 <li>不同的线程之间无法直接访问对方工作内存中的变量</li>
 <li>线程间变量的传递均需要自己的工作内存和主存之间进行数据同步进行</li>
 </ol>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>当一个变量被定义成 <code>volatile</code> 后，它具备两种特性</p>
+<ol>
+<li>可见性：当一条线程修改了这个变量的值，新值对于其他线程来说是可以立即得知的。</li>
+</ol>
+<p>volatile 变量在各个线程的工作内存中不存在一致性问题（在各个线程的工作内存中 volatile 变量也可以存在不一致的情况，但由于每次使用之前都要先刷新，执行引擎看不到不一致的情况，因此可以认为不存在一致性问题），但是 Java 里面的<strong>运算并非原子操作</strong>，导致 volatile 变量的运算在并发下一样是不安全的。</p>
+<p>示例：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> race <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">increase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    race<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果发起 20 个线程，每个线程对 race 变量进行 10000 次自增操作，如果这段代码能够正确并发的话，最后输出的结果应该是200000。但是实际上每次运行程序，输出的结果都不一样，都是一个小于 200000 的数字。</p>
+<p>因为自增运算 <code>race++</code> 不是原子的。导致 <code>volatile</code> 变量的<strong>运算</strong>在并发下一样是不安全的，仍然要通过 <code>synchorized</code> 加锁来保证原子性。</p>
+<p>volatile 的使用场景：下面的代码能保证当 shutdown() 方法被调用时，能保证所有线程中执行的 doWork() 方法都立即停下来。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">volatile</span> <span class="token keyword">boolean</span> shutdownRequested<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    shutdownRequested <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span>shutdownRequested<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//do stuff</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>禁止指令重排序</li>
+</ol>
+<h2 id="synchorized"><a href="#synchorized" class="headerlink" title="synchorized"></a>synchorized</h2><p>synchorized 块之间的操作具备原子性。</p>
 <h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><p>1000 个线程同时对 num 执行自增的操作，得到的结果可能是 980，因为一个线程执行自增过程中，另一个线程也执行了自增，两个线程同时写入了主内存。<br>解决方式：</p>
 <ul>
 <li>原子类（Atomic）：使用 <code>AutomicInteger</code> 来保证原子性</li>
@@ -282,7 +314,8 @@
 <p>解决方式：</p>
 <ul>
 <li>使用 <code>volatile</code> 来保证多线程操作时变量的可见性。被其修饰的变量在被修改后可以立即同步到主内存，在每次是用之前都从主内存刷新。</li>
-<li>使用 <code>sybchirized</code> 加锁。</li>
+<li>使用 <code>synchorized</code> 加锁，同步块的可见性是由“对一个变量执行 unlock 操作之前，必须先把此变量同步回主内存”这条规则获得的。</li>
+<li>使用 <code>final</code> 关键字。</li>
 </ul>
 <h2 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h2><p>无序是因为<strong>指令重排</strong>。单线程下提高代码效率，但会影响多线程并发执行的正确性。</p>
 <p>指令重排：</p>
@@ -296,7 +329,20 @@
 <li><code>volatile</code> 关键字会禁止指令重排</li>
 <li><code>synchronized</code> 关键字保证同一时刻只允许一条线程操作。</li>
 </ul>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><h2 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h2><p>同步是指多个线程并发访问共享数据时，保证共享数据在同一个时刻只被同一条线程使用。<br>互斥回实现同步的一种手段，临界区、互斥量和信号量都是主要的互斥实现方式。<br>因此在这四个字里面，互斥是因，同步是果，互斥是方法，同步是目的。</p>
+<h3 id="synchorized-1"><a href="#synchorized-1" class="headerlink" title="synchorized"></a>synchorized</h3><p>在 Java 里面，最基本的互斥同步手段就是 <code>synchronized</code> 关键字，<code>synchronized</code>关键字经过编译之后，会在同步块的前后分别形成 <code>monitorenter</code> 和 <code>monitorexit</code> 这两个字节码指令，这两个字节码都需要一个 <code>reference</code> 类型的参数来指明要锁定和解锁的对象。如果 Java 程序中的 <code>synchronized</code> 明确指定了对象参数，那就是这个对象的 <code>reference</code>；如果没有明确指定，那就根据 <code>synchronized</code> 修饰的是实例方法还是类方法，去取对应的对象实例或 <code>Class</code> 对象来作为锁对象。</p>
+<p><code>synchorized</code> 同步块对同一条线程来说是可重入的，不会出现自己把自己锁死的问题。</p>
+<p>Java 的线程是映射到操作系统的原生线程之上的，如果要阻塞或唤醒一条线程，都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，因此状态转换需要耗费很多的处理器时间。对于代码简单的同步块（如被 synchronized 修饰的 getter() 或setter() 方法），状态转换消耗的时间可能比用户代码执行的时间还要长。所以 synchronized 是 Java 语言中一个重量级的操作。</p>
+<h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p><code>ReenctrantLock</code> 和 <code>synchorized</code> 很相似，都一样具备线程重入特性，只是代码写法上有点区别，<code>ReentrantLock</code> 表现为 API 层面的互斥锁（lock() 和 unlock() 方法配合 try/finally 语句块来完成），一个表现为原生语法层面的互斥锁。不过 <code>ReentrantLock</code> 比 <code>synchronized</code> 增加了一些高级功能，主要有以下三项：等待可中断、可实现公平锁，以及锁可以绑定多个条件。</p>
+<ol>
+<li>等待可中断：持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情，可中断特性对处理执行时间非常长的同步块很有帮助。</li>
+<li>可实现公平锁：多个线程在等待同一个锁时，必须按照申请所得时间顺序来依次获得锁，而非公平锁不保证这一点，在锁被释放时，任何一个等待锁的线程都有机会获得锁。<code>synchronized</code> 中的锁是非公平的，<code>ReentrantLock</code> 默认情况下也是非公平的，但可以通过带布尔值的的构造函数要求使用公平锁。</li>
+<li>以及锁可以绑定多个条件：一个 <code>ReentrantLock</code> 对象可以同时绑定多个 <code>Condition</code> 对象，而在 <code>synchronized</code> 中，锁对象的<code>wait()</code> 和 <code>notify()</code> 或 <code>notifyAll()</code> 方法可以实现一个隐含的条件，如果要和多于一个的条件关联的时候，就不得不额外地添加一个锁，而 <code>ReentrantLock</code> 则无须这样做，只需要多次调用 <code>newCondition()</code> 方法即可。</li>
+</ol>
+<h2 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h2><p>互斥同步最主要的问题就是进行线程阻塞和唤醒所带来的性能问题，因此这种同步也被称为阻塞同步（Blocking Synchronization）。另外，它属于一种悲观的并发策略，总是认为只要不去做正确的同步措施（加锁），那就肯定会出现问题，无论共享数据是否真的会出现竞争，它都要进行加锁（这里说的是概念模型，实际上虚拟机会优化掉很大一部分不必要的加锁）、用户态核心态转换、维护锁计数器和检查是否有被阻塞的线程需要被唤醒等操作。随着硬件指令集的发展，我们有了另外一个选择：基于冲突检测的乐观并发策略，通俗地说就是先进行操作，如果没有其他线程争用共享数据，那操作就成功了；如果共享数据有争用，产生了冲突，那就再进行其他的补偿措施（最常见的补偿措施就是不断地重试，直到试成功为止），这种乐观的并发策略的许多实现都不需要把线程挂起，因此这种同步操作被称为非阻塞同步（Non-Blocking Synchronization）。</p>
+<p>为什么使用乐观并发策略需要“硬件指令集的发展”才能进行呢？因为我们需要操作和冲突检测这两个步骤具备原子性，靠什么来保证呢？如果这里再使用互斥同步来保证就失去意义了，所以我们只能靠硬件来完成这件事情，硬件保证一个从语义上看起来需要多次操作的行为只通过一条处理器指令就能完成。在 IA64、x86 指令集中通过 cmpxchg 指令完成 CAS 功能。</p>
+<p>CAS 指令需要有三个操作数，分别是内存位置（在 Java 中可以简单理解为变量的内存地址，用 V 表示）、旧的预期值（用 A 表示）和新值（用 B 表示）。CAS 指令执行时，当且仅当 V 符合旧预期值 A 时，处理器用新值 B 更新 V 的值，否则它就不执行更新，但是不管是否更新了 V 的值，都会返回 V 的旧值，上述的处理过程是一个原子操作。</p>
+<h2 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h2><h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
 <li><a href="http://www.ityouknow.com/java.html" target="_blank" rel="external">JVM 系列文章</a></li>
 <li><a href="https://cyc2018.github.io/CS-Notes/#/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA" target="_blank" rel="external">Java 虚拟机</a></li>
 <li><a href="https://juejin.im/post/5dd627efe51d4536be153b7a" target="_blank" rel="external">再有人问你 Java 内存模型是什么，就把这篇文章发给他</a></li>
@@ -310,7 +356,7 @@
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-内存区域（运行时数据区）"><span class="toc-text">Java 内存区域（运行时数据区）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序计数器"><span class="toc-text">程序计数器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-虚拟机栈"><span class="toc-text">Java 虚拟机栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地方法栈"><span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆"><span class="toc-text">堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区"><span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时常量池"><span class="toc-text">运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接内存"><span class="toc-text">直接内存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#垃圾收集"><span class="toc-text">垃圾收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对象存活判断"><span class="toc-text">对象存活判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-整理算法"><span class="toc-text">标记-整理算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分代收集算法"><span class="toc-text">分代收集算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-收集器"><span class="toc-text">Serial 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ParNew-收集器"><span class="toc-text">ParNew 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Scavenge-收集器"><span class="toc-text">Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Old-收集器"><span class="toc-text">Parallel Old 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS-收集器"><span class="toc-text">CMS 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1-收集器"><span class="toc-text">G1 收集器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类加载机制"><span class="toc-text">类加载机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加载"><span class="toc-text">加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派模型"><span class="toc-text">双亲委派模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-内存模型"><span class="toc-text">Java 内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#原子性"><span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可见性"><span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有序性"><span class="toc-text">有序性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-内存区域（运行时数据区）"><span class="toc-text">Java 内存区域（运行时数据区）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序计数器"><span class="toc-text">程序计数器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-虚拟机栈"><span class="toc-text">Java 虚拟机栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地方法栈"><span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆"><span class="toc-text">堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区"><span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时常量池"><span class="toc-text">运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接内存"><span class="toc-text">直接内存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#垃圾收集"><span class="toc-text">垃圾收集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对象存活判断"><span class="toc-text">对象存活判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-整理算法"><span class="toc-text">标记-整理算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分代收集算法"><span class="toc-text">分代收集算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-收集器"><span class="toc-text">Serial 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ParNew-收集器"><span class="toc-text">ParNew 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Scavenge-收集器"><span class="toc-text">Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Old-收集器"><span class="toc-text">Parallel Old 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS-收集器"><span class="toc-text">CMS 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1-收集器"><span class="toc-text">G1 收集器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类加载机制"><span class="toc-text">类加载机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加载"><span class="toc-text">加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派模型"><span class="toc-text">双亲委派模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-内存模型"><span class="toc-text">Java 内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">volatile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchorized"><span class="toc-text">synchorized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原子性"><span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可见性"><span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有序性"><span class="toc-text">有序性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程安全"><span class="toc-text">线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#互斥同步"><span class="toc-text">互斥同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#synchorized-1"><span class="toc-text">synchorized</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReentrantLock"><span class="toc-text">ReentrantLock</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非阻塞同步"><span class="toc-text">非阻塞同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁优化"><span class="toc-text">锁优化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
   </div>
 </div>
 

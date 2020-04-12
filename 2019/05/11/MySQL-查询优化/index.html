@@ -20,10 +20,8 @@
 
 通过脚本，刷新观察 status
 是否周期性故障或者波动
-
 一般由访问高峰或缓存崩溃引起，加缓存并更改缓存失效策略，使失效时间分散或夜间定时失效
-
-show processlist 或开启慢查询 获取有...">
+show processlist 或开启慢查询 获取有问题...">
   
   <title>MySQL 查询优化 [ Cellophane ]</title>
   
@@ -127,6 +125,8 @@ show processlist 或开启慢查询 获取有...">
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2019-05-11</span>
       
+        <span id = "post-title-updated">修改于 2020-03-22</span>
+      
       
       <span id = "post-title-categories">分类
       
@@ -153,10 +153,8 @@ show processlist 或开启慢查询 获取有...">
     <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>先说明如何定位低效 SQL 语句，然后根据 SQL 语句可能低效的原因做排查，先从索引着手，如果索引没有问题，考虑其他几个方面，数据访问的问题，长难语句的问题还是一些特定类型优化的问题</p>
 <ol>
 <li>通过脚本，刷新观察 status</li>
-<li><p>是否周期性故障或者波动</p>
-</li>
-<li><p>一般由访问高峰或缓存崩溃引起，加缓存并更改缓存失效策略，使失效时间分散或夜间定时失效</p>
-</li>
+<li>是否周期性故障或者波动</li>
+<li>一般由访问高峰或缓存崩溃引起，加缓存并更改缓存失效策略，使失效时间分散或夜间定时失效</li>
 <li>show processlist 或开启慢查询 获取有问题的 sql</li>
 <li>profiling 分析语句及 explain 分析语句<ol>
 <li>如果语句等待时间长：调优服务器参数（如缓冲区，线程数）</li>

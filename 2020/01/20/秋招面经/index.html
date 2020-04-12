@@ -120,6 +120,8 @@
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2020-01-20</span>
       
+        <span id = "post-title-updated">修改于 2020-03-09</span>
+      
       
       <span id = "post-title-categories">分类
       
@@ -346,7 +348,7 @@
 <li>数据库事务的隔离级别</li>
 <li>可重复读是指什么 可重复读的实现</li>
 <li>数据库有哪些引擎，InnoDB 和 MyISAM 的区别，聚簇索引和非聚簇索引的区别</li>
-<li>spring 的核心思想是什么，依赖注入解决了什么问题，类 A 依赖 B，B 依赖 C，C 依赖 A的时候怎么加载</li>
+<li>spring 的核心思想是什么，依赖注入解决了什么问题，类 A 依赖 B，B 依赖 C，C 依赖 A的时候怎么加载（循环依赖问题）</li>
 <li>HashMap 的实现</li>
 <li>ConcurrentHashMap 的实现</li>
 <li>介绍多线程</li>
@@ -358,8 +360,43 @@
 <li>Java 有哪些集合。HashMap 怎么实现</li>
 <li>MySQL 事务隔离级别，可重复读的实现，MVCC 实现原理，多版本的数据存放在哪里</li>
 <li>Spring 有什么特性，依赖注入的实现，假如有两个类都被依赖注入了，Spring 里面会 new 几个类</li>
-<li>设计一个缓存队列，存1000万数据，大于 30 分钟的数据无效</li>
+<li>设计一个缓存池（队列），最多存储 10000 个数据，每个数据存活时间 30 分钟，过期则丢弃，实现 push 和 pull 方法。</li>
 <li>有一个对象数组对应一个权重数组，随机取出最大的 10 个元素，权重越大取到的概率越高，但是权重低的也有被取到的可能性</li>
+</ul>
+<h1 id="字节跳动-1"><a href="#字节跳动-1" class="headerlink" title="字节跳动"></a>字节跳动</h1><ul>
+<li>分布式锁是锁住一部分还是整个系统，既然是锁住整个，为什么不用消息队列</li>
+<li>详细讲下怎么用 mq 实现的最终一致性，还有怎么利用的消息事务</li>
+<li>hashmap 的结构，讲到一半，不用讲了，你来写一下它的 put 方法吧，不考虑扩容，简单写下。。</li>
+<li>Array 和 ArrayList 的区别</li>
+<li>tcp 于 http 的关系，如何基于 tcp 实现 http</li>
+<li>java 打开一个 http 流不关闭的后果</li>
+<li>io 流是基于抽象类还是接口实现的</li>
+<li>数据库的乐观锁和悲观锁是什么</li>
+<li>乐观锁实现原理，讲到一半，来写一个乐观锁吧</li>
+<li>java 的类中有什么方法</li>
+<li>线程安全是什么</li>
+<li>voliate 和 synchorized 的区别</li>
+<li>假如有一个类 A 和一个 类 B，这两个类都有一个变量和一个自增操作，A 类的变量用 voliate 修饰，B 类没有，B 类的自增操作用 synchorized 修饰，他们都是线程安全的吗，如果都是，那为什么要用 synchorized ，voliate 不是更轻量吗，synchorized 有什么作用。</li>
+<li>8 个 CPU ，4 个线程，16个线程什么的。。问题我忘了，因为我不懂</li>
+<li>最后提问环节，我。。有什么学习的建议吗，怎么学习。面试官答：看官方文档不要看博客看源码。好的。。</li>
+</ul>
+<h2 id="阿里-支付宝"><a href="#阿里-支付宝" class="headerlink" title="阿里 支付宝"></a>阿里 支付宝</h2><p>阿里的面试官真是一如既往的人好，去年我印象中也是阿里的面试官态度最好。<br>其实我觉得我的表现其实很一般，还是比较差的那种，但是他说，其实我的表现还是挺优秀的，作为一个还没毕业的应届生。然后因为他们要招的是实习生，就是21届的，所以我的情况比较特殊，但是他会跟同事讨论的，最后说虽然这次也许没有机会但是我可以加他微信，以后社招会考虑我的。</p>
+<ul>
+<li>介绍项目</li>
+<li>为什么使用消息队列，已经使用了 dubbo 了为什么还要使用 MQ</li>
+<li>使用模板方法模式重构有什么好处</li>
+<li>还知道哪些设计模式</li>
+<li>乐观锁和悲观锁 使用场景</li>
+<li>用 redis 实现乐观锁</li>
+<li>从 passport 这个系统中，做了哪些有挑战性的事，亮点</li>
+<li>如何防止恶意用户的攻击 限流</li>
+<li>使用什么方式限流</li>
+<li>使用 redis 限流的话，redis 可能就扛不住了，在 redis 集群里如果有一台机器挂掉会出现什么问题</li>
+<li>线程和进程</li>
+<li>synchorized 关键字作用</li>
+<li>喜欢技术吗 想往什么技术深入发展</li>
+<li>想去哪个城市 为什么要离职</li>
+<li>问了下建议：对工作经历描述的不够流畅，沟通表达能力有待提高，对工作内容没有介绍出挑战点与亮点让他没有找到发问的地方</li>
 </ul>
 
   </article>
@@ -368,7 +405,7 @@
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#百度"><span class="toc-text">百度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#奇安信"><span class="toc-text">奇安信</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#美团一面-2019-12-31"><span class="toc-text">美团一面 2019/12/31</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-1-19"><span class="toc-text">一面 2020/1/19</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-2-3"><span class="toc-text">一面 2020/2/3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-2020-2-3"><span class="toc-text">二面 2020/2/3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三面-20202-5"><span class="toc-text">三面 20202/5</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小米-2020-2-27"><span class="toc-text">小米 2020/2/27</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#祖龙娱乐-2020-3-2"><span class="toc-text">祖龙娱乐 2020/3/2</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#百度"><span class="toc-text">百度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#奇安信"><span class="toc-text">奇安信</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#美团一面-2019-12-31"><span class="toc-text">美团一面 2019/12/31</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-1-19"><span class="toc-text">一面 2020/1/19</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-2-3"><span class="toc-text">一面 2020/2/3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-2020-2-3"><span class="toc-text">二面 2020/2/3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三面-20202-5"><span class="toc-text">三面 20202/5</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小米-2020-2-27"><span class="toc-text">小米 2020/2/27</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#祖龙娱乐-2020-3-2"><span class="toc-text">祖龙娱乐 2020/3/2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动-1"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#阿里-支付宝"><span class="toc-text">阿里 支付宝</span></a></li></ol></li></ol>
   </div>
 </div>
 

@@ -40,11 +40,11 @@
 <div class="side-navigate hide-area">
   
     <div class="item prev">
-      <a href="/2020/02/12/leetcode-记录/">
+      <a href="/2020/02/02/操作系统常见问题/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        leetcode 记录
+        操作系统笔记
       </div>
     </div>
   
@@ -120,6 +120,8 @@
     <h1>计算机网络常见问题</h1>
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2020-01-29</span>
+      
+        <span id = "post-title-updated">修改于 2020-03-10</span>
       
       
       <span id = "post-title-categories">分类
@@ -213,7 +215,7 @@
 </li>
 <li><p>第三次握手可以携带数据，如果不携带数据则不消耗序号</p>
 </li>
-<li><p>三次握手的原因：<br>三次握手是为了确认客户端的接收能力。</p>
+<li><p>三次握手的原因：<br>第三次握手是为了确认客户端的接收能力。</p>
 </li>
 </ul>
 <p>如果是两次，客户端发送的连接请求如果在网络中滞留，那么就会隔很长一段时间才能收到服务器端发回的连接确认，客户端超时重发连接请求，这样服务器会对同一个客户端保持多个连接，造成资源浪费。</p>
@@ -237,7 +239,7 @@
 </ol>
 </li>
 </ul>
-<h2 id="说说半连接队列和-SYN-Flood-攻击的关系"><a href="#说说半连接队列和-SYN-Flood-攻击的关系" class="headerlink" title="说说半连接队列和 SYN Flood 攻击的关系"></a>说说半连接队列和 SYN Flood 攻击的关系</h2><p>三次握手前，服务端的状态从CLOSED变为LISTEN, 同时在内部创建了两个队列：半连接队列和全连接队列，即SYN队列和ACCEPT队列。</p>
+<h2 id="说说半连接队列和-SYN-Flood-攻击的关系"><a href="#说说半连接队列和-SYN-Flood-攻击的关系" class="headerlink" title="说说半连接队列和 SYN Flood 攻击的关系"></a>说说半连接队列和 SYN Flood 攻击的关系</h2><p>三次握手前，服务端的状态从 CLOSED  变为LISTEN，同时在内部创建了两个队列：半连接队列和全连接队列，即SYN队列和ACCEPT队列。</p>
 <ul>
 <li>半连接队列：当客户端发送SYN到服务端，服务端收到以后回复ACK和SYN，状态由LISTEN变为SYN_RCVD，此时这个连接就被推入了SYN队列，也就是半连接队列。</li>
 <li>全连接队列：当客户端返回ACK, 服务端接收后，三次握手完成。这个时候连接等待被具体的应用取走，在被取走之前，它会被推入另外一个 TCP 维护的队列，也就是全连接队列(Accept Queue)。</li>
@@ -444,6 +446,7 @@
 <li><a href="https://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a></li>
 <li><a href="https://www.cnblogs.com/qcrao-2018/p/10182185.html" target="_blank" rel="external">“三次握手，四次挥手”你真的懂吗？</a></li>
 <li><a href="https://juejin.im/post/5e527c58e51d4526c654bf41" target="_blank" rel="external">TCP协议灵魂之问，巩固你的网路底层基础</a></li>
+<li><a href="https://juejin.im/post/5d9c284b518825095879e7a5" target="_blank" rel="external">面试官，不要再问我三次握手和四次挥手</a></li>
 </ul>
 
   </article>
@@ -459,7 +462,7 @@
   
 <nav id="pagination">
   
-    <a href="/2020/02/12/leetcode-记录/" class="prev">&larr; 上一篇 leetcode 记录</a>
+    <a href="/2020/02/02/操作系统常见问题/" class="prev">&larr; 上一篇 操作系统笔记</a>
   
 
   
