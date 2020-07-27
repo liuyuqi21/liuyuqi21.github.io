@@ -1,0 +1,654 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="基本类型和包装类型
+基本类型：byte(8),short(16),int(32),long(64),float(32),double(64),boolean,char(16)
+boolean 可以使用 1 bit来存储，JVM 会在编译时期将 boolean 类型的数据转换为 int。JVM 支持 boolean 数组，但是是通过读写 byte 数组来实现的。
+基本类型不可以为 null，包...">
+  
+  <title>Java 基础 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/17/MySQL-%E4%BA%8B%E5%8A%A1-%E6%97%A5%E5%BF%97-%E9%94%81/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        MySQL 事务 日志 锁
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/11/%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        扫码登录实现原理
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>Java 基础</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-01-15</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-02</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/Java/">Java</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/Java/">Java</a>
+          
+        </span>
+      
+      <span id="/2020/01/15/JAVA 基础/" class="leancloud-visitors" data-flag-title="Java 基础">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="基本类型和包装类型"><a href="#基本类型和包装类型" class="headerlink" title="基本类型和包装类型"></a>基本类型和包装类型</h1><ul>
+<li>基本类型：byte(8),short(16),int(32),long(64),float(32),double(64),boolean,char(16)</li>
+<li>boolean 可以使用 1 bit来存储，JVM 会在编译时期将 boolean 类型的数据转换为 int。JVM 支持 boolean 数组，但是是通过读写 byte 数组来实现的。</li>
+<li>基本类型不可以为 null，包装类型可以，所以 POJO 里只能用包装类型，因为数据库得查询结果可能是 null，如果使用基本类型，会抛空指针异常</li>
+<li>基本类型在栈中直接存储具体数值，而包装类型存储的是堆中的引用</li>
+<li>引用类型：对象、数组都是引用数据类型。所有引用类型的默认值都是 null。</li>
+</ul>
+<h2 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h2><ul>
+<li>new Integer(123) 每次都会新建一个对象</li>
+<li>Integer.valueOf(123) 会使用缓存池中的对象，多次调用取得同一个对象的引用</li>
+<li>valueOf() 方法会先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容</li>
+<li>在 Java 8 中，Integer 缓存池的大小默认为 -128~127，但是上界是可调的，在启动 jvm 的时候，通过 <code>-XX:AutoBoxCacheMax=&lt;size&gt;</code> 来指定这个缓冲池的大小</li>
+<li>编译器会在自动装箱过程调用 valueOf() 方法，因此多个值相同且值在缓存池范围内的 Integer 实例使用自动装箱来创建，那么就会引用相同的对象。</li>
+</ul>
+<pre class="line-numbers language-java"><code class="language-java">Integer x <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//装箱 调用了 Integer.valueOf(2)</span>
+<span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token operator">-</span>x<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//拆箱 调用了 x.intValue()</span>
+
+Integer m <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+Integer n <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>m <span class="token operator">==</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true</span>
+
+Integer x <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Integer y <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>x <span class="token operator">==</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// false</span>
+Integer z <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Integer k <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>z <span class="token operator">==</span> k<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><ul>
+<li>String 被声明为 final，不可变。</li>
+<li>null 和空字符串不一样</li>
+</ul>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">String</span>
+    <span class="token keyword">implements</span> <span class="token class-name">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable</span><span class="token punctuation">,</span> Comparable<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">,</span> CharSequence <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/** The value is used for character storage. */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> value<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h2><ol>
+<li>可以缓存 hash 值<br> 因为 String 的 hash 值经常被使用，例如 String 用做 HashMap 的 key。不可变的特性可以使得 hash 值也不可变，因此只需要进行一次计算。</li>
+<li>String Pool 的需要<br> 如果一个 String 对象已经被创建过了，那么就会从 String Pool 中取得引用。只有 String 是不可变的，才可能使用 String Pool。</li>
+<li>线程安全</li>
+</ol>
+<h2 id="String-Pool-字符串常量池"><a href="#String-Pool-字符串常量池" class="headerlink" title="String Pool 字符串常量池"></a>String Pool 字符串常量池</h2><p>字符串常量池保存着所有字符串的字面量，这些字面量在编译时期就确定，可以使用 String 的 intern() 方法在运行过程将字符串添加到 String Pool 中。</p>
+<p>当一个字符串调用 intern() 方法时，如果 String Pool 中已经存在一个字符串和该字符串值相等（使用 equals() 方法进行确定），那么就会返回 String Pool 中字符串的引用；否则，就会在 String Pool 中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<pre class="line-numbers language-java"><code class="language-java">String s1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"aaa"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+String s2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"aaa"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s1 <span class="token operator">==</span> s2<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// false</span>
+String s3 <span class="token operator">=</span> s1<span class="token punctuation">.</span><span class="token function">intern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+String s4 <span class="token operator">=</span> s1<span class="token punctuation">.</span><span class="token function">intern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s3 <span class="token operator">==</span> s4<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// true</span>
+
+String s5 <span class="token operator">=</span> <span class="token string">"bbb"</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//会自动创建字面量，自动放入 String Pool 中</span>
+String s6 <span class="token operator">=</span> <span class="token string">"bbb"</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s5 <span class="token operator">==</span> s6<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在 Java 7 之前，String Pool 被放在运行时常量池中，它属于永久代。而在 Java 7，String Pool 被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致 OutOfMemoryError 错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>当 String Pool 中还没有 “abc” 字符串对象的时候，new String(“abc”) 会创建两个字符串对象。</p>
+<ul>
+<li>编译时期会在 String Pool 中创建一个字符串对象，指向这个 “abc” 字面量。</li>
+<li>使用 new 方式会在堆中创建一个字符串对象</li>
+</ul>
+<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>Java 的参数使用的是值传递，不是引用传递。在方法中改变对象的字段值会改变原对象该字段值，因为引用的是同一个对象。</p>
+<h1 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h1><p>int 比 short 精度高，不能隐式向下转型为 short 类型。但是使用 += 或者 ++ 运算符会执行隐式类型转换。</p>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h2><ul>
+<li>局部变量在栈上分配</li>
+<li>没有默认值，被声明后，必须经过初始化，才可以使用</li>
+</ul>
+<h2 id="实例变量"><a href="#实例变量" class="headerlink" title="实例变量"></a>实例变量</h2><ul>
+<li>声明在一个类中，但在方法，构造方法和语句块之外</li>
+<li>当一个对象被实例化之后，每个实例变量的值就跟着确定</li>
+<li>实例变量在对象创建的时候创建，在对象被销毁的时候销毁</li>
+<li>实例变量的值应该至少被一个方法、构造方法或者语句块引用，使得外部能够通过这些方式获取实例变量信息</li>
+<li>实例变量可以声明在使用前或者使用后</li>
+<li>访问修饰符可以修饰实例变量</li>
+<li>实例变量对于类中的方法、构造方法或者语句块是可见的。一般情况下应该把实例变量设为私有。通过使用访问修饰- 符可以使实例变量对子类可见</li>
+<li>实例变量具有默认值。数值型变量的默认值是0，布尔型变量的默认值是false，引用类型变量的默认值是null。变量- 的值可以在声明时指定，也可以在构造方法中指定</li>
+<li>实例变量可以直接通过变量名访问。但在静态方法以及其他类中，就应该使用完全限定名：ObejectReference.VariableName</li>
+</ul>
+<h3 id="类变量（静态变量）"><a href="#类变量（静态变量）" class="headerlink" title="类变量（静态变量）"></a>类变量（静态变量）</h3><ul>
+<li>类变量也称为静态变量，在类中以 static 关键字声明，但必须在方法、构造方法和语句块之外。</li>
+<li>无论一个类创建了多少个对象，类只拥有类变量的一份拷贝。</li>
+<li>静态变量除了被声明为常量外很少使用。常量是指声明为 public/private，final 和 static 类型的变量。常量初始化后不可改变。</li>
+<li>静态变量储存在静态存储区。经常被声明为常量，很少单独使用 static 声明变量。</li>
+<li>静态变量在程序开始时创建，在程序结束时销毁。</li>
+<li>与实例变量具有相似的可见性。但为了对类的使用者可见，大多数静态变量声明为 public 类型。</li>
+<li>默认值和实例变量相似。数值型变量默认值是0，布尔型默认值是 false，引用类型默认值是null。变量的值可以在声明的时候指定，也可以在构造方法中指定。此外，静态变量还可以在静态语句块中初始化。</li>
+<li>静态变量可以通过：ClassName.VariableName的方式访问。</li>
+<li>类变量被声明为 public static final类型时，类变量名称必须使用大写字母。如果静态变量不是public和final类型，其命名方式与实例变量以及局部变量的命名方式一致。</li>
+</ul>
+<h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><ul>
+<li>声明数据：对于基本类型，final 使数值不变；对于引用类型， 对象的引用不能改变，但是里面的值可以改变。</li>
+<li>声明方法不能被子类重写</li>
+<li>声明类不允许被继承，final 类中的所有成员方法都会被隐式地指定为 final 方法。</li>
+<li>如果在匿名类或 Lambda 表达式中访问的局部变量，如果不是 final 类型的话，编译器自动加上 final 修饰符。（<a href="https://xsinx.com/2019/06/16/为何Lambda中的局部变量必须是final/#5-静态变量和实例变量" target="_blank" rel="noopener">【译】为何Lambda中的局部变量必须是final</a>）<ul>
+<li>为什么 Lambda 表达式(匿名类) 不能访问非 final 的局部变量呢？因为实例变量存在堆中，而局部变量是在栈上分配，Lambda 表达(匿名类) 会在另一个线程中执行。如果在线程中要直接访问一个局部变量，可能线程执行时该局部变量已经被销毁了，而 final 类型的局部变量在 Lambda 表达式(匿名类) 中其实是局部变量的一个拷贝。</li>
+</ul>
+</li>
+</ul>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ul>
+<li><strong>静态变量</strong>：又称为类变量，这个变量属于类，类的所有实例都共享静态变量，可以直接通过类名访问，静态变量在内存中只有一份，存放于 Java 内存区域的<strong>方法区</strong>。</li>
+<li><strong>静态方法</strong>：静态方法在类加载时就存在，所有静态方法必须有实现，不能是抽象方法。只能访问所属类的<strong>静态字段和静态方法</strong>，方法中不能有 this 和 super 关键字，因此这两个关键字与具体对象关联。</li>
+<li><strong>静态代码块</strong>：定义在类方法外，在非静态代码块之前执行（静态代码块—&gt;构造代码块—&gt;构造方法），只在类初始化时运行一次</li>
+<li><strong>静态内部类（static修饰类的话只能修饰内部类）</strong>：静态内部类与非静态内部类之间存在一个最大的区别: 非静态内部类在编译完成之后会隐含地保存着一个引用，该引用是指向创建它的外围类，但是静态内部类却没有。没有这个引用就意味着：<ol>
+<li>它的创建是不需要依赖外围类的创建。</li>
+<li>它不能使用任何外围类的非static成员变量和方法。</li>
+</ol>
+</li>
+</ul>
+<h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><p>super 关键字用于从子类访问父类的变量和方法。</p>
+<ul>
+<li>在构造器中使用<code>super()</code>调用父类中的其他构造方法时，该语句必须处于构造器的首行，<code>this</code>调用本类中地其他构造方法时，也要放在首行。</li>
+<li><code>this</code>、<code>super</code>不能放在<code>static</code>方法中。</li>
+</ul>
+<p>被 static 修饰的成员属于类，不属于单个这个类的某个对象，被类中所有对象共享。而 this 代表对本类对象的引用，指向本类对象；而 super 代表对父类对象的引用，指向父类对象；所以， <strong>this 和 super 是属于对象范畴的东西，而静态方法是属于类范畴的东西</strong>。</p>
+<h1 id="Object-通用方法"><a href="#Object-通用方法" class="headerlink" title="Object 通用方法"></a>Object 通用方法</h1><p><code>clone(),equals(),finalize(),getClass(),hashCode(),notify(),notifyAll(),registerNatives(),toString(),wait()</code></p>
+<h2 id="equals"><a href="#equals" class="headerlink" title="equals()"></a>equals()</h2><ul>
+<li>对于引用类型 == 判断两个对象的地址是否相等，equals() 判断值是否相等。如果变量为null，调用equals()会报错，用(s!=null&amp;&amp;equals(“abc”))或者把非null的对象放在前面”abc”.equals(s)</li>
+<li>在类没有覆盖equals()方法的时候，equals() 等价于 ==</li>
+</ul>
+<h2 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode()"></a>hashCode()</h2><ul>
+<li>hashCode() 返回哈希值，而 equals() 是用来判断两个对象是否等价。等价的两个对象散列值一定相同</li>
+<li>在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个对象哈希值也相等。</li>
+<li>HashSet 和 HashMap 等集合类使用了 hashCode() 方法来计算对象应该存储的位置，因此要将对象添加到这些集合类中，需要让对应的类实现 hashCode() 方法。</li>
+</ul>
+<h2 id="clone"><a href="#clone" class="headerlink" title="clone()"></a>clone()</h2><ul>
+<li>clone() 是 Object 的 proceted 方法，一个类不显式去重写 clone()，其他类就不能直接去调用该类实例的 clone() 方法。</li>
+<li>实现了 clone() 方法的类必须实现 Cloneable 接口，否则会抛出 CloneNotSupportedException 异常</li>
+</ul>
+<h1 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h1><h2 id="成员变量和局部变量"><a href="#成员变量和局部变量" class="headerlink" title="成员变量和局部变量"></a>成员变量和局部变量</h2><ol>
+<li>从语法形式上看:成员变量是属于类的，而局部变量是在方法中定义的变量或是方法的参数；成员变量可以被 public,private,static 等修饰符所修饰，而局部变量不能被访问控制修饰符及 static 所修饰；但是，成员变量和局部变量都能被 final 所修饰。</li>
+<li>从变量在内存中的存储方式来看:如果成员变量是使用<code>static</code>修饰的，那么这个成员变量是属于类的，如果没有使用<code>static</code>修饰，这个成员变量是属于实例的。而对象存在于堆内存，局部变量则存在于栈内存。</li>
+<li>从变量在内存中的生存时间上看:成员变量是对象的一部分，它随着对象的创建而存在，而局部变量随着方法的调用而自动消失。</li>
+<li>成员变量如果没有被赋初值:则会自动以类型的默认值而赋值（一种情况例外:被 final 修饰的成员变量也必须显式地赋值），而局部变量则不会自动赋值。</li>
+</ol>
+<h2 id="访问权限"><a href="#访问权限" class="headerlink" title="访问权限"></a>访问权限</h2><ul>
+<li>默认的，也称为default，在同一包内可见，不使用任何修饰符。</li>
+<li>私有的，以 private 修饰符指定，在同一类内可见。</li>
+<li>共有的，以 public 修饰符指定，对所有类可见。</li>
+<li>受保护的，以 protected 修饰符指定，对同一包内的类和所有子类可见。</li>
+</ul>
+<h2 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h2><p>抽象类里可以有抽象方法，如果一个类中包含抽象方法，那么这个类必须声明为抽象类。抽象类不能被实例化，只能被继承。</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口不能有任何的方法实现。接口的字段和方法默认是 public 的，并且不允许定义为 private 或者 protected，接口的字段默认是 static 和 final 的。</p>
+<ol>
+<li>jdk8 之后的接口可以有默认方法,如果同时实现两个接口，接口中定义了一样的默认方法，则必须重写，不然会报错。</li>
+<li>JDK8 中，接口也可以定义静态方法，可以直接用接口名调用。</li>
+<li>Jdk 9 在接口中引入了私有方法和私有静态方法。</li>
+</ol>
+<h3 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h3><ul>
+<li>从设计层面来说，抽象是对类的抽象，提供了一种 IS-A 的关系，是一种模板设计，接口是行为的抽象，是一种 LIKE-A 关系，是一种行为的规范。</li>
+<li>从使用上来看，一个类可以实现多个接口，但是不能继承多个类</li>
+<li>接口的字段只能是 static 和 final 类型的，而抽象类的字段没有这种限制。</li>
+<li>接口的成员只能是 public 的，而抽象类的成员可以有多种访问权限。</li>
+</ul>
+<p>需要让不相关的类都实现一个方法的时候，可以使用接口。<br>需要在几个相关的类中共享代码使用抽象类。</p>
+<h2 id="super-1"><a href="#super-1" class="headerlink" title="super"></a>super</h2><p>如果子类重写了父类的某个方法，可以通过使用 super 关键字来引用父类的方法实现。</p>
+<h2 id="重写"><a href="#重写" class="headerlink" title="重写"></a>重写</h2><p>为了满足里氏替换原则，重写有三个限制</p>
+<ul>
+<li>子类方法的访问权限必须大于等于父类方法；</li>
+<li>子类方法的返回类型必须是父类方法返回类型或为其子类型。</li>
+<li>子类方法抛出的异常类型必须是父类抛出异常类型或为其子类型。</li>
+</ul>
+<p>使用 <code>@Override</code> 注解，可以让编译器帮忙检查是否满足上面的三个限制条件。</p>
+<blockquote>
+<p> 构造方法不能被重写，但是可以被重载。</p>
+</blockquote>
+<p>在调用一个方法时，先从本类中查找看是否有对应的方法，如果没有再到父类中查看，看是否从父类继承来。否则就要对参数进行转型，转成父类之后看是否有对应的方法。总的来说，方法调用的优先级为：</p>
+<ul>
+<li>this.func(this)</li>
+<li>super.func(this)</li>
+<li>this.func(super)</li>
+<li>super.func(super)</li>
+</ul>
+<h2 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h2><ul>
+<li>存在于同一个类中，指一个方法与已经存在的方法名称上相同，但是<strong>参数类型、个数、顺序</strong>至少有一个不同，<strong>方法返回值和访问修饰符</strong>可以不同。</li>
+<li>返回值不同，其它都相同不算是重载。</li>
+</ul>
+<h2 id="面向对象三大特性"><a href="#面向对象三大特性" class="headerlink" title="面向对象三大特性"></a>面向对象三大特性</h2><h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>封装把一个对象的属性私有化，同时提供一些可以被外界访问的属性的方法。</p>
+<p>利用抽象数据类型将数据和基于数据的操作封装在一起，使其构成一个不可分割的独立实体。数据被保护在抽象数据类型的内部，尽可能地隐藏内部的细节，只保留一些对外的接口使其与外部发生联系。用户无需关心对象内部的细节，但可以通过对象对外提供的接口来访问该对象。</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>继承实现了 <strong>IS-A</strong> 关系，继承是使用已存在的类的定义作为基础建立新类的技术，新类的定义可以增加新的数据或新的功能，也可以用父类的功能，但不能选择性地继承父类。通过使用继承我们能够非常方便地复用以前的代码。</p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>所谓多态就是指程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程时并不确定，而是在程序运行期间才确定，即一个引用变量到底会指向哪个类的实例对象，该引用变量发出的方法调用到底是哪个类中实现的方法，必须在由程序运行期间才能决定。</p>
+<h2 id="面向对象和面向过程的区别"><a href="#面向对象和面向过程的区别" class="headerlink" title="面向对象和面向过程的区别"></a>面向对象和面向过程的区别</h2><ul>
+<li><strong>面向过程</strong> ：<strong>面向过程性能比面向对象高。</strong> 因为类调用时需要实例化，开销比较大，比较消耗资源，所以当性能是最重要的考量因素的时候，比如单片机、嵌入式开发、Linux/Unix 等一般采用面向过程开发。但是，<strong>面向过程没有面向对象易维护、易复用、易扩展。</strong></li>
+<li><strong>面向对象</strong> ：<strong>面向对象易维护、易复用、易扩展。</strong> 因为面向对象有封装、继承、多态性的特性，所以可以设计出低耦合的系统，使系统更加灵活、更加易于维护。但是，<strong>面向对象性能比面向过程低</strong>。</li>
+</ul>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>Java 反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为 Java语言的反射机制。</p>
+<p>每个类都有一个 Class 对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的 .class 文件，该文件内容保存着 Class 对象。</p>
+<p>类加载相当于 Class 对象的加载，类在第一次使用时才动态加载到 JVM 中。也可以使用 Class.forName(“com.mysql.jdbc.Driver”) 这种方式来控制类的加载，该方法会返回一个 Class 对象。</p>
+<p>反射可以提供运行时的类信息，并且这个类可以在运行时才加载进来，甚至在编译时期该类的 .class 不存在也可以加载进来。</p>
+<p>Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect 类库主要包含了以下三个类：</p>
+<ul>
+<li>Field ：可以使用 get() 和 set() 方法读取和修改 Field 对象关联的字段；</li>
+<li>Method ：可以使用 invoke() 方法调用与 Method 对象关联的方法；</li>
+<li>Constructor ：可以用 Constructor 的 newInstance() 创建新的对象。</li>
+</ul>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><p>Throwable 可以用来表示任何可以作为异常抛出的类，分为两种： Error 和 Exception。其中 Error 用来表示 JVM 无法处理的错误，Exception 分为两种：</p>
+<ul>
+<li>受检异常（IOException） ：需要用 try…catch… 语句捕获并进行处理，并且可以从异常中恢复。</li>
+<li>非受检异常/运行时异常 （RuntimeException）：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。</li>
+</ul>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><ul>
+<li>泛型就是编写模板代码来适应任意类型</li>
+<li>不必对类型进行强制转换</li>
+<li>可以省略编译器能自动推断出的类型 <code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code></li>
+<li>不指定泛型参数类型时，编译器会给出警告，且只能将 <T> 视为Object类型</li>
+<li>泛型不能是基本类型</li>
+</ul>
+<h2 id="编写泛型"><a href="#编写泛型" class="headerlink" title="编写泛型"></a>编写泛型</h2><ul>
+<li>编写泛型时，需要定义泛型类型 <code>&lt;T&gt;</code></li>
+<li>静态方法不能引用泛型类型 <code>&lt;T&gt;</code>，必须定义其他类型 <code>&lt;K&gt;</code> 来实现泛型</li>
+<li>泛型可以同时定义多种类型 <code>&lt;T,K&gt;</code></li>
+</ul>
+<h2 id="擦拭法"><a href="#擦拭法" class="headerlink" title="擦拭法"></a>擦拭法</h2><ul>
+<li>Java 泛型采用擦拭法实现</li>
+</ul>
+<h2 id="extends通配符"><a href="#extends通配符" class="headerlink" title="extends通配符"></a>extends通配符</h2><ul>
+<li>使用类似 <code>&lt;? extends Number&gt;</code> 通配符作为方法参数时表示方法内部可以调用获取 Number 引用的方法，无法传入</li>
+<li>使用类似 <code>&lt;T extends Number&gt;</code> 定义泛型类时表示泛型类型限定为Number或其子类</li>
+</ul>
+<h2 id="super通配符"><a href="#super通配符" class="headerlink" title="super通配符"></a>super通配符</h2><ul>
+<li>使用类似 <code>&lt;?super super Integer&gt;</code> 通配符作为方法参数时表示方法内部可以传入获取 Integer 引用的方法，无法调用</li>
+<li>使用类似 <code>&lt;T super Integer&gt;</code> 定义泛型类时表示泛型类型限定为Integer或其超类</li>
+</ul>
+<h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><h2 id="有三种实现线程的方法"><a href="#有三种实现线程的方法" class="headerlink" title="有三种实现线程的方法"></a>有三种实现线程的方法</h2><ol>
+<li>继承 Thread 类</li>
+<li>实现 Runnable 接口</li>
+<li>实现 Callable 接口，可以有返回值</li>
+</ol>
+<p>推荐使用 Runnable 接口，因为 Java 不支持多继承。<br>Callable 接口中的 call() 方法有单绘制，是一个泛型，和 Future，FutureTask 配合用来获取异步执行的结果。</p>
+<h2 id="sleep-和-wait"><a href="#sleep-和-wait" class="headerlink" title="sleep() 和 wait()"></a>sleep() 和 wait()</h2><ul>
+<li>sleep 没有释放锁，wait 释放了锁</li>
+<li>wait 通常被用于线程间的交互/通信，sleep 通常被用于暂停执行</li>
+<li>wait() 方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的 notify() 或者 notifyAll() 方法。sleep() 方法执行完成后，线程会自动苏醒。或者可以使用 wait(long timeout) 超时后线程会自动苏醒。</li>
+</ul>
+<h2 id="为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><a href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法" class="headerlink" title="为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法"></a>为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</h2><p>调用 start 方法方可启动线程并使线程进入就绪状态，start 内部调用了 run 方法，直接调用 run 方法还是在主线程里执行，没有新的线程启动。</p>
+<h2 id="守护线程和非守护线程"><a href="#守护线程和非守护线程" class="headerlink" title="守护线程和非守护线程"></a>守护线程和非守护线程</h2><p>程序运行完毕，JVM 会等待非守护线程完成后关闭，但是 JVM 不会等待守护线程，比如 GC 线程就是守护线程。</p>
+<h2 id="什么是多线程上下文切换"><a href="#什么是多线程上下文切换" class="headerlink" title="什么是多线程上下文切换"></a>什么是多线程上下文切换</h2><p>多线程的上下文切换是指 CPU 控制权由一个已经正在运行的线程切换到另外一个就绪并等待获取 CPU 执行权的线程的过程。</p>
+<h2 id="什么导致线程阻塞"><a href="#什么导致线程阻塞" class="headerlink" title="什么导致线程阻塞"></a>什么导致线程阻塞</h2><ul>
+<li>sleep()：sleep 允许指定以毫秒为单位的一段时间作为参数，使得线程在指定的时间进入阻塞状态，不能得到 CPU 时间，指定的时间一过，线程重新进入可执行状态。阻塞时不会释放占用的锁。</li>
+<li>yield()：yield 使当前线程放弃已经分得的 CPU 时间，但不使当前线程阻塞，即线程仍处于可执行状态，随时可能再次分得 CPU 时间。</li>
+<li>suspend() 和 resume()：suspend 使得线程进入阻塞状态，不会自动恢复，只有 resume 被调用，才能使得线程重新进入可执行状态。</li>
+<li>wait() 和 notify()：wait 可以指定毫秒单位的时间作为参数，也可以不指定，当超出时间或者调用 notify 方法时，线程进入可执行状态。这一对方法必须在 synchorized 方法或者块中调用，只有在 synchronized 方法或块中当前线程才占有锁，才有锁可以释放。</li>
+</ul>
+<h2 id="synchronized-和-ReentrantLock"><a href="#synchronized-和-ReentrantLock" class="headerlink" title="synchronized 和 ReentrantLock"></a>synchronized 和 ReentrantLock</h2><ul>
+<li>ReentrantLock 是一个接口，而 synchorized 是关键字</li>
+<li>都是可重入锁</li>
+<li>ReentrantLock 需要显示的加锁和释放锁，synchorized 是自动的</li>
+<li>ReentrantLock 支持公平锁和非公平锁</li>
+<li>ReentrantLock 可相应中断、可轮回，synchorized 不可以</li>
+</ul>
+<h1 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h1><ul>
+<li>IO 流是一种顺序读写数据的模式</li>
+<li>二进制数据以 byte 为最小单位在 InputStream/OuputStream 中单向流动（字节流）</li>
+<li>字符数据以 char 为最小单位在 Reader/Writer 中单向流动</li>
+<li>java.io 包提供了同步 IO 功能</li>
+</ul>
+<h2 id="Java-中-IO-流分为几种"><a href="#Java-中-IO-流分为几种" class="headerlink" title="Java 中 IO 流分为几种"></a>Java 中 IO 流分为几种</h2><p>Java IO 流有4个抽象基类:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>字节流</th>
+<th>字符流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输出流</td>
+<td>OutPutStream</td>
+<td>Writer</td>
+</tr>
+<tr>
+<td>输入流</td>
+<td>InputStream</td>
+<td>Reader</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src="https://gitee.com/cellophane/image/raw/master/20200411233959.png" alt=""></p>
+<ul>
+<li>按照流的流向分，可以分为输入流和输出流；</li>
+<li>按照操作单元划分，可以划分为字节流和字符流；</li>
+<li>按照流的角色划分为节点流和处理流。</li>
+</ul>
+<p>在 Java 的 I/O 中使用到装饰器模式,下面以 InputStream 为例：</p>
+<ul>
+<li>InputStream是抽象组件；</li>
+<li>FileInputStream 是 InputStream 的子类，属于具体组件，提供了字节流的输入操作；</li>
+<li>FilterInputStream 属于抽象装饰者，装饰者用于装饰组件，为组件提供额外的功能。例如 BufferedInputStream 为 FileInputStream 提供缓存的功能</li>
+</ul>
+<p>在实际开发中，实例化一个具有缓存功能的字节流对象时，只需要在 FileInputStream 对象上再套一层 BufferedInputStream 对象即可，例如：</p>
+<pre class="line-numbers language-java"><code class="language-java">FileInputStream fileInputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>filePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+BufferedInputStream bufferedInputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedInputStream</span><span class="token punctuation">(</span>fileInputStream<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1 id="Java-与-C-的区别"><a href="#Java-与-C-的区别" class="headerlink" title="Java 与 C++ 的区别"></a>Java 与 C++ 的区别</h1><ul>
+<li>Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。</li>
+<li>Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。</li>
+<li>Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。</li>
+<li>Java 支持自动垃圾回收，而 C++ 需要手动回收。</li>
+<li>Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。</li>
+<li>Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。</li>
+<li>Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://cyc2018.github.io/CS-Notes/#/notes/Java%20%E5%9F%BA%E7%A1%80" target="_blank" rel="noopener">Java 基础</a></li>
+<li><a href="https://www.zhihu.com/question/31203609/answer/50992895" target="_blank" rel="noopener">Java 到底是值传递还是引用传递？</a></li>
+<li><a href="https://juejin.im/post/5b57b81af265da0f4b7a9ae5" target="_blank" rel="noopener">bat等大公司常考java多线程面试题</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNDA2OTM1Ng==&mid=2453141826&idx=2&sn=759e6e18c4694b510ac8e0af31608b6c&chksm=8cf2dbc1bb8552d7575b31770cf5af9b25c470f57aa6a9727446ab99ae2d76b2c5767ff280f6&scene=0&xtrack=1#rd" target="_blank" rel="noopener">为什么阿里巴巴不建议在for循环中使用”+”进行字符串拼接</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本类型和包装类型"><span class="toc-text">基本类型和包装类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存池"><span class="toc-text">缓存池</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String"><span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不可变的好处"><span class="toc-text">不可变的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-Pool-字符串常量池"><span class="toc-text">String Pool 字符串常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#new-String-“abc”"><span class="toc-text">new String(“abc”)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参数传递"><span class="toc-text">参数传递</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隐式类型转换"><span class="toc-text">隐式类型转换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#局部变量"><span class="toc-text">局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例变量"><span class="toc-text">实例变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类变量（静态变量）"><span class="toc-text">类变量（静态变量）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字"><span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#final"><span class="toc-text">final</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static"><span class="toc-text">static</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super"><span class="toc-text">super</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Object-通用方法"><span class="toc-text">Object 通用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#equals"><span class="toc-text">equals()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashCode"><span class="toc-text">hashCode()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clone"><span class="toc-text">clone()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#面向对象"><span class="toc-text">面向对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#成员变量和局部变量"><span class="toc-text">成员变量和局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-text">访问权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类"><span class="toc-text">抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#接口和抽象类的区别"><span class="toc-text">接口和抽象类的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super-1"><span class="toc-text">super</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重写"><span class="toc-text">重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载"><span class="toc-text">重载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面向对象三大特性"><span class="toc-text">面向对象三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#封装"><span class="toc-text">封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承"><span class="toc-text">继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多态"><span class="toc-text">多态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面向对象和面向过程的区别"><span class="toc-text">面向对象和面向过程的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反射"><span class="toc-text">反射</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#异常"><span class="toc-text">异常</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型"><span class="toc-text">泛型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编写泛型"><span class="toc-text">编写泛型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#擦拭法"><span class="toc-text">擦拭法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extends通配符"><span class="toc-text">extends通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#super通配符"><span class="toc-text">super通配符</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多线程"><span class="toc-text">多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#有三种实现线程的方法"><span class="toc-text">有三种实现线程的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep-和-wait"><span class="toc-text">sleep() 和 wait()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么调用-start-方法会执行-run-方法，为什么不能直接调用-run-方法"><span class="toc-text">为什么调用 start() 方法会执行 run() 方法，为什么不能直接调用 run() 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#守护线程和非守护线程"><span class="toc-text">守护线程和非守护线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是多线程上下文切换"><span class="toc-text">什么是多线程上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么导致线程阻塞"><span class="toc-text">什么导致线程阻塞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-和-ReentrantLock"><span class="toc-text">synchronized 和 ReentrantLock</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO"><span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-中-IO-流分为几种"><span class="toc-text">Java 中 IO 流分为几种</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-与-C-的区别"><span class="toc-text">Java 与 C++ 的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/01/17/MySQL-%E4%BA%8B%E5%8A%A1-%E6%97%A5%E5%BF%97-%E9%94%81/" class="prev">&larr; Prev post MySQL 事务 日志 锁</a>
+  
+
+  
+
+  
+    <a href="/2020/01/11/%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="next">Next post 扫码登录实现原理 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

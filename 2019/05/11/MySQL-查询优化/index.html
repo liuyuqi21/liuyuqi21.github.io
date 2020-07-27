@@ -1,0 +1,598 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="分析先说明如何定位低效 SQL 语句，然后根据 SQL 语句可能低效的原因做排查，先从索引着手，如果索引没有问题，考虑其他几个方面，数据访问的问题，长难语句的问题还是一些特定类型优化的问题
+
+通过脚本，刷新观察 status
+是否周期性故障或者波动
+一般由访问高峰或缓存崩溃引起，加缓存并更改缓存失效策略，使失效时间分散或夜间定时失效
+show processlist 或开启慢查询 获取有问题...">
+  
+  <title>MySQL 查询优化 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/05/16/%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        面试知识点
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/05/09/MySQL-%E5%9F%BA%E7%A1%80/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        MySQL 基础
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>MySQL 查询优化</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2019-05-11</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-02</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/MySQL/">MySQL</a>
+          
+        </span>
+      
+      <span id="/2019/05/11/MySQL-查询优化/" class="leancloud-visitors" data-flag-title="MySQL 查询优化">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>先说明如何定位低效 SQL 语句，然后根据 SQL 语句可能低效的原因做排查，先从索引着手，如果索引没有问题，考虑其他几个方面，数据访问的问题，长难语句的问题还是一些特定类型优化的问题</p>
+<ol>
+<li>通过脚本，刷新观察 status</li>
+<li>是否周期性故障或者波动</li>
+<li>一般由访问高峰或缓存崩溃引起，加缓存并更改缓存失效策略，使失效时间分散或夜间定时失效</li>
+<li>show processlist 或开启慢查询 获取有问题的 sql</li>
+<li>profiling 分析语句及 explain 分析语句<ol>
+<li>如果语句等待时间长：调优服务器参数（如缓冲区，线程数）</li>
+<li>如果语句执行时间长：可能是表设计有缺陷，索引没优化 语句没优化</li>
+</ol>
+</li>
+</ol>
+<h2 id="排查命令"><a href="#排查命令" class="headerlink" title="排查命令"></a>排查命令</h2><ul>
+<li><code>show status</code> 返回计数器</li>
+<li><code>show global status</code> 查看服务器级别的所有计数</li>
+<li><code>show processlist</code> 观察是否有大量线程处于不正常的状态或特征</li>
+</ul>
+<h2 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h2><ul>
+<li>开启慢查询日志<ol>
+<li>以命令行的方式设置参数，不需要重启 MySQL 服务 <code>set global slow_query_log = ON;</code></li>
+<li>以配置文件的方式设置，需要重启 MySQL 服务。</li>
+</ol>
+</li>
+<li>设置 long_query_time 值：<code>set long_query_time=10;</code></li>
+<li>查看慢查询日志：<code>more show-query.log</code> 或者 <code>mysqldumpslow show-query.log</code></li>
+</ul>
+<h2 id="使用-Explain-进行分析"><a href="#使用-Explain-进行分析" class="headerlink" title="使用 Explain 进行分析"></a>使用 Explain 进行分析</h2><p>Explain 用来分析 SELECT 查询语句，开发人员可以通过分析 Explain 结果来优化查询语句。</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>type</td>
+<td>表示找到所需数据使用的扫描方式</td>
+</tr>
+<tr>
+<td>select_type</td>
+<td>查询类型，有简单查询、联合查询、子查询等</td>
+</tr>
+<tr>
+<td>table</td>
+<td>表名</td>
+</tr>
+<tr>
+<td>key</td>
+<td>使用的索引</td>
+</tr>
+<tr>
+<td>row</td>
+<td>扫描的行数</td>
+</tr>
+<tr>
+<td>Extra</td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>常见扫描方式（type）</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>system</td>
+<td>系统表，少量数据，往往不需要磁盘 IO</td>
+</tr>
+<tr>
+<td>const</td>
+<td>常量连接，主键或者唯一索引上的等值查询</td>
+</tr>
+<tr>
+<td>eq_ref</td>
+<td>主键索引或者非空唯一索引上的 join 查询，等值扫描，对于前表的每一行，后表只有一行命中</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>非主键非唯一索引等值扫描</td>
+</tr>
+<tr>
+<td>range</td>
+<td>范围扫描，如 between</td>
+</tr>
+<tr>
+<td>index</td>
+<td>索引树扫描，需要扫描索引上的全部数据，如 InnoDB 的count</td>
+</tr>
+<tr>
+<td>ALL</td>
+<td>全表扫描</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Extra</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Using Where</td>
+<td>SQL 使用了 where 条件过滤数据</td>
+</tr>
+<tr>
+<td>Using index</td>
+<td>返回的所有列数据均在一颗所引述上，无需访问实际行记录（索引覆盖）</td>
+</tr>
+<tr>
+<td>Using index condition</td>
+<td>命中索引但是没有索引覆盖</td>
+</tr>
+<tr>
+<td>using filesort</td>
+<td>得到所需结果集，需要对所有记录进行文件排序（在没有建立索引的列上 order by）</td>
+</tr>
+<tr>
+<td>using temporary</td>
+<td>需要建立临时表(temporary table)来暂存中间结果(group by 和 order by 同时存在，且作用于不同的字段时）</td>
+</tr>
+<tr>
+<td>Using join buffer(Block Nested Loop)</td>
+<td>需要进行循环嵌套计算（两个关联表join，关联字段均未建立索引）</td>
+</tr>
+</tbody></table>
+<h2 id="profiling-分析查询"><a href="#profiling-分析查询" class="headerlink" title="profiling 分析查询"></a>profiling 分析查询</h2><ul>
+<li>profiling 默认是关闭的，通过<code>select @@profiling；</code>查看是否开启，通过<code>set profiling=1;</code>开启</li>
+<li>执行需要测试的 sql 语句</li>
+<li><code>show profiles\G;</code> 得到被执行的 SQL 语句的时间和 ID。</li>
+<li><code>show profile for query 1;</code>得到 id 为 2 的语句执行的详细信息</li>
+</ul>
+<h1 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a>优化方向</h1><ul>
+<li>数据表数据类型和表结构优化</li>
+<li>索引优化</li>
+<li>SQL语句的优化</li>
+<li>存储引擎的优化</li>
+<li>数据库服务器架构的优化</li>
+</ul>
+<h1 id="数据表数据类型和表结构优化"><a href="#数据表数据类型和表结构优化" class="headerlink" title="数据表数据类型和表结构优化"></a>数据表数据类型和表结构优化</h1><h2 id="建表原则"><a href="#建表原则" class="headerlink" title="建表原则"></a>建表原则</h2><ul>
+<li>定常与变长分离</li>
+<li>常用字段和不常用字段分离</li>
+<li>在 1 对多，需要关联统计的字段上，添加冗余字段</li>
+<li>不允许 null</li>
+</ul>
+<h2 id="列类型选择"><a href="#列类型选择" class="headerlink" title="列类型选择"></a>列类型选择</h2><ul>
+<li>字段类型优先级 int date,time enum char varchar blob text</li>
+<li>整形：定长，没有国家/地区之分，没有字符集差异，char 需要考虑字符集与校对集（排序规则）</li>
+<li>enum：能起约束的目的，内部用整形存储，但与 char 联查时，内部要经历串和值的转化</li>
+<li>varchar：不定长，速度慢</li>
+<li>text/blob：无法使用内存临时表（排序等操作只能在磁盘上进行）</li>
+<li>varchar(10) 和 varchar(300) 在表联查时花更多内存</li>
+<li>尽量避免null，不利于索引，要用特殊字节标注，在磁盘占据的空间更大（mysql5.5对null做了改进）</li>
+<li>ip 地址的存储，用字符串浪费空间。可以用 iptolong 函数转化为整形存储 </li>
+</ul>
+<h1 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h1><h2 id="索引的创建原则"><a href="#索引的创建原则" class="headerlink" title="索引的创建原则"></a>索引的创建原则</h2><ul>
+<li>最适合索引的列是出现在where，on，group by，order by 子句中的列</li>
+<li>尽量选择区分度高的列作为索引</li>
+<li>对较小的数据列使用索引,这样会使索引文件更小,同时内存中也可以装载更多的索引键</li>
+<li>索引基数越大效果越好</li>
+<li>避免创建过多索引</li>
+<li>主键尽可能选择较短的数据类型，可以有效减少索引的磁盘占用提高查询效率</li>
+</ul>
+<h2 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h2><p>在需要使用多个列作为条件进行查询时，使用复合索引比使用多个单列索引性能更好。</p>
+<h3 id="左前缀原则"><a href="#左前缀原则" class="headerlink" title="左前缀原则"></a>左前缀原则</h3><p>原理：比如，我们在（a,b,c）字段上创建一个联合索引，则索引记录会首先按照 A 字段排序，然后再按照 B 字段排序然后再是 C 字段。类似于查字典。<br>index(a,b,c)<br>where a=1 and b&gt;7 and c=2 只能使用 a，b，b用了一半，无法使用到c（使用到范围查询和模糊查询后面的索引都用不到）<br>where a=1 and b=3 order by c 都能用上</p>
+<h2 id="索引与排序"><a href="#索引与排序" class="headerlink" title="索引与排序"></a>索引与排序</h2><ul>
+<li>对于覆盖索引，直接在索引上查询时，就是有序的，using index</li>
+<li>在 InnoDB 引擎中，沿着索引字段排序，自然是有序的， MyISAM 引擎，如果按某索引字段排序，但取出的字段中有未索引字段的做法不是索引-&gt;回行，索引-&gt;回行，而是先取出所有行，再排序</li>
+<li>group by 和 order by 同时存在，且作用于不同的字段时，先取出数据，形成临时表做 filesort</li>
+</ul>
+<h2 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h2><p>如果查询的列恰好是索引的一部分，那么查询只需要在索引文件上进行,不需要回到磁盘再找数据<br>如 </p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">index</span> index_birthday_and_user_name <span class="token keyword">on</span> user_info<span class="token punctuation">(</span>birthday<span class="token punctuation">,</span> user_name<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">`</span><span class="token punctuation">,</span><span class="token punctuation">`</span><span class="token keyword">select</span> user_name <span class="token keyword">from</span> user_info <span class="token keyword">where</span> birthday <span class="token operator">=</span> <span class="token string">'1991-11-1'</span><span class="token punctuation">`</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h2><ul>
+<li>ASC，DESC 混用</li>
+<li>WHERE 字句中出现非排序使用到的索引</li>
+<li>排序列包含非同一个索引的列</li>
+<li>排序列使用了复杂的表达式</li>
+<li>复合索引遵循左前缀原则</li>
+<li>like 查询，% 在前，索引失效，可以使用全文索引</li>
+<li>如果 MySQL 估计使用索引比全表扫描更慢,会放弃使用索引</li>
+<li>or 条件中的列有索引，后面的没有,索引不会被用到</li>
+<li>负向条件(!=、&lt;&gt;、not in、not exists、not like 等)查询不能使用索引，可以优化为 in 查询。</li>
+<li>索引列不能是表达式的一部分，也不能是函数的参数</li>
+<li>建立索引的列不允许为 null，column is null 可以命中索引，is not null 不能命中。</li>
+<li>列的值是字符串，查询时一定要给值加引号,否则索引失效</li>
+</ul>
+<h2 id="伪哈希索引"><a href="#伪哈希索引" class="headerlink" title="伪哈希索引"></a>伪哈希索引</h2><ul>
+<li>同时存在 url 列 hash 列，存储时 crcurl=crc32(url)</li>
+</ul>
+<h2 id="索引列的顺序"><a href="#索引列的顺序" class="headerlink" title="索引列的顺序"></a>索引列的顺序</h2><p>让选择性最强的索引列放在前面。<br>索引的选择性是指：不重复的索引值和记录总数的比值。最大值为 1，此时每个记录都有唯一的索引与其对应。选择性越高，查询效率也越高。</p>
+<h2 id="对较长的字段使用前缀索引"><a href="#对较长的字段使用前缀索引" class="headerlink" title="对较长的字段使用前缀索引"></a>对较长的字段使用前缀索引</h2><p>可以节约大量索引空间<br>对于 BLOB、TEXT 和 VARCHAR 类型的列，必须使用前缀索引，只索引开始的部分字符。<br>对于前缀长度的选取需要根据索引选择性来确定。</p>
+<h2 id="索引的使用条件"><a href="#索引的使用条件" class="headerlink" title="索引的使用条件"></a>索引的使用条件</h2><ul>
+<li>对于非常小的表、大部分情况下简单的全表扫描比建立索引更高效；</li>
+<li>对于中到大型的表，索引就非常有效；</li>
+<li>但是对于特大型的表，建立和维护索引的代价将会随之增长。这种情况下，需要用到一种技术可以直接区分出需要查询的一组数据，而不是一条记录一条记录地匹配，例如可以使用分区技术。</li>
+</ul>
+<h2 id="索引碎片与维护"><a href="#索引碎片与维护" class="headerlink" title="索引碎片与维护"></a>索引碎片与维护</h2><ul>
+<li>在长期的数据更改过程中，索引文件和数据文件，都将产生空洞，形成碎片，可以通过一个不产生对数据实质影响的操作来修改表</li>
+<li>或者使用 optimize table 也可以修复</li>
+</ul>
+<h2 id="索引的优点"><a href="#索引的优点" class="headerlink" title="索引的优点"></a>索引的优点</h2><ul>
+<li>大大减少服务器需要扫描的数据量</li>
+<li>帮助服务器避免进行排序和分组，以及避免创建临时表（B+Tree 索引是有序的，可以用于 ORDER BY 和 GROUP BY 操作。临时表主要是在排序和分组过程中创建，因为不需要排序和分组，也就不需要创建临时表）。</li>
+<li>将随机 I/O 变为顺序 I/O（B+Tree 索引是有序的，会将相邻的数据都存储在一起）。</li>
+<li>大大提高查询速度，降低写的速度，占用磁盘</li>
+</ul>
+<h1 id="SQL语句的优化"><a href="#SQL语句的优化" class="headerlink" title="SQL语句的优化"></a>SQL语句的优化</h1><h2 id="切分大查询"><a href="#切分大查询" class="headerlink" title="切分大查询"></a>切分大查询</h2><p>一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。<br>将一个大的查询分解成多个小的相同的查询。<br>一次性删除 1000 万的数据要比一次删除 1 万，暂停一会儿的方案更损耗服务器开销。</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> messages <span class="token keyword">WHERE</span> <span class="token keyword">create</span> <span class="token operator">&lt;</span> DATE_SUB<span class="token punctuation">(</span><span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> INTERVAL <span class="token number">3</span> MONTH<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//切分后</span>
+rows_affected <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">do</span> {
+rows_affected <span class="token operator">=</span> do_query<span class="token punctuation">(</span>
+<span class="token string">"DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000"</span><span class="token punctuation">)</span>
+} <span class="token keyword">while</span> rows_affected <span class="token operator">></span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="分解关联查询"><a href="#分解关联查询" class="headerlink" title="分解关联查询"></a>分解关联查询</h2><p>将一个关联查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联。</p>
+<ul>
+<li>让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用。</li>
+<li>分解成多个单表查询，这些单表查询的缓存结果更可能被其它查询使用到，从而减少冗余记录的查询。</li>
+<li>减少锁竞争。</li>
+<li>在应用层进行连接，可以更容易对数据库进行拆分，从而更容易做到高性能和可伸缩。</li>
+<li>查询本身效率也可能会有所提升。</li>
+</ul>
+<h2 id="优化特定类型的查询语句"><a href="#优化特定类型的查询语句" class="headerlink" title="优化特定类型的查询语句"></a>优化特定类型的查询语句</h2><ul>
+<li>count(*) 会忽略所有列，直接统计所有列数，不要使用 count(列名)。count()在查询 &lt; 时快，查询 &gt;100 时可以用总的减去 &lt;=100。</li>
+<li>group by 和 distinct 可以使用索引来优化</li>
+<li>如果不需要使用 order by 进行 group by 时使用 order by null，MySQL 就不会再进行文件排序</li>
+<li>优化关联查询：确定 on 或者 using 子句的列上有索引，确保 group by 和 order by 中只有一个表中的列，这样 MySQl 才有可能使用索引</li>
+<li>优化子查询：用关联查询替代</li>
+<li>优化 limit 分页：limit 偏移量大的时候，查询效率较低。 优化方法：<ol>
+<li>从业务上解决，不允许翻过 100 页</li>
+<li>不用 offset，用条件查询,记录上次查询最大 ID，下次查询时直接根据 ID 查询</li>
+</ol>
+</li>
+<li>优化 UNION 查询：UNION ALL 效率更高，会查询出重复的数据，但是可以在应用层筛选。 UNION 的子句要尽量具体，查询更少的行</li>
+<li>union、in、or 都能够命中索引，建议使用 in。</li>
+<li>min/max 优化</li>
+</ul>
+<h2 id="优化数据访问"><a href="#优化数据访问" class="headerlink" title="优化数据访问"></a>优化数据访问</h2><ul>
+<li>改变数据库和表的结构，修改数据表的范式，冗余</li>
+<li>只返回必要的列：最好不要使用 SELECT * 语句。</li>
+<li>只返回必要的行：使用 LIMIT 语句来限制返回的数据。</li>
+<li>缓存重复查询的数据：使用缓存可以避免在数据库中进行查询，特别在要查询的数据经常被重复查询时，缓存带来的查询性能提升将会是非常明显的。</li>
+<li>使用索引来覆盖查询</li>
+</ul>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li>燕十八.MySQL 优化视频</li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651962514&idx=1&sn=550c48c9395b52b7ec561741e86e5ce0&chksm=bd2d094e8a5a80589117a653a30d062b5760ec20f8ab9e2154a63ab782d3353d1b1da50b9bc2&scene=21#wechat_redirect" target="_blank" rel="noopener">同一个SQL语句，为啥性能差异咋就这么大呢？</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651962587&idx=1&sn=d197aea0090ce93b156e0774c6dc3019&chksm=bd2d09078a5a801138922fb5f2b9bb7fdaace7e594d55f45ce4b3fc25cbb973bbc9b2deb2c31&scene=21#wechat_redirect" target="_blank" rel="noopener">如何利用工具，迅猛定位低效SQL？</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#排查命令"><span class="toc-text">排查命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#慢查询日志"><span class="toc-text">慢查询日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-Explain-进行分析"><span class="toc-text">使用 Explain 进行分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#profiling-分析查询"><span class="toc-text">profiling 分析查询</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#优化方向"><span class="toc-text">优化方向</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据表数据类型和表结构优化"><span class="toc-text">数据表数据类型和表结构优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#建表原则"><span class="toc-text">建表原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列类型选择"><span class="toc-text">列类型选择</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引优化"><span class="toc-text">索引优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的创建原则"><span class="toc-text">索引的创建原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#联合索引"><span class="toc-text">联合索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#左前缀原则"><span class="toc-text">左前缀原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引与排序"><span class="toc-text">索引与排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引覆盖"><span class="toc-text">索引覆盖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引失效的情况"><span class="toc-text">索引失效的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#伪哈希索引"><span class="toc-text">伪哈希索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引列的顺序"><span class="toc-text">索引列的顺序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对较长的字段使用前缀索引"><span class="toc-text">对较长的字段使用前缀索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的使用条件"><span class="toc-text">索引的使用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引碎片与维护"><span class="toc-text">索引碎片与维护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#索引的优点"><span class="toc-text">索引的优点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL语句的优化"><span class="toc-text">SQL语句的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#切分大查询"><span class="toc-text">切分大查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分解关联查询"><span class="toc-text">分解关联查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化特定类型的查询语句"><span class="toc-text">优化特定类型的查询语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化数据访问"><span class="toc-text">优化数据访问</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2019/05/16/%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9/" class="prev">&larr; Prev post 面试知识点</a>
+  
+
+  
+
+  
+    <a href="/2019/05/09/MySQL-%E5%9F%BA%E7%A1%80/" class="next">Next post MySQL 基础 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

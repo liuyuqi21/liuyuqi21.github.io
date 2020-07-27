@@ -1,0 +1,408 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="MySQL
+MySQL 性能优化神器 Explain 使用分析
+20+条MySQL性能优化的最佳经验
+MySQL慢查询&amp;分析SQL执行效率浅谈
+数据库索引是怎样工作的？
+深入浅出数据库索引原理
+MySQl 索引背后的数据结构及算法原理
+MySQL——通过EXPLAIN分析SQL的执行计划
+MySQL——索引优化实战
+《高性能MySQL》读后感——聚簇索引
+10分钟让你明白MySQL是...">
+  
+  <title>各类文章合集 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/04/23/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        设计模式-PHP
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/04/16/PHP-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PHP 面试知识点
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>各类文章合集</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2019-04-16</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-27</span>
+      
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>
+          
+        </span>
+      
+      <span id="/2019/04/16/各类文章合集/" class="leancloud-visitors" data-flag-title="各类文章合集">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><ul>
+<li><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL 性能优化神器 Explain 使用分析</a></li>
+<li><a href="https://www.jfox.info/2017/20-tiao-mysql-xing-nen-you-hua-de-zui-jia-jing-yan.html" target="_blank" rel="noopener">20+条MySQL性能优化的最佳经验</a></li>
+<li><a href="https://www.jianshu.com/p/43091bfa8aa7" target="_blank" rel="noopener">MySQL慢查询&amp;分析SQL执行效率浅谈</a></li>
+<li><a href="https://blog.csdn.net/xiangwanpeng/article/details/54310955" target="_blank" rel="noopener">数据库索引是怎样工作的？</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/23624390" target="_blank" rel="noopener">深入浅出数据库索引原理</a></li>
+<li><a href="http://www.uml.org.cn/sjjm/201107145.asp" target="_blank" rel="noopener">MySQl 索引背后的数据结构及算法原理</a></li>
+<li><a href="https://www.cnblogs.com/songwenjie/p/9409852.html" target="_blank" rel="noopener">MySQL——通过EXPLAIN分析SQL的执行计划</a></li>
+<li><a href="https://www.cnblogs.com/songwenjie/p/9402295.html" target="_blank" rel="noopener">MySQL——索引优化实战</a></li>
+<li><a href="https://www.jianshu.com/p/54c6d5db4fe6" target="_blank" rel="noopener">《高性能MySQL》读后感——聚簇索引</a></li>
+<li><a href="http://www.fordba.com/spend-10-min-to-understand-how-mysql-use-index.html" target="_blank" rel="noopener">10分钟让你明白MySQL是如何利用索引的</a></li>
+<li><a href="https://www.cnblogs.com/JetpropelledSnake/p/9094280.html#_label8" target="_blank" rel="noopener">SQL学习笔记五之MySQL索引原理与慢查询优化</a></li>
+</ul>
+<h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ul>
+<li><a href="https://www.jianshu.com/p/e7f45779008a" target="_blank" rel="noopener">tcp建立连接为什么需要三次握手</a></li>
+<li><a href="https://www.jianshu.com/p/7d0f91345483" target="_blank" rel="noopener">TCP 为什么是三次握手四次挥手？</a></li>
+<li><a href="https://mp.weixin.qq.com/s/NIjxgx4NPn7FC4PfkHBAAQ" target="_blank" rel="noopener">TCP 为什么是三次握手，而不是两次或四次？</a></li>
+<li><a href="http://www.blogjava.net/yongboy/archive/2015/05/07/424917.html" target="_blank" rel="noopener">TCP协议缺陷不完全记录</a></li>
+<li><a href="https://imququ.com/post/web-security-and-response-header.html" target="_blank" rel="noopener">一些安全相关的HTTP响应头</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25690011" target="_blank" rel="noopener">Web通信中传统轮询、长轮询和WebSocket简介</a></li>
+</ul>
+<h2 id="面试知识点"><a href="#面试知识点" class="headerlink" title="面试知识点"></a>面试知识点</h2><ul>
+<li><a href="https://xianyunyh.gitbooks.io/php-interview/Mysql/" target="_blank" rel="noopener">php-interview</a></li>
+</ul>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><ul>
+<li><a href="https://www.jianshu.com/p/72c579528337" target="_blank" rel="noopener">Linux查找命令</a></li>
+<li><a href="https://www.jianshu.com/p/b94644559308" target="_blank" rel="noopener">LINUX中如何查看某个端口是否被占用</a></li>
+<li><a href="https://www.cnblogs.com/peida/archive/2013/03/08/2949194.html" target="_blank" rel="noopener">每天一个linux命令（56）：netstat命令</a></li>
+<li><a href="https://blog.biezhi.me/2017/08/write-code-must-linux-command.html" target="_blank" rel="noopener">写代码怎能不会这些 Linux 命令？</a></li>
+</ul>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><ul>
+<li><a href="https://juejin.im/entry/592257b62f301e006b183b95" target="_blank" rel="noopener">操作系统面试重难点总结</a></li>
+<li><a href="https://www.cnblogs.com/memewry/archive/2012/08/25/2656966.html" target="_blank" rel="noopener"></a></li>
+<li><a href="https://www.imooc.com/article/11015" target="_blank" rel="noopener">BAT面试之操作系统内存详解</a></li>
+</ul>
+<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><ul>
+<li><a href="https://www.mantis.vip/posts/2018-03-24-Nginx%E4%B8%8Ephp-fpm%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%8C%BA%E5%88%AB.html" target="_blank" rel="noopener">Nginx与php-fpm之间的通信方式及区别</a></li>
+<li><a href="https://learnku.com/articles/23694" target="_blank" rel="noopener">PHP-FPM 与 Nginx 的通信机制总结</a></li>
+<li><a href="https://www.cnblogs.com/wujuntian/p/5768336.html" target="_blank" rel="noopener">PHP常用配置</a></li>
+<li><a href="http://www.laruence.com/2008/06/18/221.html" target="_blank" rel="noopener">深入理解PHP原理之Opcodes</a></li>
+<li><a href="https://www.hoohack.me/2016/02/15/understanding-phps-internal-array-implementation-ch" target="_blank" rel="noopener">【译】理解数组在PHP内部的实现（给PHP开发者的PHP源码-第四部分）</a></li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html" target="_blank" rel="noopener">常用 Git 命令清单</a></li>
+<li><a href="https://www.cnblogs.com/Sungeek/p/9152223.html#sg3" target="_blank" rel="noopener">SVN与Git比较的优缺点差异</a></li>
+<li><a href="https://www.git-tower.com/learn/git/ebook/cn/command-line/introduction" target="_blank" rel="noopener">Learn Version Control with Git</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247484609&idx=1&sn=4c053236699fde3c2db1241ab497487b&chksm=ebd745c0dca0ccd682e91938fc30fa947df1385b06d6ae9bb52514967b0736c66684db2f1ac9&token=177635168&lang=zh_CN#rd" target="_blank" rel="noopener">面试前必须要知道的Redis面试题</a></li>
+<li><a href="https://juejin.im/post/5cb025fb5188251b0351ef48" target="_blank" rel="noopener">什么是消息队列？</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html" target="_blank" rel="noopener">YAML 语言教程</a></li>
+<li><a href="https://www.cnblogs.com/Anker/p/3265058.html" target="_blank" rel="noopener">select、poll、epoll之间的区别总结</a></li>
+</ul>
+<h2 id="Laravel-设计模式"><a href="#Laravel-设计模式" class="headerlink" title="Laravel/设计模式"></a>Laravel/设计模式</h2><ul>
+<li><a href="https://segmentfault.com/a/1190000002411255" target="_blank" rel="noopener">PHP程序员如何理解IoC/DI</a></li>
+<li><a href="https://www.insp.top/article/learn-laravel-container" target="_blank" rel="noopener">laravel 学习笔记 —— 神奇的服务容器</a></li>
+<li><a href="https://learnku.com/laravel/t/1954/on-laravel-design-pattern#3e05a8" target="_blank" rel="noopener">浅谈 Laravel 设计模式</a></li>
+<li><a href="https://github.com/cxp1539/laravel-core-learn" target="_blank" rel="noopener">laravel核心知识学习</a></li>
+<li><a href="https://laravelacademy.org/post/3088.html?utm_source=tuicool&utm_medium=referral" target="_blank" rel="noopener">Laravel 中管道设计模式的使用 —— 中间件实现原理探究</a></li>
+<li><a href="https://www.cnblogs.com/jade640/p/6773125.html" target="_blank" rel="noopener">laravel 管道设计模式 —— 代码理解</a></li>
+<li><a href="https://juejin.im/entry/591ab0a8128fe1005cded993" target="_blank" rel="noopener">Laravel 源码分析——看一次 Http 请求到响应</a></li>
+<li><a href="https://www.cnblogs.com/XiongMaoMengNan/p/6644892.html" target="_blank" rel="noopener">Laravel框架一：原理机制篇</a></li>
+<li><a href="https://wwxiong.com/hexo_blog/2019/06/15/2019/2019-06-15-laravel-source-code-02/" target="_blank" rel="noopener">【Laravel 源码分析】一次请求的生命周期</a></li>
+<li><a href="https://learnku.com/articles/10421/depth-mining-of-laravel-life-cycle#11bfd9" target="_blank" rel="noopener">深度挖掘 Laravel 生命周期</a></li>
+</ul>
+<p>计算机、软件专业自学或考研可能用到的教学课程：<br>数据结构：<a href="https://www.bilibili.com/video/av38920216/" target="_blank" rel="noopener">av38920216</a><br>计算机组成原理：<a href="https://www.bilibili.com/video/av38976462/" target="_blank" rel="noopener">av38976462</a><br>操作系统：<a href="https://www.bilibili.com/video/av59006688/" target="_blank" rel="noopener">av59006688</a>、<a href="https://www.bilibili.com/video/av59002531/" target="_blank" rel="noopener">av59002531</a><br>计算机网络：<a href="https://www.bilibili.com/video/av58999844/" target="_blank" rel="noopener">av58999844</a><br>计算机体系结构：<a href="https://www.bilibili.com/video/av19929862/" target="_blank" rel="noopener">av19929862</a><br>软件工程：<a href="https://www.bilibili.com/video/av59018769/" target="_blank" rel="noopener">av59018769</a><br>编译原理：<a href="https://www.bilibili.com/video/av59119931/" target="_blank" rel="noopener">av59119931</a><br>数据库：<a href="https://www.bilibili.com/video/av59111036/" target="_blank" rel="noopener">av59111036</a><br>汇编：<a href="https://www.bilibili.com/video/av58986670/" target="_blank" rel="noopener">av58986670</a><br>通信原理：<a href="https://www.bilibili.com/video/av58879979/" target="_blank" rel="noopener">av58879979</a><br>密码学：<a href="https://www.bilibili.com/video/av41333023/" target="_blank" rel="noopener">av41333023</a>、<a href="https://www.bilibili.com/video/av20135839/" target="_blank" rel="noopener">av20135839</a><br>微机原理：<a href="https://www.bilibili.com/video/av59112242/" target="_blank" rel="noopener">av59112242</a><br>考研机构辅导课程：<br>数据结构：<a href="https://www.bilibili.com/video/av58640456/" target="_blank" rel="noopener">av58640456</a><br>计算机组成原理：<a href="https://www.bilibili.com/video/av58627872/" target="_blank" rel="noopener">av58627872</a><br>操作系统：<a href="https://www.bilibili.com/video/av58630026/" target="_blank" rel="noopener">av58630026</a><br>计算机网络：<a href="https://www.bilibili.com/video/av58629608/" target="_blank" rel="noopener">av58629608</a></p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL"><span class="toc-text">MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机网络"><span class="toc-text">计算机网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面试知识点"><span class="toc-text">面试知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作系统"><span class="toc-text">操作系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP"><span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Laravel-设计模式"><span class="toc-text">Laravel&#x2F;设计模式</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2019/04/23/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="prev">&larr; Prev post 设计模式-PHP</a>
+  
+
+  
+
+  
+    <a href="/2019/04/16/PHP-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9/" class="next">Next post PHP 面试知识点 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

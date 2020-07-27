@@ -1,0 +1,767 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="七层协议各层协议的作用
+七层协议物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。
+各层传输单位：
+
+物理层：比特流
+数据链路层：帧
+网络层：包
+传输层：报文
+
+五层协议
+应用层：为特定应用程序提供数据传输服务。 
+传输层：为进程提供通用数据传输服务。提供端对端的接口。
+网络层：为主机提供数据传输服务。为数据包选择路由。
+数据链路层：传输有地址的帧以及差错校验功能。
+物理层：以二进...">
+  
+  <title>计算机网络常见问题 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/02/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        操作系统笔记
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 虚拟机
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>计算机网络常见问题</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-01-29</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-27</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+          
+        </span>
+      
+      <span id="/2020/01/29/计算机网络常见问题/" class="leancloud-visitors" data-flag-title="计算机网络常见问题">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="七层协议"><a href="#七层协议" class="headerlink" title="七层协议"></a>七层协议</h1><h2 id="各层协议的作用"><a href="#各层协议的作用" class="headerlink" title="各层协议的作用"></a>各层协议的作用</h2><p><img src="https://gitee.com/cellophane/image/raw/master/20200408113004.png" alt=""></p>
+<h3 id="七层协议-1"><a href="#七层协议-1" class="headerlink" title="七层协议"></a>七层协议</h3><p>物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。</p>
+<p>各层传输单位：</p>
+<ul>
+<li>物理层：比特流</li>
+<li>数据链路层：帧</li>
+<li>网络层：包</li>
+<li>传输层：报文</li>
+</ul>
+<h3 id="五层协议"><a href="#五层协议" class="headerlink" title="五层协议"></a>五层协议</h3><ul>
+<li>应用层：为特定应用程序提供数据传输服务。 </li>
+<li>传输层：为进程提供通用数据传输服务。提供端对端的接口。</li>
+<li>网络层：为主机提供数据传输服务。为数据包选择路由。</li>
+<li>数据链路层：传输有地址的帧以及差错校验功能。</li>
+<li>物理层：以二进制在物理媒体上传输数据。</li>
+</ul>
+<p>各层中的协议和设备：</p>
+<ul>
+<li>物理层：集线器、中继器</li>
+<li>数据链路层：网桥、交换机、PPP、ARP、RARP</li>
+<li>网络层：路由器、IP、ICMP、OSPF、RIP</li>
+<li>传输层：TCP、UDP</li>
+<li>应用层：HTTP、FTP、DNS、SMTP、Telnet</li>
+</ul>
+<h3 id="TCP-IP-协议"><a href="#TCP-IP-协议" class="headerlink" title="TCP/IP 协议"></a>TCP/IP 协议</h3><p>只有四层，相当于五层协议中数据链路层和物理层合并为网络接口层。TCP/IP 协议体系结构不严格遵循 OSI 分层概念，应用层可能会直接使用 IP 层或者网络接口层。</p>
+<h2 id="数据链路层和传输层的差错控制有什么区别"><a href="#数据链路层和传输层的差错控制有什么区别" class="headerlink" title="数据链路层和传输层的差错控制有什么区别"></a>数据链路层和传输层的差错控制有什么区别</h2><ul>
+<li>数据链路层使用循环冗余检验码（CRC）校验</li>
+<li>TCP使用校验和：TCP 的首部字段中有一个字段是校验和，发送方将伪首部、TCP首部、TCP数据使用累加和校验的方式计算出一个数字，然后存放在首部的校验和字段里，接收者收到TCP包后重复这个过程，然后将计算出的校验和和接收到的首部中的校验和比较，如果不一致则说明数据在传输过程中出错。</li>
+</ul>
+<p>数据链路层的校验只覆盖物理链路，当以太网离开主机网卡前，添加了 CRC 校验，顺着物理链路流动到另一头，进入路由器接口之后。接收方（路由器）开始计算 CRC 校验，计算得到的 CRC 如果与接收的 CRC 相同，校验通过。将 CRC 剥离，接受并路由到另一个接口。</p>
+<p>因为IP 报文在路由器内部可能需要做 “QPS”、“NAT” 等操作，这些操作都需要修改 IP、TCP 头的某些字段，所以还需要传输层校验。</p>
+<h2 id="以太网的特点，以及帧结构。"><a href="#以太网的特点，以及帧结构。" class="headerlink" title="以太网的特点，以及帧结构。"></a>以太网的特点，以及帧结构。</h2><ul>
+<li>以太网是一种星型拓扑结构局域网。</li>
+<li>以太网帧格式</li>
+<li>类型：标记上层使用的协议；</li>
+<li>数据：长度在 46-1500 之间秒如果太小则需要填充；</li>
+<li>FCS：帧检验序列，使用的是 CRC 检验方法；</li>
+</ul>
+<h2 id="集线器、交换机、路由器的作用，以及所属的网络层"><a href="#集线器、交换机、路由器的作用，以及所属的网络层" class="headerlink" title="集线器、交换机、路由器的作用，以及所属的网络层"></a><a href="https://www.tianmaying.com/tutorial/NetWorkInstrument" target="_blank" rel="noopener">集线器、交换机、路由器的作用，以及所属的网络层</a></h2><ul>
+<li>集线器：物理层设备。作用于比特而不是帧，当一个比特到达接口时，集线器重新生成这个比特，并将其能量强度放大，从而扩大网络的传输距离，之后再将这个比特发送到其他所有接口。如果集线器同时收到两个不同接口的帧，那么就发生了碰撞。</li>
+<li>交换机：链路层设备。是一种基于 MAC 识别，能完成封装转发数据包功能的网络设备。它不会发生碰撞，能根据 MAC 地址进行存储转发。</li>
+<li>路由器：网络层设备。是一种连接多个网络或网段的网络设备，根据 IP 进行转发。</li>
+</ul>
+<h2 id="IP-数据数据报常见字段的作用。"><a href="#IP-数据数据报常见字段的作用。" class="headerlink" title="IP 数据数据报常见字段的作用。"></a>IP 数据数据报常见字段的作用。</h2><ul>
+<li>版本：有 4（IPv4）和 6（IPv6）两个值；</li>
+<li>首部长度 : 占 4 位，因此最大值为 15。值为 1 表示的是 1 个 32 位字的长度，也就是 4 字节。因为首部固定长度为 20 字节，因此该值最小为 5。如果可选字段的长度不是 4 字节的整数倍，就用尾部的填充部分来填充。</li>
+<li>区分服务 : 用来获得更好的服务，一般情况下不使用。</li>
+<li>总长度 : 包括首部长度和数据部分长度。</li>
+<li>生存时间 ：TTL，它的存在是为了防止无法交付的数据报在互联网中不断兜圈子。以路由器跳数为单位，当 TTL 为 0 时就丢弃数据报。</li>
+<li>协议 ：指出携带的数据应该上交给哪个协议进行处理，例如 ICMP、TCP、UDP 等。</li>
+<li>首部检验和 ：因为数据报每经过一个路由器，都要重新计算检验和，因此检验和不包含数据部分可以减少计算的工作量。</li>
+<li>标识 : 在数据报长度过长从而发生分片的情况下，相同数据报的不同分片具有相同的标识符。</li>
+<li>片偏移 : 和标识符一起，用于发生分片的情况。片偏移的单位为 8 字节。</li>
+</ul>
+<h2 id="ARP-协议的作用，以及维护-ARP-缓存的过程。"><a href="#ARP-协议的作用，以及维护-ARP-缓存的过程。" class="headerlink" title="ARP 协议的作用，以及维护 ARP 缓存的过程。"></a>ARP 协议的作用，以及维护 ARP 缓存的过程。</h2><ul>
+<li>ARP 实现由 IP 地址得到 MAC 地址</li>
+<li>如果主机 A 知道主机 B 的 IP 地址，但是 ARP 高速缓存中没有该 IP 地址到 MAC 地址的映射，此时主机 A 通过广播的方式发送 ARP 请求分组，主机 B 收到该请求后会发送 ARP 响应分组给主机 A 告知其 MAC 地址，随后主机 A 向其高速缓存中写入主机 B 的 IP 地址到MAC 地址的映射。</li>
+</ul>
+<h2 id="ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。"><a href="#ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。" class="headerlink" title="ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。"></a>ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。</h2><ul>
+<li>ICMP 报文分为差错报告报文和询问报文</li>
+<li>ICMP 是为了更有效地转发 IP 数据报和提高交付成功的机会。它封装在 IP 数据报中，但不属于高层协议</li>
+<li>Ping 的原理是通过向目的主机发送 ICMP Echo 请求报文，目的主机收到之后会发送 Echo 回答报文。Ping 会根据时间和成功相应次数估算出数据包往返时间以及丢包率</li>
+<li>Traceroute 发送的 IP 数据报封装的是无法交付的 UDP 用户数据报，并由目的主机发送终点不可达差错报告报文。</li>
+<li>源主机向目的主机发送一连串的 IP 数据报。第一个数据报 P1 的生存时间 TTL 设置为 1，当 P1 到达路径上的第一个路由器 R1 时，R1 收下它并把 TTL 减 1，此时 TTL 等于 0，R1 就把 P1 丢弃，并向源主机发送一个 ICMP 时间超过差错报告报文；</li>
+<li>源主机接着发送第二个数据报 P2，并把 TTL 设置为 2。P2 先到达 R1，R1 收下后把 TTL 减 1 再转发给 R2，R2 收下后也把 TTL 减 1，由于此时 TTL 等于 0，R2 就丢弃 P2，并向源主机发送一个 ICMP 时间超过差错报文。</li>
+<li>不断执行这样的步骤，直到最后一个数据报刚刚到达目的主机，主机不转发数据报，也不把 TTL 值减 1。但是因为数据报封装的是无法交付的 UDP，因此目的主机要向源主机发送 ICMP 终点不可达差错报告报文。</li>
+<li>之后源主机知道了到达目的主机所经过的路由器 IP 地址以及到达每个路由器的往返时间。</li>
+</ul>
+<h2 id="UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。"><a href="#UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。" class="headerlink" title="UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。"></a>UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。</h2><ul>
+<li>传输控制协议 TCP：是面向连接的，提供可靠交付，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。TCP 主要提供完整性服务。</li>
+<li>用户数据报协议 UDP：是无连接的，尽最大可能交付，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。主要提供及时性服务。</li>
+</ul>
+<p>当对网络通讯质量有要求的时候，比如：整个数据要准确无误的传递给对方，这往往用于一些要求可靠的应用，比如HTTP、HTTPS、FTP等传输文件的协议，POP、SMTP 等邮件传输的协议。当对网络通讯质量要求不高的时候，要求网络通讯速度能尽量的快，这时就可以使用UDP（如视频传输、实时通信等）。</p>
+<h2 id="理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。"><a href="#理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。" class="headerlink" title="理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。"></a>理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。</h2><p><img src="https://gitee.com/cellophane/image/raw/master/sanciwoshou.jpg" alt=""></p>
+<p>三次握手过程：</p>
+<ol>
+<li>服务器处于 LISTEN 状态，等待来自客户端的连接请求</li>
+<li>客户端向服务器发送连接请求报文 SYN 段，并指明客户端的初始序列号 ISN(c)</li>
+<li>服务器收到客户端发来的 SYN，如果同意建立连接，则向客户端发送确认报文 SYN = ISN(s)，并将 ISN(c)+1 作为ACK 数值，这样每发送一个 SYN，序列号加1，如果有丢失的情况，就会重传。</li>
+<li>客户端收到 SYN ACK 后，还要向服务器发出确认报文 ACK，ACK 的值为 ISN(s)+1。</li>
+<li>服务器收到 ACK 后，连接建立</li>
+</ol>
+<ul>
+<li><p>连接建立以后，ACK 都置为 1</p>
+</li>
+<li><p>第三次握手可以携带数据，如果不携带数据则不消耗序号</p>
+</li>
+<li><p>三次握手的原因：第三次握手是为了确认客户端的接收能力。</p>
+</li>
+</ul>
+<p>如果是两次，客户端发送的连接请求如果在网络中滞留，那么就会隔很长一段时间才能收到服务器端发回的连接确认，客户端超时重发连接请求，这样服务器会对同一个客户端保持多个连接，造成资源浪费。</p>
+<p>握手只需要确认双方通信时的初始化序号（ISN 是随机的，防止攻击者猜出确认号和防止同一个连接的不同实例），保证通信不会乱序。</p>
+<p><img src="http://q6z2k96rl.bkt.clouddn.com/Fi4rFhwnndiBxPW-Sk-VlXqvr49a" alt=""></p>
+<p>四次挥手：</p>
+<ul>
+<li>客户端（主动关闭方）发送释放报文 FIN</li>
+<li>服务器（被动关闭方）收到 FIN 后发出确认 ACK，此时 TCP 属于半关闭状态（CLOSED_WAIT），服务器能向客户端发送数据但是客户端不能向服务器发送数据</li>
+<li>当服务器不再需要连接时，发送连接释放报文 FIN</li>
+<li>客户端收到 FIN 后发出确认 ACK，进入 TIME-WAIT 状态，等待 2 倍的 MSL（最大报文存活时间）后释放连接</li>
+<li>服务器收到 ACK 后释放连接</li>
+</ul>
+<p>四次挥手的原因：客户端发送了 FIN 连接释放报文之后，服务器收到了这个报文，就进入了 CLOSE-WAIT 状态。这个状态是为了让服务器发送还未传送完毕的数据，传送完毕后，服务器会发送 FIN 连接释放报文。</p>
+<p>TIME_WAIT：客户端收到服务端的 FIN 报文址后进入此状态，此时并不是直接进入 CLOSED 状态，还需要等待一个时间计时器设置的时间 2MSL。这么做有两个理由：</p>
+<ol>
+<li>确保最后一个报文能够到达。如果服务器没收到客户端发送来的确认报文（网络不好），那么就会重新发送连接释放请求报文（被动方重传或延迟的 FIN 包），收到后会给被动方回一个 RST 包，可能会影响被动方其他的服务连接。</li>
+<li>等待一段时间是为了让本连接持续时间内所产生的所有报文都从网络中消失，确保下一个连接不会出现旧的连接请求报文。有可能新连接和老连接的端口号是相同的，如果前一次连接的某些数据仍然滞留在网络中，这些延迟数据在建立新连接之后才到达 Server，由于新连接和老连接的端口号是一样的，又因为TCP协议判断不同连接的依据是socket pair，于是，TCP协议就认为那个延迟的数据是属于新连接的，这样就和真正的新连接的数据包发生混淆了。</li>
+</ol>
+<h2 id="TIME-WAIT-过多造成的问题"><a href="#TIME-WAIT-过多造成的问题" class="headerlink" title="TIME-WAIT 过多造成的问题"></a>TIME-WAIT 过多造成的问题</h2><p>在<strong>高并发短连接</strong>的TCP服务器上，当服务器处理完请求后立刻主动正常关闭连接。这个场景下会出现大量 socket 处于 TIME_WAIT 状态，系统会把多余的 TIME_WAIT socket 删除掉，并且显示警告信息。如果客户端的并发量持续很高，此时部分客户端就会显示连接不上。</p>
+<p>MSL 时间：maximum segment lifetime(最大分节生命期），这是一个IP数据包能在互联网上生存的最长时间，超过这个时间IP数据包将在网络中消失 。MSL在RFC 793上建议是2分钟。</p>
+<p>在流量大的网站或者服务器上，可以调整 Windows 预设的 TIME-WAIT，微软建议最低可设 30 秒。</p>
+<pre class="line-numbers language-shell"><code class="language-shell">vim /etc/sysctl.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>编辑文件，加入以下内容</p>
+<pre class="line-numbers language-conf"><code class="language-conf">net.ipv4.tcp_syncookies = 1 //表示开启 SYN Cookies。当出现 SYN 等待队列溢出时，启用 Cookies 来处理，可防范少量 SYN 攻击，默认为 0，表示关闭；
+net.ipv4.tcp_tw_reuse = 1 //表示开启重用，允许将 TIME-WAIT sockets 重新用于新的 TCP 连接，默认为 0，表示关闭；
+net.ipv4.tcp_tw_recycle = 1 //表示开启 TCP 连接中的 TIME-WAIT sockets 的快速回收，默认为 0，表示关闭（尽量不要开启）；
+net.ipv4.tcp_fin_timeout = 30 //修改系统默认的 TIMEOUT 时间
+tcp_max_tw_buckets = 256000 // 当出现 TCP: time wait bucket table overflow 时，调大这个参数<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>造成 TIME-WAIT 过多的原因还有可能是 http 连接未关闭。</p>
+<p>由于 keepalive 存在，一般服务端都会有 keepalive 超时设置。如果到了超时时间，客户端没有断开连接，服务端会主动断开。这种情况下，服务端会采用四次挥手方式断开连接，但是由于客户端对象已经没有任何引用，不会调用 close 方法，客户端虽然接收到了服务端发过来的fin包，但是不会回fin包，所以连接无法正常断开：客户端将处于 close-wait 状态，等待 gc 回收，服务端将处于 fin-wait-2 状态，并等待超时，进入 time-wait 状态。</p>
+<h2 id="说说半连接队列和-SYN-Flood-攻击的关系"><a href="#说说半连接队列和-SYN-Flood-攻击的关系" class="headerlink" title="说说半连接队列和 SYN Flood 攻击的关系"></a>说说半连接队列和 SYN Flood 攻击的关系</h2><p>三次握手前，服务端的状态从 CLOSED  变为 LISTEN，同时在内部创建了两个队列：半连接队列和全连接队列，即 SYN 队列和 ACCEPT 队列。</p>
+<ul>
+<li>半连接队列：当客户端发送 SYN 到服务端，服务端收到以后回复 ACK 和 SYN，状态由 LISTEN 变为SYN_RCVD，此时这个连接就被推入了 SYN 队列，也就是半连接队列。</li>
+<li>全连接队列：当客户端返回ACK, 服务端接收后，三次握手完成。这个时候连接等待被具体的应用取走，在被取走之前，它会被推入另外一个 TCP 维护的队列，也就是全连接队列(Accept Queue)。</li>
+</ul>
+<p>SYN Flood 攻击原理：SYN Flood 属于典型的 DoS/DDoS 攻击。其攻击的原理很简单，就是用客户端在短时间内伪造大量不存在的 IP 地址，并向服务端疯狂发送 SYN。对于服务端而言，会产生两个危险的后果:</p>
+<ol>
+<li>处理大量的 SYN 包并返回对应 ACK, 势必有大量连接处于 SYN_RCVD 状态，从而占满整个半连接队列，无法处理正常的请求。</li>
+<li>由于是不存在的 IP，服务端长时间收不到客户端的 ACK，会导致服务端不断重发数据，直到耗尽服务端的资源。</li>
+</ol>
+<p>如何应对：</p>
+<ol>
+<li>增加 SYN 连接，也就是增加半连接队列的容量。</li>
+<li>减少 SYN + ACK 重试次数，避免大量的超时重发。</li>
+<li>利用 SYN Cookie 技术，在服务端接收到 SYN 后不立即分配连接资源，而是根据这个 SYN 计算出一个Cookie，连同第二次握手回复给客户端，在客户端回复 ACK 的时候带上这个 Cookie 值，服务端验证 Cookie 合法之后才分配连接资源。</li>
+</ol>
+<h2 id="可靠传输原理，并设计可靠-UDP-协议。"><a href="#可靠传输原理，并设计可靠-UDP-协议。" class="headerlink" title="可靠传输原理，并设计可靠 UDP 协议。"></a>可靠传输原理，并设计可靠 UDP 协议。</h2><ul>
+<li>建立连接（标志位）：通信前确认通信实体存在</li>
+<li>序号机制（序号、确认号）：确保了数据是按序、完整到达</li>
+<li>数据校验（校验和）：CRC 校验全部数据，校验包出错，丢弃报文段，不给出响应，超时重发</li>
+<li>超时重传（定时器）：保证因链路故障未能到达数据能够被多次重发。<ul>
+<li>RTT：数据从发送到接收到对方响应之间的时间间隔，即数据报在网络中一个往返用时。大小不稳定。</li>
+<li>RTO：重传间隔，通常每次重传 RTO 是前一次重传间隔的两倍，重传次数达到上限后停止重传。RTO = RTTs + 4*RTTd</li>
+</ul>
+</li>
+<li>流量控制（流量窗口）</li>
+<li>拥塞控制（拥塞窗口）</li>
+</ul>
+<h2 id="流量控制的作用，原理。"><a href="#流量控制的作用，原理。" class="headerlink" title="流量控制的作用，原理。"></a>流量控制的作用，原理。</h2><p>目的是避免发送过量，接收方通过 TCP 头窗口字段告知发送方本方可接收的最大数据量，用以解决发送速率过快导致接收方不能接收的问题。</p>
+<ul>
+<li>发送方和接收方各有一个窗口，接收方通过 TCP 报文段中的窗口字段来告诉发送方自己的窗口大小，发送方根据这个值来设置自己窗口大小。如果发送窗口左部的字节已经发送并且收到了确认，那么就将发送窗口向右滑动一定距离，直到左部第一个字节不是已发送并且已确认的状态，接收窗口类似。</li>
+<li>TCP 是流数据，发送出去的数据流可以被分为以下四部分：已发送且被确认部分 | 已发送未被确认部分 | 未发送但可发送部分 | 不可发送部分，其中发送窗 = 已发送未确认部分 + 未发但可发送部分。接收到的数据流可分为：已接收 | 未接收但准备接收 | 未接收不准备接收。接收窗 = 未接收但准备接收部分。</li>
+<li>发送窗内的数据只有当收到接收端某段发送数据的 ACK 响应时才移动发送窗。接收窗口只会对窗口最后一个<strong>按序</strong>到达的字节进行确认。</li>
+</ul>
+<h2 id="TCP-拥塞控制的作用，理解具体原理。"><a href="#TCP-拥塞控制的作用，理解具体原理。" class="headerlink" title="TCP 拥塞控制的作用，理解具体原理。"></a>TCP 拥塞控制的作用，理解具体原理。</h2><p>作用：为了降低整个网络的拥塞程度。</p>
+<p>拥塞控制使用拥塞窗口。TCP 主要通过四个算法来进行拥塞控制：慢开始、拥塞避免、快重传、快恢复。</p>
+<ul>
+<li>慢开始：发送的最初执行慢开始，令拥塞窗口 cwnd（congestion window） = 1，发送方只能发送一个报文段，当收到确认后，将 cwnd 加倍。</li>
+<li>拥塞避免：设置一个慢开始门限 ssthresh ，当cwnd &gt;= ssthresh 时，进入拥塞避免，每个轮次只将 cwnd 加 1。如果出现了超时，则令 ssthresh = cwnd / 2，然后重新执行慢开始。</li>
+<li>快重传：在发送方，如果收到 3 个重复确认，那么知道下一个报文段丢失，此时执行快重传，立刻重传下一个报文段。</li>
+<li>快恢复：快重传之后执行快恢复，令 ssthresh = cwnd / 2，cwnd = ssthresh，此时直接进入拥塞避免。</li>
+</ul>
+<p>慢开始和快恢复的快慢指的是 cwnd 的设定值，而不是 cwnd 的增长速率。慢开始 cwnd 设定为 1，而快恢复 cwnd 设定为 ssthresh。</p>
+<ul>
+<li>流量控制和拥塞控制：<ul>
+<li>流量控制属于通信双方协商，拥塞控制涉及通信链路全局</li>
+<li>实际最终发送窗口 = min{awnd（流量控制发送窗口）,cwnd（拥塞窗口）}</li>
+</ul>
+</li>
+</ul>
+<h2 id="DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><a href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。" class="headerlink" title="DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。"></a>DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</h2><p>DNS可以使用 UDP 和 TCP 进行传输，使用的端口号都为53。大多数情况下 DNS 使用 UDP 进行传输，这就要求域名解析器和域名服务器都必须自己处理超市和重传来保证可靠性。在两种情况下会使用 TCP 进行传输：</p>
+<ol>
+<li>如果返回的响应超过 512 字节（UDP 最大只支持 512 字节的数据）。</li>
+<li>区域传送（区域传送是主域名服务器向辅助域名服务器传送变化的那部分数据）。</li>
+</ol>
+<h2 id="IP-协议的作用"><a href="#IP-协议的作用" class="headerlink" title="IP 协议的作用"></a>IP 协议的作用</h2><h2 id="DNS-寻址过程"><a href="#DNS-寻址过程" class="headerlink" title="DNS 寻址过程"></a>DNS 寻址过程</h2><ul>
+<li>浏览器 DNS 缓存</li>
+<li>系统 DNS 缓存</li>
+<li>本地 DNS 服务器</li>
+<li>根 DNS 服务器</li>
+<li>顶级 DNS 服务器</li>
+<li>域名 DNS 服务器</li>
+</ul>
+<h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><h2 id="GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><a href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。" class="headerlink" title="GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。"></a>GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET</a></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>请求是否有主体</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>安全</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>幂等</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>可缓存</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>获取资源</td>
+<td>传输实体主体</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>以查询字符串出现在 URL 中</td>
+<td>存储在实体主体中</td>
+</tr>
+</tbody></table>
+<p>安全性：安全的 HTTP 方法不会改变服务器状态，也就是说他只是可读的。</p>
+<p>幂等性：幂等的 HTTP 方法，同样的请求被执行一次与连续执行多次的效果是一样的，服务器的状态也是一样的。换句话说就是，幂等方法不应该具有副作用（统计用途除外）。所有的安全方法也都是幂等的。在正确实现的条件下，GET，HEAD，PUT 和 DELETE 等方法都是幂等的，而 POST 方法不是。</p>
+<h2 id="HTTP-状态码。"><a href="#HTTP-状态码。" class="headerlink" title="HTTP 状态码。"></a>HTTP 状态码。</h2><table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>类别</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1XX</td>
+<td>Informational（信息性状态码）</td>
+<td>接受的请求正在处理</td>
+</tr>
+<tr>
+<td>2XX</td>
+<td>Successful（成功状态码）</td>
+<td>请求正常处理完毕</td>
+</tr>
+<tr>
+<td>3XX</td>
+<td>Redirection（重定向状态码）</td>
+<td>需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td>4XX</td>
+<td>Client Error（客户端错误状态码）</td>
+<td>服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5XX</td>
+<td>Server Error（服务器错误状态码）</td>
+<td>服务器请求处理出错</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>100 Continue：表明到目前为止都很正常，客户端可以继续发送请求或者忽略这个响应。</p>
+</li>
+<li><p>200 Ok</p>
+</li>
+<li><p>204 No Content：请求已经成功处理，但是返回的响应报文不包含实体的主体部分。一般在只需要从客户端往服务器发送信息，而不需要返回数据时使用。</p>
+</li>
+<li><p>206 Partial Content：表示客户端进行了范围请求，响应报文包含由 Conent-Range 指定范围的实体内容。</p>
+</li>
+<li><p>301 Moved Permanently：永久重定向</p>
+</li>
+<li><p>302 Found：临时性重定向</p>
+</li>
+<li><p>303 See Other ：和 302 有着相同的功能，但是 303 明确要求客户端应该采用 GET 方法获取资源。</p>
+<p>注：虽然 HTTP 协议规定 301、302 状态下重定向时不允许把 POST 方法改成 GET 方法，但是大多数浏览器都会在 301、302 和 303 状态下的重定向把 POST 方法改成 GET 方法。</p>
+</li>
+<li><p>304 Not Modified ：如果请求报文首部包含一些条件，例如：If-Match，If-Modified-Since，If-None-Match，If-Range，If-Unmodified-Since，如果不满足条件，则服务器会返回 304 状态码。</p>
+</li>
+<li><p>307 Temporary Redirect ：临时重定向，与 302 的含义类似，但是 307 要求浏览器不会把重定向请求的 POST 方法改成 GET 方法。</p>
+</li>
+<li><p>400 Bad Request：请求报文中存在语法错误</p>
+</li>
+<li><p>401 Unauthorized：该状态码表示发送的请求需要有认证信息（BASIC 认证、DIGEST 认证）。如果之前已进行过一次请求，则表示用户认证失败。</p>
+</li>
+<li><p>403 Fobidden：请求被拒绝</p>
+</li>
+<li><p>404 Not Found</p>
+</li>
+<li><p>500 Internal Server Error ：服务器正在执行请求时发生错误。</p>
+</li>
+<li><p>503 Service Unavailable ：服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。</p>
+</li>
+</ul>
+<h2 id="Cookie-作用、安全性问题、和-Session-的比较。"><a href="#Cookie-作用、安全性问题、和-Session-的比较。" class="headerlink" title="Cookie 作用、安全性问题、和 Session 的比较。"></a>Cookie 作用、安全性问题、和 Session 的比较。</h2><ul>
+<li><p>Session 在服务端，Cookie 在客户端（浏览器）</p>
+</li>
+<li><p>Session 的运行依赖 session_id，session_id 存在 Cookie 中，如果浏览器禁用可以用其他方式实现，比如在 URL 中传递 session_id。</p>
+</li>
+</ul>
+<p>用途：</p>
+<ol>
+<li>会话状态管理（如用户登录状态、购物车、游戏分数或其它需要记录的信息）</li>
+<li>个性化设置（如用户自定义设置、主题等）</li>
+<li>浏览器行为跟踪（如跟踪分析用户行为等）</li>
+</ol>
+<ul>
+<li>标记为 HttpOnly 的 Cookie 不能被 Javascript 脚本调用。跨站脚本攻击 (XSS) 常常使用 JavaScript 的 <code>document.cookie</code> API 窃取用户的 Cookie 信息，因此使用 HttpOnly 标记可以在一定程度上避免 XSS 攻击。</li>
+<li>标记为 Secure 的 Cookie 只能通过被 HTTPS 协议加密过的请求发送给服务端。但即便设置了 Secure 标记，敏感信息也不应该通过 Cookie 传输，因为 Cookie 有其固有的不安全性，Secure 标记也无法提供确实的安全保障。</li>
+</ul>
+<p>Cookie 与 Session 选择</p>
+<ul>
+<li>Cookie 只能存储 ASCII 码字符串，而 Session 则可以存取任何类型的数据，因此在考虑数据复杂性时首选 Session；</li>
+<li>Cookie 存储在浏览器中，容易被恶意查看。如果非要将一些隐私数据存在 Cookie 中，可以将 Cookie 值进行加密，然后在服务器进行解密；</li>
+<li>对于大型网站，如果用户所有的信息都存储在 Session 中，那么开销是非常大的，因此不建议将所有的用户信息都存储到 Session 中。</li>
+</ul>
+<h2 id="缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。"><a href="#缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。" class="headerlink" title="缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。"></a>缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。</h2><p>HTTP/1.1 通过 Cache-Control 首部字段来控制缓存。</p>
+<ul>
+<li><p>no-store 指令规定不能对请求或响应的任何一部分进行缓存 <code>Cache-Control：no-store</code></p>
+</li>
+<li><p>no-cache 指令规定缓存服务器需要先向源服务器验证缓存的有效性，只有当缓存服务器有效才将能使用该缓存对客户端的请求进行相应</p>
+</li>
+<li><p>private 指令规定了将资源作为私有缓存，只能被单独用户所使用，一般存储在用户浏览器中。public 指令规定了将资源作为公共缓存，可以被多个用户所使用，一般存储在代理服务器中。</p>
+</li>
+<li><p>max-age 指令出现在请求报文中，并且缓存资源的缓存时间小于该指令指定的时间，那么就能接受该缓存。max-age 指令出现在响应报文中，表示缓存资源在缓存服务器中保存的时间。Expires 首部字段也可以用于告知缓存服务器该资源什么时候会过期。在 HTTP/1.1 中，会优先处理 max-age 指令；在 HTTP/1.0 中，max-age 指令会被忽略掉。 </p>
+</li>
+</ul>
+<p>ETag：它是资源的唯一标识。URL 不能唯一表示资源，例如 <code>http://www.google.com/</code> 有中文和英文两个资源，只有 ETag 才能对这两个资源进行唯一标识。<code>ETag: &quot;82e22293907ce725faf67773957acd12&quot;</code>可以将缓存资源的 ETag 值放入 If-None-Match 首部，服务器收到该请求后，判断缓存资源的 ETag 值和资源的最新 ETag 值是否一致，如果一致则表示缓存资源有效，返回 304 Not Modified。 <code>If-None-Match: &quot;82e22293907ce725faf67773957acd12&quot;</code></p>
+<p>304 也是一种很好的缓存手段：服务器响应文件内容时，同时响应 etag 标签(内容的签名，内容变了他就变)， 和 last_modified_since 两个标签值。浏览器下次去请求时，头信息发送这两个标签,，服务器检测文件有没有发生变化,如无,直接头信息返回 etag，last_modified_since。浏览器知道内容无改变，于是直接调用本地缓存。这个过程，也请求了服务器，但是传输的内容极少。对于变化周期较短的，如静态 html、js、css 比较适于用这个方式。</p>
+<h2 id="长连接与短连接原理以及使用场景，流水线。"><a href="#长连接与短连接原理以及使用场景，流水线。" class="headerlink" title="长连接与短连接原理以及使用场景，流水线。"></a>长连接与短连接原理以及使用场景，流水线。</h2><p><a href="https://cloud.tencent.com/developer/article/1115572" target="_blank" rel="noopener">关于HTTP协议中的保持连接</a></p>
+<ul>
+<li><p>当浏览器访问一个包含多张图片的 HTML 页面时，除了请求访问 HTML 页面资源，还会请求图片资源。如果每进行一次 HTTP 通信就要新建一个 TCP 连接，那么开销会很大。长连接只需要建立一次 TCP 连接就能进行多次 HTTP 通信。</p>
+</li>
+<li><p>从 HTTP/1.1 开始默认是长连接的，如果要断开连接，需要由客户端或者服务器端提出断开，使用 <code>Connection : close</code>；</p>
+</li>
+<li><p>在 HTTP/1.1 之前默认是短连接的，如果需要使用长连接，则使用 <code>Connection : Keep-Alive</code>。</p>
+</li>
+<li><p>短连接：连接-&gt;传输数据-&gt;关闭连接</p>
+</li>
+<li><p>长连接：连接-&gt;传输数据-&gt;保持连接 -&gt; 传输数据-&gt; ………..-&gt;直到一方关闭连接，多是客户端关闭连接。</p>
+</li>
+</ul>
+<p>HTTP的长连接和短连接本质上是 TCP 长连接和短连接。</p>
+<ul>
+<li>HTTP 1.0 默认使用短连接，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话。</li>
+<li>HTTP 1.1 默认使用长连接。使用长连接的HTTP协议，会在响应头有加入这行代码 <code>Connection:keep-alive</code>。</li>
+<li>TCP 短连接：短连接一般只会在 client/server 间传递一次读写操作。优点是管理起来比较简单，存在的连接都是有用的连接，不需要额外的控制手段。</li>
+<li>TCP 长连接：Client 与 server 完成一次读写之后，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。</li>
+</ul>
+<p>心跳包用来解决半连接问题。<br>当服务器断电、断网、丢弃三次握手的ack包都可能造成客户端半连接，同时客户端断电、断网，或者中间设备故障也可能造成服务器端半连接。<br>半连接出现后，从系统层面考虑，对服务器而言，害怕的是量大导致资源耗尽从而拒绝服务；对客户端而言，系统危害不大，连接一致性无法保证。从业务层面而言，如果是长连接的推送服务，如果客户端故障导致，将导致推送数据失败。</p>
+<p>TCP 的保活功能：主要为服务器应用提供。如果客户端已经消失而连接未断开，则会使得服务器上保留一个半开放的连接，而服务器又在等待来自客户端的数据，此时服务器将永远等待客户端的数据。保活功能就是试图在服务端器端检测到这种半开放的连接。在 Linux 操作系统中，我们可以通过代码启用一个 socket 的心跳检测（即每隔一定时间间隔发送一个心跳检测包给对端）。</p>
+<p>应用层心跳包：TCP 提供的 KeepAlive 机制无法代替心跳包。为了保持长连接，它像心跳一样每隔固定时间发一次，以此来告诉服务器，这个客户端还活着。</p>
+<h2 id="HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。"><a href="#HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。" class="headerlink" title="HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。"></a>HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。</h2><p>安全性问题：</p>
+<ul>
+<li>使用明文进行通信，内容可能会被窃听</li>
+<li>不验证通信方身份，通信方的身份可能遭遇伪装</li>
+<li>无法验证报文的完整性，报文有可能遭篡改</li>
+</ul>
+<p>HTTPs：让 HTTP 先和 SSL（Secure Sockets Layer）通信，再由 SSL 和 TCP 通信，也就是说 HTTPs 使用了隧道进行通信。通过使用 SSL，HTTPs 具有了加密（防窃听）、认证（防伪装）和完整性保护（防篡改）。</p>
+<ol>
+<li>客户端请求服务器获取<code>证书公钥</code></li>
+<li>客户端(SSL/TLS)解析证书（无效会弹出警告）</li>
+<li>生成随机值</li>
+<li>用<code>公钥加密</code>随机值生成<strong>密钥</strong></li>
+<li>客户端将<code>秘钥</code>发送给服务器</li>
+<li>服务端用<code>私钥</code>解密<code>秘钥</code>得到随机值</li>
+<li><code>将信息和随机值混合在一起</code>进行对称加密</li>
+<li>将加密的内容发送给客户端</li>
+<li>客户端用<code>秘钥</code>解密信息</li>
+</ol>
+<h2 id="什么是队头阻塞"><a href="#什么是队头阻塞" class="headerlink" title="什么是队头阻塞"></a>什么是队头阻塞</h2><h3 id="TCP-队头阻塞"><a href="#TCP-队头阻塞" class="headerlink" title="TCP 队头阻塞"></a>TCP 队头阻塞</h3><p>TCP 要求数据严格按照序号顺序，如果第一个 TCP 分节丢失了，客户端将一直等待丢失的分节重传成功，这样就延缓了后面数据的接收。</p>
+<p>如何解决：不使用 TCP 协议，比如 google 推出的 quic 协议，它是在 UDP 基础上实现的可靠传输。还有一个 SCTP（流控制传输协议），它是和 TCP，UDP 在同一层次的传输协议。SCTP 的多流特性也可以尽可能的避免队头阻塞的情况。</p>
+<h3 id="HTTP-1-1-队头阻塞"><a href="#HTTP-1-1-队头阻塞" class="headerlink" title="HTTP 1.1 队头阻塞"></a>HTTP 1.1 队头阻塞</h3><p>HTTP 1.1 允许在持久连接上可选的使用管道化（pipeline）特性。管道化允许客户端在已发送的请求收到服务端的响应之前发送下一个请求，，借此来减少等待时间提高吞吐；如果多个请求能在同一个TCP分节发送的话，还能提高网络利用率。</p>
+<p>但是管道化要求服务端按照请求发送的顺序返回响应，因为 HTTP 请求和响应没有序号标识，无法将乱序的响应与请求关联起来。所以一个响应返回延迟了，后续的响应都会被延迟，直到队头的响应送达。</p>
+<p>如何解决：使用 HTTP 2.0。HTTP 2.0 采用二进制分帧，将阐述信息分割为更小的消息和帧，对他们采用二进制格式编码。比如 header 帧，Data 帧。这些帧可以打散乱序发送，然后根据每个帧首部的流标识符重新组装，并且可以根据优先级，决定优先处理哪个流的数据。</p>
+<h2 id="HTTP-1-x-的缺陷，以及-HTTP-2-的特点。"><a href="#HTTP-1-x-的缺陷，以及-HTTP-2-的特点。" class="headerlink" title="HTTP/1.x 的缺陷，以及 HTTP/2 的特点。"></a>HTTP/1.x 的缺陷，以及 HTTP/2 的特点。</h2><ul>
+<li>HTTP/1.X 缺陷：<ul>
+<li>客户端需要使用多个连接才能实现并发和缩短延迟</li>
+<li>不会压缩请求和响应首部，从而导致不必要的网络流量</li>
+<li>不支持有效的资源优先级，导致底层 TCP 连接的利用率低下</li>
+<li>客户端需要主动请求</li>
+<li>队头阻塞</li>
+</ul>
+</li>
+<li>HTTP/2：<ul>
+<li>二进制分帧层：HTTP 2 是二进制协议，他下用二进制格式传输数据而不是 1.x 的文本格式。它将报文分成 HEADERS 帧和 DATA 帧，它们都是二进制格式的。在通信过程中，只会有一个 TCP 连接存在，它承载力任意数量的数据流。</li>
+<li>服务器推送：HTTP/2.0 在客户端请求一个资源时，会把相关的资源一起发送给客户端，客户端就不需要再次发起请求了。例如客户端请求 page.html 页面，服务端就把 script.js 和 style.css 等与之相关的资源一起发给客户端。</li>
+<li>首部压缩：HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见过的首部字段表，从而避免了重复传输。不仅如此，HTTP/2.0 也使用 Huffman 编码对首部字段进行压缩。</li>
+<li>多路复用：HTTP2 让所有的通信都在一个 TCP 连接上完成，实现了请求并发，后面的请求不用再等待，解决了队头阻塞。</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP-1-1-的特性。"><a href="#HTTP-1-1-的特性。" class="headerlink" title="HTTP/1.1 的特性。"></a>HTTP/1.1 的特性。</h2><ul>
+<li>默认是长连接</li>
+<li>支持流水线</li>
+<li>支持同时打开多个 TCP 连接</li>
+<li>支持虚拟主机</li>
+<li>新增状态码 100</li>
+<li>支持分块传输编码</li>
+<li>新增缓存处理指令 max-age</li>
+</ul>
+<h2 id="HTTP-与-FTP-的比较。"><a href="#HTTP-与-FTP-的比较。" class="headerlink" title="HTTP 与 FTP 的比较。"></a>HTTP 与 FTP 的比较。</h2><ul>
+<li>FTP 使用 TCP 进行连接，它需要两个连接来传送一个文件</li>
+<li>控制连接：服务器打开端口号 21 等待客户端的连接，客户端主动建立连接后，使用这个连接将客户端的命令传送给服务器，并传回服务器的应答</li>
+<li>数据连接：用来传送一个文件数据</li>
+</ul>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://juejin.im/post/5ce37660f265da1bb13f05f0" target="_blank" rel="noopener">什么是队头阻塞以及如何解决</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="noopener">HTTP 协议入门</a></li>
+<li><a href="https://www.cnblogs.com/qcrao-2018/p/10182185.html" target="_blank" rel="noopener">“三次握手，四次挥手”你真的懂吗？</a></li>
+<li><a href="https://juejin.im/post/5e527c58e51d4526c654bf41" target="_blank" rel="noopener">TCP协议灵魂之问，巩固你的网路底层基础</a></li>
+<li><a href="https://juejin.im/post/5d9c284b518825095879e7a5" target="_blank" rel="noopener">面试官，不要再问我三次握手和四次挥手</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#七层协议"><span class="toc-text">七层协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#各层协议的作用"><span class="toc-text">各层协议的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#七层协议-1"><span class="toc-text">七层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五层协议"><span class="toc-text">五层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-协议"><span class="toc-text">TCP&#x2F;IP 协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层和传输层的差错控制有什么区别"><span class="toc-text">数据链路层和传输层的差错控制有什么区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以太网的特点，以及帧结构。"><span class="toc-text">以太网的特点，以及帧结构。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器、交换机、路由器的作用，以及所属的网络层"><span class="toc-text">集线器、交换机、路由器的作用，以及所属的网络层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据数据报常见字段的作用。"><span class="toc-text">IP 数据数据报常见字段的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP-协议的作用，以及维护-ARP-缓存的过程。"><span class="toc-text">ARP 协议的作用，以及维护 ARP 缓存的过程。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。"><span class="toc-text">ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。"><span class="toc-text">UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。"><span class="toc-text">理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TIME-WAIT-过多造成的问题"><span class="toc-text">TIME-WAIT 过多造成的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#说说半连接队列和-SYN-Flood-攻击的关系"><span class="toc-text">说说半连接队列和 SYN Flood 攻击的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠传输原理，并设计可靠-UDP-协议。"><span class="toc-text">可靠传输原理，并设计可靠 UDP 协议。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流量控制的作用，原理。"><span class="toc-text">流量控制的作用，原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-拥塞控制的作用，理解具体原理。"><span class="toc-text">TCP 拥塞控制的作用，理解具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><span class="toc-text">DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-协议的作用"><span class="toc-text">IP 协议的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-寻址过程"><span class="toc-text">DNS 寻址过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP"><span class="toc-text">HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><span class="toc-text">GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-状态码。"><span class="toc-text">HTTP 状态码。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-作用、安全性问题、和-Session-的比较。"><span class="toc-text">Cookie 作用、安全性问题、和 Session 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。"><span class="toc-text">缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#长连接与短连接原理以及使用场景，流水线。"><span class="toc-text">长连接与短连接原理以及使用场景，流水线。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。"><span class="toc-text">HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是队头阻塞"><span class="toc-text">什么是队头阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-队头阻塞"><span class="toc-text">TCP 队头阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1-队头阻塞"><span class="toc-text">HTTP 1.1 队头阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-x-的缺陷，以及-HTTP-2-的特点。"><span class="toc-text">HTTP&#x2F;1.x 的缺陷，以及 HTTP&#x2F;2 的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-1-的特性。"><span class="toc-text">HTTP&#x2F;1.1 的特性。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-与-FTP-的比较。"><span class="toc-text">HTTP 与 FTP 的比较。</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/02/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" class="prev">&larr; Prev post 操作系统笔记</a>
+  
+
+  
+
+  
+    <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="next">Next post Java 虚拟机 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

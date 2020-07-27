@@ -1,0 +1,422 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="负载均衡会把用户发送的访问请求分发到任意一台服务器上处理，当其中一台服务器宕机时，负载均衡服务器通过心跳检测机制发现该服务失去响应，就是把它从服务器列表中删除，而将请求发送到其他服务器上。
+负载均衡的实现技术HTTP 重定向
+HTTP 重定向服务器就是一台普通的应用服务器，其唯一功能就是根据用户的 HTTP 请求计算一台真是的 Web 服务器地址，并将该 Web 服务器地址写入 HTTP 重...">
+  
+  <title>负载均衡 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        面试范围
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 并发
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>负载均衡</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-03-23</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-02</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          
+        </span>
+      
+      <span id="/2020/03/23/负载均衡/" class="leancloud-visitors" data-flag-title="负载均衡">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <p>负载均衡会把用户发送的访问请求分发到任意一台服务器上处理，当其中一台服务器宕机时，负载均衡服务器通过心跳检测机制发现该服务失去响应，就是把它从服务器列表中删除，而将请求发送到其他服务器上。</p>
+<h2 id="负载均衡的实现技术"><a href="#负载均衡的实现技术" class="headerlink" title="负载均衡的实现技术"></a>负载均衡的实现技术</h2><h3 id="HTTP-重定向"><a href="#HTTP-重定向" class="headerlink" title="HTTP 重定向"></a>HTTP 重定向</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323171907.png" alt=""></p>
+<p>HTTP 重定向服务器就是一台普通的应用服务器，其唯一功能就是根据用户的 HTTP 请求计算一台真是的 Web 服务器地址，并将该 Web 服务器地址写入 HTTP 重定向响应（ 302）中返回给用户浏览器。</p>
+<ul>
+<li>优点：实现比较简单</li>
+<li>缺点：是浏览器需要请求两次服务器才能完成一次访问，性能较差。</li>
+</ul>
+<h3 id="DNS-域名解析"><a href="#DNS-域名解析" class="headerlink" title="DNS 域名解析"></a>DNS 域名解析</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323172452.png" alt=""></p>
+<p>在 DNS 服务器中配置多个 A 记录，每次域名解析请求都会根据负载均衡算法计算一个不同的 IP 地址返回。这样 A 记录中配置的多个服务器就会构成一个集群，并实现负载均衡。</p>
+<ul>
+<li>优点：是将负载均衡的工作转交给 DNS，同时许多 NDS 还支持基于地理位置的域名解析，会将域名解析成距离用户地理最近的一个服务器，加快用户访问速度。</li>
+<li>缺点：DNS 是多级解析，每一级 DNS 都可能缓存 A 记录，当下线某台服务器修改了 A 记录后，使其生效也需要较长时间，这段时间 DNS 依然会将域名解析到已经下线的服务器，导致用户访问失败。</li>
+</ul>
+<h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323180646.png" alt=""></p>
+<p>反向代理服务器将请求根据负载均衡算法转发到不同 Web 服务器上。Web 服务器处理完成的响应也需要反向代理服务器返回给用户，由于 Web 服务器不直接对外提供访问，因此需不要使用外部 IP 地址，而反向代理服务器需要配置内外网 IP。</p>
+<p>反向代理服务器转发请求在 HTTP 协议层面，因此也叫应用层负载均衡。</p>
+<ul>
+<li>优点：和反向代理服务器功能集成在一起，部署简单。</li>
+<li>缺点：反向代理服务器是所有请求和相应的中转站，其性能可能会成为瓶颈。</li>
+</ul>
+<h3 id="IP-负载均衡"><a href="#IP-负载均衡" class="headerlink" title="IP 负载均衡"></a>IP 负载均衡</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323181315.png" alt=""></p>
+<p>在<strong>网络层</strong>通过修改请求目标地址进行负载均衡。</p>
+<ul>
+<li>优点：在内核进程内完成数据分发，较反向代理有更好的处理性能。</li>
+<li>缺点：集群的最大响应数据吞吐量受限于负载均衡服务器网卡带宽。</li>
+</ul>
+<h3 id="直接路由"><a href="#直接路由" class="headerlink" title="直接路由"></a>直接路由</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323183116.png" alt=""></p>
+<p>是指在通信协议的数据链路层修改 mac 地址进行负载均衡，这种传输方式又称三角传输模式。实际请求的正是物理服务器 IP 和数据请求目的 IP 一致，不需要通过负载均衡服务器进行地址转换。</p>
+<p>这种三角传输模式的链路层负载均衡是目前大型网站使用最广的一种负载均衡手段。在 Linux 平台上最好的链路层负载均衡开源产品是 LVS（Linux Virtual Server）。</p>
+<ul>
+<li>优点：避免负载均衡服务器网卡带宽称为瓶颈。</li>
+</ul>
+<h2 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h2><h3 id="轮询（-Round-Robin，RR）"><a href="#轮询（-Round-Robin，RR）" class="headerlink" title="轮询（ Round Robin，RR）"></a>轮询（ Round Robin，RR）</h3><p>所有请求被依次分发到每台应用服务器上，即每台服务器需要处理的请求数目都相同，适合于所有服务器硬件都相同的场景。</p>
+<h3 id="随机（-Random）"><a href="#随机（-Random）" class="headerlink" title="随机（ Random）"></a>随机（ Random）</h3><p>请求被随机分配到各个应用服务器。如果应用服务器硬件配置不同，也可以使用加权随机算法。</p>
+<h3 id="最少连接（-Least-Connections）"><a href="#最少连接（-Least-Connections）" class="headerlink" title="最少连接（ Least Connections）"></a>最少连接（ Least Connections）</h3><p>记录每个应用服务器正在处理的连接数，将新的请求分发到最少链接的服务器上。最少连接算法也可以实现加权最少连接。</p>
+<h3 id="源地址散列（-Source-Hashing）"><a href="#源地址散列（-Source-Hashing）" class="headerlink" title="源地址散列（ Source Hashing）"></a>源地址散列（ Source Hashing）</h3><p>根据请求来源的 IP 地址进行 Hash 计算，得到应用服务器。</p>
+<p>优点：这样来自同一个 IP 地址的请求总在同一个服务器上处理，该请求的上下文信息可以存储在这台服务器上，在一个会话周期重复使用，从而实现会话粘滞。</p>
+<p>缺点：一旦有服务器上线、下线，那么通过源地址哈希路由到的服务器是之前的概率非常低，如果是 session 则取不到 session，如果是缓存则可能引发缓存雪崩。</p>
+<h3 id="一致性哈希（ConsistentHash）"><a href="#一致性哈希（ConsistentHash）" class="headerlink" title="一致性哈希（ConsistentHash）"></a>一致性哈希（ConsistentHash）</h3><p><img src="https://gitee.com/cellophane/image/raw/master/TIM%E5%9B%BE%E7%89%8720200323200221.png" alt=""></p>
+<p>一致性哈希是为了克服传统哈希分布在服务器节点数量变化时大量数据迁移的问题，在移除/添加操作。它能够尽可能小的改变已经存在 key 映射关系。</p>
+<p>先构造一个长度为232的整数环（这个环被称为一致性Hash环），根据节点名称的Hash值（其分布为[0, 232-1]）将缓存服务器节点放置在这个Hash环上，然后根据需要缓存的数据的Key值计算得到其Hash值（其分布也为[0, 232-1]），然后在Hash环上顺时针查找距离这个Key值的Hash值最近的服务器节点，完成Key到服务器的映射查找。<strong>集群中缓存服务器节点越多，增加节点带来的影响越小</strong>。</p>
+<h4 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h4><p>当节点数量少的时候，节点分布并不均匀，这时需要引入虚拟节点机制。</p>
+<p><img src="https://gitee.com/cellophane/image/raw/master/165a8d816e9122a0.jpg" alt=""></p>
+<p>增加虚拟节点，然后将虚拟节点映射到真实节点上。虚拟节点的数量比真实节点来得多，那么虚拟节点在哈希环上分布的均匀性就会比原来的真实节点好，从而使得数据分布也更加均匀。</p>
+<h2 id="LVS-原理"><a href="#LVS-原理" class="headerlink" title="LVS 原理"></a>LVS 原理</h2><p>LVS 通过工作于内核的 ipvs 模块来实现功能，其主要工作于 netfilter 的 INPUT 链上。而用户需要对 ipvs 进行操作配置则需要使用 ipvsadm 这个工具。ipvsadm 主要用于设置 lvs 模型、调度方式以及指定后端主机。</p>
+<h3 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h3><ul>
+<li><p>DS（Director Server）：指的是前端负载均衡器节点</p>
+</li>
+<li><p>RS（Real Server）：后端真实的工作服务器</p>
+</li>
+<li><p>VIP（Director Virtual IP）：向外部直接面向用户请求，作为用户请求的目标的IP地址</p>
+</li>
+<li><p>DIP（Director Server IP）：主要用于和内部主机通讯的IP地址</p>
+</li>
+<li><p>RIP（Real Server IP）：后端服务器的IP地址</p>
+</li>
+<li><p>CIP（Client IP）：访问客户端的IP地址</p>
+<h3 id="LVS-集群分为三层结构"><a href="#LVS-集群分为三层结构" class="headerlink" title="LVS 集群分为三层结构"></a>LVS 集群分为三层结构</h3></li>
+<li><p>负载调度器(Load Blancer)：是整个 LVS 集群对外的前端机器，负责接收 client 的请求发送到一组服务器【多台 LB IP】上执行，而 client 则认为返回来是同一个 IP(通常把这个 IP 成为虚拟 IP 或 VIP)</p>
+</li>
+<li><p>服务器池(server pool):一组真正执行clinet请求的服务器，一般是web服务器；除了web，还有FTP、MAIL、DNS等</p>
+</li>
+<li><p>共享存储(shared stord):它为server pool提供了一个共享的存储区，很容易让服务器池拥有相同的内容，提供相同的服务</p>
+</li>
+</ul>
+<p>LVS 有三种工作模式：</p>
+<h3 id="DR"><a href="#DR" class="headerlink" title="DR"></a>DR</h3><h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>优点：</p>
+<ul>
+<li>支持端口映射</li>
+<li>RS 可以使用任意操作系统</li>
+<li>节省公有 IP 地址</li>
+</ul>
+<p>缺点：请求和响应报文都要经过 Director 转发，负载高时 Director 可能成为系统瓶颈。</p>
+<h3 id="TUN"><a href="#TUN" class="headerlink" title="TUN"></a>TUN</h3><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>大型网站技术架构：核心原理与案例分析</li>
+<li><a href="https://blog.csdn.net/liwei0526vip/article/details/103104483" target="_blank" rel="noopener">负载均衡 LVS 入门教程详解 - 基础原理</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#负载均衡的实现技术"><span class="toc-text">负载均衡的实现技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-重定向"><span class="toc-text">HTTP 重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-域名解析"><span class="toc-text">DNS 域名解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反向代理"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-负载均衡"><span class="toc-text">IP 负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#直接路由"><span class="toc-text">直接路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#负载均衡算法"><span class="toc-text">负载均衡算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#轮询（-Round-Robin，RR）"><span class="toc-text">轮询（ Round Robin，RR）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机（-Random）"><span class="toc-text">随机（ Random）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最少连接（-Least-Connections）"><span class="toc-text">最少连接（ Least Connections）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源地址散列（-Source-Hashing）"><span class="toc-text">源地址散列（ Source Hashing）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一致性哈希（ConsistentHash）"><span class="toc-text">一致性哈希（ConsistentHash）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#虚拟节点"><span class="toc-text">虚拟节点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVS-原理"><span class="toc-text">LVS 原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关术语"><span class="toc-text">相关术语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LVS-集群分为三层结构"><span class="toc-text">LVS 集群分为三层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DR"><span class="toc-text">DR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TUN"><span class="toc-text">TUN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/" class="prev">&larr; Prev post 面试范围</a>
+  
+
+  
+
+  
+    <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/" class="next">Next post Java 并发 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,404 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="passport 中涉及的接口：
+getQRCode（pc 端获得登录二维码）
+生成一个随机字符串 code，调用 setex 命令，将这个 code 拼接前缀后作为 key 存入 redis 同时设置一个过期时间，过期后二维码失效需要刷新重新获取。
+存储成功后返回 code。
+
+public static function getQRCode() {
+    $code = self::g...">
+  
+  <title>扫码登录实现原理 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/15/JAVA%20%E5%9F%BA%E7%A1%80/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 基础
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/05/random%E4%B8%BB%E9%A2%98%E5%BD%92%E6%A1%A3%E9%A1%B5%E9%97%AE%E9%A2%98/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        random 主题归档页问题
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>扫码登录实现原理</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-01-11</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-02</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+      
+      </span>
+      
+      
+      <span id="/2020/01/11/扫码登录实现原理/" class="leancloud-visitors" data-flag-title="扫码登录实现原理">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <p><img src="https://gitee.com/cellophane/image/raw/master/qrcode.png" alt=""></p>
+<p>passport 中涉及的接口：</p>
+<h2 id="getQRCode（pc-端获得登录二维码）"><a href="#getQRCode（pc-端获得登录二维码）" class="headerlink" title="getQRCode（pc 端获得登录二维码）"></a>getQRCode（pc 端获得登录二维码）</h2><ol>
+<li>生成一个随机字符串 code，调用 setex 命令，将这个 code 拼接前缀后作为 key 存入 redis 同时设置一个过期时间，过期后二维码失效需要刷新重新获取。</li>
+<li>存储成功后返回 code。</li>
+</ol>
+<pre class="line-numbers language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">function</span> <span class="token function">getQRCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token variable">$code</span> <span class="token operator">=</span> self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">gen64Random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$redis</span> <span class="token operator">=</span> self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">getRedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setEx</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrCode</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token constant">QR_CODE_VALID_TIME</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token variable">$ret</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string">'token'</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$code</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">serviceRet</span><span class="token punctuation">(</span>Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token constant">ERR_NO_SUCCESS</span><span class="token punctuation">,</span> <span class="token variable">$ret</span><span class="token punctuation">,</span> <span class="token string">'获取成功！'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="appLogin（app-扫码）"><a href="#appLogin（app-扫码）" class="headerlink" title="appLogin（app 扫码）"></a>appLogin（app 扫码）</h2><ol>
+<li>手机扫码可以得到 code 和登录接口，app 调用 appLogin 接口传入用户 memberId 和 code。</li>
+<li>服务器解析得到用户 memberId 和 code，用 code 去 redis 查询二维码是否过期。</li>
+<li>如果没过期，将 code 作为键 memberID 作为值存入 redis，建立 memberId 与 code 的联系。</li>
+<li>踢出其他登录信息。</li>
+</ol>
+<pre class="line-numbers language-php"><code class="language-php"><span class="token variable">$status</span> <span class="token operator">=</span> <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">get</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrCode</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$status</span> <span class="token operator">===</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">serviceRet</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'二维码已失效，请刷新重试!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">set</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrCode</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setEx</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrToken</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token variable">$validTime</span><span class="token punctuation">,</span> <span class="token variable">$memberId</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 踢出其他登录的信息</span>
+<span class="token variable">$loginToken</span> <span class="token operator">=</span> <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">get</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrLoginTokenKey</span><span class="token punctuation">(</span><span class="token variable">$memberId</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$loginToken</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">delete</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrLoginToken</span><span class="token punctuation">(</span><span class="token variable">$loginToken</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="getQRStatus（pc-轮询扫码状态）"><a href="#getQRStatus（pc-轮询扫码状态）" class="headerlink" title="getQRStatus（pc 轮询扫码状态）"></a>getQRStatus（pc 轮询扫码状态）</h2><ol>
+<li>浏览器拿到二维码之后，每隔一秒向浏览器发送一次登录是否成功的请求（调用接口 ‘getQRStatus’）。</li>
+<li>请求中携带 code，先查询二维码是否失效，失效则返回二维码已失效。</li>
+<li>然后用 code 查询 redis 是否有 memberId。</li>
+<li>如果有 memberId 就登陆成功并设置对应的 loginToken，返回 loginToken，没有就继续轮询。</li>
+</ol>
+<pre class="line-numbers language-php"><code class="language-php"><span class="token variable">$redis</span> <span class="token operator">=</span> self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">getRedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$status</span> <span class="token operator">=</span> <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">get</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrCode</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$status</span> <span class="token operator">===</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">serviceRet</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'二维码已失效!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token variable">$memberId</span> <span class="token operator">=</span> <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">get</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrToken</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$memberId</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 登陆成功</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">del</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrToken</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">del</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrCode</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$loginToken</span> <span class="token operator">=</span> self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">gen64Random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 设置对应的登陆token</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setEx</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrLoginToken</span><span class="token punctuation">(</span><span class="token variable">$loginToken</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token variable">$validTime</span><span class="token punctuation">,</span> <span class="token variable">$memberId</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// 保存用户的登录信息，以便下次用户扫描二维码时将该loginToken失效</span>
+    <span class="token variable">$redis</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">setEx</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">makeQrLoginTokenKey</span><span class="token punctuation">(</span><span class="token variable">$memberId</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token variable">$validTime</span><span class="token punctuation">,</span> <span class="token variable">$loginToken</span><span class="token punctuation">)</span>
+    <span class="token variable">$ret</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string">'loginToken'</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$loginToken</span><span class="token punctuation">,</span>
+        <span class="token string">'status'</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token variable">$status</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">serviceRet</span><span class="token punctuation">(</span>Error<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token constant">ERR_NO_SUCCESS</span><span class="token punctuation">,</span> <span class="token variable">$ret</span><span class="token punctuation">,</span> <span class="token string">'登录成功！'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzAxNjk4ODE4OQ==&mid=2247488299&idx=1&sn=0cbdefeef1555167247b266011943f56&chksm=9bed3259ac9abb4fde1b13d913803c99645b0b89e504ed35e0888908b9d025cc0843c72a4d2e&mpshare=1&scene=23&srcid=02107idLn2aTJVrxHWuQX96z&sharer_sharetime=1581317735054&sharer_shareid=da3c4e6d38e0827ddba7900a4fab3cd4#rd" target="_blank" rel="noopener">阿里面试官：分别说说微信和淘宝扫码登录背后的实现原理？</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#getQRCode（pc-端获得登录二维码）"><span class="toc-text">getQRCode（pc 端获得登录二维码）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appLogin（app-扫码）"><span class="toc-text">appLogin（app 扫码）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getQRStatus（pc-轮询扫码状态）"><span class="toc-text">getQRStatus（pc 轮询扫码状态）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/01/15/JAVA%20%E5%9F%BA%E7%A1%80/" class="prev">&larr; Prev post Java 基础</a>
+  
+
+  
+
+  
+    <a href="/2020/01/05/random%E4%B8%BB%E9%A2%98%E5%BD%92%E6%A1%A3%E9%A1%B5%E9%97%AE%E9%A2%98/" class="next">Next post random 主题归档页问题 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

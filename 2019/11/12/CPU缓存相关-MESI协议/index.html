@@ -1,0 +1,405 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="CPU 缓存
+CPUCPU由寄存器、控制器、运算器（ALU）、时钟组成。
+CPU从内存或缓存中取出指令，放入指令寄存器，并对指令译码分解成一系列的微操作，然后发出各种控制命令，执行微操作系列，从而完成 系统指令的执行。
+内存CPU 并不能直接调用存储在硬盘上的系统、程序和数据，必须首先将硬盘的有关内容存储在内存中，这样才能被 CPU 读取运行。因而，内存(即物理 内存，是相对于硬盘这个“外存...">
+  
+  <title>CPU 缓存相关-MESI 协议 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/11/16/Redis-%E5%BA%94%E7%94%A8/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Redis-应用
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/11/10/Redis-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Redis-底层原理
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>CPU 缓存相关-MESI 协议</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2019-11-12</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-02</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+          
+            
+              /
+            
+            
+            <a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>
+          
+        </span>
+      
+      <span id="/2019/11/12/CPU缓存相关-MESI协议/" class="leancloud-visitors" data-flag-title="CPU 缓存相关-MESI 协议">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="CPU-缓存"><a href="#CPU-缓存" class="headerlink" title="CPU 缓存"></a>CPU 缓存</h1><p><img src="https://gitee.com/cellophane/image/raw/master/2011242-c90d7652fdccbae5.jpg" alt=""></p>
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><p>CPU由寄存器、控制器、运算器（ALU）、时钟组成。</p>
+<p>CPU从内存或缓存中取出指令，放入指令寄存器，并对指令译码分解成一系列的微操作，然后发出各种控制命令，执行微操作系列，从而完成 系统指令的执行。</p>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>CPU 并不能直接调用存储在硬盘上的系统、程序和数据，必须首先将硬盘的有关内容存储在内存中，这样才能被 CPU 读取运行。因而，内存(即物理 内存，是相对于硬盘这个“外存”而言)作为硬盘和CPU的“中转站”，对电脑运行速度有较大影响。</p>
+<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><p>当运行数据超出物理内存容纳限度的时候，部分数据就会自行“溢出”，这时系统就会将硬盘上的部分空间模拟成内存——虚拟内存，并将暂时不运行的程序或 不使用的数据存放到这部分空间之中，等待需要的时候方便及时调用。</p>
+<h2 id="硬盘"><a href="#硬盘" class="headerlink" title="硬盘"></a>硬盘</h2><p>由于内存是带电存储的(一旦断电数据就会消失)，而且容量有限，所以要长时间储存程序或数据就需要使用硬盘(外存储器)。硬盘也会影响系统速度，因为 系统从硬盘中读取数据并通过总线存入内存的速度也会影响系统运行的快慢。</p>
+<p>CPU是负责运算和处理的，内存是交换数据的。<br>当程序或者操作者对CPU发出指令，这些指令和数据暂存在内存里，在CPU空闲时传送给CPU，CPU处理后把结果输出到输出设备上，输出设备就是显示器，打印机等。在没有显示完之前，这些数据也保存在内存里，如果内存不足，那么系统自动从硬盘上划分一部分空间作为虚拟内存来用。但写入和读取的速度 跟物理内存差的很远很远，所以，在内存不足的时候，会感到机器反应很慢，硬盘一直在响。</p>
+<h2 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h2><p>它是介于CPU与内存之间，常用有一级缓存（L1）、二级缓存（L2）、三级缓存（L3）（一般存在于Intel系列）。它的读写速度比内存还快，当CPU在内存中读取或写入数据时，数据会被保存在高级缓冲存储器中，当下次访问该数据时，CPU直接读取高级缓冲存储器，而不是更慢的内存。</p>
+<p>CPU缓存的定义为CPU与内存之间的临时数据交换器，它的出现是为了解决CPU运行处理速度与内存读写速度不匹配的矛盾——缓存的速度比内存的速度快多了。CPU缓存一般直接跟CPU芯片集成或位于主板总线互连的独立芯片上。（现阶段的CPU缓存一般直接集成在CPU上）CPU往往需要重复处理相同的数据、重复执行相同的指令，如果这部分数据、指令CPU能在CPU缓存中找到，CPU就不需要从内存或硬盘中再读取数据、指令，从而减少了整机的响应时间。</p>
+<p><img src="https://gitee.com/cellophane/image/raw/master/02.png" alt=""></p>
+<p>三级缓存：cpu -&gt; cache -&gt; memory</p>
+<h2 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h2><p>CPU 每次从贮存中读取数据太慢，现代 CPU 通常被设计为多级缓存，CPU 读主存按照空间局部性原理，load 局部区块的数据到缓存。</p>
+<h2 id="MESI（缓存一致性协议）"><a href="#MESI（缓存一致性协议）" class="headerlink" title="MESI（缓存一致性协议）"></a>MESI（缓存一致性协议）</h2><p><img src="https://gitee.com/cellophane/image/raw/master/20200409143114.png" alt=""></p>
+<p>在多核 CPU 中，内存中的数据会在多个核心中存在数据副本，某一个核心发生修改操作，就产生了数据不一致的问题。而一致性协议正是用于保证多个CPU cache之间缓存共享数据的一致。</p>
+<p>至于 MESI，则是缓存一致性协议中的一个，到底怎么实现，还是得看具体的处理器指令集。</p>
+<ul>
+<li>M（Modified）修改：该 Cache line 有效，数据被修改了，和内存中地数据不一致，数据只存在于本 Cache 中。</li>
+<li>E（Exclusive）独享、互斥：该 Cache line 有效，数据和内存中的数据一致，数据只存在于本 Cache 中。</li>
+<li>S（Shared）共享：该 Cache line 有效，数据和内存中的数据一致，数据只存在于很多 Cache 中。</li>
+<li>I（Invalid）无效：该 Cache line 无效。</li>
+</ul>
+<h3 id="cache-的写方式"><a href="#cache-的写方式" class="headerlink" title="cache 的写方式"></a>cache 的写方式</h3><p>cache 的写操作方式可以追溯到大学教程《计算机组成原理》一书。</p>
+<ul>
+<li>write through（写通）：每次CPU修改了cache中的内容，立即更新到内存，也就意味着每次CPU写共享数据，都会导致总线事务，因此这种方式常常会引起总线事务的竞争，高一致性，但是效率非常低；</li>
+<li>write back（写回）：每次CPU修改了cache中的数据，不会立即更新到内存，而是等到cache line在某一个必须或合适的时机才会更新到内存中；</li>
+</ul>
+<p>无论是写通还是写回，在多线程环境下都需要处理缓存cache一致性问题。为了保证缓存一致性，处理器又提供了写失效（write invalidate）和写更新（write update）两个操作来保证cache一致性。</p>
+<ul>
+<li>写失效：当一个CPU修改了数据，如果其他CPU有该数据，则通知其为无效；</li>
+<li>写更新：当一个CPU修改了数据，如果其他CPU有该数据，则通知其跟新数据；</li>
+</ul>
+<p>写更新会导致大量的更新操作，因此在MESI协议中，采取的是写失效（即MESI中的I：ivalid，如果采用的是写更新，那么就不是MESI协议了，而是MESU协议）。</p>
+<h1 id="缓存特征"><a href="#缓存特征" class="headerlink" title="缓存特征"></a>缓存特征</h1><h2 id="命中率"><a href="#命中率" class="headerlink" title="命中率"></a>命中率</h2><p>当某个请求能够通过访问缓存而得到响应时，称为缓存命中。</p>
+<p>缓存命中率越高，缓存的利用率也就越高。</p>
+<h2 id="最大空间"><a href="#最大空间" class="headerlink" title="最大空间"></a>最大空间</h2><p>缓存通常位于内存中，内存的空间通常比磁盘空间小的多，因此缓存的最大空间不可能非常大。</p>
+<p>当缓存存放的数据量超过最大空间时，就需要淘汰部分数据来存放新到达的数据。</p>
+<h1 id="缓存位置"><a href="#缓存位置" class="headerlink" title="缓存位置"></a>缓存位置</h1><h2 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h2><ul>
+<li>当 HTTP 响应允许进行缓存时，浏览器会将 HTML、CSS、JavaScript、图片等静态资源进行缓存。<h2 id="ISP"><a href="#ISP" class="headerlink" title="ISP"></a>ISP</h2></li>
+<li>当 HTTP 响应允许进行缓存时，浏览器会将 HTML、CSS、JavaScript、图片等静态资源进行缓存<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2></li>
+<li>反向代理位于服务器之前，请求与响应都需要经过反向代理。通过将数据缓存在反向代理，在用户请求反向代理时就可以使用缓存进行响应<h2 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h2></li>
+<li>使用 Redis，Memcache 等分布式缓存将数据缓存中分布式缓存系统中<h2 id="数据库缓存"><a href="#数据库缓存" class="headerlink" title="数据库缓存"></a>数据库缓存</h2><h1 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h1></li>
+</ul>
+<p>内容分发网络（Content distribute network，CDN）是一种互连的网络系统，它利用更靠近用户的服务器从而更快更可靠的将 HTML、CSS、JavaScript、音乐、图片、视频等静态资源分发给用户。</p>
+<p>CDN 主要有以下优点</p>
+<ul>
+<li>更快地将数据分发给用户</li>
+<li>通过部署多台机器，从而提高系统整体的带宽性能</li>
+<li>多台服务器可以看成是一种冗余机制，从而提高可用性</li>
+</ul>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a href="https://www.cnkirito.moe/cache-line/" target="_blank" rel="noopener">JAVA 拾遗 — CPU Cache 与缓存行</a></li>
+<li><a href="https://www.toutiao.com/i6669945231242166791/?group_id=6669945231242166791" target="_blank" rel="noopener">你知道如何更新缓存吗？如何保证缓存和数据库双写一致性？</a></li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU-缓存"><span class="toc-text">CPU 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU"><span class="toc-text">CPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存"><span class="toc-text">内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟内存"><span class="toc-text">虚拟内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#硬盘"><span class="toc-text">硬盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高速缓存"><span class="toc-text">高速缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多级缓存"><span class="toc-text">多级缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MESI（缓存一致性协议）"><span class="toc-text">MESI（缓存一致性协议）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cache-的写方式"><span class="toc-text">cache 的写方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存特征"><span class="toc-text">缓存特征</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#命中率"><span class="toc-text">命中率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大空间"><span class="toc-text">最大空间</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存位置"><span class="toc-text">缓存位置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器"><span class="toc-text">浏览器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ISP"><span class="toc-text">ISP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式缓存"><span class="toc-text">分布式缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库缓存"><span class="toc-text">数据库缓存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CDN"><span class="toc-text">CDN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2019/11/16/Redis-%E5%BA%94%E7%94%A8/" class="prev">&larr; Prev post Redis-应用</a>
+  
+
+  
+
+  
+    <a href="/2019/11/10/Redis-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="next">Next post Redis-底层原理 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

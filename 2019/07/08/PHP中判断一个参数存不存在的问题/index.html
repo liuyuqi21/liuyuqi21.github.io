@@ -1,0 +1,367 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="最近做的需求要求开发一个接口，参数是可选的。比如说有个设备号 equipment_id，这个参数是可选的，可以不传，也可以传入但是内容为空，并且如果穿了参数就要验签。
+isset() 和 empty()
+isset() 函数用来检查一个变量是否存在并且不是 null。
+empty() 函数检查一个变量是否为空。
+
+无论使用 isset() 还是 empty() 都无法区别，传入&quot;e...">
+  
+  <title>PHP中判断一个参数存不存在的问题 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2019/07/18/linux-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        linux 常见问题
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2019/06/22/Linux-%E5%91%BD%E4%BB%A4/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        linux 命令
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>PHP中判断一个参数存不存在的问题</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2019-07-08</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-27</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E9%97%AE%E9%A2%98/">问题</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/PHP/">PHP</a>
+          
+        </span>
+      
+      <span id="/2019/07/08/PHP中判断一个参数存不存在的问题/" class="leancloud-visitors" data-flag-title="PHP中判断一个参数存不存在的问题">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <p>最近做的需求要求开发一个接口，参数是可选的。比如说有个设备号 equipment_id，这个参数是可选的，可以不传，也可以传入但是内容为空，并且如果穿了参数就要验签。</p>
+<h2 id="isset-和-empty"><a href="#isset-和-empty" class="headerlink" title="isset() 和 empty()"></a>isset() 和 empty()</h2><ul>
+<li>isset() 函数用来检查一个变量是否存在并且不是 <strong>null</strong>。</li>
+<li>empty() 函数检查一个变量是否为空。</li>
+</ul>
+<p>无论使用 isset() 还是 empty() 都无法区别，传入<code>&quot;equipment_id&quot;:&quot;&quot;</code>,与不传 equipment_id。</p>
+<p>所以去查了下 PHP 手册，发现了这个函数，array_key_exists()，作用是检查数组里是否有指定的键名或索引，这个函数正好可以解决这个问题，如果是传了参数 <code>array_key_exists(&#39;equipment_id&#39;, $allParam)</code> 返回 true，如果是没有传参，则返回 false。</p>
+<p>最用后了一个这样的函数来判断，感觉挺奇葩的，这大概就是弱类型语言的一个缺陷吧。。</p>
+<p>最后巩固一下 PHP 中空的其中情况。</p>
+<h3 id="PHP-空的七种情况"><a href="#PHP-空的七种情况" class="headerlink" title="PHP 空的七种情况"></a>PHP 空的七种情况</h3><ul>
+<li>“” (空字符串)</li>
+<li>0 (作为整数的0)</li>
+<li>0.0 (作为浮点数的0)</li>
+<li>“0” (作为字符串的0)</li>
+<li>NULL</li>
+<li>FALSE</li>
+<li>array() (一个空数组)</li>
+<li>$var (一个声明了，但是没有值的变量)</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#isset-和-empty"><span class="toc-text">isset() 和 empty()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP-空的七种情况"><span class="toc-text">PHP 空的七种情况</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2019/07/18/linux-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="prev">&larr; Prev post linux 常见问题</a>
+  
+
+  
+
+  
+    <a href="/2019/06/22/Linux-%E5%91%BD%E4%BB%A4/" class="next">Next post linux 命令 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

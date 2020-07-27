@@ -1,0 +1,784 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="百度一面一面面试官人真的很好，我项目介绍这块真的太垃圾了，他都叫我慢慢说，画张图理清思路，我画完图说了一遍他都觉得我这个项目没啥特点，他就随便问，好多地方我就是没过脑子随便乱说，他就说我不能这么说，面试完了他还跟我说了很多建议，说我学一个东西不能就随便学一下，要去了解他的原理，还说很多中小型企业的人，都是停留在写业务代码的阶段，写个十几年都跟两三年没什么区别，哎。一共聊了一个多小时，估计我是...">
+  
+  <title>秋招面经 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 虚拟机
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/19/JAVA%20%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 集合框架
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>秋招面经</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-01-20</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-27</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E9%9D%A2%E8%AF%95/">面试</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a>
+          
+        </span>
+      
+      <span id="/2020/01/20/秋招面经/" class="leancloud-visitors" data-flag-title="秋招面经">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="百度"><a href="#百度" class="headerlink" title="百度"></a>百度</h1><h2 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h2><p>一面面试官人真的很好，我项目介绍这块真的太垃圾了，他都叫我慢慢说，画张图理清思路，我画完图说了一遍他都觉得我这个项目没啥特点，他就随便问，好多地方我就是没过脑子随便乱说，他就说我不能这么说，面试完了他还跟我说了很多建议，说我学一个东西不能就随便学一下，要去了解他的原理，还说很多中小型企业的人，都是停留在写业务代码的阶段，写个十几年都跟两三年没什么区别，哎。一共聊了一个多小时，估计我是他最后一个面试的人他也不着急，有时间就多说会儿吧。</p>
+<ul>
+<li>自我介绍，介绍项目</li>
+<li>项目中es的使用，写了一条sql语句，让我转换为es</li>
+<li>项目的难点</li>
+<li>在项目中学到了什么</li>
+<li>定时发送邮件怎么实现的 我说框架里的，但是最终会转换为 shell 脚本，他问我 crontab 用过吗，我。学过，没怎么用，我就记得他那个分时日月周</li>
+<li>队列怎么实现的，除了 redis 有用过其他的队列吗 我，没用过，知道一点，比如 RabbitMQ 他问我，RabbitMQ 又是怎么实现队列的呢</li>
+<li>redis 有什么特点</li>
+<li>zset 怎么使用</li>
+<li>数据库中什么时候要建立索引</li>
+<li>乐观锁和悲观锁，读锁是乐观锁还是悲观锁</li>
+<li>mysql 主从复制</li>
+<li>binlog 里存的是什么</li>
+<li>项目中数据库的量级多少 我脑袋一片空白，说了句不大，他说我不能这么说。</li>
+<li>tcp 和 udp 介绍一下</li>
+<li>进程间通信的方式，并说出每一种的特点</li>
+<li>大小堆了解吗 用在什么地方</li>
+<li>linux 内存泄漏怎么解决</li>
+<li>c 语言学的如何</li>
+<li>算法 链表中倒数第k个节点，只能遍历一次 </li>
+<li>算法 跳台阶</li>
+<li>单元测试了解吗</li>
+<li>在生活中和别人遇到冲突怎么解决</li>
+<li>觉得自己的表现怎么样</li>
+<li>给我提了一些建议</li>
+<li>有什么想问他的</li>
+</ul>
+<h2 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h2><p>二面面试官拿到我的简历看了几秒就在笑，我？？？，他说你这怎么是群众，我，没交团费吧，我也不知道是团员还是群众了，反正不入党都一样，他说，24岁以后没入党才会变为群众，或者没交团费，幽默的面试官~</p>
+<ul>
+<li>又是介绍项目，我巴拉巴拉说完了，他。。啥也没问，估计他觉得这项目太没意思了</li>
+<li>redis 里的数据结构 zset 底层是怎么样的</li>
+<li>链表怎么插入和删除</li>
+<li>b+ 树是怎么样的</li>
+<li>b+ 树的根节点是怎么存放索引的，我。。不知道，瞎扯了半天开始说聚簇索引非聚簇。。。他又笑我然后不问了</li>
+<li>nginx 和 php 怎么通信的</li>
+<li>tcp 和 udp</li>
+<li>linux 问一个日志文件里，每行都是 key=xxx，如何计算出每一种key的数量，我在纸上先写了gerp。。然后写了个awk。。我是真不会写。他就说我用grep但是不知道xxx是什么，所以要先得到xxx，我说用awk，awk可以得到第几列的字段，但是他怎么写我忘了，反正能这么做，他说好，可以。那么得到以后如何去重呢，我想了会儿，说linux应该是有一个命令去重的，看过来着，他说有，但是我可以用别的方式，我就说，那php就是放到数组里，然后用一个函数去重吧。ok。</li>
+<li>他盯着我的简历，说，诶，发现一个有意思的了，然后又问我es。 match 和 match_parse 有什么区别，match 和 term 有什么区别。</li>
+<li>算法 反转二叉树</li>
+<li>算法 接雨水问题  哎，这个我看到过但是不记得怎么做了，临时想了半天给他解释了好久思路，最后他认可了，说了句挺聪明，然后就结束面试了，然后我就被小姐姐带走，小姐姐告诉我出门左转</li>
+</ul>
+<h1 id="奇安信"><a href="#奇安信" class="headerlink" title="奇安信"></a>奇安信</h1><p>不想吐槽这个辣鸡公司，0好感，面试觉得自己像个犯人被拷问。后来又被拉起来面了一次，那次的一二面面试官态度都不错但是没问什么东西，最后开价太低拒了。</p>
+<ul>
+<li>Mvc 解释</li>
+<li>面向对象</li>
+<li>单例模式</li>
+<li>闭包</li>
+<li>yield </li>
+<li>Self 和 static 区别 </li>
+<li>MySQL int 类型可以存多大的数字</li>
+<li>Linux 命令 crontab ps </li>
+<li>Xss csrf </li>
+<li>Redis 怎么查看内存占用</li>
+<li>rdb aof，rdb 磁盘上怎么写</li>
+<li>Redis 数据类型</li>
+<li>32 位是多少字节</li>
+<li>Nginx</li>
+<li>Php 怎么起一个进程后台运行</li>
+<li>Php 怎么返回一个状态码</li>
+<li>Curl 怎么用的，怎么得到状态码</li>
+<li>Php 怎么下载扩展</li>
+<li>Redis 内部结构动态字符串</li>
+<li>Redis 过期策略：惰性过期和定期过期</li>
+<li>nginx 禁止访问目录</li>
+<li>git 撤销暂存</li>
+</ul>
+<h1 id="美团-2019-12-31"><a href="#美团-2019-12-31" class="headerlink" title="美团 2019/12/31"></a>美团 2019/12/31</h1><p>转 Java 后的第一面，开头就跟面试官说我学 Java 才两个多月。。然后他问了挺多 Java 的问题，好多我就说没学到，最后他问我在不在北京，下周去现场面。然后两天后又告诉我没 hc 了。</p>
+<ul>
+<li>介绍项目</li>
+<li>分布式锁的实现</li>
+<li>分布式锁过期解决</li>
+<li>分布式数据库主从复制</li>
+<li>前缀树是什么 前缀树的使用场景</li>
+<li>MySQL 死锁发生的原因和解决</li>
+<li>MySQL 分别建立索引 a,b,c 语句 <code>select ...where b=x,c=x,a=x</code> 能不能用到索引，建立联合索引能不能用到，<code>a=x,b&gt;x</code> 能不能用到，用到几个索引</li>
+<li>B 树和 b+ 树的区别 b+ 树的优点</li>
+<li>MVCC 怎么实现的</li>
+<li>Linux cpu 满了怎么排查</li>
+<li>怎么查看占 cpu 最多的线程</li>
+<li>Linux 怎么搜索文件中的字符串，写到另一个文件中</li>
+<li>liunx 网络相关命令</li>
+<li>Java == 和 equals</li>
+<li>Java contentMap 线程安全怎么实现</li>
+<li>哈希冲突解决的方法</li>
+<li>Java 异常</li>
+<li>Java 类加载</li>
+<li>什么是泛型 泛型的使用场景</li>
+<li>面向过程和面向对象</li>
+<li>多态 父类如何调用子类的方法</li>
+<li>单例模式的用途 静态内部类实现单例模式的方式</li>
+<li>工厂模式的用途</li>
+<li>策略模式的用途</li>
+<li>Get 和 post 请求的区别</li>
+<li>网页请求的整个过程</li>
+<li>说说自己的优缺点，对缺点的改进</li>
+</ul>
+<h1 id="字节跳动"><a href="#字节跳动" class="headerlink" title="字节跳动"></a>字节跳动</h1><p>最想去的公司，没想到投简历后不到半天就约面试了，1.5 号约的 1.16 又被我改到 1.19。一面结束的时候以为自己凉凉，因为算法题没想出来，没想到第二天 hr 约了年后二面。</p>
+<h2 id="一面-2020-1-19"><a href="#一面-2020-1-19" class="headerlink" title="一面 2020/1/19"></a>一面 2020/1/19</h2><ul>
+<li>介绍项目</li>
+<li>分布式锁的实现 如果判断锁是不是自己的（value = 线程 ID来判断，面试官说线程 ID 不可以，问我线程 ID 长啥样， 不知道，你们实际用的是什么，记不清）</li>
+<li>java 有什么数据类型</li>
+<li>float 和 double 分别占用多少字节</li>
+<li>java 有哪些集合 map 有几种</li>
+<li>hashMap 怎么实现的</li>
+<li>hashMap 怎么插入的，只是插入到链表不会变吗（大于8变成红黑树），怎么哈希的，怎么扩容的</li>
+<li>ConcurrentHashMap 怎么实现的，分段锁怎么实现的</li>
+<li>数据库 索引怎么实现的 为什么用 b+ 树</li>
+<li>b+ 树为什么左右节点用指针连接 我：b 树没有左右指针需要中序遍历 面试官：什么时候需要中序遍历</li>
+<li>为什么二级索引存主键 ID 不直接存数据位置</li>
+<li>sql 语句怎么执行的，比如 select</li>
+<li>索引覆盖是什么</li>
+<li>tcp 如何建立连接</li>
+<li>为什么三次握手 第二次握手后没有回复会怎么样 重发 会一直重发吗，我：有一定次数（不确定）</li>
+<li>tcp 怎么保证可靠性</li>
+<li>拥塞控制的详细过程 在现代网络环境中，拥塞控制有什么问题</li>
+<li>设计可靠 udp</li>
+<li>如何判断一个字符串是否合法，括号配对问题，如 (() 非法<ul>
+<li>时间复杂度 空间复杂度（我用栈 O(n)）</li>
+<li>空间复杂度优化（用变量计数） </li>
+<li>如果 * 可以代表 ( 或者 ) 或者空怎么做 <a href="https://leetcode-cn.com/problems/valid-parenthesis-string/" target="_blank" rel="noopener">原题链接</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="一面-2020-2-3"><a href="#一面-2020-2-3" class="headerlink" title="一面 2020/2/3"></a>一面 2020/2/3</h2><p>哦，面完才知道，我重来了一次，这又是一面。小哥哥挺年轻的人也挺好的。</p>
+<ul>
+<li>介绍自己在项目里做了啥</li>
+<li>分布式锁</li>
+<li>面向对象的特性 多态怎么实现的</li>
+<li>三次握手的过程，为什么需要第三次</li>
+<li>滑动窗口是什么，干什么用的</li>
+<li>tcp 和 udp 的区别</li>
+<li>mysql 数据库事务的隔离级别</li>
+<li>事务隔离级别的实现</li>
+<li>mysql 有哪些锁，如何加锁</li>
+<li>单例模式代码实现，还有其他方式吗。 静态内部类，枚举</li>
+<li>找出链表的第一个公共节点</li>
+<li>二叉树的公共祖先 <ul>
+<li>不用递归怎么做</li>
+<li>面试官提示：找到根节点到目标结点的路径（与剑指 offer 同思路）</li>
+<li>找到两条路径后转化为找链表第一个公共节点，写出找路径的代码</li>
+</ul>
+</li>
+</ul>
+<h2 id="二面-2020-2-3"><a href="#二面-2020-2-3" class="headerlink" title="二面 2020/2/3"></a>二面 2020/2/3</h2><ul>
+<li>上来就是算法题，还是我没做过的（只会剑指 Offer 的菜鸡），只能想出暴力解法，最后思路稍微接近了点答案，然后在面试官的提示下，死活想不出最优解。</li>
+<li>二叉树中和为某一值的路径。巴拉巴拉写完了，面试官问，为什么最后要 removeLast</li>
+<li>http 协议是怎么样的</li>
+<li>get 和 post 的区别</li>
+<li>cookie 和 session，session 在多台不同服务器怎么办</li>
+<li>数据库的主键索引和普通索引的区别，哪个查询更快</li>
+<li>索引是越多越好吗，索引建多了会有什么问题，对什么操作有影响</li>
+<li>问我 passport 的项目，叫我说几个接口的实现，用户登录后，业务调 api 怎么判断用户是否登录。哦凑，每天光看基础什么业务都忘干净了</li>
+</ul>
+<h2 id="三面-20202-5"><a href="#三面-20202-5" class="headerlink" title="三面 20202/5"></a>三面 20202/5</h2><ul>
+<li>项目介绍 分布式锁</li>
+<li>分布式锁除了 redis 还有其他实现吗，我说有数据库和 zookeeper，说了数据库的实现，zk 不了解</li>
+<li>团队之间如何分工</li>
+<li>题目1：链表奇数位升序，偶数位降序，如何改为有序链表</li>
+<li>题目二：百万的数据，找出最大的 100 个<ul>
+<li>用最小堆</li>
+<li>如果这 100 万个数据都是 0-100 之间的有什么其他办法，用一个大小为 100 的哈希结构存储数据</li>
+<li>如果数据是 100 亿，大到内存存不下怎么办，我说就分次读取</li>
+</ul>
+</li>
+<li>redis 有哪些数据结构</li>
+<li>redis 的有序列表怎么实现</li>
+<li>跳表有什么优势，比如和二叉树比较</li>
+<li>mysql 用的是什么数据结构存储</li>
+<li>b+ 树是什么样的，b 树和 b+ 树的区别，为什么用 b+ 不用 b 树</li>
+<li>题目三：有一个函数 random(5) 产生随机数 0-5，如何用它来实现 random(7)<ul>
+<li>产生随机数的概率得是均匀的</li>
+<li>leetcode <a href="https://leetcode-cn.com/problems/implement-rand10-using-rand7" target="_blank" rel="noopener">random 7 实现 random 10</a></li>
+</ul>
+</li>
+<li>场景设计题：抖音点赞，QPS 是百万级，如何设计<ul>
+<li>用 redis 做缓存</li>
+<li>数据最终写到哪：数据库</li>
+<li>怎么写：定期写入</li>
+<li>有没有不一致问题：机器出问题数据丢了就可能不一致吧</li>
+<li>怎么解决：redis 的持久存储 rdb 和 aof</li>
+<li>磁盘出问题怎么办，rdb 和 aof 都有问题：redis 集群，用多台 redis 保证高可用</li>
+<li>redis 集群怎么设计的：一台写其他读</li>
+</ul>
+</li>
+</ul>
+<h1 id="小米-2020-2-27"><a href="#小米-2020-2-27" class="headerlink" title="小米 2020/2/27"></a>小米 2020/2/27</h1><ul>
+<li>介绍项目</li>
+<li>rocketmq 的架构</li>
+<li>brocker 是集群的吗 slave 挂掉怎么办 consumer 从哪里得到消息</li>
+<li>下游 消费了 consumer 后挂掉怎么办，执行了操作但是没有返回通知</li>
+<li>下游 A B C 中其中一个挂掉其他成功了怎么办<ul>
+<li>通过定时任务系统创建延时回滚任务，如果其中一个下游未完成，则创建回滚任务发送给其他系统。</li>
+</ul>
+</li>
+<li>介绍设计模式</li>
+<li>分布式锁 锁过期 锁误删 锁超时之类的</li>
+<li>数据库有哪些锁</li>
+<li>delete from id &lt;= 1000 和 select 出所有要删除的 id 后传给 delete 去删除哪个更快，id是主键</li>
+<li>数据量大的时候数据库分页操作有什么问题，怎么优化</li>
+<li>数据库事务的隔离级别</li>
+<li>可重复读是指什么 可重复读的实现</li>
+<li>数据库有哪些引擎，InnoDB 和 MyISAM 的区别，聚簇索引和非聚簇索引的区别</li>
+<li>spring 的核心思想是什么，依赖注入解决了什么问题，类 A 依赖 B，B 依赖 C，C 依赖 A的时候怎么加载（循环依赖问题）</li>
+<li>HashMap 的实现</li>
+<li>ConcurrentHashMap 的实现</li>
+<li>介绍多线程</li>
+<li>分层打印二叉树</li>
+</ul>
+<h1 id="祖龙娱乐-2020-3-2"><a href="#祖龙娱乐-2020-3-2" class="headerlink" title="祖龙娱乐 2020/3/2"></a>祖龙娱乐 2020/3/2</h1><ul>
+<li>事务消息的作用</li>
+<li>Java 接口和类和抽象类的区别</li>
+<li>Java 有哪些集合。HashMap 怎么实现</li>
+<li>MySQL 事务隔离级别，可重复读的实现，MVCC 实现原理，多版本的数据存放在哪里</li>
+<li>Spring 有什么特性，依赖注入的实现，假如有两个类都被依赖注入了，Spring 里面会 new 几个类</li>
+<li>设计一个缓存池（队列），最多存储 10000 个数据，每个数据存活时间 30 分钟，过期则丢弃，实现 push 和 pull 方法。</li>
+<li>有一个对象数组对应一个权重数组，随机取出最大的 10 个元素，权重越大取到的概率越高，但是权重低的也有被取到的可能性</li>
+</ul>
+<h1 id="字节跳动-3-5"><a href="#字节跳动-3-5" class="headerlink" title="字节跳动 3/5"></a>字节跳动 3/5</h1><ul>
+<li>分布式锁是锁住一部分还是整个系统，既然是锁住整个，为什么不用消息队列</li>
+<li>详细讲下怎么用 mq 实现的最终一致性，还有怎么利用的消息事务</li>
+<li>hashmap 的结构，讲到一半，不用讲了，你来写一下它的 put 方法吧，不考虑扩容，简单写下。。</li>
+<li>Array 和 ArrayList 的区别</li>
+<li>tcp 于 http 的关系，如何基于 tcp 实现 http</li>
+<li>java 打开一个 http 流不关闭的后果 <a href="http://tacy.github.io/post/java-http-connect-unclose/" target="_blank" rel="noopener">http://tacy.github.io/post/java-http-connect-unclose/</a></li>
+<li>io 流是基于抽象类还是接口实现的</li>
+<li>数据库的乐观锁和悲观锁是什么</li>
+<li>乐观锁实现原理，讲到一半，来写一个乐观锁吧</li>
+<li>java 的类中有什么方法</li>
+<li>线程安全是什么</li>
+<li>voliate 和 synchorized 的区别</li>
+<li>假如有一个类 A 和一个 类 B，这两个类都有一个变量和一个自增操作，A 类的变量用 voliate 修饰，B 类没有，B 类的自增操作用 synchorized 修饰，他们都是线程安全的吗，如果都是，那为什么要用 synchorized ，voliate 不是更轻量吗，synchorized 有什么作用。</li>
+<li>8 个 CPU ，4 个线程，16个线程什么的。。问题我忘了，因为我不懂</li>
+<li>最后提问环节，我。。有什么学习的建议吗，怎么学习。面试官答：看官方文档不要看博客看源码。好的。。</li>
+</ul>
+<h1 id="阿里-支付宝-3-6"><a href="#阿里-支付宝-3-6" class="headerlink" title="阿里 支付宝 3/6"></a>阿里 支付宝 3/6</h1><p>阿里的面试官真是一如既往的人好，去年我印象中也是阿里的面试官态度最好。<br>其实我觉得我的表现其实很一般，还是比较差的那种，但是他说，其实我的表现还是挺优秀的，作为一个还没毕业的应届生。然后因为他们要招的是实习生，就是21届的，所以我的情况比较特殊，但是他会跟同事讨论的，最后说虽然这次也许没有机会但是我可以加他微信，以后社招会考虑我的。</p>
+<ul>
+<li>介绍项目</li>
+<li>为什么使用消息队列，已经使用了 dubbo 了为什么还要使用 MQ</li>
+<li>使用模板方法模式重构有什么好处</li>
+<li>还知道哪些设计模式</li>
+<li>乐观锁和悲观锁 使用场景</li>
+<li>用 redis 实现乐观锁</li>
+<li>从 passport 这个系统中，做了哪些有挑战性的事，亮点</li>
+<li>如何防止恶意用户的攻击 限流</li>
+<li>使用什么方式限流</li>
+<li>使用 redis 限流的话，redis 可能就扛不住了，在 redis 集群里如果有一台机器挂掉会出现什么问题</li>
+<li>线程和进程</li>
+<li>synchorized 关键字作用</li>
+<li>喜欢技术吗 想往什么技术深入发展</li>
+<li>想去哪个城市 为什么要离职</li>
+<li>问了下建议：对工作经历描述的不够流畅，沟通表达能力有待提高，对工作内容没有介绍出挑战点与亮点让他没有找到发问的地方</li>
+</ul>
+<h1 id="Shopee"><a href="#Shopee" class="headerlink" title="Shopee"></a>Shopee</h1><h2 id="一面-3-11"><a href="#一面-3-11" class="headerlink" title="一面 3/11"></a>一面 3/11</h2><ul>
+<li>ArrayList 和 LinkedList 区别，使用场景</li>
+<li>堆是什么，数据结构，时间复杂度</li>
+<li>排序算法有哪些，归并排序时间复杂度，是不是稳定的</li>
+<li>Map 有几种，LinkedHashMap 的数据结构，怎么实现的</li>
+<li>数据库三大范式 有哪些反范式的设计</li>
+<li>join 和 left join、right join 的区别</li>
+<li>数据库事务 什么是持久性 隔离级别 幻读是什么</li>
+<li>进程和线程的区别</li>
+<li>线程同步</li>
+<li>页面置换算法有哪些 LRU 和 LFU 分别是什么意思</li>
+<li>TCP 和 UDP </li>
+<li>TCP 怎么保证可靠性</li>
+<li>拥塞控制是什么</li>
+<li>三次握手 </li>
+<li>HTTP 状态码有哪些</li>
+<li>GET POST 区别 他们系统里有些 GET 请求 用了 POST 为什么</li>
+<li>乐观锁和悲观锁  CAS 的过程</li>
+<li>Redis 分布式锁使用在了什么地方 怎么实现的 除了 Redis 还有什么方式可以实现</li>
+</ul>
+<h2 id="二面-3-19"><a href="#二面-3-19" class="headerlink" title="二面 3/19"></a>二面 3/19</h2><ul>
+<li>介绍项目</li>
+<li>介绍自己做了哪些</li>
+<li>springboot 和 dubbo 特点</li>
+<li>用什么做的服务发现 zookeeper，zookeeper 内部原理</li>
+<li>用什么实现的负载均衡 知道哪些负载均衡算法</li>
+<li>不同消息队列的特点选型</li>
+<li>rocketmq brocker 内部进程</li>
+<li>kafka 的IO模型，多进程</li>
+<li>redis 集群怎么做的</li>
+<li>redis 单点故障怎么办 还有什么保证可靠性的方法</li>
+<li>rocketmq 在使用过程中遇到了什么问题</li>
+<li>自己的职业规划</li>
+<li>对 shopee 的了解</li>
+</ul>
+<h1 id="中邮消费金融-3-16"><a href="#中邮消费金融-3-16" class="headerlink" title="中邮消费金融 3/16"></a>中邮消费金融 3/16</h1><h2 id="一面-1"><a href="#一面-1" class="headerlink" title="一面"></a>一面</h2><ul>
+<li>什么是高内聚低耦合</li>
+<li>讲一下设计模式</li>
+<li>讲一下 Java 虚拟机 </li>
+<li>讲一下堆的结构</li>
+</ul>
+<h2 id="二面-1"><a href="#二面-1" class="headerlink" title="二面"></a>二面</h2><ul>
+<li>消息队列如何保证读取时候的性能</li>
+<li>消息队列什么时机得到消息有没有被消费</li>
+<li>常用数据结构，数组会用在项目的什么地方</li>
+<li>多线程出现什么问题 怎么解决</li>
+<li>乐观锁和悲观锁</li>
+</ul>
+<h1 id="百度-3-24"><a href="#百度-3-24" class="headerlink" title="百度 3/24"></a>百度 3/24</h1><ul>
+<li><p>介绍项目</p>
+</li>
+<li><p>OOM 怎么定位问题</p>
+</li>
+<li><p>内部类编译成 .class 文件以后是怎么体现的</p>
+</li>
+<li><p>如何使 final 修饰的变量可修改</p>
+</li>
+<li><p>Java 里面使用精度很高数字的用什么类</p>
+</li>
+<li><p>对一个自定义的类创建 HashMap 有什么要注意的（重写 hashCode 和 equals 方法）</p>
+</li>
+<li><p>线程并发的处理方法</p>
+</li>
+<li><p>awk 的作用 </p>
+</li>
+<li><p>linux 如何查看 cpu 使用量</p>
+</li>
+<li><p>将一个数组去重后排序打印输出</p>
+</li>
+</ul>
+<h1 id="途游-3-27"><a href="#途游-3-27" class="headerlink" title="途游 3/27"></a>途游 3/27</h1><h1 id="中信银行-3-30"><a href="#中信银行-3-30" class="headerlink" title="中信银行 3/30"></a>中信银行 3/30</h1><h1 id="字节跳动-1"><a href="#字节跳动-1" class="headerlink" title="字节跳动"></a>字节跳动</h1><h2 id="一面-4-12"><a href="#一面-4-12" class="headerlink" title="一面 4/12"></a>一面 4/12</h2><ul>
+<li>介绍了下重构支付订单的东西，订单的状态机</li>
+<li>ip 协议，DNS 寻址过程</li>
+<li>https加密过程</li>
+<li>死锁怎么形成，java 代码里死锁的解决</li>
+<li>线程同步 （我说了操作系统的 java 的）那php里怎么实现（php？单线程呀。。）那多进程呢，怎么同步（不。。不了解，写php的我对线程进程一无所知）</li>
+<li>三次握手四次挥手的作用</li>
+<li>算法 旋转数组的最小数字</li>
+<li>线程和进程的区别 为什么进程切换慢</li>
+</ul>
+<h2 id="二面-4-12"><a href="#二面-4-12" class="headerlink" title="二面 4/12"></a>二面 4/12</h2><ul>
+<li>问项目中消息队列的使用<ul>
+<li>我做的是生产者这边还是消费者这边</li>
+<li>什么是最大努力通知</li>
+<li>如何保证投递可靠（事务消息，半消息）</li>
+<li>下游消费失败怎么办</li>
+<li>消息重复投递怎么办</li>
+<li>消息id存在哪里，消息里吗</li>
+</ul>
+</li>
+<li>分布式事务除了消息队列还有什么解决办法<ul>
+<li>我说分布式锁，叫我讲个场景，然后说如果是两个数据库，从一个数据库里减金额，另一个数据库里加金额，怎么办</li>
+<li>好不容易想起了2pc，讲2pc，然后面试官提出2pc的问题，投票完成后其中一个参与者失败怎么办 （这里当初理解的不透彻，忘了，就扯 3pc，扯又没扯明白，面试官问我回答他问题了吗，很是尴尬）</li>
+</ul>
+</li>
+<li>看我项目有个redisson，他说他不太懂这个redisson，给他讲讲（你不懂，骗鬼吧）<ul>
+<li>如果有个线程执行时间过长超过了设置的超时时间被释放了怎么办</li>
+</ul>
+</li>
+<li>对微服务治理架构的了解（Dobble Zookeeper）</li>
+<li>TIME-WAIT 发生在哪个阶段<ul>
+<li>为什么等待 2 MSL</li>
+<li>2MSL 大概是多久，现实中的时间（秒？毫秒，布吉岛）</li>
+<li>正常上网请求网页的时候，进入 TIME-WAIT 的是服务器还是客户端（指网页请求的那个服务器，主动关闭连接的一方会进入 TIME-WAIT，一般是服务器主动关闭连接）。那他等待的 2MSL 对他性能有没有影响（emm，时间久就有影响吧）问题又回到了多久，布吉岛。。</li>
+</ul>
+</li>
+<li>id 生成器怎么做 数据库分表</li>
+<li>聚簇索引和非聚簇索引的区别 一个表里可以有几个聚簇索引</li>
+<li>幻读是什么 mysql 怎么解决（我答临键锁，面试官问我刚才提到的mvcc是否可以解决）</li>
+<li>设计一个加权随机算法（思考加修修改改搞了好几十分钟，面试官也亏他有耐心）</li>
+</ul>
+<h2 id="三面-4-14"><a href="#三面-4-14" class="headerlink" title="三面 4/14"></a>三面 4/14</h2><p>面试官态度非常好，没有压迫感</p>
+<ul>
+<li>问我有其他offer没</li>
+<li>设计一个String 转 Int 的方法，做成一个基础库<ul>
+<li>判断负数、字符串、溢出</li>
+<li>我用的是<code>res &gt; Integer.MAX_VALUE / 10 || res == Integer.MAX_VALUE / 10 &amp;&amp; pop &gt; 7</code>这种方式判断溢出，他问我有没有更优雅的其他方法，比如我这个为什么要判断最后一个字符，这个Integer.MAX_VALUE不就是最大数吗，我脑子抽了下，说那就直接加起来判断吧，我想复杂了，他说那要是加的时候就溢出了呢，我。。。那。。那还是就我那样判断吧。。</li>
+<li>为什么我一开始写的是抛异常，后来改成了return 0；我，运行的时候报错了，懒得改，反正觉得return 0也没啥问题，面试官：那要是人家就传 0 呢，我，那，那还是抛异常吧。</li>
+</ul>
+</li>
+<li>TCP/IP是哪四层</li>
+<li>ip 和 mac 什么关系，<ul>
+<li>为什么要有 ip</li>
+<li>mac不可以划分子网吗</li>
+<li>mac 属于哪一层</li>
+<li>ip 属于哪一层</li>
+<li>端口属于哪一层</li>
+<li>端口的作用</li>
+<li>多个进程可以监听同一个端口吗</li>
+</ul>
+</li>
+<li>sleep() 是什么<ul>
+<li>sleep 是怎么实现的，我说运行态变阻塞态</li>
+<li>这个状态的转换是中断吗，一番思考，我猜是吧，他问我这么猜的理由，我就念了遍中断的定义，说看起来是符合sleep的</li>
+<li>sleep 里面有个休眠时间，是如何实现的，怎么做到到了时间就唤醒。瞎逼逼了两下，不知道，就说linux有个crontab，内部啥原理，不懂</li>
+</ul>
+</li>
+<li>实习的收获</li>
+<li>redis 的原理是怎么学习的，看了源码吗。我说看书，redis 设计与实现。为什么要学习呢，为什么要学这个redis 的原理</li>
+<li>面试就到这里，有啥想问的，我又开始emm（回答每个问题的我都这个状态），他赶紧说，没啥想问的可以不问，emm，那，那没了。</li>
+</ul>
+<h1 id="Boss直聘"><a href="#Boss直聘" class="headerlink" title="Boss直聘"></a>Boss直聘</h1><h2 id="一面-4-21"><a href="#一面-4-21" class="headerlink" title="一面 4/21"></a>一面 4/21</h2><ul>
+<li>static 修饰的代码块，执行顺序</li>
+<li>final 修饰的基本类型，在 lambada 表达式里面能不能更改</li>
+<li>Java 有哪些锁 synchronized 是哪种锁，可重入锁的意思</li>
+<li>公平锁和非公平锁的区别</li>
+<li>进程与线程的区别</li>
+<li>Java 线程的状态</li>
+<li>数据库索引的数据结构</li>
+<li>Java 基本类型的大小</li>
+<li>十亿个手机号里面，怎么找到一个手机号存不存在，用什么样的数据结构</li>
+<li>求一个数由哪些完全平方数构成</li>
+<li>怎么平衡工作与学习的时间</li>
+</ul>
+<h2 id="二面-4-30"><a href="#二面-4-30" class="headerlink" title="二面 4/30"></a>二面 4/30</h2><ul>
+<li>java 集合体系</li>
+<li>hashset 有一个user类要存入 hashset 需要做什么</li>
+<li>安全的 hashset</li>
+<li>long access(String ip) 得到ip返回次数 并发环境下</li>
+<li>浏览器输入网址过程</li>
+<li>cookie session</li>
+<li>乐观锁 悲观锁</li>
+<li>http 响应字段</li>
+<li>数据库 索引 更新数据主键，唯一，普通的区别</li>
+<li>线程池参数</li>
+<li>redis 数据结构 hash使用场景</li>
+</ul>
+<h1 id="字节跳动广告部门-4-21"><a href="#字节跳动广告部门-4-21" class="headerlink" title="字节跳动广告部门 4/21"></a>字节跳动广告部门 4/21</h1><ul>
+<li>Java 有哪些集合类</li>
+<li>Array list 和linked list 扩容</li>
+<li>Hashmap怎么插入，扩容</li>
+<li>conrruent hashmap Hashset</li>
+<li>数据结构有哪些线程结构，非线性结构</li>
+<li>二叉树有哪几种 二三树？红黑树 b树 b+树</li>
+<li>Java有哪些锁 实现原理</li>
+<li>Wait与sleep </li>
+<li>Cas是什么 是操作系统的指令吗</li>
+<li>线程状态</li>
+<li>Jvm内存结构</li>
+<li>垃圾回收</li>
+<li>Aop ioc 怎么实现的</li>
+<li>Maven生命周期</li>
+<li>Bean factory 和factory bean</li>
+<li>Springboot与springmvc</li>
+<li>800万条数据，优化查询</li>
+<li>缓存雪崩</li>
+<li>大数据有了解么</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#百度"><span class="toc-text">百度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#奇安信"><span class="toc-text">奇安信</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#美团-2019-12-31"><span class="toc-text">美团 2019&#x2F;12&#x2F;31</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-1-19"><span class="toc-text">一面 2020&#x2F;1&#x2F;19</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-2020-2-3"><span class="toc-text">一面 2020&#x2F;2&#x2F;3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-2020-2-3"><span class="toc-text">二面 2020&#x2F;2&#x2F;3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三面-20202-5"><span class="toc-text">三面 20202&#x2F;5</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小米-2020-2-27"><span class="toc-text">小米 2020&#x2F;2&#x2F;27</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#祖龙娱乐-2020-3-2"><span class="toc-text">祖龙娱乐 2020&#x2F;3&#x2F;2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动-3-5"><span class="toc-text">字节跳动 3&#x2F;5</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#阿里-支付宝-3-6"><span class="toc-text">阿里 支付宝 3&#x2F;6</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Shopee"><span class="toc-text">Shopee</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-3-11"><span class="toc-text">一面 3&#x2F;11</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-3-19"><span class="toc-text">二面 3&#x2F;19</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中邮消费金融-3-16"><span class="toc-text">中邮消费金融 3&#x2F;16</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-1"><span class="toc-text">一面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-1"><span class="toc-text">二面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#百度-3-24"><span class="toc-text">百度 3&#x2F;24</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#途游-3-27"><span class="toc-text">途游 3&#x2F;27</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中信银行-3-30"><span class="toc-text">中信银行 3&#x2F;30</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动-1"><span class="toc-text">字节跳动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-4-12"><span class="toc-text">一面 4&#x2F;12</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-4-12"><span class="toc-text">二面 4&#x2F;12</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三面-4-14"><span class="toc-text">三面 4&#x2F;14</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Boss直聘"><span class="toc-text">Boss直聘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一面-4-21"><span class="toc-text">一面 4&#x2F;21</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二面-4-30"><span class="toc-text">二面 4&#x2F;30</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字节跳动广告部门-4-21"><span class="toc-text">字节跳动广告部门 4&#x2F;21</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="prev">&larr; Prev post Java 虚拟机</a>
+  
+
+  
+
+  
+    <a href="/2020/01/19/JAVA%20%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" class="next">Next post Java 集合框架 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
