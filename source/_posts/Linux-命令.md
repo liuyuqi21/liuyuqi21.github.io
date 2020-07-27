@@ -1,3 +1,12 @@
+---
+title: linux 命令
+date: 2019-06-22 15:31:25
+tags: 
+    - Linux
+    - 题目
+category: 基础
+---
+
 # Linux-命令
 - 文件目录操作：pwd，cd，ls，file，cp，mv，mkdir，rm，ln
 - 使用命令：type，help，man，apropos，info，whatis，alias

@@ -1,7 +1,9 @@
 ---
 title: PHP 面试知识点
 date: 2019-04-16 21:53:20
-tags:
+tags: 
+    - PHP
+categories: PHP
 ---
 
 # 引用变量

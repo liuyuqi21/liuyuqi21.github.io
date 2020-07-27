@@ -1,3 +1,11 @@
+---
+title: laravel 笔记
+date: 2018-11-13 22:15:49
+tags: 
+    - Laravel
+categories: PHP
+---
+
 ## 路由
 - 基本路由
 ```php
