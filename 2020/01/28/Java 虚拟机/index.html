@@ -37,8 +37,7 @@
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -342,24 +341,11 @@
 </ol>
 <p>volatile 变量在各个线程的工作内存中不存在一致性问题（在各个线程的工作内存中 volatile 变量也可以存在不一致的情况，但由于每次使用之前都要先刷新，执行引擎看不到不一致的情况，因此可以认为不存在一致性问题），但是 Java 里面的<strong>运算并非原子操作</strong>，导致 volatile 变量的运算在并发下一样是不安全的。</p>
 <p>示例：</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> race <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">increase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    race<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> race = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span></span>&#123;</span><br><span class="line">    race++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果发起 20 个线程，每个线程对 race 变量进行 10000 次自增操作，如果这段代码能够正确并发的话，最后输出的结果应该是200000。但是实际上每次运行程序，输出的结果都不一样，都是一个小于 200000 的数字。</p>
 <p>因为自增运算 <code>race++</code> 不是原子的。导致 <code>volatile</code> 变量的<strong>运算</strong>在并发下一样是不安全的，仍然要通过 <code>synchorized</code> 加锁来保证原子性。</p>
 <p>volatile 的使用场景：下面的代码能保证当 shutdown() 方法被调用时，能保证所有线程中执行的 doWork() 方法都立即停下来。</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">volatile</span> <span class="token keyword">boolean</span> shutdownRequested<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    shutdownRequested <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span>shutdownRequested<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">//do stuff</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> shutdownRequested;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span></span>&#123;</span><br><span class="line">    shutdownRequested = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doWork</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!shutdownRequested)&#123;</span><br><span class="line">        <span class="comment">//do stuff</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>禁止指令重排序</li>
 </ol>
@@ -368,7 +354,7 @@
 <ul>
 <li>原子类（Atomic）：使用 <code>AutomicInteger</code> 来保证原子性</li>
 </ul>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> AtomicInteger num <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicInteger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> AtomicInteger num = <span class="keyword">new</span> AtomicInteger();</span><br></pre></td></tr></table></figure>
 <ul>
 <li>互斥锁：<code>synchronized</code> 用来保证方法和代码块内的操作是原子性的。</li>
 </ul>

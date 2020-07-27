@@ -581,12 +581,15 @@ article img {
 .btn-hide-toc:hover {
   background-color: #888;
 }
+code style,
 figure.highlight {
   margin: 0px -10px 0px -10px;
 }
+code style td.gutter,
 figure.highlight td.gutter {
   padding-right: 20px;
 }
+code style .line,
 figure.highlight .line {
   height: 22px;
 }

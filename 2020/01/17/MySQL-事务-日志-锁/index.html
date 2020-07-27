@@ -40,8 +40,7 @@ ACID原子性要么全部都执行，要都不执行。
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -325,8 +324,7 @@ ACID原子性要么全部都执行，要都不执行。
 <li>意向共享锁（IS）：事务有意向对表中的某些行加 S 锁</li>
 <li>意向排他锁（IX）：事务有意向对表中的某些行加 X 锁</li>
 </ul>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">lock</span> <span class="token operator">in</span> <span class="token keyword">share mode</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//要设置 IS 锁</span>
-<span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">for</span> <span class="token keyword">update</span>；<span class="token comment" spellcheck="true">//要设置IX锁</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ... <span class="keyword">lock</span> <span class="keyword">in</span> <span class="keyword">share</span> <span class="keyword">mode</span>;//要设置 IS 锁</span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">for</span> <span class="keyword">update</span>；//要设置IX锁</span><br></pre></td></tr></table></figure>
 <p>意向锁的意义：</p>
 <ol>
 <li>IX，IS 是表级锁，不会和行级的 X，S 锁发生冲突。只会和表级的 X，S 发生冲突。</li>
@@ -335,10 +333,10 @@ ACID原子性要么全部都执行，要都不执行。
 <li>如果有了意向锁，只需要判断该意向锁与表级锁是否兼容即可。</li>
 </ol>
 <h2 id="记录锁（Record-Lock）"><a href="#记录锁（Record-Lock）" class="headerlink" title="记录锁（Record Lock）"></a>记录锁（Record Lock）</h2><p>对单条索引记录进行加锁，锁住的是索引记录而非记录本身，即使表中没有任何索引，MySQL会自动创建一个隐式的row_id作为聚集索引来进行加锁。</p>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 <p>它会在 <code>id = 1</code> 的索引上加锁，以防止其他事务插入、更新、删除 id = 1 的这一行。</p>
 <h2 id="间隙锁（GAP-Lock）"><a href="#间隙锁（GAP-Lock）" class="headerlink" title="间隙锁（GAP Lock）"></a>间隙锁（GAP Lock）</h2><p>封锁索引记录中的间隔，如</p>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> t <span class="token keyword">where</span> id <span class="token operator">between</span> <span class="token number">8</span> <span class="token operator">and</span> <span class="token number">15</span> <span class="token keyword">for</span> <span class="token keyword">update</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">between</span> <span class="number">8</span> <span class="keyword">and</span> <span class="number">15</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
 <p>会封锁区间，阻止其他事务在 8-15 之间插入。</p>
 <h2 id="插入意向锁"><a href="#插入意向锁" class="headerlink" title="插入意向锁"></a>插入意向锁</h2><p>是间隙锁的一种，所以也是实施在索引上的，专门针对 insert 操作。</p>
 <p>多个事务，在同一个索引，同一个范围区间插入记录时，如果插入的位置不冲突，不会阻塞彼此。</p>
@@ -350,9 +348,10 @@ ACID原子性要么全部都执行，要都不执行。
 <li>乐观锁：在更新时判断在此期间别人有没有去更新这个数据，可以使用<strong>版本号机制和 CAS 算法</strong>实现。乐观锁适用于<strong>多读</strong>的应用类型，这样可以提供吞吐量。</li>
 </ul>
 <h2 id="乐观锁实现方式一：版本号机制"><a href="#乐观锁实现方式一：版本号机制" class="headerlink" title="乐观锁实现方式一：版本号机制"></a>乐观锁实现方式一：版本号机制</h2><p>一般是在数据表中加上一个数据版本号 version 字段，表示数据被修改的次数，当数据被修改时，version 值会加一。当线程 A 要更新数据值时，在读取数据的同时也会读取 version 值，在提交更新时，若刚才读取到的 version 值为当前数据库中的 version 值相等时才更新，否则重试更新操作，直到更新成功。</p>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> name<span class="token punctuation">,</span> version <span class="token keyword">from</span> goods <span class="token keyword">where</span> id <span class="token operator">=</span> <span class="token comment" spellcheck="true">#{id};</span>
-<span class="token keyword">update</span> goods <span class="token keyword">set</span> name <span class="token operator">=</span> <span class="token comment" spellcheck="true">#{name}, version = version + 1;</span>
-<span class="token keyword">where</span> id <span class="token operator">=</span> <span class="token comment" spellcheck="true">#{id} and version = #{version};</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>, <span class="keyword">version</span> <span class="keyword">from</span> goods <span class="keyword">where</span> <span class="keyword">id</span> = <span class="comment">#&#123;id&#125;;</span></span><br><span class="line"><span class="keyword">update</span> goods <span class="keyword">set</span> <span class="keyword">name</span> = <span class="comment">#&#123;name&#125;, version = version + 1;</span></span><br><span class="line"><span class="keyword">where</span> <span class="keyword">id</span> = <span class="comment">#&#123;id&#125; and version = #&#123;version&#125;;</span></span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="乐观锁实现方式二：CAS-算法"><a href="#乐观锁实现方式二：CAS-算法" class="headerlink" title="乐观锁实现方式二：CAS 算法"></a>乐观锁实现方式二：CAS 算法</h2><p>即<strong>compare and swap（比较与交换）</strong>，是一种有名的<strong>无锁算法</strong>。<br>CAS 算法涉及到三个操作数：</p>
 <ul>
 <li>需要读写的内存值 V</li>

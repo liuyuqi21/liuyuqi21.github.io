@@ -36,8 +36,7 @@
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -154,7 +153,8 @@
 <h2 id="找到归档页的代码"><a href="#找到归档页的代码" class="headerlink" title="找到归档页的代码"></a>找到归档页的代码</h2><p>虽然不是前端，但还是硬着头皮看了看代码。发现新的代码里使用的是 <code>site.posts</code>，旧的代码是 <code>page.posts</code>。搜了一下这两个东西，发现是 hexo 的变量，<code>site.posts</code> 会显示出全部文章，<code>page.posts</code> 是当前页文章。打印出 <code>site.posts</code> 发现显示出来就是乱序的，<code>page.posts</code>只有十条。</p>
 <p>于是我下了个 next 主题，看看别人是怎么写的，发现 next 代码里用的是 <code>page</code> 变量，打开页面，发现文章是分页显示的，打开 hexo 的文档，又看到了分页相关的变量，折腾了好久终于想到了问题的所在，random 没有分页，但是 <code>page</code> 变量只能显示第一页，于是作者改成了 <code>site</code>，但是顺序又不对。</p>
 <h2 id="使归档不分页"><a href="#使归档不分页" class="headerlink" title="使归档不分页"></a>使归档不分页</h2><p>怎么办呢，网上肯定有不分页的办法哈哈哈，果然，<a href="https://sobaigu.com/hexo-archives-show-all-in-one-page.html" target="_blank" rel="noopener">Hexo博客归档不分页显示设置方法</a>。由于我的文章不多，而且时间宝贵不想折腾别的了，就采取了第一种最简单的方式，在 hexo 配置里加一条</p>
-<pre class="line-numbers language-yml"><code class="language-yml">archive:  1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">archive:</span>  <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
 <p>好了，赶紧干正事去，折腾了三四个小时了都😭</p>
 
   </article>

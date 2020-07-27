@@ -36,8 +36,7 @@ TCPTCP 位于传输层，提供可靠的字节流服...">
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -328,8 +327,8 @@ TCPTCP 位于传输层，提供可靠的字节流服...">
 <h3 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h3><p>Pragma 是 HTTP/1.1 之前版本的历史遗留字段，仅作为与 HTTP/1.0 的向后兼容而定义。</p>
 <p>规范定义的形式唯一，Pragma: no-cache。</p>
 <p>通常发送的请求会同时含有下面两个首部字段。</p>
-<pre><code>Cache-Control: no-cache
-Pragma: no-cache</code></pre><h3 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h3><p>首部字段 Upgrade 用于检测 HTTP 协议及其他协议是否可使用更高的版本进行通信，其参数值可以用来指定一个完全不同的通信协议。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-cache</span><br><span class="line">Pragma: no-cache</span><br></pre></td></tr></table></figure>
+<h3 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h3><p>首部字段 Upgrade 用于检测 HTTP 协议及其他协议是否可使用更高的版本进行通信，其参数值可以用来指定一个完全不同的通信协议。</p>
 <p>使用首部字段 Upgrade 时，还需要额外指定 Connection:Upgrade。</p>
 <h3 id="Via"><a href="#Via" class="headerlink" title="Via"></a>Via</h3><p>使用首部字段 Via 是为了追踪客户端与服务器之间的请求和响应报文的传输路径。</p>
 <p>报文经过代理或网关时，会先在首部字段 Via 中附加该服务器的信息，然后再进行转发。这个做法和 traceroute 及电子邮件的 Received 首部的工作机制很类似。</p>

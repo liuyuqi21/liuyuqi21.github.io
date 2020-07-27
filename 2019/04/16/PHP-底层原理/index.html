@@ -39,8 +39,7 @@ php 本身不支持缓存，...">
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -176,24 +175,7 @@ php 本身不支持缓存，...">
 <li>Compilation，将表达式编译成 Opcodes</li>
 <li>Execution，顺次执行 Opcodes，每次一条，从而实现 PHP 脚本的功能</li>
 </ul>
-<h2 id="变量的底层实现"><a href="#变量的底层实现" class="headerlink" title="变量的底层实现"></a>变量的底层实现</h2><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">struct</span> _zval_struct<span class="token punctuation">{</span>
-    <span class="token keyword">union</span> <span class="token punctuation">{</span>
-        <span class="token keyword">long</span> lval<span class="token punctuation">;</span>
-        <span class="token keyword">double</span> dval<span class="token punctuation">;</span>
-        <span class="token keyword">struct</span><span class="token punctuation">{</span>
-            <span class="token keyword">char</span> <span class="token operator">*</span>val<span class="token punctuation">;</span>
-            <span class="token keyword">int</span> len<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//字符串长度</span>
-        <span class="token punctuation">}</span>str<span class="token punctuation">;</span>
-        HashTable <span class="token operator">*</span>ht<span class="token punctuation">;</span>
-        zend_object_value obj<span class="token punctuation">;</span>
-        zend_ast <span class="token operator">*</span>ast<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>value<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">//变量的值，是个联合体</span>
-    zend_uint refcount_gc <span class="token comment" spellcheck="true">//指向次数</span>
-    zend_uchar type <span class="token comment" spellcheck="true">//变量类型</span>
-    zend_uchar is_ref_gc <span class="token comment" spellcheck="true">//是否引用</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="变量的底层实现"><a href="#变量的底层实现" class="headerlink" title="变量的底层实现"></a>变量的底层实现</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zval_struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">long</span> lval;</span><br><span class="line">        <span class="keyword">double</span> dval;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">            <span class="keyword">char</span> *val;</span><br><span class="line">            <span class="keyword">int</span> len;<span class="comment">//字符串长度</span></span><br><span class="line">        &#125;str;</span><br><span class="line">        HashTable *ht;</span><br><span class="line">        zend_object_value obj;</span><br><span class="line">        zend_ast *ast;</span><br><span class="line">    &#125;value;</span><br><span class="line">    <span class="comment">//变量的值，是个联合体</span></span><br><span class="line">    zend_uint refcount_gc <span class="comment">//指向次数</span></span><br><span class="line">    zend_uchar type <span class="comment">//变量类型</span></span><br><span class="line">    zend_uchar is_ref_gc <span class="comment">//是否引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>在php中，字符串长度直接体现在其结构体中。strlen速度非常快</li>
 </ul>
@@ -208,14 +190,9 @@ php 本身不支持缓存，...">
 <p>引用时，if_ref_gc=1,说明这个变量是引用，共用一个结构体，修改时直接改这个结构体的值，不分裂。</p>
 <p>如果 <code>$a=3;$b=$a; $c=&amp;$a;</code> 会强制分裂，b分裂一份结构体。</p>
 <p>数组的 zvalue 里面存放的是指针，指向哈希表，哈希表里面就是数组的键和存放数组值的 zval</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token variable">$arr</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token variable">$tmp</span><span class="token operator">=</span><span class="token variable">$arr</span><span class="token punctuation">;</span>
-<span class="token variable">$arr</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token number">11</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//$tmp[1]=1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">$tmp=$arr;</span><br><span class="line">$arr[<span class="number">1</span>]=<span class="number">11</span>;<span class="comment">//$tmp[1]=1</span></span><br></pre></td></tr></table></figure>
 <p>此时发生了分裂，数组的一号单元产生了一个新的结构体，但是0，2，3对应的还是同一个结构体</p>
-<pre class="line-numbers language-php"><code class="language-php"><span class="token variable">$arr</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token variable">$x</span><span class="token operator">=</span><span class="token operator">&amp;</span><span class="token variable">$arr</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token variable">$tmp</span><span class="token operator">=</span><span class="token variable">$arr</span><span class="token punctuation">;</span>
-<span class="token variable">$arr</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token number">11</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//$tmp[1]=11</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$arr=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">$x=&amp;$arr[<span class="number">1</span>];</span><br><span class="line">$tmp=$arr;</span><br><span class="line">$arr[<span class="number">1</span>]=<span class="number">11</span>;<span class="comment">//$tmp[1]=11</span></span><br></pre></td></tr></table></figure>
 <p>此时强制分裂失效</p>
 <h2 id="弱类型的实现"><a href="#弱类型的实现" class="headerlink" title="弱类型的实现"></a>弱类型的实现</h2><h2 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h2><ul>
 <li>foreach 循环后，数组指针停留在数组结尾</li>
@@ -232,9 +209,8 @@ php 本身不支持缓存，...">
 </ul>
 <p>但是引用计数中的循环引用，引用计数不会消减为 0，就会导致内存泄露。<br>而php中内存对象就是zval，而计数器就是refcount__gc。</p>
 <ul>
-<li>循环引用问题：<pre class="line-numbers language-php"><code class="language-php"><span class="token variable">$a</span><span class="token operator">=</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$a</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token operator">&amp;</span><span class="token variable">$a</span><span class="token punctuation">;</span>
-<span class="token function">unset</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<li>循环引用问题：<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$a=<span class="keyword">array</span>(<span class="string">"one"</span>);</span><br><span class="line">$a[]=&amp;$a;</span><br><span class="line"><span class="keyword">unset</span>($a);</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <p>在 5.3 版本之后，做了这些优化：</p>

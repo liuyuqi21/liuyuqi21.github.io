@@ -40,8 +40,7 @@ show processlist 或开启慢查询 获取有问题...">
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -336,7 +335,10 @@ show processlist 或开启慢查询 获取有问题...">
 <li>group by 和 order by 同时存在，且作用于不同的字段时，先取出数据，形成临时表做 filesort</li>
 </ul>
 <h2 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h2><p>如果查询的列恰好是索引的一部分，那么查询只需要在索引文件上进行,不需要回到磁盘再找数据<br>如 </p>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">index</span> index_birthday_and_user_name <span class="token keyword">on</span> user_info<span class="token punctuation">(</span>birthday<span class="token punctuation">,</span> user_name<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">`</span><span class="token punctuation">,</span><span class="token punctuation">`</span><span class="token keyword">select</span> user_name <span class="token keyword">from</span> user_info <span class="token keyword">where</span> birthday <span class="token operator">=</span> <span class="token string">'1991-11-1'</span><span class="token punctuation">`</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> index_birthday_and_user_name <span class="keyword">on</span> user_info(birthday, user_name);`,`<span class="keyword">select</span> user_name <span class="keyword">from</span> user_info <span class="keyword">where</span> birthday = <span class="string">'1991-11-1'</span><span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h2><ul>
 <li>ASC，DESC 混用</li>
 <li>WHERE 字句中出现非排序使用到的索引</li>
@@ -372,13 +374,8 @@ show processlist 或开启慢查询 获取有问题...">
 <li>大大提高查询速度，降低写的速度，占用磁盘</li>
 </ul>
 <h1 id="SQL语句的优化"><a href="#SQL语句的优化" class="headerlink" title="SQL语句的优化"></a>SQL语句的优化</h1><h2 id="切分大查询"><a href="#切分大查询" class="headerlink" title="切分大查询"></a>切分大查询</h2><p>一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。<br>将一个大的查询分解成多个小的相同的查询。<br>一次性删除 1000 万的数据要比一次删除 1 万，暂停一会儿的方案更损耗服务器开销。</p>
-<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> messages <span class="token keyword">WHERE</span> <span class="token keyword">create</span> <span class="token operator">&lt;</span> DATE_SUB<span class="token punctuation">(</span><span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> INTERVAL <span class="token number">3</span> MONTH<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">//切分后</span>
-rows_affected <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token keyword">do</span> {
-rows_affected <span class="token operator">=</span> do_query<span class="token punctuation">(</span>
-<span class="token string">"DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000"</span><span class="token punctuation">)</span>
-} <span class="token keyword">while</span> rows_affected <span class="token operator">></span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> messages <span class="keyword">WHERE</span> <span class="keyword">create</span> &lt; <span class="keyword">DATE_SUB</span>(<span class="keyword">NOW</span>(), <span class="built_in">INTERVAL</span> <span class="number">3</span> <span class="keyword">MONTH</span>);</span><br><span class="line">//切分后</span><br><span class="line">rows_affected = 0</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">rows_affected = do_query(</span><br><span class="line"><span class="string">"DELETE FROM messages WHERE create &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000"</span>)</span><br><span class="line">&#125; <span class="keyword">while</span> rows_affected &gt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="分解关联查询"><a href="#分解关联查询" class="headerlink" title="分解关联查询"></a>分解关联查询</h2><p>将一个关联查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联。</p>
 <ul>
 <li>让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用。</li>

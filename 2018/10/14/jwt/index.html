@@ -42,8 +42,7 @@
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -178,11 +177,7 @@
 <h2 id="并发请求，过期的时候同一个页面发来两个请求"><a href="#并发请求，过期的时候同一个页面发来两个请求" class="headerlink" title="并发请求，过期的时候同一个页面发来两个请求"></a>并发请求，过期的时候同一个页面发来两个请求</h2><p>用 Redis，将旧token作为键，新token作为值，设置一个30秒过期的时间。当第二个请求来的时候，已经知道token在backlist中了，我们可以去redis查询下是否存在这么个旧token，存在的话给他新的 Token。</p>
 <h2 id="jWT"><a href="#jWT" class="headerlink" title="jWT"></a>jWT</h2><ul>
 <li>Token 有三部分组成，中间用.隔开，并使用 Base64 编码<ul>
-<li>header：Token 的类型，苏使用的加密算法<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
-<span class="token property">"typ"</span><span class="token operator">:</span> <span class="token string">"JWT"</span><span class="token punctuation">,</span>
-<span class="token property">"alg"</span><span class="token operator">:</span> <span class="token string">"HS256"</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<li>header：Token 的类型，苏使用的加密算法<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"typ"</span>: <span class="string">"JWT"</span>,</span><br><span class="line"><span class="attr">"alg"</span>: <span class="string">"HS256"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>payload</li>
 <li>signature：用 Base64 对 header.payload 进行编码，然后用 Secret 对编码后的内容进行加密，加密后的内容即为 Signature<h2 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h2></li>
 </ul>

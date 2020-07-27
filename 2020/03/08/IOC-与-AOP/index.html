@@ -41,8 +41,7 @@
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -165,24 +164,10 @@
 <li>基于注解: 通过 Java 的注解机制来让 IoC 容器注入所依赖类型的对象,例如 Spring 框架中的 <code>@Autowired</code>。</li>
 </ul>
 <h2 id="IOC-思想"><a href="#IOC-思想" class="headerlink" title="IOC 思想"></a>IOC 思想</h2><p>传统实现中，调用一个类的方法需要先实例化。</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">cook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        Food food <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tomato</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"cooking "</span> <span class="token operator">+</span> food<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cook</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Food food = <span class="keyword">new</span> Tomato();</span><br><span class="line">        System.out.println(<span class="string">"cooking "</span> + food.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>而 IOC 是通过一个第三方容器来管理并维护这些对象，应用程序只需要接收并使用 IOC 容器注入的对象而不需要关注其他事情。控制反转其实就是对象控制权的转移,应用程序将对象的控制权转移给了第三方容器并通过它来管理这些被依赖对象,完成了应用程序与被依赖对象的解耦。</p>
-<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> Food food<span class="token punctuation">;</span>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Food food;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFood</span><span class="params">(Food food)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.food = food;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cook</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"cooking "</span> + <span class="keyword">this</span>.food.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setFood</span><span class="token punctuation">(</span>Food food<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>food <span class="token operator">=</span> food<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">cook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"cooking "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>food<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h1><p>AOP(Aspect-Oriented Programming) 即面向切面编程。它是一种在运行时,动态地将代码切入到类的指定方法、指定位置上的编程思想。用于切入到指定类指定方法的代码片段叫做切面,而切入到哪些类中的哪些方法叫做切入点。</p>
 <p>AOP解决了代码的重复并将这些外围业务代码抽离到一个切面中,我们可以动态地将切面切入到切入点。</p>
 <h1 id="循环依赖问题"><a href="#循环依赖问题" class="headerlink" title="循环依赖问题"></a>循环依赖问题</h1><p>A 依赖 B，B 依赖 C，C 依赖 A，Spring 实例化 A 的时候发现 A 依赖于 B 于是去实例化 B（此时 A 创建未结束，处于创建中的状态），而发现 B 又依赖于 A ，于是就这样循环下去，最终导致 OOM。</p>

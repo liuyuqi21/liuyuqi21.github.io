@@ -52,8 +52,7 @@ del key [key…]
 
   
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
-<script src="/js/prism-line-numbers.min.js"></script></head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
 <div class="side-navigate hide-area">
@@ -944,41 +943,16 @@ del key [key…]
 <li>节约空间, 1 亿人每天的登陆情况，用 1 亿bit，约 1200WByte，约 10M 的字符就能表示</li>
 <li>计算方便</li>
 </ol>
-<pre><code>Log0721: &#39;011001................0&#39;
-......
-log0726 : &#39;011001...............0
-Log0727 : &#39;0110000..............1&#39;
-</code></pre><ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Log0721: &#39;011001................0&#39;</span><br><span class="line">......</span><br><span class="line">log0726 : &#39;011001...............0</span><br><span class="line">Log0727 : &#39;0110000..............1&#39;</span><br></pre></td></tr></table></figure>
+
+<ol>
 <li><p>记录用户登陆</p>
 <p> 每天按日期生成一个位图, 用户登陆后，把 user_id 位上的 bit 值置为 1</p>
 </li>
 <li><p>把 1 周的位图 and 计算,<br> 位上为1的，即是连续登陆的用户</p>
-<pre><code> redis 127.0.0.1:6379&gt; setbit mon 100000000 0
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit mon 3 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit mon 5 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit mon 7 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit thur 100000000 0
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit thur 3 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit thur 5 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit thur 8 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit wen 100000000 0
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit wen 3 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit wen 4 1
- (integer) 0
- redis 127.0.0.1:6379&gt; setbit wen 6 1
- (integer) 0
- redis 127.0.0.1:6379&gt; bitop and  res mon feb wen
- (integer) 12500001</code></pre></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; setbit mon 100000000 0</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit mon 3 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit mon 5 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit mon 7 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit thur 100000000 0</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit thur 3 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit thur 5 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit thur 8 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit wen 100000000 0</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit wen 3 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit wen 4 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; setbit wen 6 1</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; bitop and  res mon feb wen</span><br><span class="line">(integer) 12500001</span><br></pre></td></tr></table></figure>
+
+</li>
 </ol>
 <h2 id="安全队列"><a href="#安全队列" class="headerlink" title="安全队列"></a>安全队列</h2><p>场景: task + bak 双链表完成安全队列</p>
 <p>业务逻辑:</p>
