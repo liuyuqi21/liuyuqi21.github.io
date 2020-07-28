@@ -3,7 +3,6 @@ title: linux 命令
 date: 2019-06-22 15:31:25
 tags: 
     - Linux
-    - 题目
 category: 基础
 ---
 

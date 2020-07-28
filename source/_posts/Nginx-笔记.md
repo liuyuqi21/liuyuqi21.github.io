@@ -2,7 +2,7 @@
 title: Nginx 笔记
 date: 2018-09-17 16:24:00
 tags: Nginx
-category: Nginx
+category: 基础
 ---
 Nginx ("engine x") 是一个高性能的 HTTP 和 反向代理 服务器，也是一个 IMAP/POP3/SMTP 代理服务器。Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的。
 

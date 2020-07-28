@@ -2,7 +2,7 @@
 title: 单例模式 JAVA
 date: 2019-09-21 15:23:33
 tags: 
-    - JAVA
+    - Java
     - 设计模式
 categories: 设计模式
 ---
