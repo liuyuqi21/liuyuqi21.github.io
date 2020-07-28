@@ -1,98 +1,178 @@
-<!DOCTYPE html>
-<html>
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="七层协议各层协议的作用
+七层协议物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。
+各层传输单位：
+
+物理层：比特流
+数据链路层：帧
+网络层：包
+传输层：报文
+
+五层协议
+应用层：为特定应用程序提供数据传输服务。 
+传输层：为进程提供通用数据传输服务。提供端对端的接口。
+网络层：为主机提供数据传输服务。为数据包选择路由。
+数据链路层：传输有地址的帧以及差错校验功能。
+物理层：以二进...">
+  
+  <title>计算机网络常见问题 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
 
   
-  <title>计算机网络常见问题 | Cellophane&#39;s blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="七层协议各层协议的作用 七层协议物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。 各层传输单位：  物理层：比特流 数据链路层：帧 网络层：包 传输层：报文  五层协议 应用层：为特定应用程序提供数据传输服务。  传输层：为进程提供通用数据传输服务。提供端对端的接口。 网络层：为主机提供数据传输服务。为数据包选择路由。 数据链路层：传输有地址的帧以及差错校验功能。 物理层：以二进制在物">
-<meta property="og:type" content="article">
-<meta property="og:title" content="计算机网络常见问题">
-<meta property="og:url" content="https://liuyuqi21.github.io/2020/01/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
-<meta property="og:site_name" content="Cellophane&#39;s blog">
-<meta property="og:description" content="七层协议各层协议的作用 七层协议物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。 各层传输单位：  物理层：比特流 数据链路层：帧 网络层：包 传输层：报文  五层协议 应用层：为特定应用程序提供数据传输服务。  传输层：为进程提供通用数据传输服务。提供端对端的接口。 网络层：为主机提供数据传输服务。为数据包选择路由。 数据链路层：传输有地址的帧以及差错校验功能。 物理层：以二进制在物">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/20200408113004.png">
-<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/sanciwoshou.jpg">
-<meta property="og:image" content="http://q6z2k96rl.bkt.clouddn.com/Fi4rFhwnndiBxPW-Sk-VlXqvr49a">
-<meta property="article:published_time" content="2020-01-29T07:16:20.000Z">
-<meta property="article:modified_time" content="2020-07-28T02:52:43.215Z">
-<meta property="article:author" content="Cellophane">
-<meta property="article:tag" content="计算机网络">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/cellophane/image/raw/master/20200408113004.png">
-  
-  
-    <link rel="icon" href="/icon.ico">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
 <meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Cellophane&#39;s blog</a>
-      </h1>
-      
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/02/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        操作系统笔记
+      </div>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+  
+  
+    <div class="item next">
+      <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Java 虚拟机
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
         
-          <a class="main-nav-link" href="/">Home</a>
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
         
-          <a class="main-nav-link" href="/archives">Archives</a>
         
-      </nav>
-      <nav id="sub-nav">
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liuyuqi21.github.io"></form>
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
       </div>
     </div>
   </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-计算机网络常见问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/01/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2020-01-29T07:16:20.000Z" itemprop="datePublished">2020-01-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      计算机网络常见问题
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  <div id="content-outer">
+    <div id="content-inner">
       
-        <h1 id="七层协议"><a href="#七层协议" class="headerlink" title="七层协议"></a>七层协议</h1><h2 id="各层协议的作用"><a href="#各层协议的作用" class="headerlink" title="各层协议的作用"></a>各层协议的作用</h2><p><img src="https://gitee.com/cellophane/image/raw/master/20200408113004.png" alt=""></p>
+      
+  
+
+  <article id="post">
+    <h1>计算机网络常见问题</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-01-29</span>
+      
+        <span id = "post-title-updated">Updated at 2020-07-28</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+          
+        </span>
+      
+      <span id="/2020/01/29/计算机网络常见问题/" class="leancloud-visitors" data-flag-title="计算机网络常见问题">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h1 id="七层协议"><a href="#七层协议" class="headerlink" title="七层协议"></a>七层协议</h1><h2 id="各层协议的作用"><a href="#各层协议的作用" class="headerlink" title="各层协议的作用"></a>各层协议的作用</h2><p><img src="https://gitee.com/cellophane/image/raw/master/20200408113004.png" alt=""></p>
 <h3 id="七层协议-1"><a href="#七层协议-1" class="headerlink" title="七层协议"></a>七层协议</h3><p>物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。</p>
 <p>各层传输单位：</p>
 <ul>
@@ -503,153 +583,184 @@ tcp_max_tw_buckets = 256000 // 当出现 TCP: time wait bucket table overflow �
 <li><a href="https://juejin.im/post/5d9c284b518825095879e7a5" target="_blank" rel="noopener">面试官，不要再问我三次握手和四次挥手</a></li>
 </ul>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liuyuqi21.github.io/2020/01/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" data-id="ckd5eg3qi0046tmnr400hhwd8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
-
-    </footer>
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#七层协议"><span class="toc-text">七层协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#各层协议的作用"><span class="toc-text">各层协议的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#七层协议-1"><span class="toc-text">七层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五层协议"><span class="toc-text">五层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-协议"><span class="toc-text">TCP&#x2F;IP 协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层和传输层的差错控制有什么区别"><span class="toc-text">数据链路层和传输层的差错控制有什么区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以太网的特点，以及帧结构。"><span class="toc-text">以太网的特点，以及帧结构。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器、交换机、路由器的作用，以及所属的网络层"><span class="toc-text">集线器、交换机、路由器的作用，以及所属的网络层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据数据报常见字段的作用。"><span class="toc-text">IP 数据数据报常见字段的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP-协议的作用，以及维护-ARP-缓存的过程。"><span class="toc-text">ARP 协议的作用，以及维护 ARP 缓存的过程。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP-报文种类以及作用；和-IP-数据报的关系；Ping-和-Traceroute-的具体原理。"><span class="toc-text">ICMP 报文种类以及作用；和 IP 数据报的关系；Ping 和 Traceroute 的具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-与-TCP-比较，分析上层协议应该使用-UDP-还是-TCP。"><span class="toc-text">UDP 与 TCP 比较，分析上层协议应该使用 UDP 还是 TCP。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME-WAIT-的作用。"><span class="toc-text">理解三次握手以及四次挥手具体过程，三次握手的原因、四次挥手原因、TIME_WAIT 的作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TIME-WAIT-过多造成的问题"><span class="toc-text">TIME-WAIT 过多造成的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#说说半连接队列和-SYN-Flood-攻击的关系"><span class="toc-text">说说半连接队列和 SYN Flood 攻击的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可靠传输原理，并设计可靠-UDP-协议。"><span class="toc-text">可靠传输原理，并设计可靠 UDP 协议。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流量控制的作用，原理。"><span class="toc-text">流量控制的作用，原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-拥塞控制的作用，理解具体原理。"><span class="toc-text">TCP 拥塞控制的作用，理解具体原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的端口号；TCP-还是-UDP；作为缓存、负载均衡。"><span class="toc-text">DNS 的端口号；TCP 还是 UDP；作为缓存、负载均衡。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-协议的作用"><span class="toc-text">IP 协议的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-寻址过程"><span class="toc-text">DNS 寻址过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP"><span class="toc-text">HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GET-与-POST-比较：作用、参数、安全性、幂等性、可缓存。"><span class="toc-text">GET 与 POST 比较：作用、参数、安全性、幂等性、可缓存。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-状态码。"><span class="toc-text">HTTP 状态码。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-作用、安全性问题、和-Session-的比较。"><span class="toc-text">Cookie 作用、安全性问题、和 Session 的比较。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存的-Cache-Control-字段，特别是-Expires-和-max-age-的区别。ETag-验证原理。"><span class="toc-text">缓存的 Cache-Control 字段，特别是 Expires 和 max-age 的区别。ETag 验证原理。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#长连接与短连接原理以及使用场景，流水线。"><span class="toc-text">长连接与短连接原理以及使用场景，流水线。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-存在的安全性问题，以及-HTTPs-的加密、认证和完整性保护作用。"><span class="toc-text">HTTP 存在的安全性问题，以及 HTTPs 的加密、认证和完整性保护作用。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是队头阻塞"><span class="toc-text">什么是队头阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-队头阻塞"><span class="toc-text">TCP 队头阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-1-1-队头阻塞"><span class="toc-text">HTTP 1.1 队头阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-x-的缺陷，以及-HTTP-2-的特点。"><span class="toc-text">HTTP&#x2F;1.x 的缺陷，以及 HTTP&#x2F;2 的特点。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-1-的特性。"><span class="toc-text">HTTP&#x2F;1.1 的特性。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-与-FTP-的比较。"><span class="toc-text">HTTP 与 FTP 的比较。</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/02/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          操作系统笔记
-        
-      </div>
-    </a>
+</div>
+
   
   
-    <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Java 虚拟机</div>
-    </a>
+<nav id="pagination">
+  
+    <a href="/2020/02/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" class="prev">&larr; Prev post 操作系统笔记</a>
+  
+
+  
+
+  
+    <a href="/2020/01/28/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="next">Next post Java 虚拟机 &rarr;</a>
   
 </nav>
 
-  
-</article>
+  <!-- JiaThis Button BEGIN -->
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98/">问题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
+<!-- JiaThis Button END -->
+
+
+      
+      
     </div>
   </div>
 
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Laravel/" rel="tag">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redisson/" rel="tag">redisson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/" rel="tag">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/" rel="tag">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer/" rel="tag">剑指Offer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%98%E7%9B%AE/" rel="tag">题目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
     </div>
   </div>
+</div>
+
+</div>
 
 
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png">
+    <p id="description"></p>
+    <ul class="social-icon">
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PHP/" style="font-size: 17.5px;">PHP</a> <a href="/tags/Redis/" style="font-size: 17.5px;">Redis</a> <a href="/tags/RocketMQ/" style="font-size: 12.5px;">RocketMQ</a> <a href="/tags/ZooKeeper/" style="font-size: 10px;">ZooKeeper</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/redisson/" style="font-size: 10px;">redisson</a> <a href="/tags/spring/" style="font-size: 10px;">spring</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 10px;">乐观锁</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 12.5px;">分布式事务</a> <a href="/tags/%E5%89%91%E6%8C%87Offer/" style="font-size: 20px;">剑指Offer</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 10px;">消息队列</a> <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" style="font-size: 10px;">知识点</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 12.5px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">读书笔记</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 12.5px;">面经</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A2%98%E7%9B%AE/" style="font-size: 15px;">题目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 10px;">高并发</a>
-    </div>
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
   </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
-    </div>
-  </div>
+</div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">leetcode 数据结构</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">面试范围</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">Java 并发</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/10/typora%E5%BF%AB%E6%8D%B7%E9%94%AE/">typora 快捷键</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
+<div id="btn-view">Hide</div>
 
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Cellophane<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
   
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
 
 
 
 
-<script src="/js/script.js"></script>
+var backgroundColor = "34495E";
 
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
 
-
-
-  </div>
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
 </body>
 </html>
+
