@@ -1,168 +1,100 @@
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
   
-  <meta name="author" content="Cellophane">
-  
-  
-  
-  
-    <meta name="description" content="分库分表分片（水平分割）水平切分又称为 Sharding，它是将同一个表中的记录拆分到多个结构相同的表中。当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓存单个数据库的压力。
-水平切分，到底是分库还是分表建议分库
-
-分表依然公用一个数据库文件，仍然有磁盘 IO 的竞争
-分库能够很容易的将数据迁移到不同数据库实例，甚至数据库机器上，扩展性更好...">
-  
-  <title>MySQL 分库分表 [ Cellophane's blog ]</title>
-  
-  
-    <link rel="shortcut icon" href="/icon.ico">
-  
-  
-  
-<link rel="stylesheet" href="/css/random.css">
-<link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
-<link rel="stylesheet" href="/css/jquery.fancybox.css">
-<link rel="stylesheet" href="/css/iconfont/iconfont.css">
-<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
-<link rel="stylesheet" href="/css/plyr.css">
 
   
-<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  <title>MySQL 分库分表 | Cellophane&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="分库分表分片（水平分割）水平切分又称为 Sharding，它是将同一个表中的记录拆分到多个结构相同的表中。当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓存单个数据库的压力。 水平切分，到底是分库还是分表建议分库  分表依然公用一个数据库文件，仍然有磁盘 IO 的竞争 分库能够很容易的将数据迁移到不同数据库实例，甚至数据库机器上，扩展性更好  S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 分库分表">
+<meta property="og:url" content="https://liuyuqi21.github.io/2019/04/12/MySQL-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Cellophane&#39;s blog">
+<meta property="og:description" content="分库分表分片（水平分割）水平切分又称为 Sharding，它是将同一个表中的记录拆分到多个结构相同的表中。当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓存单个数据库的压力。 水平切分，到底是分库还是分表建议分库  分表依然公用一个数据库文件，仍然有磁盘 IO 的竞争 分库能够很容易的将数据迁移到不同数据库实例，甚至数据库机器上，扩展性更好  S">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/20200412232622.png">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/db-1.png">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/db-2.png">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/db-3.png">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/sharding.png">
+<meta property="article:published_time" content="2019-04-12T15:02:28.000Z">
+<meta property="article:modified_time" content="2020-07-28T02:52:43.191Z">
+<meta property="article:author" content="Cellophane">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/cellophane/image/raw/master/20200412232622.png">
+  
+  
+    <link rel="icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
-<div class="side-navigate hide-area">
-  
-    <div class="item prev">
-      <a href="/2019/04/14/%E6%98%A5%E6%8B%9B%E9%9D%A2%E7%BB%8F/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        春招面经
-      </div>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Cellophane&#39;s blog</a>
+      </h1>
+      
     </div>
-  
-  
-    <div class="item next">
-      <a href="/2019/04/10/PHP-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        PHP 基础
-      </div>
-    </div>
-  
-</div>
-<div id="outer-container" class="hide-area">
-<div id="container">
-  <div id="menu-outer" class="slide-down">
-    <div id="menu-inner">
-      <div id="brand">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a onClick="openUserCard()">
-          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
-          <div id="homelink">Cellophane's blog</div>
-        </a>
-      </div>
-      <div id="menu-list">
-        <ul>
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-          
-            <li>
-          
-            <a href="/index.html">Home</a>
-            
-          </li>
+      </nav>
+      <nav id="sub-nav">
         
-          
-            <li>
-          
-            <a href="/archives">Archives</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/tags">Tags</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/categories">Categories</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/about">About</a>
-            
-          </li>
-        
-        </ul>
-      </div>
-      <div id="show-menu">
-        <button>Menu</button>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liuyuqi21.github.io"></form>
       </div>
     </div>
   </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL-分库分表" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/12/MySQL-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" class="article-date">
+  <time datetime="2019-04-12T15:02:28.000Z" itemprop="datePublished">2019-04-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+  </div>
 
-  <div id="content-outer">
-    <div id="content-inner">
-      
-      
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL 分库分表
+    </h1>
   
 
-  <article id="post">
-    <h1>MySQL 分库分表</h1>
-    <p class="page-title-sub">
-      <span id = "post-title-date">Created at 2019-04-12</span>
-      
-        <span id = "post-title-updated">Updated at 2020-07-02</span>
-      
-      
-      <span id = "post-title-categories">Category
-      
-      
-        
-        
-        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-      
-      </span>
-      
-      
-        <span id = "post-title-tags">
-          Tag
-          
-          
-            
-            
-            <a href="/tags/MySQL/">MySQL</a>
-          
-        </span>
-      
-      <span id="/2019/04/12/MySQL-分库分表/" class="leancloud-visitors" data-flag-title="MySQL 分库分表">
-        <i class="leancloud-visitors-count"></i>
-        <em class="post-meta-item-text"> views </em>
-      </span>
-    </p>
+      </header>
     
-    <h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><h2 id="分片（水平分割）"><a href="#分片（水平分割）" class="headerlink" title="分片（水平分割）"></a>分片（水平分割）</h2><p>水平切分又称为 Sharding，它是将同一个表中的记录拆分到多个结构相同的表中。<br>当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓存单个数据库的压力。</p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><h2 id="分片（水平分割）"><a href="#分片（水平分割）" class="headerlink" title="分片（水平分割）"></a>分片（水平分割）</h2><p>水平切分又称为 Sharding，它是将同一个表中的记录拆分到多个结构相同的表中。<br>当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓存单个数据库的压力。</p>
 <h3 id="水平切分，到底是分库还是分表"><a href="#水平切分，到底是分库还是分表" class="headerlink" title="水平切分，到底是分库还是分表"></a>水平切分，到底是分库还是分表</h3><p>建议分库</p>
 <ul>
 <li>分表依然公用一个数据库文件，仍然有磁盘 IO 的竞争</li>
@@ -335,18 +267,93 @@
 <ol>
 <li>修改 pom.xml 增加 dependency，需要添加两个 jar，sharding-jdbc-core 和 sharding-jdbc-config-spring。</li>
 </ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dangdang<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sharding-jdbc-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dangdang<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sharding-jdbc-config-spring<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.dangdang<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.dangdang<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-config-spring<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="2">
 <li>修改 Spring 中 Database 部分的配置</li>
 </ol>
 <p>原 Database 配置</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span><span class="attr">class</span>=<span class="string">"org.apache.tomcat.jdbc.pool.DataSource"</span><span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">propertyname="driverClassName"value="com.mysql.jdbc.Driver"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">propertyname="url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql://localhost:3306/sharding"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">propertyname="username"</span> <span class="attr">value</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">propertyname="password"</span> <span class="attr">value</span>=<span class="string">"sharding"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;bean id="dataSource"class="org.apache.tomcat.jdbc.pool.DataSource"destroy-method="close">
+
+  &lt;propertyname="driverClassName"value="com.mysql.jdbc.Driver"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="url" value="jdbc:mysql://localhost:3306/sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="username" value="root"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+  &lt;propertyname="password" value="sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>修改后的配置</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beanid="db-node-0"class="org.apache.tomcat.jdbc.pool.DataSource"destroy-method="close"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span><span class="attr">value</span>=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span><span class="attr">value</span>=<span class="string">"jdbc:mysql://localhost:3306/sharding"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span><span class="attr">value</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span><span class="attr">value</span>=<span class="string">"sharding"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdb:strategyid="historyTableStrategy"</span></span></span><br><span class="line"><span class="tag"></span></span><br><span class="line"><span class="tag"> <span class="attr">sharding-columns</span>=<span class="string">"entity_key"</span></span></span><br><span class="line"><span class="tag"></span></span><br><span class="line"><span class="tag"> <span class="attr">algorithm-class</span>=<span class="string">"cn.codestory.sharding.SingleKeyTableShardingAlgorithm"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdb:data-sourceid="dataSource"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">rdb:sharding-ruledata-sources="db-node-0"default-data-source="db-node-0"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">rdb:table-rules</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">rdb:table-rulelogic-table="operate_history"</span></span></span><br><span class="line"><span class="tag"></span></span><br><span class="line"><span class="tag">   <span class="attr">actual-tables</span>=<span class="string">"operate_history_0,operate_history_1,operate_history_2,operate_history_3"</span></span></span><br><span class="line"><span class="tag"></span></span><br><span class="line"><span class="tag">   <span class="attr">table-strategy</span>=<span class="string">"historyTableStrategy"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;/<span class="name">rdb:table-rules</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;/<span class="name">rdb:sharding-rule</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdb:data-source</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;beanid="db-node-0"class="org.apache.tomcat.jdbc.pool.DataSource"destroy-method="close">
+
+ &lt;property name="driverClassName"value="com.mysql.jdbc.Driver"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="url"value="jdbc:mysql://localhost:3306/sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="username"value="root"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+ &lt;property name="password"value="sharding"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+
+&lt;rdb:strategyid="historyTableStrategy"
+
+ sharding-columns="entity_key"
+
+ algorithm-class="cn.codestory.sharding.SingleKeyTableShardingAlgorithm"/>
+
+&lt;rdb:data-sourceid="dataSource">
+
+ &lt;rdb:sharding-ruledata-sources="db-node-0"default-data-source="db-node-0">
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">rdb:</span>table-rules</span><span class="token punctuation">></span></span>
+
+   &lt;rdb:table-rulelogic-table="operate_history"
+
+   actual-tables="operate_history_0,operate_history_1,operate_history_2,operate_history_3"
+
+   table-strategy="historyTableStrategy" />
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>table-rules</span><span class="token punctuation">></span></span>
+
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>sharding-rule</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">rdb:</span>data-source</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="3">
 <li>编写类 SingleKeyTableShardingAlgorithm，这个类用来根据 entity_key 值确定使用的分表名。参考 sharding 提供的示例代码进行修改。核心代码如下</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Collection&lt;String&gt; <span class="title">doInSharding</span><span class="params">(Collection&lt;String&gt; availableTargetNames, ShardingValue&lt;Long&gt; shardingValue)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这是一个简单的实现，对 entity_key 进行求模，用余数确定数据表名。</span></span><br><span class="line">    <span class="keyword">int</span> targetCount = availableTargetNames.size();</span><br><span class="line">    Collection&lt;String&gt; result = newLinkedHashSet &lt;&gt;(targetCount);</span><br><span class="line">    Collection&lt;Long&gt; values = shardingValue.getValues();</span><br><span class="line">    <span class="keyword">for</span> (Long value : values) &#123;</span><br><span class="line">        <span class="keyword">for</span> (String tableNames : availableTargetNames) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tableNames.endsWith(value % targetCount + <span class="string">""</span>)) &#123;</span><br><span class="line">                result.add(tableNames);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">doInSharding</span><span class="token punctuation">(</span>Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> availableTargetNames<span class="token punctuation">,</span> ShardingValue<span class="token operator">&lt;</span>Long<span class="token operator">></span> shardingValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//这是一个简单的实现，对 entity_key 进行求模，用余数确定数据表名。</span>
+    <span class="token keyword">int</span> targetCount <span class="token operator">=</span> availableTargetNames<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Collection<span class="token operator">&lt;</span>String<span class="token operator">></span> result <span class="token operator">=</span> newLinkedHashSet <span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>targetCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Collection<span class="token operator">&lt;</span>Long<span class="token operator">></span> values <span class="token operator">=</span> shardingValue<span class="token punctuation">.</span><span class="token function">getValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>Long value <span class="token operator">:</span> values<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>String tableNames <span class="token operator">:</span> availableTargetNames<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>tableNames<span class="token punctuation">.</span><span class="token function">endsWith</span><span class="token punctuation">(</span>value <span class="token operator">%</span> targetCount <span class="token operator">+</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>tableNames<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="4">
 <li>修改主键生成方法：因为数据分表保存，不能使用 identify 方式生成数据表主键。如果主键是 String 类型，可以考虑使用 uuid 生成方法，但它查询效率会相对比较低。如果使用 long 型主键，可以使用其他方式，一定要确保各个子表中的主键不重复。</li>
 <li>历史数据的处理：根据数据分表的规则，需要对原有数据包的数据进行迁移，分别移动到四个数据表中。如果不做这一步，或者数据迁移到了错误的数据表，后续将会查询不到这些数据。</li>
@@ -365,184 +372,153 @@
 <li><a href="https://juejin.im/post/5d6fc8eff265da03ef7a324b" target="_blank" rel="noopener">分布式id生成方案总结</a></li>
 </ul>
 
-  </article>
-  <div class="random-toc-area">
-  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
-  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
-  <div class="random-toc">
-    <h2>Table of Content</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分库分表"><span class="toc-text">分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分片（水平分割）"><span class="toc-text">分片（水平分割）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#水平切分，到底是分库还是分表"><span class="toc-text">水平切分，到底是分库还是分表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sharding-策略"><span class="toc-text">Sharding 策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决的问题"><span class="toc-text">解决的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垂直切分"><span class="toc-text">垂直切分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-1"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分区"><span class="toc-text">分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作原理"><span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分区的使用场景"><span class="toc-text">分区的使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制"><span class="toc-text">限制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分布式ID生成方案"><span class="toc-text">分布式ID生成方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是分布式中间件"><span class="toc-text">什么是分布式中间件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分布式中间件"><span class="toc-text">分布式中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#直连数据库模式"><span class="toc-text">直连数据库模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读写分离模式"><span class="toc-text">读写分离模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据分片模式"><span class="toc-text">数据分片模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分库分表后的问题"><span class="toc-text">分库分表后的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#是否分库分表"><span class="toc-text">是否分库分表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#手动分表的方式"><span class="toc-text">手动分表的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#根据取值范围"><span class="toc-text">根据取值范围</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点-2"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#哈希取模"><span class="toc-text">哈希取模</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用中间件分表"><span class="toc-text">使用中间件分表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#从手动分表改造成中间件分表的步骤"><span class="toc-text">从手动分表改造成中间件分表的步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Sharding-JDBC简介"><span class="toc-text">Sharding-JDBC简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#与常见开源产品对比"><span class="toc-text">与常见开源产品对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现原理"><span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分片规则配置"><span class="toc-text">分片规则配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-解析"><span class="toc-text">SQL 解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL改写"><span class="toc-text">SQL改写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL路由"><span class="toc-text">SQL路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL执行"><span class="toc-text">SQL执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结果归并"><span class="toc-text">结果归并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sharding-JDBC-具体使用"><span class="toc-text">Sharding-JDBC 具体使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据分表规则的一些考虑"><span class="toc-text">数据分表规则的一些考虑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liuyuqi21.github.io/2019/04/12/MySQL-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" data-id="ckd5czhhm000onnnr7sy83sbz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li></ul>
+
+    </footer>
   </div>
-</div>
-
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/04/14/%E6%98%A5%E6%8B%9B%E9%9D%A2%E7%BB%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          春招面经
+        
+      </div>
+    </a>
   
   
-<nav id="pagination">
-  
-    <a href="/2019/04/14/%E6%98%A5%E6%8B%9B%E9%9D%A2%E7%BB%8F/" class="prev">&larr; Prev post 春招面经</a>
-  
-
-  
-
-  
-    <a href="/2019/04/10/PHP-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="next">Next post PHP 基础 &rarr;</a>
+    <a href="/2019/04/10/PHP-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PHP 基础</div>
+    </a>
   
 </nav>
 
-  <!-- JiaThis Button BEGIN -->
+  
+</article>
 
-<!-- JiaThis Button END -->
-
-
-      
-      
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98/">问题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
     </div>
   </div>
 
-  <div id="bottom-outer">
-    <div id="bottom-inner">
-      Site by Cellophane using
-      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
-      <br>
-      
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Laravel/" rel="tag">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redisson/" rel="tag">redisson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/" rel="tag">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/" rel="tag">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer/" rel="tag">剑指Offer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%98%E7%9B%AE/" rel="tag">题目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
     </div>
   </div>
-</div>
-
-</div>
 
 
-<div id="user-card">
-  <div class="center-field">
-    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
-    <p id="description"></p>
-    <ul class="social-icon">
   
-  
-    <li>
-      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
-        
-          <i class="icon iconfont github">&#xe606;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="823458299@qq.com">
-        
-          M
-        
-      </a>
-    </li>
-  
-</ul>
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PHP/" style="font-size: 17.5px;">PHP</a> <a href="/tags/Redis/" style="font-size: 17.5px;">Redis</a> <a href="/tags/RocketMQ/" style="font-size: 12.5px;">RocketMQ</a> <a href="/tags/ZooKeeper/" style="font-size: 10px;">ZooKeeper</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/redisson/" style="font-size: 10px;">redisson</a> <a href="/tags/spring/" style="font-size: 10px;">spring</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 10px;">乐观锁</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 12.5px;">分布式事务</a> <a href="/tags/%E5%89%91%E6%8C%87Offer/" style="font-size: 20px;">剑指Offer</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 10px;">消息队列</a> <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" style="font-size: 10px;">知识点</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 12.5px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">读书笔记</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 12.5px;">面经</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A2%98%E7%9B%AE/" style="font-size: 15px;">题目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 10px;">高并发</a>
+    </div>
   </div>
-</div>
 
-
-<div id="btn-view">Hide</div>
-
-<script>
-// is trigger analytics / tongji script
-var isIgnoreHost = false;
-
-if(window && window.location && window.location.host) {
-  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
-    return 0 === window.location.host.indexOf(address);
-  });
-}
-
-var isTriggerAnalytics = !( true && isIgnoreHost );
-
-</script>
-
-
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
+    </div>
+  </div>
 
 
   
-  
-    <script src="/js/jquery-2.2.3.min.js"></script>
-  
-    <script src="/js/vegas.min.js"></script>
-  
-    <script src="/js/random.js"></script>
-  
-    <script src="/js/highlight.pack.js"></script>
-  
-    <script src="/js/jquery.mousewheel.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox-thumbs.js"></script>
-  
-    <script src="/js/plyr.js"></script>
-  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">leetcode 数据结构</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">面试范围</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">Java 并发</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/typora%E5%BF%AB%E6%8D%B7%E9%94%AE/">typora 快捷键</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
 
-<script>
-
-  // fancybox
-  var backgroundImages = [];
   
-  $('#post').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
-      var alt = this.alt || this.title;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'post' + i);
-    });
-  });
-  $(".fancybox").fancybox();
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Cellophane<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
-var unsplashConfig = {"gravity":"center"};
-// is show background images
-var turnoffBackgroundImage = false;
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-var backgroundColor = "34495E";
+<script src="/js/script.js"></script>
 
-$(".fancybox-thumb").fancybox({
-  prevEffect: 'none',
-  nextEffect: 'none',
-  helpers: {
-    title: {
-      type: 'outside'
-    },
-    thumbs: {
-      width: 50,
-      height: 50
-    }
-  }
-});
 
-// show video with plyr
-$(".video-container iframe").each(function(i){
-  var url = $(this).attr('src');
-  var id = url.split('/').pop();
-  var plyrContainer = document.createElement('div');
-  plyrContainer.className = 'plyr';
-  var plyrElement = document.createElement('div');
-  plyrElement.dataset.videoId = id;
-  switch(true) {
-    case url.search('youtube.com') >= 0:
-      plyrElement.dataset.type = 'youtube';
-      break;
-    case url.search('vimeo.com') >= 0:
-      plyrElement.dataset.type = 'vimeo';
-      break;
-    default:
-      return;
-  };
-  plyrContainer.appendChild(plyrElement);
-  $(this).parent().html(plyrContainer);
-});
-plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
-</script>
+
+
+  </div>
 </body>
 </html>
-

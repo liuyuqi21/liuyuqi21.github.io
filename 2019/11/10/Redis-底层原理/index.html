@@ -1,169 +1,96 @@
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
   
-  <meta name="author" content="Cellophane">
-  
-  
-  
-  
-    <meta name="description" content="高并发和快速的原因
-redis 是基于内存的
-redis 是单线程的，省去了很多上下文切换线程的时间
-redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll 中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。
-
-为什么单线程Redis 的性能...">
-  
-  <title>Redis-底层原理 [ Cellophane's blog ]</title>
-  
-  
-    <link rel="shortcut icon" href="/icon.ico">
-  
-  
-  
-<link rel="stylesheet" href="/css/random.css">
-<link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
-<link rel="stylesheet" href="/css/jquery.fancybox.css">
-<link rel="stylesheet" href="/css/iconfont/iconfont.css">
-<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
-<link rel="stylesheet" href="/css/plyr.css">
 
   
-<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  <title>Redis-底层原理 | Cellophane&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="高并发和快速的原因 redis 是基于内存的 redis 是单线程的，省去了很多上下文切换线程的时间 redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll 中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。  为什么单线程Redis 的性能瓶颈不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis-底层原理">
+<meta property="og:url" content="https://liuyuqi21.github.io/2019/11/10/Redis-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Cellophane&#39;s blog">
+<meta property="og:description" content="高并发和快速的原因 redis 是基于内存的 redis 是单线程的，省去了很多上下文切换线程的时间 redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll 中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。  为什么单线程Redis 的性能瓶颈不">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/20200412124809.png">
+<meta property="article:published_time" content="2019-11-10T12:12:32.000Z">
+<meta property="article:modified_time" content="2020-07-28T02:52:43.198Z">
+<meta property="article:author" content="Cellophane">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/cellophane/image/raw/master/20200412124809.png">
+  
+  
+    <link rel="icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
-<div class="side-navigate hide-area">
-  
-    <div class="item prev">
-      <a href="/2019/11/12/CPU%E7%BC%93%E5%AD%98%E7%9B%B8%E5%85%B3-MESI%E5%8D%8F%E8%AE%AE/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        CPU 缓存相关-MESI 协议
-      </div>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Cellophane&#39;s blog</a>
+      </h1>
+      
     </div>
-  
-  
-    <div class="item next">
-      <a href="/2019/11/03/Redis-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        Redis-基本操作
-      </div>
-    </div>
-  
-</div>
-<div id="outer-container" class="hide-area">
-<div id="container">
-  <div id="menu-outer" class="slide-down">
-    <div id="menu-inner">
-      <div id="brand">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a onClick="openUserCard()">
-          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
-          <div id="homelink">Cellophane's blog</div>
-        </a>
-      </div>
-      <div id="menu-list">
-        <ul>
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-          
-            <li>
-          
-            <a href="/index.html">Home</a>
-            
-          </li>
+      </nav>
+      <nav id="sub-nav">
         
-          
-            <li>
-          
-            <a href="/archives">Archives</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/tags">Tags</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/categories">Categories</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/about">About</a>
-            
-          </li>
-        
-        </ul>
-      </div>
-      <div id="show-menu">
-        <button>Menu</button>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liuyuqi21.github.io"></form>
       </div>
     </div>
   </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Redis-底层原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/10/Redis-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="article-date">
+  <time datetime="2019-11-10T12:12:32.000Z" itemprop="datePublished">2019-11-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+  </div>
 
-  <div id="content-outer">
-    <div id="content-inner">
-      
-      
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Redis-底层原理
+    </h1>
   
 
-  <article id="post">
-    <h1>Redis-底层原理</h1>
-    <p class="page-title-sub">
-      <span id = "post-title-date">Created at 2019-11-10</span>
-      
-        <span id = "post-title-updated">Updated at 2020-07-02</span>
-      
-      
-      <span id = "post-title-categories">Category
-      
-      
-        
-        
-        <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
-      
-      </span>
-      
-      
-        <span id = "post-title-tags">
-          Tag
-          
-          
-            
-            
-            <a href="/tags/Redis/">Redis</a>
-          
-        </span>
-      
-      <span id="/2019/11/10/Redis-底层原理/" class="leancloud-visitors" data-flag-title="Redis-底层原理">
-        <i class="leancloud-visitors-count"></i>
-        <em class="post-meta-item-text"> views </em>
-      </span>
-    </p>
+      </header>
     
-    <h2 id="高并发和快速的原因"><a href="#高并发和快速的原因" class="headerlink" title="高并发和快速的原因"></a>高并发和快速的原因</h2><ul>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="高并发和快速的原因"><a href="#高并发和快速的原因" class="headerlink" title="高并发和快速的原因"></a>高并发和快速的原因</h2><ul>
 <li>redis 是基于内存的</li>
 <li>redis 是单线程的，省去了很多上下文切换线程的时间</li>
 <li>redis 使用<strong>多路复用</strong>技术，可以处理并发的连接。非阻塞 IO 内部实现采用 epoll，采用了 epoll + 自己实现的简单的事件框架。epoll 中的读、写、关闭、连接都转化成了事件，然后利用 epoll 的多路复用特性，绝不在 IO 上浪费一点时间。</li>
@@ -206,11 +133,49 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
 <li>zset 使用 dict 和 skiplist 共同维护</li>
 </ul>
 <p>Redis 的字典使用哈希表作为底层实现，一个哈希表里面可以有多个哈希表的节点，而每个哈希表节点就保存了字典的一个键值对。</p>
-<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span>&#123;</span></span><br><span class="line">    <span class="comment">//哈希表数组， 数组中的每个元素都是一个指向 dict.h/dictEntry 结构的指针， 每个 dictEntry 结构保存着一个键值对。</span></span><br><span class="line">    dictEntry **table;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//哈希表大小</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="built_in">size</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//哈希表大小掩码，用于计算索引值</span></span><br><span class="line">    <span class="comment">//总是等于 size-1</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//该哈希表已有节点的数量，这个属性和哈希值一起决定一个键应该被放到 table 数组的哪个索引上面。</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> userd;</span><br><span class="line">&#125; dictht;</span><br></pre></td></tr></table></figure>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> dictht<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//哈希表数组， 数组中的每个元素都是一个指向 dict.h/dictEntry 结构的指针， 每个 dictEntry 结构保存着一个键值对。</span>
+    dictEntry <span class="token operator">*</span><span class="token operator">*</span>table<span class="token punctuation">;</span>
 
-<h3 id="哈希表节点"><a href="#哈希表节点" class="headerlink" title="哈希表节点"></a>哈希表节点</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span>&#123;</span></span><br><span class="line">    <span class="comment">//键</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//值</span></span><br><span class="line">    <span class="keyword">union</span>&#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//指向下个哈希表节点，形成链表</span></span><br><span class="line">    <span class="comment">//这个指针可以将多个哈希值相同的键值对连接在一起，以此来解决键冲突的问题</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+    <span class="token comment" spellcheck="true">//哈希表大小</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> size<span class="token punctuation">;</span>
 
-<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span>&#123;</span></span><br><span class="line">    <span class="comment">//类型特定函数</span></span><br><span class="line">    dictType *type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有数据</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//哈希表</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//rehash 索引</span></span><br><span class="line">    <span class="comment">//当 rehash 不在进行时，值为 -1</span></span><br><span class="line">    <span class="keyword">int</span> rehashidx;</span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure>
+    <span class="token comment" spellcheck="true">//哈希表大小掩码，用于计算索引值</span>
+    <span class="token comment" spellcheck="true">//总是等于 size-1</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> sizemask<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//该哈希表已有节点的数量，这个属性和哈希值一起决定一个键应该被放到 table 数组的哪个索引上面。</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> userd<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> dictht<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="哈希表节点"><a href="#哈希表节点" class="headerlink" title="哈希表节点"></a>哈希表节点</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> dictEntry<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//键</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>key<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//值</span>
+    <span class="token keyword">union</span><span class="token punctuation">{</span>
+        <span class="token keyword">void</span> <span class="token operator">*</span>val<span class="token punctuation">;</span>
+        uint64_t u64<span class="token punctuation">;</span>
+        int64_t s64<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> v<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//指向下个哈希表节点，形成链表</span>
+    <span class="token comment" spellcheck="true">//这个指针可以将多个哈希值相同的键值对连接在一起，以此来解决键冲突的问题</span>
+    <span class="token keyword">struct</span> dictEntry <span class="token operator">*</span>next<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> dictEntry<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> dict<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//类型特定函数</span>
+    dictType <span class="token operator">*</span>type<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//私有数据</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>privdata<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//哈希表</span>
+    dictht ht<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//rehash 索引</span>
+    <span class="token comment" spellcheck="true">//当 rehash 不在进行时，值为 -1</span>
+    <span class="token keyword">int</span> rehashidx<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> dict<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>type 属性是一个指向 dictType 结构的指针，每个 ditType 结构保存了一簇用于操作特定类型键值对的函数，Redis 会为用途不同的字典设置不同的类型特定函数。</li>
 <li>privdata 属性保存了需要传给那些类型特定函数的可选参数。</li>
@@ -250,7 +215,33 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
 <li>level 记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不计算在内）</li>
 <li>length 记录跳跃表的长度（表头节点的层数不计算在内）</li>
 </ul>
-<h3 id="zskiplistNode-结构"><a href="#zskiplistNode-结构" class="headerlink" title="zskiplistNode 结构"></a>zskiplistNode 结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后退指针</span></span><br><span class="line">    <span class="comment">// 在程序从表尾向表头遍历时使用</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 分值</span></span><br><span class="line">    <span class="comment">// 节点按各自所保存的分值从小到大排列</span></span><br><span class="line">    <span class="keyword">double</span> score;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 成员对象</span></span><br><span class="line">    robj *obj;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 层</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 前进指针</span></span><br><span class="line">        <span class="comment">// 用于从表头向表尾方向访问节点</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 跨度</span></span><br><span class="line">        <span class="comment">// 用于记录两个节点之间的距离</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</span><br><span class="line"></span><br><span class="line">    &#125; level[];</span><br><span class="line"></span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+<h3 id="zskiplistNode-结构"><a href="#zskiplistNode-结构" class="headerlink" title="zskiplistNode 结构"></a>zskiplistNode 结构</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplistNode <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">// 后退指针</span>
+    <span class="token comment" spellcheck="true">// 在程序从表尾向表头遍历时使用</span>
+    <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>backward<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 分值</span>
+    <span class="token comment" spellcheck="true">// 节点按各自所保存的分值从小到大排列</span>
+    <span class="token keyword">double</span> score<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 成员对象</span>
+    robj <span class="token operator">*</span>obj<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 层</span>
+    <span class="token keyword">struct</span> zskiplistLevel <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">// 前进指针</span>
+        <span class="token comment" spellcheck="true">// 用于从表头向表尾方向访问节点</span>
+        <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>forward<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 跨度</span>
+        <span class="token comment" spellcheck="true">// 用于记录两个节点之间的距离</span>
+        <span class="token keyword">unsigned</span> <span class="token keyword">int</span> span<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span> level<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span> zskiplistNode<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="层（level）"><a href="#层（level）" class="headerlink" title="层（level）"></a>层（level）</h3><p>level 数组可以包含多个元素，每个元素都包含一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度。</p>
 <p>每次创建一个新的跳跃表节点的时候，程序都根据幂次定律随机生成一个介于 1 和 32 之间的值作为 level 数组的大小，这个大小就是层的“高度”。一般来说， 层的数量越多， 访问其他节点的速度就越快。</p>
 <ul>
@@ -269,184 +260,153 @@ redis 使用多路复用技术，可以处理并发的连接。非阻塞 IO 内�
 <li><a href="https://www.cnblogs.com/kismetv/p/8654978.html" target="_blank" rel="noopener">深入学习Redis（1）：Redis内存模型</a></li>
 </ul>
 
-  </article>
-  <div class="random-toc-area">
-  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
-  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
-  <div class="random-toc">
-    <h2>Table of Content</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#高并发和快速的原因"><span class="toc-text">高并发和快速的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么单线程"><span class="toc-text">为什么单线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#其他开源软件采用的模型"><span class="toc-text">其他开源软件采用的模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单线程的劣势"><span class="toc-text">单线程的劣势</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过期策略"><span class="toc-text">过期策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#淘汰策略"><span class="toc-text">淘汰策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#底层数据结构"><span class="toc-text">底层数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SDS-简单动态字符串"><span class="toc-text">SDS 简单动态字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#O-1-获取字符串的长度"><span class="toc-text">O(1) 获取字符串的长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#杜绝缓冲区溢出"><span class="toc-text">杜绝缓冲区溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少内存分配次数"><span class="toc-text">减少内存分配次数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制安全"><span class="toc-text">二进制安全</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#robj（Redis-Object）"><span class="toc-text">robj（Redis Object）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dict-字典"><span class="toc-text">dict 字典</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希表"><span class="toc-text">哈希表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希表节点"><span class="toc-text">哈希表节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字典"><span class="toc-text">字典</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈希算法"><span class="toc-text">哈希算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决键冲突"><span class="toc-text">解决键冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rehash（重新散列）"><span class="toc-text">rehash（重新散列）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渐进式-rehash"><span class="toc-text">渐进式 rehash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链表"><span class="toc-text">链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跳跃表"><span class="toc-text">跳跃表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist-结构"><span class="toc-text">zskiplist 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplistNode-结构"><span class="toc-text">zskiplistNode 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#层（level）"><span class="toc-text">层（level）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么用跳表不用平衡树"><span class="toc-text">为什么用跳表不用平衡树</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liuyuqi21.github.io/2019/11/10/Redis-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" data-id="ckd5czhhx001qnnnr293adu1c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
   </div>
-</div>
-
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/11/12/CPU%E7%BC%93%E5%AD%98%E7%9B%B8%E5%85%B3-MESI%E5%8D%8F%E8%AE%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CPU 缓存相关-MESI 协议
+        
+      </div>
+    </a>
   
   
-<nav id="pagination">
-  
-    <a href="/2019/11/12/CPU%E7%BC%93%E5%AD%98%E7%9B%B8%E5%85%B3-MESI%E5%8D%8F%E8%AE%AE/" class="prev">&larr; Prev post CPU 缓存相关-MESI 协议</a>
-  
-
-  
-
-  
-    <a href="/2019/11/03/Redis-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="next">Next post Redis-基本操作 &rarr;</a>
+    <a href="/2019/11/03/Redis-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis-基本操作</div>
+    </a>
   
 </nav>
 
-  <!-- JiaThis Button BEGIN -->
+  
+</article>
 
-<!-- JiaThis Button END -->
-
-
-      
-      
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98/">问题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
     </div>
   </div>
 
-  <div id="bottom-outer">
-    <div id="bottom-inner">
-      Site by Cellophane using
-      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
-      <br>
-      
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Laravel/" rel="tag">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redisson/" rel="tag">redisson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/" rel="tag">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/" rel="tag">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer/" rel="tag">剑指Offer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%98%E7%9B%AE/" rel="tag">题目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
     </div>
   </div>
-</div>
-
-</div>
 
 
-<div id="user-card">
-  <div class="center-field">
-    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
-    <p id="description"></p>
-    <ul class="social-icon">
   
-  
-    <li>
-      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
-        
-          <i class="icon iconfont github">&#xe606;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="823458299@qq.com">
-        
-          M
-        
-      </a>
-    </li>
-  
-</ul>
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PHP/" style="font-size: 17.5px;">PHP</a> <a href="/tags/Redis/" style="font-size: 17.5px;">Redis</a> <a href="/tags/RocketMQ/" style="font-size: 12.5px;">RocketMQ</a> <a href="/tags/ZooKeeper/" style="font-size: 10px;">ZooKeeper</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/redisson/" style="font-size: 10px;">redisson</a> <a href="/tags/spring/" style="font-size: 10px;">spring</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 10px;">乐观锁</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 12.5px;">分布式事务</a> <a href="/tags/%E5%89%91%E6%8C%87Offer/" style="font-size: 20px;">剑指Offer</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 10px;">消息队列</a> <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" style="font-size: 10px;">知识点</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 12.5px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">读书笔记</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 12.5px;">面经</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A2%98%E7%9B%AE/" style="font-size: 15px;">题目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 10px;">高并发</a>
+    </div>
   </div>
-</div>
 
-
-<div id="btn-view">Hide</div>
-
-<script>
-// is trigger analytics / tongji script
-var isIgnoreHost = false;
-
-if(window && window.location && window.location.host) {
-  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
-    return 0 === window.location.host.indexOf(address);
-  });
-}
-
-var isTriggerAnalytics = !( true && isIgnoreHost );
-
-</script>
-
-
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
+    </div>
+  </div>
 
 
   
-  
-    <script src="/js/jquery-2.2.3.min.js"></script>
-  
-    <script src="/js/vegas.min.js"></script>
-  
-    <script src="/js/random.js"></script>
-  
-    <script src="/js/highlight.pack.js"></script>
-  
-    <script src="/js/jquery.mousewheel.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox-thumbs.js"></script>
-  
-    <script src="/js/plyr.js"></script>
-  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">leetcode 数据结构</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">面试范围</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">Java 并发</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/typora%E5%BF%AB%E6%8D%B7%E9%94%AE/">typora 快捷键</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
 
-<script>
-
-  // fancybox
-  var backgroundImages = [];
   
-  $('#post').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
-      var alt = this.alt || this.title;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'post' + i);
-    });
-  });
-  $(".fancybox").fancybox();
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Cellophane<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
-var unsplashConfig = {"gravity":"center"};
-// is show background images
-var turnoffBackgroundImage = false;
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-var backgroundColor = "34495E";
+<script src="/js/script.js"></script>
 
-$(".fancybox-thumb").fancybox({
-  prevEffect: 'none',
-  nextEffect: 'none',
-  helpers: {
-    title: {
-      type: 'outside'
-    },
-    thumbs: {
-      width: 50,
-      height: 50
-    }
-  }
-});
 
-// show video with plyr
-$(".video-container iframe").each(function(i){
-  var url = $(this).attr('src');
-  var id = url.split('/').pop();
-  var plyrContainer = document.createElement('div');
-  plyrContainer.className = 'plyr';
-  var plyrElement = document.createElement('div');
-  plyrElement.dataset.videoId = id;
-  switch(true) {
-    case url.search('youtube.com') >= 0:
-      plyrElement.dataset.type = 'youtube';
-      break;
-    case url.search('vimeo.com') >= 0:
-      plyrElement.dataset.type = 'vimeo';
-      break;
-    default:
-      return;
-  };
-  plyrContainer.appendChild(plyrElement);
-  $(this).parent().html(plyrContainer);
-});
-plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
-</script>
+
+
+  </div>
 </body>
 </html>
-

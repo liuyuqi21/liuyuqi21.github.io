@@ -1,171 +1,97 @@
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
   
-  <meta name="author" content="Cellophane">
-  
-  
-  
-  
-    <meta name="description" content="第一章 了解 Web 及网络基础IPIP(Internet Protocol) 网际协议位于网络层。IP 地址指明了节点被分配到的地址，MAC 地址是指网卡所属的固定地址。IP 地址可以和 MAC 地址配对。IP 地址可变换，但 MAC 地址基本上不会改。ARP 是一种用以地址解析的协议，根据通信放的 IP 地址就可以反查出对应的 MAC 地址。
-TCPTCP 位于传输层，提供可靠的字节流服...">
-  
-  <title>图解 HTTP 笔记 [ Cellophane's blog ]</title>
-  
-  
-    <link rel="shortcut icon" href="/icon.ico">
-  
-  
-  
-<link rel="stylesheet" href="/css/random.css">
-<link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
-<link rel="stylesheet" href="/css/jquery.fancybox.css">
-<link rel="stylesheet" href="/css/iconfont/iconfont.css">
-<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
-<link rel="stylesheet" href="/css/plyr.css">
 
   
-<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  <title>图解 HTTP 笔记 | Cellophane&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第一章 了解 Web 及网络基础IPIP(Internet Protocol) 网际协议位于网络层。IP 地址指明了节点被分配到的地址，MAC 地址是指网卡所属的固定地址。IP 地址可以和 MAC 地址配对。IP 地址可变换，但 MAC 地址基本上不会改。ARP 是一种用以地址解析的协议，根据通信放的 IP 地址就可以反查出对应的 MAC 地址。 TCPTCP 位于传输层，提供可靠的字节流服务。字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图解 HTTP 笔记">
+<meta property="og:url" content="https://liuyuqi21.github.io/2019/08/25/HTTP%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
+<meta property="og:site_name" content="Cellophane&#39;s blog">
+<meta property="og:description" content="第一章 了解 Web 及网络基础IPIP(Internet Protocol) 网际协议位于网络层。IP 地址指明了节点被分配到的地址，MAC 地址是指网卡所属的固定地址。IP 地址可以和 MAC 地址配对。IP 地址可变换，但 MAC 地址基本上不会改。ARP 是一种用以地址解析的协议，根据通信放的 IP 地址就可以反查出对应的 MAC 地址。 TCPTCP 位于传输层，提供可靠的字节流服务。字">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/cellophane/image/raw/master/20200507213447.png">
+<meta property="article:published_time" content="2019-08-25T09:45:12.000Z">
+<meta property="article:modified_time" content="2020-07-28T02:52:43.185Z">
+<meta property="article:author" content="Cellophane">
+<meta property="article:tag" content="HTTP">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/cellophane/image/raw/master/20200507213447.png">
+  
+  
+    <link rel="icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
-<div class="side-navigate hide-area">
-  
-    <div class="item prev">
-      <a href="/2019/09/10/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        分布式事务
-      </div>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Cellophane&#39;s blog</a>
+      </h1>
+      
     </div>
-  
-  
-    <div class="item next">
-      <a href="/2019/08/21/elasticsearch/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        Elasticsearch 相关
-      </div>
-    </div>
-  
-</div>
-<div id="outer-container" class="hide-area">
-<div id="container">
-  <div id="menu-outer" class="slide-down">
-    <div id="menu-inner">
-      <div id="brand">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a onClick="openUserCard()">
-          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
-          <div id="homelink">Cellophane's blog</div>
-        </a>
-      </div>
-      <div id="menu-list">
-        <ul>
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-          
-            <li>
-          
-            <a href="/index.html">Home</a>
-            
-          </li>
+      </nav>
+      <nav id="sub-nav">
         
-          
-            <li>
-          
-            <a href="/archives">Archives</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/tags">Tags</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/categories">Categories</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/about">About</a>
-            
-          </li>
-        
-        </ul>
-      </div>
-      <div id="show-menu">
-        <button>Menu</button>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liuyuqi21.github.io"></form>
       </div>
     </div>
   </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-HTTP知识点" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/25/HTTP%E7%9F%A5%E8%AF%86%E7%82%B9/" class="article-date">
+  <time datetime="2019-08-25T09:45:12.000Z" itemprop="datePublished">2019-08-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
+  </div>
 
-  <div id="content-outer">
-    <div id="content-inner">
-      
-      
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图解 HTTP 笔记
+    </h1>
   
 
-  <article id="post">
-    <h1>图解 HTTP 笔记</h1>
-    <p class="page-title-sub">
-      <span id = "post-title-date">Created at 2019-08-25</span>
-      
-        <span id = "post-title-updated">Updated at 2020-07-27</span>
-      
-      
-      <span id = "post-title-categories">Category
-      
-      
-        
-        
-        <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-      
-      </span>
-      
-      
-        <span id = "post-title-tags">
-          Tag
-          
-          
-            
-            
-            <a href="/tags/HTTP/">HTTP</a>
-          
-            
-              /
-            
-            
-            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
-          
-        </span>
-      
-      <span id="/2019/08/25/HTTP知识点/" class="leancloud-visitors" data-flag-title="图解 HTTP 笔记">
-        <i class="leancloud-visitors-count"></i>
-        <em class="post-meta-item-text"> views </em>
-      </span>
-    </p>
+      </header>
     
-    <h1 id="第一章-了解-Web-及网络基础"><a href="#第一章-了解-Web-及网络基础" class="headerlink" title="第一章 了解 Web 及网络基础"></a>第一章 了解 Web 及网络基础</h1><h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><p>IP(Internet Protocol) 网际协议位于网络层。IP 地址指明了节点被分配到的地址，MAC 地址是指网卡所属的固定地址。IP 地址可以和 MAC 地址配对。IP 地址可变换，但 MAC 地址基本上不会改。ARP 是一种用以地址解析的协议，根据通信放的 IP 地址就可以反查出对应的 MAC 地址。</p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="第一章-了解-Web-及网络基础"><a href="#第一章-了解-Web-及网络基础" class="headerlink" title="第一章 了解 Web 及网络基础"></a>第一章 了解 Web 及网络基础</h1><h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><p>IP(Internet Protocol) 网际协议位于网络层。IP 地址指明了节点被分配到的地址，MAC 地址是指网卡所属的固定地址。IP 地址可以和 MAC 地址配对。IP 地址可变换，但 MAC 地址基本上不会改。ARP 是一种用以地址解析的协议，根据通信放的 IP 地址就可以反查出对应的 MAC 地址。</p>
 <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>TCP 位于传输层，提供可靠的字节流服务。字节流服务指，为了方便传输，将大块数据分割成以报文段为单位的数据包管理。可靠的传输服务指，能够把数据准确可靠的传给对方。</p>
 <h2 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h2><p>URI(Uniform Resource Identifier)</p>
 <ul>
@@ -327,8 +253,8 @@ TCPTCP 位于传输层，提供可靠的字节流服...">
 <h3 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h3><p>Pragma 是 HTTP/1.1 之前版本的历史遗留字段，仅作为与 HTTP/1.0 的向后兼容而定义。</p>
 <p>规范定义的形式唯一，Pragma: no-cache。</p>
 <p>通常发送的请求会同时含有下面两个首部字段。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-cache</span><br><span class="line">Pragma: no-cache</span><br></pre></td></tr></table></figure>
-<h3 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h3><p>首部字段 Upgrade 用于检测 HTTP 协议及其他协议是否可使用更高的版本进行通信，其参数值可以用来指定一个完全不同的通信协议。</p>
+<pre><code>Cache-Control: no-cache
+Pragma: no-cache</code></pre><h3 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h3><p>首部字段 Upgrade 用于检测 HTTP 协议及其他协议是否可使用更高的版本进行通信，其参数值可以用来指定一个完全不同的通信协议。</p>
 <p>使用首部字段 Upgrade 时，还需要额外指定 Connection:Upgrade。</p>
 <h3 id="Via"><a href="#Via" class="headerlink" title="Via"></a>Via</h3><p>使用首部字段 Via 是为了追踪客户端与服务器之间的请求和响应报文的传输路径。</p>
 <p>报文经过代理或网关时，会先在首部字段 Via 中附加该服务器的信息，然后再进行转发。这个做法和 traceroute 及电子邮件的 Received 首部的工作机制很类似。</p>
@@ -520,184 +446,153 @@ TCPTCP 位于传输层，提供可靠的字节流服...">
 <li><a href="https://www.bilibili.com/video/BV1At41137Q8/?spm_id_from=333.788.videocard.5" target="_blank" rel="noopener">燕十八-HTTP 视频教程</a></li>
 </ul>
 
-  </article>
-  <div class="random-toc-area">
-  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
-  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
-  <div class="random-toc">
-    <h2>Table of Content</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#第一章-了解-Web-及网络基础"><span class="toc-text">第一章 了解 Web 及网络基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP"><span class="toc-text">IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URI"><span class="toc-text">URI</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第二章-简单的-HTTP-协议"><span class="toc-text">第二章 简单的 HTTP 协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-方法"><span class="toc-text">HTTP 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持久连接"><span class="toc-text">持久连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#管线化"><span class="toc-text">管线化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第三章-HTTP-报文内的-HTTP-信息"><span class="toc-text">第三章 HTTP 报文内的 HTTP 信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#请求"><span class="toc-text">请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应"><span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编码提升传输速度"><span class="toc-text">编码提升传输速度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分割发送的分块传输编码"><span class="toc-text">分割发送的分块传输编码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送多种数据的多部分对象集合"><span class="toc-text">发送多种数据的多部分对象集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取部分内容的范围请求"><span class="toc-text">获取部分内容的范围请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内容协商返回最合适的内容"><span class="toc-text">内容协商返回最合适的内容</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第四章-返回结果的-HTTP-状态码"><span class="toc-text">第四章 返回结果的 HTTP 状态码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2XX-成功"><span class="toc-text">2XX 成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3XX-重定向"><span class="toc-text">3XX 重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#301-Moved-Permanently"><span class="toc-text">301 Moved Permanently</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#302-Found"><span class="toc-text">302 Found</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#303-See-Other"><span class="toc-text">303 See Other</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#304-Not-Modified"><span class="toc-text">304 Not Modified</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#307-Temporary-Redirect"><span class="toc-text">307 Temporary Redirect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4XX-客户端错误"><span class="toc-text">4XX 客户端错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#401-Unauthorized"><span class="toc-text">401 Unauthorized</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#500-服务器错误"><span class="toc-text">500 服务器错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#503-Service-Unavailable"><span class="toc-text">503 Service Unavailable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第五章-与-HTTP-协作的-Web-服务器"><span class="toc-text">第五章 与 HTTP 协作的 Web 服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用单台虚拟主机实现多个域名"><span class="toc-text">用单台虚拟主机实现多个域名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通信数据转发程序-：代理、网关、隧道"><span class="toc-text">通信数据转发程序 ：代理、网关、隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代理"><span class="toc-text">代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存代理"><span class="toc-text">缓存代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#透明代理"><span class="toc-text">透明代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网关"><span class="toc-text">网关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隧道"><span class="toc-text">隧道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#保存资源的缓存"><span class="toc-text">保存资源的缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存的有效期限"><span class="toc-text">缓存的有效期限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端缓存"><span class="toc-text">客户端缓存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-首部"><span class="toc-text">HTTP 首部</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#通用首部字段"><span class="toc-text">通用首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-Control"><span class="toc-text">Cache-Control</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#no-cache"><span class="toc-text">no-cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#s-maxage"><span class="toc-text">s-maxage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#max-age"><span class="toc-text">max-age</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#min-fresh"><span class="toc-text">min-fresh</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#no-transform"><span class="toc-text">no-transform</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Connection"><span class="toc-text">Connection</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#控制不再转发给代理的首部字段"><span class="toc-text">控制不再转发给代理的首部字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#管理持久连接"><span class="toc-text">管理持久连接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pragma"><span class="toc-text">Pragma</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Upgrade"><span class="toc-text">Upgrade</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Via"><span class="toc-text">Via</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#请求首部字段"><span class="toc-text">请求首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accept"><span class="toc-text">Accept</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authorization"><span class="toc-text">Authorization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Host"><span class="toc-text">Host</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Match"><span class="toc-text">If-Match</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Modified-Since"><span class="toc-text">If-Modified-Since</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-None-Match"><span class="toc-text">If-None-Match</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Range"><span class="toc-text">If-Range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Max-Forwards"><span class="toc-text">Max-Forwards</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Range"><span class="toc-text">Range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Referer"><span class="toc-text">Referer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Agent"><span class="toc-text">User-Agent</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应首部字段"><span class="toc-text">响应首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accept-Ranges"><span class="toc-text">Accept-Ranges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Age"><span class="toc-text">Age</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ETag"><span class="toc-text">ETag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Location"><span class="toc-text">Location</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vary"><span class="toc-text">Vary</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实体首部字段"><span class="toc-text">实体首部字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Allow"><span class="toc-text">Allow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expires"><span class="toc-text">Expires</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#确保安全的-HTTPS"><span class="toc-text">确保安全的 HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-的缺点"><span class="toc-text">HTTP 的缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通信使用明文（不加密），内容可能会被窃听"><span class="toc-text">通信使用明文（不加密），内容可能会被窃听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不验证通信方的身份，因此有可能遭遇伪装"><span class="toc-text">不验证通信方的身份，因此有可能遭遇伪装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无法证明报文的完整性，所以有可能已遭篡改"><span class="toc-text">无法证明报文的完整性，所以有可能已遭篡改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="toc-text">HTTP+ 加密 + 认证 + 完整性保护 &#x3D; HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相互交换密钥的公开密钥加密技术"><span class="toc-text">相互交换密钥的公开密钥加密技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPS-采用混合加密机制"><span class="toc-text">HTTPS 采用混合加密机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证明公开密钥正确性的证书"><span class="toc-text">证明公开密钥正确性的证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可证明组织真实性的-EV-SSL-证书"><span class="toc-text">可证明组织真实性的 EV SSL 证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPS通信步骤"><span class="toc-text">HTTPS通信步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSL-和-TLS"><span class="toc-text">SSL 和 TLS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#确认访问用户身份的认证"><span class="toc-text">确认访问用户身份的认证</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#何为认证"><span class="toc-text">何为认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BASIC-认证"><span class="toc-text">BASIC 认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIGEST-认证"><span class="toc-text">DIGEST 认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSL-客户端认证"><span class="toc-text">SSL 客户端认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于表单认证"><span class="toc-text">基于表单认证</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第九章"><span class="toc-text">第九章</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-的瓶颈"><span class="toc-text">HTTP 的瓶颈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-2-0"><span class="toc-text">HTTP&#x2F;2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#队头阻塞"><span class="toc-text">队头阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第十一章-Web-的攻击技术"><span class="toc-text">第十一章 Web 的攻击技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#主动攻击"><span class="toc-text">主动攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#被动攻击"><span class="toc-text">被动攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#因输出值转义不完全引发的安全漏洞"><span class="toc-text">因输出值转义不完全引发的安全漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#因设置或设计上的缺陷引发的安全漏洞"><span class="toc-text">因设置或设计上的缺陷引发的安全漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#因会话管理疏忽引发的安全漏洞"><span class="toc-text">因会话管理疏忽引发的安全漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他安全漏洞"><span class="toc-text">其他安全漏洞</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-text">参考文章</span></a></li></ol>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liuyuqi21.github.io/2019/08/25/HTTP%E7%9F%A5%E8%AF%86%E7%82%B9/" data-id="ckd5czhh80002nnnr7ht4hju9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+
+    </footer>
   </div>
-</div>
-
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/10/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          分布式事务
+        
+      </div>
+    </a>
   
   
-<nav id="pagination">
-  
-    <a href="/2019/09/10/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" class="prev">&larr; Prev post 分布式事务</a>
-  
-
-  
-
-  
-    <a href="/2019/08/21/elasticsearch/" class="next">Next post Elasticsearch 相关 &rarr;</a>
+    <a href="/2019/08/21/elasticsearch/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Elasticsearch 相关</div>
+    </a>
   
 </nav>
 
-  <!-- JiaThis Button BEGIN -->
+  
+</article>
 
-<!-- JiaThis Button END -->
-
-
-      
-      
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98/">问题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
     </div>
   </div>
 
-  <div id="bottom-outer">
-    <div id="bottom-inner">
-      Site by Cellophane using
-      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
-      <br>
-      
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Laravel/" rel="tag">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redisson/" rel="tag">redisson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/" rel="tag">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/" rel="tag">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer/" rel="tag">剑指Offer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%98%E7%9B%AE/" rel="tag">题目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
     </div>
   </div>
-</div>
-
-</div>
 
 
-<div id="user-card">
-  <div class="center-field">
-    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
-    <p id="description"></p>
-    <ul class="social-icon">
   
-  
-    <li>
-      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
-        
-          <i class="icon iconfont github">&#xe606;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="823458299@qq.com">
-        
-          M
-        
-      </a>
-    </li>
-  
-</ul>
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PHP/" style="font-size: 17.5px;">PHP</a> <a href="/tags/Redis/" style="font-size: 17.5px;">Redis</a> <a href="/tags/RocketMQ/" style="font-size: 12.5px;">RocketMQ</a> <a href="/tags/ZooKeeper/" style="font-size: 10px;">ZooKeeper</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/redisson/" style="font-size: 10px;">redisson</a> <a href="/tags/spring/" style="font-size: 10px;">spring</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 10px;">乐观锁</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 12.5px;">分布式事务</a> <a href="/tags/%E5%89%91%E6%8C%87Offer/" style="font-size: 20px;">剑指Offer</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 10px;">消息队列</a> <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" style="font-size: 10px;">知识点</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 12.5px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">读书笔记</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 12.5px;">面经</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A2%98%E7%9B%AE/" style="font-size: 15px;">题目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 10px;">高并发</a>
+    </div>
   </div>
-</div>
 
-
-<div id="btn-view">Hide</div>
-
-<script>
-// is trigger analytics / tongji script
-var isIgnoreHost = false;
-
-if(window && window.location && window.location.host) {
-  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
-    return 0 === window.location.host.indexOf(address);
-  });
-}
-
-var isTriggerAnalytics = !( true && isIgnoreHost );
-
-</script>
-
-
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
+    </div>
+  </div>
 
 
   
-  
-    <script src="/js/jquery-2.2.3.min.js"></script>
-  
-    <script src="/js/vegas.min.js"></script>
-  
-    <script src="/js/random.js"></script>
-  
-    <script src="/js/highlight.pack.js"></script>
-  
-    <script src="/js/jquery.mousewheel.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox-thumbs.js"></script>
-  
-    <script src="/js/plyr.js"></script>
-  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">leetcode 数据结构</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">面试范围</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">Java 并发</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/typora%E5%BF%AB%E6%8D%B7%E9%94%AE/">typora 快捷键</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
 
-<script>
-
-  // fancybox
-  var backgroundImages = [];
   
-  $('#post').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
-      var alt = this.alt || this.title;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'post' + i);
-    });
-  });
-  $(".fancybox").fancybox();
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Cellophane<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
-var unsplashConfig = {"gravity":"center"};
-// is show background images
-var turnoffBackgroundImage = false;
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-var backgroundColor = "34495E";
+<script src="/js/script.js"></script>
 
-$(".fancybox-thumb").fancybox({
-  prevEffect: 'none',
-  nextEffect: 'none',
-  helpers: {
-    title: {
-      type: 'outside'
-    },
-    thumbs: {
-      width: 50,
-      height: 50
-    }
-  }
-});
 
-// show video with plyr
-$(".video-container iframe").each(function(i){
-  var url = $(this).attr('src');
-  var id = url.split('/').pop();
-  var plyrContainer = document.createElement('div');
-  plyrContainer.className = 'plyr';
-  var plyrElement = document.createElement('div');
-  plyrElement.dataset.videoId = id;
-  switch(true) {
-    case url.search('youtube.com') >= 0:
-      plyrElement.dataset.type = 'youtube';
-      break;
-    case url.search('vimeo.com') >= 0:
-      plyrElement.dataset.type = 'vimeo';
-      break;
-    default:
-      return;
-  };
-  plyrContainer.appendChild(plyrElement);
-  $(this).parent().html(plyrContainer);
-});
-plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
-</script>
+
+
+  </div>
 </body>
 </html>
-

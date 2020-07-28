@@ -1,173 +1,94 @@
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
   
-  <meta name="author" content="Cellophane">
-  
-  
-  
-  
-    <meta name="description" content="1. 计算机基础基础
-正码，反码和补码的概念；二进制的相关操作：与，或，非，异或，左移，右移关键字等；
-
-正码：正数是其二进制本身，负数是符号位为1，数值部分取 x 绝对值的二进制
-反码：正数的正码和反码相同，其他位于原码相反
-补码：正数的补码与正码相同，负数的符号位为 1，其他位是原码取反，末位加1
-
-
-GB,MB,KB,BYTE,BIT的换算关系
-12341GB &#x3D; 1024M...">
-  
-  <title>面试范围 [ Cellophane's blog ]</title>
-  
-  
-    <link rel="shortcut icon" href="/icon.ico">
-  
-  
-  
-<link rel="stylesheet" href="/css/random.css">
-<link rel="stylesheet" href="/css/vegas.min.css">
-<link rel="stylesheet" href="/css/highlight-railscasts.css">
-<link rel="stylesheet" href="/css/jquery.fancybox.css">
-<link rel="stylesheet" href="/css/iconfont/iconfont.css">
-<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
-<link rel="stylesheet" href="/css/plyr.css">
 
   
-<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  <title>面试范围 | Cellophane&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 计算机基础基础 正码，反码和补码的概念；二进制的相关操作：与，或，非，异或，左移，右移关键字等；  正码：正数是其二进制本身，负数是符号位为1，数值部分取 x 绝对值的二进制 反码：正数的正码和反码相同，其他位于原码相反 补码：正数的补码与正码相同，负数的符号位为 1，其他位是原码取反，末位加1   GB,MB,KB,BYTE,BIT的换算关系 1GB &#x3D; 1024MB 1MB &#x3D; 1024">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试范围">
+<meta property="og:url" content="https://liuyuqi21.github.io/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/index.html">
+<meta property="og:site_name" content="Cellophane&#39;s blog">
+<meta property="og:description" content="1. 计算机基础基础 正码，反码和补码的概念；二进制的相关操作：与，或，非，异或，左移，右移关键字等；  正码：正数是其二进制本身，负数是符号位为1，数值部分取 x 绝对值的二进制 反码：正数的正码和反码相同，其他位于原码相反 补码：正数的补码与正码相同，负数的符号位为 1，其他位是原码取反，末位加1   GB,MB,KB,BYTE,BIT的换算关系 1GB &#x3D; 1024MB 1MB &#x3D; 1024">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-01T10:23:44.000Z">
+<meta property="article:modified_time" content="2020-07-28T02:52:43.219Z">
+<meta property="article:author" content="Cellophane">
+<meta property="article:tag" content="知识点">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 <body>
-<div class="side-navigate hide-area">
-  
-    <div class="item prev">
-      <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        leetcode 数据结构
-      </div>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Cellophane&#39;s blog</a>
+      </h1>
+      
     </div>
-  
-  
-    <div class="item next">
-      <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-        <div class="item-icon"></div>
-      </a>
-      <div class="item-title">
-        负载均衡
-      </div>
-    </div>
-  
-</div>
-<div id="outer-container" class="hide-area">
-<div id="container">
-  <div id="menu-outer" class="slide-down">
-    <div id="menu-inner">
-      <div id="brand">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a onClick="openUserCard()">
-          <img id="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png"/>
-          <div id="homelink">Cellophane's blog</div>
-        </a>
-      </div>
-      <div id="menu-list">
-        <ul>
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-          
-            <li>
-          
-            <a href="/index.html">Home</a>
-            
-          </li>
+      </nav>
+      <nav id="sub-nav">
         
-          
-            <li>
-          
-            <a href="/archives">Archives</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/tags">Tags</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/categories">Categories</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/about">About</a>
-            
-          </li>
-        
-        </ul>
-      </div>
-      <div id="show-menu">
-        <button>Menu</button>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liuyuqi21.github.io"></form>
       </div>
     </div>
   </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-面试范围" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/" class="article-date">
+  <time datetime="2020-04-01T10:23:44.000Z" itemprop="datePublished">2020-04-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a>
+  </div>
 
-  <div id="content-outer">
-    <div id="content-inner">
-      
-      
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      面试范围
+    </h1>
   
 
-  <article id="post">
-    <h1>面试范围</h1>
-    <p class="page-title-sub">
-      <span id = "post-title-date">Created at 2020-04-01</span>
-      
-        <span id = "post-title-updated">Updated at 2020-07-27</span>
-      
-      
-      <span id = "post-title-categories">Category
-      
-      
-        
-        
-        <a href="/categories/%E9%9D%A2%E8%AF%95/">面试</a>
-      
-      </span>
-      
-      
-        <span id = "post-title-tags">
-          Tag
-          
-          
-            
-            
-            <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
-          
-        </span>
-      
-      <span id="/2020/04/01/面试范围/" class="leancloud-visitors" data-flag-title="面试范围">
-        <i class="leancloud-visitors-count"></i>
-        <em class="post-meta-item-text"> views </em>
-      </span>
-    </p>
+      </header>
     
-    <h2 id="1-计算机基础"><a href="#1-计算机基础" class="headerlink" title="1. 计算机基础"></a>1. 计算机基础</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><ul>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-计算机基础"><a href="#1-计算机基础" class="headerlink" title="1. 计算机基础"></a>1. 计算机基础</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>正码</code>，<code>反码</code>和<code>补码</code>的概念；二进制的相关操作：<code>与</code>，<code>或</code>，<code>非</code>，<code>异或</code>，<code>左移</code>，<code>右移</code>关键字等；</p>
 <ul>
 <li>正码：正数是其二进制本身，负数是符号位为1，数值部分取 x 绝对值的二进制</li>
@@ -176,8 +97,10 @@ GB,MB,KB,BYTE,BIT的换算关系
 </ul>
 </li>
 <li><p><code>GB</code>,<code>MB</code>,<code>KB</code>,<code>BYTE</code>,<code>BIT</code>的换算关系</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1GB &#x3D; 1024MB</span><br><span class="line">1MB &#x3D; 1024KB</span><br><span class="line">1KB &#x3D; 1024BYTE</span><br><span class="line">1BYTE &#x3D; 8BIT</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>1GB = 1024MB
+1MB = 1024KB
+1KB = 1024BYTE
+1BYTE = 8BIT</code></pre></li>
 <li><p><code>二进制</code>，<code>十进制</code>，<code>十六进制</code>的描述方式和转换方式</p>
 </li>
 <li><p>常用的<code>字符集</code>介绍和可能带来的<code>乱码</code>问题</p>
@@ -195,15 +118,115 @@ GB,MB,KB,BYTE,BIT的换算关系
 <h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
 <li><p>最快计算2的N次方的方式；最快判断一个数字是奇数的方式；</p>
 <ul>
-<li><pre class="line-numbers language-java"><span class="keyword">double</span> res = <span class="number"><code class="language-java"><span class="keyword">double</span> res = <span class="number">1</span>;
-    <span class="keyword">for</span> (<span class="keyword">long</span> i = N; i > <span class="number">0</span>; i /= <span class="number">2</span>) {
-        <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">1</span>) {
-            res = res * x;
-        }
-        x *= x;
-    }
-    <span class="keyword">return</span> res;
-<!--￼<span class="number">1</span>--><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<li><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">double</span> res <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">long</span> i <span class="token operator">=</span> N<span class="token punctuation">;</span> i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">/=</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            res <span class="token operator">=</span> res <span class="token operator">*</span> x<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        x <span class="token operator">*=</span> x<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>判断奇数：位运算，<code>(x&amp;1)==1</code> 是奇数</p>
+</li>
+</ul>
+</li>
+<li><p>浮点数float的长度为多少？不同位数区域代表的含义？为什么会产生精度丢失的问题？</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/8ee02e9bb57d" target="_blank" rel="noopener">IEEE754标准: 一 , 浮点数在内存中的存储方式</a></li>
+<li>float 是32位的，符号部分 1bit，指数部分 8bit，尾数部分23bit</li>
+<li>double 64位，符号部分1bit，指数部分11bit，尾数部分52bit</li>
+</ul>
+</li>
+<li><p>1MB内存空间能存下100万个8位数吗？如果能，怎么存储？如果不能，那么最少需要多大的内存空间？</p>
+<ul>
+<li>1000000*4/1024/1024=3.8M</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-JAVA语言基础"><a href="#2-JAVA语言基础" class="headerlink" title="2. JAVA语言基础"></a>2. JAVA语言基础</h2><h3 id="基础-1"><a href="#基础-1" class="headerlink" title="基础"></a>基础</h3><ul>
+<li><p>8种<code>基本数据类型</code>的介绍；各自的长度范围和使用场景；8种基本类型对应的<code>包装类</code>和作用；</p>
+<ul>
+<li>POJO 必须用包装类，比如有个属性是 score，用int，一次考试,学生可能没考,值是null,也可能考了,但考了0分,值是0,这两个表达的状态明显不一样。</li>
+<li>强制转换 Object 时要用Integer不能用int</li>
+<li>基本数据类型的特点：直接存储在栈(stack)中的数据</li>
+<li>引用数据类型的特点：<strong>存储的是该对象在栈中引用，真实的数据存放在堆内存里</strong></li>
+</ul>
+</li>
+<li><p><code>Object类</code>下的常用方法介绍和相应作用</p>
+<ul>
+<li>clone()  是 native 方法</li>
+<li>equals()</li>
+<li>finalize()</li>
+<li>getClass()</li>
+<li>hashCode()</li>
+<li>notify()</li>
+<li>notifyAll()</li>
+<li>toString()</li>
+<li>wait()</li>
+</ul>
+</li>
+<li><p><code>String类</code>下的常用方法介绍和相应作用;<code>StringBuffer</code>,<code>StringBuilder</code>和<code>String</code>三者的比较；</p>
+<ul>
+<li>常用方法：<code>toCharArray(),charAt(),length(),indexOf(),trim(),substring(),split(),toLowerCase(),toUpperCase(),replace(),concat(),compareTo()</code></li>
+<li>String 是不可变的，用 final 修饰字符数组来保存字符串 <code>private final char value[]</code></li>
+<li>StringBuilder 与 StringBuffer 是可变的，都继承自 AbstractStringBuilder</li>
+<li>StringBuffer 是线程安全的，对方法加了同步锁</li>
+</ul>
+</li>
+<li><p>关键词<code>static</code>,<code>final</code>的作用和使用方式；</p>
+<ul>
+<li><a href="https://www.cnblogs.com/Qian123/p/5713440.html" target="_blank" rel="noopener">Java提高篇——静态代码块、构造代码块、构造函数以及Java类初始化顺序</a></li>
+</ul>
+</li>
+<li><p>关键词<code>public</code>,<code>protected</code>,<code>private</code>,<code>default</code>的作用；可以用来修饰哪些对象（类，方法，属性，构造器），修饰不同对象的不同作用；</p>
+<ul>
+<li>protected 用于修饰成员，表示继承体系中对于子类可见，这个修饰符对于类没有意义。</li>
+</ul>
+</li>
+<li><p><code>接口</code>与<code>抽象类</code>的比较；方法<code>重写</code>与<code>重载</code>的比较；<code>多接口实现</code>和<code>多类继承</code>的可行性；</p>
+<ul>
+<li>接口不能有有任何方法的实现，是完全抽象的类，但是从 Java 8开始，接口也可以拥有默认的方法实现</li>
+<li>接口的成员默认都是 public 的，不允许定义为 private 和 protected，抽象类没有这种限制</li>
+<li>接口的字段默认都是 static 和 final 的，抽象类没有这种限制</li>
+<li>从设计层面上看，抽象类提供了一种 IS-A 关系，需要满足里式替换原则，即子类对象必须能够替换掉所有父类对象。而接口更像是一种 LIKE-A 关系，它只是提供一种方法实现契约，并不要求接口和实现接口的类具有 IS-A 关系。</li>
+<li>从使用上来看，一个类可以实现多个接口，但是不能继承多个抽象类。</li>
+</ul>
+</li>
+<li><p>函数的<code>形参</code>和<code>实参</code>的比较；<code>值传递</code>和<code>引用传递</code>的比较；</p>
+<ul>
+<li><p>Java 的参数是以值传递的形式传入方法中，而不是引用传递</p>
+</li>
+<li><pre class="line-numbers language-java"><code class="language-java">作者：Intopass
+链接：https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>www<span class="token punctuation">.</span>zhihu<span class="token punctuation">.</span>com<span class="token operator">/</span>question<span class="token operator">/</span><span class="token number">31203609</span><span class="token operator">/</span>answer<span class="token operator">/</span><span class="token number">50992895</span>
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+第一个例子：基本类型
+<span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    value <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">foo</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// num 没有被改变</span>
+
+第二个例子：没有提供改变自身方法的引用类型
+<span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span>String text<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    text <span class="token operator">=</span> <span class="token string">"windows"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">foo</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// str 也没有被改变</span>
+
+第三个例子：提供了改变自身方法的引用类型
+StringBuilder sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"iphone"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span>StringBuilder builder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    builder<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"4"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">foo</span><span class="token punctuation">(</span>sb<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// sb 被改变了，变成了"iphone4"。</span>
+
+第四个例子：提供了改变自身方法的引用类型，但是不使用，而是使用赋值运算符。
+StringBuilder sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"iphone"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span>StringBuilder builder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    builder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"ipad"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">foo</span><span class="token punctuation">(</span>sb<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// sb 没有被改变，还是 "iphone"。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 </ul>
 </li>
@@ -269,7 +292,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li>System.gc()方法的作用和使用不当带来的问题；</li>
 <li>Thread.sleep(0)和Thread.sleep(1)的含义；Thread.currentThread().interrupt()和Thread.interrupt()的比较及使用时的注意事项；</li>
 </ul>
-<h2 id="3-数据结构与集合"><a href="#3-数据结构与集合" class="headerlink" title="3. 数据结构与集合"></a>3. 数据结构与集合</h2><h3 id="基础-1"><a href="#基础-1" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="3-数据结构与集合"><a href="#3-数据结构与集合" class="headerlink" title="3. 数据结构与集合"></a>3. 数据结构与集合</h2><h3 id="基础-2"><a href="#基础-2" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>List</code>,<code>Map</code>,<code>Set</code>,<code>Queue</code>所抽象的数据结构和对应的使用场景；</p>
 </li>
 <li><p>对象比较的两种实现方式:<code>comparable</code>和<code>compartor</code>；</p>
@@ -295,7 +318,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>SkipList的介绍和使用场景；</p>
 </li>
 </ul>
-<h2 id="4-并发与多线程"><a href="#4-并发与多线程" class="headerlink" title="4. 并发与多线程"></a>4. 并发与多线程</h2><h3 id="基础-2"><a href="#基础-2" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="4-并发与多线程"><a href="#4-并发与多线程" class="headerlink" title="4. 并发与多线程"></a>4. 并发与多线程</h2><h3 id="基础-3"><a href="#基础-3" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>悲观锁</code>和<code>乐观锁</code>的特点和使用场景；</p>
 </li>
 <li><p>介绍创建<code>线程</code>的方式；Thread.run(),Thread.start(),Runnable.run()的比较；</p>
@@ -335,7 +358,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>比较一下Object的wait()和notify() 和Condition的await()和signal()的使用，并介绍Condition的实现原理；</p>
 </li>
 </ul>
-<h2 id="5-设计模式"><a href="#5-设计模式" class="headerlink" title="5. 设计模式"></a>5. 设计模式</h2><h3 id="基础-3"><a href="#基础-3" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="5-设计模式"><a href="#5-设计模式" class="headerlink" title="5. 设计模式"></a>5. 设计模式</h2><h3 id="基础-4"><a href="#基础-4" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p>几种实现<code>单例模式</code>的方式：饿汉式加载，懒汉式加载，枚举；</p>
 </li>
 <li><p><code>模板模式</code>的使用方式和应用场景；</p>
@@ -361,7 +384,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>列举你所阅读过得源码中使用的设计模式和其设计思想；</p>
 </li>
 </ul>
-<h2 id="6-常用三方框架和工具类"><a href="#6-常用三方框架和工具类" class="headerlink" title="6. 常用三方框架和工具类"></a>6. 常用三方框架和工具类</h2><h3 id="基础-4"><a href="#基础-4" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="6-常用三方框架和工具类"><a href="#6-常用三方框架和工具类" class="headerlink" title="6. 常用三方框架和工具类"></a>6. 常用三方框架和工具类</h2><h3 id="基础-5"><a href="#基础-5" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p>Spring框架中的<code>IOC</code>,<code>DI</code>,<code>AOP</code>的意义和作用；</p>
 </li>
 <li><p>Spring框架中的<code>FactoryBean</code>和<code>BeanFactory</code>的定义和比较；框架是如何进行类的加载和管理；</p>
@@ -397,7 +420,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>Netty框架的网络模型；ByteBuf与ByteBuffer的比较；IO线程池和工作线程池的设计；ChannelPipeline的相关设计；ChannelHandler的作用和常用的实现；</p>
 </li>
 </ul>
-<h2 id="7-JVM与内存管理"><a href="#7-JVM与内存管理" class="headerlink" title="7. JVM与内存管理"></a>7. JVM与内存管理</h2><h3 id="基础-5"><a href="#基础-5" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="7-JVM与内存管理"><a href="#7-JVM与内存管理" class="headerlink" title="7. JVM与内存管理"></a>7. JVM与内存管理</h2><h3 id="基础-6"><a href="#基础-6" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>JAVA内存模型</code>的划分及其作用；哪些是线程共用的；哪些是线程私有的；</p>
 </li>
 <li><p>有哪些内存区域会发生<code>OOM</code>异常；不同的<code>OOM</code>异常的含义；</p>
@@ -429,7 +452,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>是否了解JAVA动态追踪技术（Instrumnetation,Attach等），是否了解相关框架，分别可以使用在哪些场景；</p>
 </li>
 </ul>
-<h2 id="8-网络协议"><a href="#8-网络协议" class="headerlink" title="8. 网络协议"></a>8. 网络协议</h2><h3 id="基础-6"><a href="#基础-6" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="8-网络协议"><a href="#8-网络协议" class="headerlink" title="8. 网络协议"></a>8. 网络协议</h2><h3 id="基础-7"><a href="#基础-7" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>tcp</code>和<code>udp</code>的比较</p>
 </li>
 <li><p><code>http</code>和<code>https</code>的比较</p>
@@ -461,7 +484,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>tcp协议保证通信可靠性的方式有哪些；如何实现；</p>
 </li>
 </ul>
-<h2 id="9-服务器与操作系统"><a href="#9-服务器与操作系统" class="headerlink" title="9. 服务器与操作系统"></a>9. 服务器与操作系统</h2><h3 id="基础-7"><a href="#基础-7" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="9-服务器与操作系统"><a href="#9-服务器与操作系统" class="headerlink" title="9. 服务器与操作系统"></a>9. 服务器与操作系统</h2><h3 id="基础-8"><a href="#基础-8" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p>常用<code>linux指令</code>的使用方式，例如top,netstat,grep,awk,vim,cat,sh,less;</p>
 </li>
 <li><p>linux文件系统<code>权限</code>的设计和设置；</p>
@@ -477,7 +500,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>IO零拷贝的技术实现和解决的问题；</p>
 </li>
 </ul>
-<h2 id="10-算法"><a href="#10-算法" class="headerlink" title="10. 算法"></a>10. 算法</h2><h3 id="基础-8"><a href="#基础-8" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="10-算法"><a href="#10-算法" class="headerlink" title="10. 算法"></a>10. 算法</h2><h3 id="基础-9"><a href="#基础-9" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>算法复杂度</code>的定义；算法复杂度排序列举；map,list,array,tree查找数据的算法复杂度分别是多少；</p>
 </li>
 <li><p>用代码实现堆，栈，双向链表，二叉树等常见数据结构；</p>
@@ -491,7 +514,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>单链表反转的解决思路与实现</p>
 </li>
 </ul>
-<h2 id="11-数据库"><a href="#11-数据库" class="headerlink" title="11. 数据库"></a>11. 数据库</h2><h3 id="基础-9"><a href="#基础-9" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="11-数据库"><a href="#11-数据库" class="headerlink" title="11. 数据库"></a>11. 数据库</h2><h3 id="基础-10"><a href="#基础-10" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p>数据库事务的<code>ACID</code>特性的说明和解读；</p>
 </li>
 <li><p>数据库事务的<code>隔离级别</code>和低隔离级别带来的数据读取问题列举；</p>
@@ -521,7 +544,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>mysql如何使用binlog和redolog进行数据的备份和恢复；</p>
 </li>
 </ul>
-<h2 id="12-分布式系统与中间件"><a href="#12-分布式系统与中间件" class="headerlink" title="12. 分布式系统与中间件"></a>12. 分布式系统与中间件</h2><h3 id="基础-10"><a href="#基础-10" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="12-分布式系统与中间件"><a href="#12-分布式系统与中间件" class="headerlink" title="12. 分布式系统与中间件"></a>12. 分布式系统与中间件</h2><h3 id="基础-11"><a href="#基础-11" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>缓存</code>的作用；什么叫缓存穿透，缓存雪崩；缓存失效后合理的更新方式；了解或使用过哪些缓存工具并进行比较（redis,memcache,ecache）；</p>
 </li>
 <li><p><code>redis</code>有哪些数据结构；redis分布式锁的实现，需要注意什么问题；redis过期策略的实现；redis支持高并发的原因；</p>
@@ -553,7 +576,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <li><p>其他分布式系统工具，例如分布式定时任务，日志搜索，全链路跟踪，分布式系统监控，分库分表中间件，分布式ID生成器；</p>
 </li>
 </ul>
-<h2 id="13-代码风格和规范"><a href="#13-代码风格和规范" class="headerlink" title="13. 代码风格和规范"></a>13. 代码风格和规范</h2><h3 id="基础-11"><a href="#基础-11" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="13-代码风格和规范"><a href="#13-代码风格和规范" class="headerlink" title="13. 代码风格和规范"></a>13. 代码风格和规范</h2><h3 id="基础-12"><a href="#基础-12" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p>包名，类名，方法名，变量名的命名规范；</p>
 </li>
 <li><p>DO,VO,DTO,BO的含义；</p>
@@ -562,7 +585,7 @@ GB,MB,KB,BYTE,BIT的换算关系
 <h3 id="进阶-11"><a href="#进阶-11" class="headerlink" title="进阶"></a>进阶</h3><ul>
 <li><h2 id="14-持续集成与发布"><a href="#14-持续集成与发布" class="headerlink" title="14. 持续集成与发布"></a>14. 持续集成与发布</h2></li>
 </ul>
-<h3 id="基础-12"><a href="#基础-12" class="headerlink" title="基础"></a>基础</h3><ul>
+<h3 id="基础-13"><a href="#基础-13" class="headerlink" title="基础"></a>基础</h3><ul>
 <li><p><code>git</code>常用指令及其作用；master,branch,tag的作用；多分支合并冲突解决；代码合并后如何回滚；回滚后的合并操作；</p>
 </li>
 <li><p><code>maven</code>是什么；如何用maven新建多模块工程；如何排除有冲突的jar包；maven常用指令及其作用；maven坐标的定义；镜像仓库；本地仓库，中央仓库的作用；<br>常用的标签比较例如<DependcyManagement>和<Dependcies>;maven插件的作用；坐标中<scope>的意义；snapshot和release的比较；如何指定不同路劲的配置文件打包进classpath；</p>
@@ -619,184 +642,153 @@ GB,MB,KB,BYTE,BIT的换算关系
 </li>
 </ul>
 
-  </article>
-  <div class="random-toc-area">
-  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
-  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
-  <div class="random-toc">
-    <h2>Table of Content</h2>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-计算机基础"><span class="toc-text">1. 计算机基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶"><span class="toc-text">进阶</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-1"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数据结构与集合"><span class="toc-text">3. 数据结构与集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-1"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-2"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-并发与多线程"><span class="toc-text">4. 并发与多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-2"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-3"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-设计模式"><span class="toc-text">5. 设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-3"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-4"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-常用三方框架和工具类"><span class="toc-text">6. 常用三方框架和工具类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-4"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-5"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-JVM与内存管理"><span class="toc-text">7. JVM与内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-5"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-6"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-网络协议"><span class="toc-text">8. 网络协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-6"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-7"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-服务器与操作系统"><span class="toc-text">9. 服务器与操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-7"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-8"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-算法"><span class="toc-text">10. 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-8"><span class="toc-text">基础</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-数据库"><span class="toc-text">11. 数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-9"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-9"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-分布式系统与中间件"><span class="toc-text">12. 分布式系统与中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-10"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-10"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-代码风格和规范"><span class="toc-text">13. 代码风格和规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-11"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-11"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-持续集成与发布"><span class="toc-text">14. 持续集成与发布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础-12"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-12"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-系统设计"><span class="toc-text">15. 系统设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-13"><span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-项目管理"><span class="toc-text">16. 项目管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进阶-14"><span class="toc-text">进阶</span></a></li></ol></li></ol>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liuyuqi21.github.io/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/" data-id="ckd5czhiu004onnnrcfgsdsqx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li></ul>
+
+    </footer>
   </div>
-</div>
-
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode 数据结构
+        
+      </div>
+    </a>
   
   
-<nav id="pagination">
-  
-    <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="prev">&larr; Prev post leetcode 数据结构</a>
-  
-
-  
-
-  
-    <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="next">Next post 负载均衡 &rarr;</a>
+    <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">负载均衡</div>
+    </a>
   
 </nav>
 
-  <!-- JiaThis Button BEGIN -->
+  
+</article>
 
-<!-- JiaThis Button END -->
-
-
-      
-      
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98/">问题</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
     </div>
   </div>
 
-  <div id="bottom-outer">
-    <div id="bottom-inner">
-      Site by Cellophane using
-      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
-      <br>
-      
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Laravel/" rel="tag">Laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redisson/" rel="tag">redisson</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/" rel="tag">spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/" rel="tag">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer/" rel="tag">剑指Offer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag">知识点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%98%E7%9B%AE/" rel="tag">题目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
     </div>
   </div>
-</div>
-
-</div>
 
 
-<div id="user-card">
-  <div class="center-field">
-    <img class="avatar" src="https://i.loli.net/2020/07/27/qrXwW2ghKUdkG9x.png">
-    <p id="description"></p>
-    <ul class="social-icon">
   
-  
-    <li>
-      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
-        
-          <i class="icon iconfont github">&#xe606;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="823458299@qq.com">
-        
-          M
-        
-      </a>
-    </li>
-  
-</ul>
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Laravel/" style="font-size: 10px;">Laravel</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PHP/" style="font-size: 17.5px;">PHP</a> <a href="/tags/Redis/" style="font-size: 17.5px;">Redis</a> <a href="/tags/RocketMQ/" style="font-size: 12.5px;">RocketMQ</a> <a href="/tags/ZooKeeper/" style="font-size: 10px;">ZooKeeper</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/redisson/" style="font-size: 10px;">redisson</a> <a href="/tags/spring/" style="font-size: 10px;">spring</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 10px;">乐观锁</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 12.5px;">分布式事务</a> <a href="/tags/%E5%89%91%E6%8C%87Offer/" style="font-size: 20px;">剑指Offer</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 10px;">消息队列</a> <a href="/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/" style="font-size: 10px;">知识点</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 12.5px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">读书笔记</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 12.5px;">面经</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A2%98%E7%9B%AE/" style="font-size: 15px;">题目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 10px;">高并发</a>
+    </div>
   </div>
-</div>
 
-
-<div id="btn-view">Hide</div>
-
-<script>
-// is trigger analytics / tongji script
-var isIgnoreHost = false;
-
-if(window && window.location && window.location.host) {
-  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
-    return 0 === window.location.host.indexOf(address);
-  });
-}
-
-var isTriggerAnalytics = !( true && isIgnoreHost );
-
-</script>
-
-
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
+    </div>
+  </div>
 
 
   
-  
-    <script src="/js/jquery-2.2.3.min.js"></script>
-  
-    <script src="/js/vegas.min.js"></script>
-  
-    <script src="/js/random.js"></script>
-  
-    <script src="/js/highlight.pack.js"></script>
-  
-    <script src="/js/jquery.mousewheel.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox.pack.js"></script>
-  
-    <script src="/js/jquery.fancybox-thumbs.js"></script>
-  
-    <script src="/js/plyr.js"></script>
-  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/11/leetcode-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">leetcode 数据结构</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/01/%E9%9D%A2%E8%AF%95%E8%8C%83%E5%9B%B4/">面试范围</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/23/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/20/JAVA%20%E5%B9%B6%E5%8F%91/">Java 并发</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/typora%E5%BF%AB%E6%8D%B7%E9%94%AE/">typora 快捷键</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
 
-<script>
-
-  // fancybox
-  var backgroundImages = [];
   
-  $('#post').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
-      var alt = this.alt || this.title;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'post' + i);
-    });
-  });
-  $(".fancybox").fancybox();
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Cellophane<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
-var unsplashConfig = {"gravity":"center"};
-// is show background images
-var turnoffBackgroundImage = false;
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-var backgroundColor = "34495E";
+<script src="/js/script.js"></script>
 
-$(".fancybox-thumb").fancybox({
-  prevEffect: 'none',
-  nextEffect: 'none',
-  helpers: {
-    title: {
-      type: 'outside'
-    },
-    thumbs: {
-      width: 50,
-      height: 50
-    }
-  }
-});
 
-// show video with plyr
-$(".video-container iframe").each(function(i){
-  var url = $(this).attr('src');
-  var id = url.split('/').pop();
-  var plyrContainer = document.createElement('div');
-  plyrContainer.className = 'plyr';
-  var plyrElement = document.createElement('div');
-  plyrElement.dataset.videoId = id;
-  switch(true) {
-    case url.search('youtube.com') >= 0:
-      plyrElement.dataset.type = 'youtube';
-      break;
-    case url.search('vimeo.com') >= 0:
-      plyrElement.dataset.type = 'vimeo';
-      break;
-    default:
-      return;
-  };
-  plyrContainer.appendChild(plyrElement);
-  $(this).parent().html(plyrContainer);
-});
-plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
-</script>
+
+
+  </div>
 </body>
 </html>
-
