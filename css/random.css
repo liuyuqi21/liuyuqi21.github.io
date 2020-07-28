@@ -1,12 +1,13 @@
 body {
   background-color: #34495e;
+  color: #555;
   margin: 0px;
   font: 400 1em/1.8 'Microsoft Yahei', 'PingFang SC', 'Avenir', 'Segoe UI', 'Hiragino Sans GB', STHeiti, 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', sans-serif;
-  font-size: 18px;
+  font-size: 15px;
 }
 @media (max-width: 860px) {
   body {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 article {
@@ -21,6 +22,34 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.3em;
+}
+h4 {
+  font-size: 1.2em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 1em;
+  color: #999;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1em;
+  margin: 1.1em 0;
 }
 #outer-container {
   position: absolute;
@@ -581,25 +610,44 @@ article img {
 .btn-hide-toc:hover {
   background-color: #888;
 }
+code style,
 figure.highlight {
   margin: 0px -10px 0px -10px;
 }
+code style td.gutter,
 figure.highlight td.gutter {
   padding-right: 20px;
 }
+code style .line,
 figure.highlight .line {
   height: 22px;
 }
 code {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
-  background-color: #ddd;
-  font-style: italic;
-  padding-left: 12px;
-  padding-right: 12px;
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, monospace, SFMono-Regular, Liberation Mono;
+  background: #eee;
+  text-shadow: 0 1px #fff;
+  padding: 0 0.3em;
+}
+pre[class*="language-"] {
+  margin: -0.7em !important;
 }
 table .line {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, monospace, SFMono-Regular, Liberation Mono;
   height: 22px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+th {
+  font-weight: bold;
+  border-bottom: 3px solid #ddd;
+  padding-bottom: 0.5em;
+}
+td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 blockquote {
   background-color: #eee;
