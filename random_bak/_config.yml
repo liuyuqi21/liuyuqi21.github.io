@@ -48,7 +48,7 @@ valine:
   visit_analytics: true
 
 # Miscelaneous
-favicon: /favicon.ico
+favicon: /icon.ico
 
 # stylesheets loaded in the <head>
 stylesheets:
@@ -119,7 +119,7 @@ unsplashConfig:
   gravity: 'center' # north, east, south, west, center
   # greyscale: true
 
-avatar: https://i.loli.net/2020/07/27/LBpcYeakfOjDWxQ.png
+avatar: https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png
 
 # do not like fancybox, set this as false, this will turn it off
 fancybox: true

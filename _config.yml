@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: https://liuyuqi21.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -44,17 +44,17 @@ render_drafts: false
 post_asset_folder: false
 relative_link: false
 future: true
-# highlight:
-#   enable: false
-#   line_number: true
-#   auto_detect: false
-#   tab_replace: ''
-#   wrap: true
-#   hljs: false
+highlight:
+  enable: false
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
 
 prism_plugin:
   mode: 'preprocess'    # realtime/preprocess
-  theme: 'coy'     #主题选项
+  theme: 'base16-ateliersulphurpool.light' #主题选项/coy
   line_number: true    # default false
   custom_css:
 
@@ -99,7 +99,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: random
+theme: landscape
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
