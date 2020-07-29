@@ -568,11 +568,6 @@ article img {
   top: 0px;
   display: block;
 }
-@media (max-width: 1360px) {
-  .random-toc-area {
-    display: none;
-  }
-}
 .random-toc {
   background: #444;
   color: #bbb;
