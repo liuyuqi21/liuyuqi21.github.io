@@ -557,23 +557,29 @@ article img
 
 .random-toc-area
   position: fixed;
-  width: 200px;
+  //width: 160px;
+  width :200px
   right: 0px;
   top: 0px;
   display: block;
-  @media (max-width: lgDesktopWidth + 400px)
+  
+
+  @media (max-width: lgDesktopWidth + 200px)
     display: none;
     
 .random-toc
   // top: 30px;
   background: #444;
   color: #bbb;
-  height: 500px;
+  //height: 100%;
+  max-height: 750px;
   margin-top: 0px;
   font-size: 12px;
-  height: 100%;
+  //bottom: 100px
   overflow-y: auto;
+
 .random-toc ol
+  //color: #444
   padding-left: 15px;
 .random-toc h2
   text-align: center;
