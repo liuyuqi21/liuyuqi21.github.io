@@ -2,7 +2,7 @@ body {
   background-color: #34495e;
   color: #555;
   margin: 0px;
-  font: 400 1em/1.8 'Microsoft Yahei', 'PingFang SC', 'Avenir', 'Segoe UI', 'Hiragino Sans GB', STHeiti, 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', sans-serif;
+  font: 400 1em/1.8 -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 15px;
 }
 @media (max-width: 860px) {
@@ -568,7 +568,7 @@ article img {
   top: 0px;
   display: block;
 }
-@media (max-width: 1360px) {
+@media (max-width: 1160px) {
   .random-toc-area {
     display: none;
   }
@@ -576,10 +576,10 @@ article img {
 .random-toc {
   background: #444;
   color: #bbb;
-  height: 500px;
+  max-height: 740px;
   margin-top: 0px;
-  font-size: 12px;
-  height: 100%;
+  font-size: 13px;
+  padding: 10px;
   overflow-y: auto;
 }
 .random-toc ol {
@@ -627,6 +627,7 @@ code {
   background: #eee;
   text-shadow: 0 1px #fff;
   padding: 0 0.3em;
+  word-wrap: break-word;
 }
 pre[class*="language-"] {
   margin: -0.7em !important;

@@ -139,7 +139,7 @@ GB,MB,KB,BYTE,BIT的换算关系
     <p class="page-title-sub">
       <span id = "post-title-date">Created at 2020-04-01</span>
       
-        <span id = "post-title-updated">Updated at 2020-07-28</span>
+        <span id = "post-title-updated">Updated at 2020-08-01</span>
       
       
       <span id = "post-title-categories">Category
@@ -197,19 +197,16 @@ GB,MB,KB,BYTE,BIT的换算关系
 </ul>
 <h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
 <li><p>最快计算2的N次方的方式；最快判断一个数字是奇数的方式；</p>
-<ul>
-<li><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">double</span> res <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">long</span> i <span class="token operator">=</span> N<span class="token punctuation">;</span> i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">/=</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            res <span class="token operator">=</span> res <span class="token operator">*</span> x<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        x <span class="token operator">*=</span> x<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> res<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">double</span> res <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">long</span> i <span class="token operator">=</span> N<span class="token punctuation">;</span> i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">/=</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      res <span class="token operator">=</span> res <span class="token operator">*</span> x<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      x <span class="token operator">*=</span> x<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> res<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>判断奇数：位运算，<code>(x&amp;1)==1</code> 是奇数</p>
-</li>
-</ul>
 </li>
 <li><p>浮点数float的长度为多少？不同位数区域代表的含义？为什么会产生精度丢失的问题？</p>
 <ul>
