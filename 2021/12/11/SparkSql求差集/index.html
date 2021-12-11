@@ -16,10 +16,11 @@
   
   
   
-    <meta name="description" content="最近遇到一个问题，执行某个spark脚本的时候，我想要在输出时减少分区数，就使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，所以就只有200个task，由于task太少导致了内存溢出。
-这个问题换成了repartition算子之后解决了，因为repartition会有一个sh...">
+    <meta name="description" content="需求有两个表，A，B。A 表中有字段 id，name，B表有id字段，我需要求出A表中不包含B表的id的name，而使用 expect 只能求一列的差集。
+解决办法查阅一些资料后得到一个办法，就是使用left outer join，试了一下非常好用。
+select name from A left outer join B on A.id=B.id where B.id is null">
   
-  <title>coalesce 导致内存溢出 [ Cellophane's blog ]</title>
+  <title>SparkSql 使用 left outer join 求差集 [ Cellophane's blog ]</title>
   
   
     <link rel="shortcut icon" href="/icon.ico">
@@ -43,11 +44,11 @@
   
   
     <div class="item next">
-      <a href="/2020/09/27/shell%E5%88%A4%E6%96%AD%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8/">
+      <a href="/2021/12/11/Spark%20coalesce%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/">
         <div class="item-icon"></div>
       </a>
       <div class="item-title">
-        shell判断文件是否存在
+        Spark coalesce 导致内存溢出
       </div>
     </div>
   
@@ -117,7 +118,7 @@
   
 
   <article id="post">
-    <h1>coalesce 导致内存溢出</h1>
+    <h1>SparkSql 使用 left outer join 求差集</h1>
     <p class="page-title-sub">
       <span id = "post-title-date">Created at 2021-12-11</span>
       
@@ -142,22 +143,17 @@
             
             <a href="/tags/Spark/">Spark</a>
           
-            
-              /
-            
-            
-            <a href="/tags/%E9%97%AE%E9%A2%98/">问题</a>
-          
         </span>
       
-      <span id="/2021/12/11/coalesce导致内存溢出/" class="leancloud-visitors" data-flag-title="coalesce 导致内存溢出">
+      <span id="/2021/12/11/SparkSql求差集/" class="leancloud-visitors" data-flag-title="SparkSql 使用 left outer join 求差集">
         <i class="leancloud-visitors-count"></i>
         <em class="post-meta-item-text"> views </em>
       </span>
     </p>
     
-    <p>最近遇到一个问题，执行某个spark脚本的时候，我想要在输出时减少分区数，就使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，所以就只有200个task，由于task太少导致了内存溢出。</p>
-<p>这个问题换成了<code>repartition</code>算子之后解决了，因为<code>repartition</code>会有一个shuffle的过程，shuffle前后是两个stage。而<code>coalesce</code>不会产生shuffle，一直只有一个stage，所以分区数一开始就减少了。</p>
+    <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>有两个表，A，B。A 表中有字段 id，name，B表有id字段，我需要求出A表中不包含B表的id的name，而使用 expect 只能求一列的差集。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>查阅一些资料后得到一个办法，就是使用left outer join，试了一下非常好用。</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> name <span class="token keyword">from</span> A <span class="token keyword">left</span> <span class="token keyword">outer</span> <span class="token keyword">join</span> B <span class="token keyword">on</span> A<span class="token punctuation">.</span>id<span class="token operator">=</span>B<span class="token punctuation">.</span>id <span class="token keyword">where</span> B<span class="token punctuation">.</span>id <span class="token operator">is</span> <span class="token boolean">null</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
   </article>
   <div class="random-toc-area">
@@ -165,7 +161,7 @@
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
   <div class="random-toc">
     <h2>Table of Content</h2>
-    
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-text">解决办法</span></a></li></ol>
   </div>
 </div>
 
@@ -177,7 +173,7 @@
   
 
   
-    <a href="/2020/09/27/shell%E5%88%A4%E6%96%AD%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8/" class="next">Next post shell判断文件是否存在 &rarr;</a>
+    <a href="/2021/12/11/Spark%20coalesce%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/" class="next">Next post Spark coalesce 导致内存溢出 &rarr;</a>
   
 </nav>
 

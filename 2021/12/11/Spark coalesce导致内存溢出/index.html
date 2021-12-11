@@ -1,8 +1,6 @@
 
 
 
-  
-
 
 
 
@@ -18,9 +16,10 @@
   
   
   
-    <meta name="description" content="">
+    <meta name="description" content="最近遇到一个问题，执行某个spark脚本的时候，我想要在输出时减少分区数，就使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，所以就只有200个task，由于task太少导致了内存溢出。
+这个问题换成了repartition算子之后解决了，因为repartition会有一个sh...">
   
-  <title>Tag: typora [ Cellophane's blog ]</title>
+  <title>Spark coalesce 导致内存溢出 [ Cellophane's blog ]</title>
   
   
     <link rel="shortcut icon" href="/icon.ico">
@@ -42,6 +41,24 @@
 <body>
 <div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2021/12/11/SparkSql%E6%B1%82%E5%B7%AE%E9%9B%86/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        SparkSql 使用 left outer join 求差集
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/09/27/shell%E5%88%A4%E6%96%AD%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        shell判断文件是否存在
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -74,7 +91,7 @@
           </li>
         
           
-            <li class="active">
+            <li>
           
             <a href="/tags">Tags</a>
             
@@ -106,415 +123,79 @@
     <div id="content-inner">
       
       
-  <div id="tag">
-    <h1>typora</h1>
-    
+  
+
+  <article id="post">
+    <h1>Spark coalesce 导致内存溢出</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2021-12-11</span>
+      
+        <span id = "post-title-updated">Updated at 2021-12-11</span>
+      
+      
+      <span id = "post-title-categories">Category
       
       
         
-      
         
+        <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
       
+      </span>
       
-    
       
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
+        <span id = "post-title-tags">
+          Tag
           
-        
+          
+            
+            
+            <a href="/tags/Spark/">Spark</a>
+          
+            
+              /
+            
+            
+            <a href="/tags/%E9%97%AE%E9%A2%98/">问题</a>
+          
+        </span>
       
-      
-      <div class="post-title-item">
-  
-  <a href="/2020/03/10/typora快捷键/">
-  
-    typora 快捷键
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">3-10</span>
+      <span id="/2021/12/11/Spark coalesce导致内存溢出/" class="leancloud-visitors" data-flag-title="Spark coalesce 导致内存溢出">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
     
-    <span id = "post-title-categories">Category
-    
-    
-      
-      
-      <a href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    Tag
-    
-    
-      
-      
-      <a href="/tags/typora/">typora</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
+    <p>最近遇到一个问题，执行某个spark脚本的时候，我想要在输出时减少分区数，就使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，所以就只有200个task，由于task太少导致了内存溢出。</p>
+<p>这个问题换成了<code>repartition</code>算子之后解决了，因为<code>repartition</code>会有一个shuffle的过程，shuffle前后是两个stage。而<code>coalesce</code>不会产生shuffle，一直只有一个stage，所以分区数一开始就减少了。</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
     
   </div>
+</div>
 
   
+  
+<nav id="pagination">
+  
+    <a href="/2021/12/11/SparkSql%E6%B1%82%E5%B7%AE%E9%9B%86/" class="prev">&larr; Prev post SparkSql 使用 left outer join 求差集</a>
+  
+
+  
+
+  
+    <a href="/2020/09/27/shell%E5%88%A4%E6%96%AD%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8/" class="next">Next post shell判断文件是否存在 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
 
       
       
