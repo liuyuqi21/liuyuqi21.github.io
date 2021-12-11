@@ -1,0 +1,370 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="Python2 有两种字符串类型： str和unicode
+从 str 转 unicode 使用decode
+从 unicode 转 str 使用 encode
+a = '中秋' # str
+b = u'中秋' # unicode
+
+print a.decode('utf-8')
+print b.encode('utf-8')
+UnicodeEncodeError: &#39;ascii&#...">
+  
+  <title>python2中文编码问题 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/12/12/python-%E6%8E%92%E5%BA%8F/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        python-排序
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/10/15/python%E7%AC%94%E8%AE%B0-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        python笔记-函数的参数传递
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>python2中文编码问题</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-10-19</span>
+      
+        <span id = "post-title-updated">Updated at 2021-12-12</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/python/">python</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/python/">python</a>
+          
+        </span>
+      
+      <span id="/2020/10/19/python2中文编码问题/" class="leancloud-visitors" data-flag-title="python2中文编码问题">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <p>Python2 有两种字符串类型： <code>str</code>和<code>unicode</code></p>
+<p>从 <code>str</code> 转 <code>unicode</code> 使用<code>decode</code></p>
+<p>从 <code>unicode</code> 转 <code>str</code> 使用 <code>encode</code></p>
+<pre class="line-numbers language-python"><code class="language-python">a <span class="token operator">=</span> <span class="token string">'中秋'</span> <span class="token comment" spellcheck="true"># str</span>
+b <span class="token operator">=</span> u<span class="token string">'中秋'</span> <span class="token comment" spellcheck="true"># unicode</span>
+
+<span class="token keyword">print</span> a<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> b<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode characters in position 0-3: ordinal not in range(128)</code>的错误原因是使用了错误的字符集来 encode / decode。</p>
+<ul>
+<li><p>在同时包含 str 与 unicode 的运算时，python 一律把 str 都转换成 unicode 再运算，运算结果也是 unicode</p>
+</li>
+<li><p>由于 Python 事先并不知道 str 的编码，它只能使用 <code>sys.getdefaultencoding()</code> 编码去 decode，<code>sys.getdefaultencoding()</code> 的值默认是 <code>ascii</code>。 如果需要转换的 str 有中文，一定会出现错误。</p>
+</li>
+<li><p>可以修改默认编码，或者遇到中文都使用<code>u&#39;中文&#39;</code></p>
+<pre class="line-numbers language-python"><code class="language-python">reload<span class="token punctuation">(</span>sys<span class="token punctuation">)</span>                      <span class="token comment" spellcheck="true"># reload 才能调用 setdefaultencoding 方法  </span>
+sys<span class="token punctuation">.</span>setdefaultencoding<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 设置 'utf-8'  </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">print</span> <span class="token punctuation">(</span>unicode<span class="token punctuation">(</span><span class="token string">"请输入销售额"</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/12/12/python-%E6%8E%92%E5%BA%8F/" class="prev">&larr; Prev post python-排序</a>
+  
+
+  
+
+  
+    <a href="/2020/10/15/python%E7%AC%94%E8%AE%B0-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/" class="next">Next post python笔记-函数的参数传递 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,382 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="sorted(iterable[, cmp[, key[, reverse]]])
+
+cmp：自定义排序，cmp=lambda x,y: cmp(x.lower(), y.lower())
+key：要排序的key
+reverse：默认正序，设置为 Flase 为倒序
+
+根据某个 key 排序# dict
+kids = [
+    {'name': 'xiaoming', 'score': 9...">
+  
+  <title>python-排序 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2021/12/11/Spark%20coalesce%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Spark coalesce 导致内存溢出
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/10/19/python2%E4%B8%AD%E6%96%87%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        python2中文编码问题
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>python-排序</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-12-12</span>
+      
+        <span id = "post-title-updated">Updated at 2021-12-12</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/python/">python</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/python/">python</a>
+          
+        </span>
+      
+      <span id="/2020/12/12/python-排序/" class="leancloud-visitors" data-flag-title="python-排序">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <pre class="line-numbers language-python"><code class="language-python">sorted<span class="token punctuation">(</span>iterable<span class="token punctuation">[</span><span class="token punctuation">,</span> cmp<span class="token punctuation">[</span><span class="token punctuation">,</span> key<span class="token punctuation">[</span><span class="token punctuation">,</span> reverse<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li>cmp：自定义排序，<code>cmp=lambda x,y: cmp(x.lower(), y.lower())</code></li>
+<li>key：要排序的key</li>
+<li>reverse：默认正序，设置为 Flase 为倒序</li>
+</ul>
+<h3 id="根据某个-key-排序"><a href="#根据某个-key-排序" class="headerlink" title="根据某个 key 排序"></a>根据某个 key 排序</h3><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># dict</span>
+kids <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'xiaoming'</span><span class="token punctuation">,</span> <span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">99</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'xiaohong'</span><span class="token punctuation">,</span> <span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">75</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">13</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'xiaowang'</span><span class="token punctuation">,</span> <span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">88</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">15</span><span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+sorted<span class="token punctuation">(</span>kids<span class="token punctuation">,</span> key<span class="token operator">=</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x<span class="token punctuation">[</span><span class="token string">'score'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># tuple</span>
+students <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">'john'</span><span class="token punctuation">,</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">'jane'</span><span class="token punctuation">,</span> <span class="token string">'B'</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">'dave'</span><span class="token punctuation">,</span><span class="token string">'B'</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+sorted<span class="token punctuation">(</span>students<span class="token punctuation">,</span>key<span class="token operator">=</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#按照年龄来排序</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="多关键字排序"><a href="#多关键字排序" class="headerlink" title="多关键字排序"></a>多关键字排序</h3><p>先根据 key1 排，再根据 key2 排</p>
+<pre class="line-numbers language-python"><code class="language-python">sorted<span class="token punctuation">(</span>dict<span class="token punctuation">,</span> key <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x<span class="token punctuation">[</span>key1<span class="token punctuation">]</span><span class="token punctuation">,</span> x<span class="token punctuation">[</span>key2<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="特殊排序规则"><a href="#特殊排序规则" class="headerlink" title="特殊排序规则"></a>特殊排序规则</h3><p>默认<code>sorted([True, False])==[False, True] (False=0 &lt; True=1)</code></p>
+<p>一个字符串排序，排序规则：小写&lt;大写&lt;奇数&lt;偶数</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#元组内(e1, e2, e3)的优先级排列为: e1 > e2 > e3</span>
+sorted<span class="token punctuation">(</span>s<span class="token punctuation">,</span> key<span class="token operator">=</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> <span class="token punctuation">(</span>x<span class="token punctuation">.</span>isdigit<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>x<span class="token punctuation">.</span>isdigit<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">and</span> int<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">,</span>x<span class="token punctuation">.</span>isupper<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>x<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">#input: 'asdf234GDSdsf23'</span>
+<span class="token comment" spellcheck="true">#output: ['a', 'd', 'd', 'f', 'f', 's', 's', 'D', 'G', 'S', '3', '3', '2', '2', '4']</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>x.isdigit()的作用是把数字放在后边（True）,字母放在前面（False）.</li>
+<li>x.isdigit() and int(x) % 2 == 0的作用是保证数字中奇数在前（False），偶数在后（True）。</li>
+<li>x.isupper()的作用是在前面基础上,保证字母小写（False）在前大写在后（True）.</li>
+<li>最后的x表示在前面基础上,对所有类别数字或字母排序。</li>
+</ol>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#根据某个-key-排序"><span class="toc-text">根据某个 key 排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多关键字排序"><span class="toc-text">多关键字排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特殊排序规则"><span class="toc-text">特殊排序规则</span></a></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2021/12/11/Spark%20coalesce%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/" class="prev">&larr; Prev post Spark coalesce 导致内存溢出</a>
+  
+
+  
+
+  
+    <a href="/2020/10/19/python2%E4%B8%AD%E6%96%87%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" class="next">Next post python2中文编码问题 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+

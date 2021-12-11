@@ -1,0 +1,417 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="Cellophane">
+  
+  
+  
+  
+    <meta name="description" content="list使用append()和pop()可以在list 的末尾插入或者删除元素。
+list 支持切片操作，切片是从原list中拷贝出指定的一段。
+使用start:end[:step]来获取切片，是一个左闭右开的区间。留空则表示全部获取，我们也可以额外设置一个参数来表示步长，步长设置成 -1 表示反向遍历
+li2 = li[:] # 可以获得li的拷贝
+两个list 相加等于使用extend(...">
+  
+  <title>python笔记-集合 [ Cellophane's blog ]</title>
+  
+  
+    <link rel="shortcut icon" href="/icon.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css">
+
+  
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-base16-ateliersulphurpool.light.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+<div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2020/09/23/python-%E5%8F%96%E6%B6%88%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF%E6%B3%95/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        python-取消科学技术法
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2020/09/07/python%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        python笔记-基础概念
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png"/>
+          <div id="homelink">Cellophane's blog</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">Home</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">Archives</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/tags">Tags</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/categories">Categories</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/about">About</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  
+
+  <article id="post">
+    <h1>python笔记-集合</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2020-09-10</span>
+      
+        <span id = "post-title-updated">Updated at 2021-12-12</span>
+      
+      
+      <span id = "post-title-categories">Category
+      
+      
+        
+        
+        <a href="/categories/python/">python</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
+          
+          
+            
+            
+            <a href="/tags/python/">python</a>
+          
+        </span>
+      
+      <span id="/2020/09/10/python笔记-集合/" class="leancloud-visitors" data-flag-title="python笔记-集合">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><p>使用<code>append()</code>和<code>pop()</code>可以在<code>list</code> 的末尾插入或者删除元素。</p>
+<p>list 支持切片操作，切片是从原<code>list</code>中<strong>拷贝</strong>出指定的一段。</p>
+<p>使用<code>start:end[:step]</code>来获取切片，是一个左闭右开的区间。留空则表示全部获取，我们也可以额外设置一个参数来表示步长，步长设置成 -1 表示反向遍历</p>
+<pre class="line-numbers language-python"><code class="language-python">li2 <span class="token operator">=</span> li<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true"># 可以获得li的拷贝</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>两个<code>list</code> 相加等于使用<code>extend()</code>方法。</p>
+<pre class="line-numbers language-python"><code class="language-python">li <span class="token operator">+</span> li2 
+li<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>li2<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="list去重方法"><a href="#list去重方法" class="headerlink" title="list去重方法"></a>list去重方法</h3><pre class="line-numbers language-python"><code class="language-python">run_function <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> x <span class="token keyword">if</span> y <span class="token keyword">in</span> x <span class="token keyword">else</span> x <span class="token operator">+</span> <span class="token punctuation">[</span>y<span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># list去重</span>
+self<span class="token punctuation">.</span>oEntity<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"@value"</span><span class="token punctuation">]</span> <span class="token operator">=</span> reduce<span class="token punctuation">(</span>run_function<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">]</span> <span class="token operator">+</span> self<span class="token punctuation">.</span>oEntity<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"@value"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="list-判断相等"><a href="#list-判断相等" class="headerlink" title="list 判断相等"></a>list 判断相等</h3><p>元素顺序不同会判定为不想等，所以可以先排序。</p>
+<pre class="line-numbers language-python"><code class="language-python">list1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"one"</span><span class="token punctuation">,</span><span class="token string">"two"</span><span class="token punctuation">,</span><span class="token string">"three"</span><span class="token punctuation">]</span>
+list2 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"one"</span><span class="token punctuation">,</span><span class="token string">"three"</span><span class="token punctuation">,</span><span class="token string">"two"</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true"># 改变list本身</span>
+list1<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>
+list2<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span> 
+<span class="token comment" spellcheck="true"># 不改变list本身</span>
+list1 <span class="token operator">=</span> sorted<span class="token punctuation">(</span>list1<span class="token punctuation">)</span>
+list2 <span class="token operator">=</span> sorted<span class="token punctuation">(</span>list2<span class="token punctuation">)</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="循环中删除"><a href="#循环中删除" class="headerlink" title="循环中删除"></a>循环中删除</h2><ul>
+<li><p>倒序循环遍历</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">for</span> item <span class="token keyword">in</span> num_list_3<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>遍历copy的list，操作原始list</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">for</span> item <span class="token keyword">in</span> num_list_4<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<h2 id="tuple"><a href="#tuple" class="headerlink" title="tuple"></a>tuple</h2><p><code>tuple</code> 表示元组，<code>tuple</code>是<strong>不可变</strong>对象，如果修改<code>tuple</code>对象，会引发<code>TypeError</code>异常。</p>
+<pre class="line-numbers language-python"><code class="language-python">tup <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span>
+tup <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># 定义单个tuple，末尾必须加逗号，否则()会被认为是其他含义</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>我们可以用多个变量来解压一个<code>tuple</code></p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># You can unpack tuples (or lists) into variables</span>
+a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># a is now 1, b is now 2 and c is now 3</span>
+<span class="token comment" spellcheck="true"># You can also do extended unpacking</span>
+a<span class="token punctuation">,</span> <span class="token operator">*</span>b<span class="token punctuation">,</span> c <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># a is now 1, b is now [2, 3] and c is now 4</span>
+<span class="token comment" spellcheck="true"># Tuples are created by default if you leave out the parentheses</span>
+d<span class="token punctuation">,</span> e<span class="token punctuation">,</span> f <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span>  <span class="token comment" spellcheck="true"># tuple 4, 5, 6 is unpacked into variables d, e and f</span>
+<span class="token comment" spellcheck="true"># respectively such that d = 4, e = 5 and f = 6</span>
+<span class="token comment" spellcheck="true"># Now look how easy it is to swap two values</span>
+e<span class="token punctuation">,</span> d <span class="token operator">=</span> d<span class="token punctuation">,</span> e  <span class="token comment" spellcheck="true"># d is now 5 and e is now 4</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面的<code>*b</code>表示这是一个 <code>list</code>。</p>
+<p><code>tuple</code>本身是不可变的，但是<code>tuple</code>里面的元素是可变的，比如里面有一个<code>list</code>，那么这个<code>list</code>就可以改变。</p>
+<h2 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h2><p><code>dict</code>存储键值对，用<code>{}</code>表示一个<code>dict</code>，用<code>:</code>分隔<code>key</code>和<code>value</code>。</p>
+<p><code>dict</code> 的<code>key</code>必须为不可变对象，所以<strong>list、set 和 dict 不可以作为另一个 dict 的 key</strong>，否则会抛出异常。</p>
+<p><code>[]</code> 和<code>get()</code>都可以获得<code>value</code>，但是<code>dict</code>可以为不存在的<code>key</code>返回一个默认值，默认为<code>None</code>，用<code>[]</code>会引发<code>KeyError</code>异常。</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Looking up a non-existing key is a KeyError</span>
+filled_dict<span class="token punctuation">[</span><span class="token string">"four"</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># KeyError</span>
+
+<span class="token comment" spellcheck="true"># Use "get()" method to avoid the KeyError</span>
+filled_dict<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span>      <span class="token comment" spellcheck="true"># => 1</span>
+filled_dict<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"four"</span><span class="token punctuation">)</span>     <span class="token comment" spellcheck="true"># => None</span>
+<span class="token comment" spellcheck="true"># The get method supports a default argument when the value is missing</span>
+filled_dict<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>   <span class="token comment" spellcheck="true"># => 1</span>
+filled_dict<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"four"</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># => 4</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>keys()</code>方法可以返回所有的<code>key</code>，<code>values()</code>方法可以返回所有的<code>value</code>。</p>
+<p>使用<code>in</code>可以判断一个<code>key</code>是否在<code>dict</code>中。</p>
+<p><code>setdefault()</code>方法可以<strong>为不存在的 key</strong>插入一个<code>value</code>，如果<code>key</code>已经存在，则不会覆盖它。</p>
+<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><p>key相同，y覆盖x</p>
+<pre class="line-numbers language-python"><code class="language-python">x <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'a'</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">}</span>
+y <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'b'</span><span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token string">'c'</span><span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true"># python3</span>
+z <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token operator">**</span>x<span class="token punctuation">,</span> <span class="token operator">**</span>y<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># python2</span>
+z <span class="token operator">=</span> x<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+z<span class="token punctuation">.</span>update<span class="token punctuation">(</span>y<span class="token punctuation">)</span> 
+
+<span class="token comment" spellcheck="true"># {'a': 2, 'b': 5, 'c': 3}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="相加"><a href="#相加" class="headerlink" title="相加"></a>相加</h3><p>利用collections.Counter</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> collections <span class="token keyword">import</span> Counter
+dict<span class="token punctuation">(</span>Counter<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">+</span> Counter<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># {'a': 2, 'b': 7, 'c': 3}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#list"><span class="toc-text">list</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#list去重方法"><span class="toc-text">list去重方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-判断相等"><span class="toc-text">list 判断相等</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环中删除"><span class="toc-text">循环中删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tuple"><span class="toc-text">tuple</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dict"><span class="toc-text">dict</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相加"><span class="toc-text">相加</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+  
+  
+<nav id="pagination">
+  
+    <a href="/2020/09/23/python-%E5%8F%96%E6%B6%88%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF%E6%B3%95/" class="prev">&larr; Prev post python-取消科学技术法</a>
+  
+
+  
+
+  
+    <a href="/2020/09/07/python%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" class="next">Next post python笔记-基础概念 &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
+
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by Cellophane using
+      <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random" target="_blank" rel="noopener">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="https://gitee.com/Cellophane/image/raw/master/null/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%884.11.47.png">
+    <p id="description"></p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/liuyuqi21" target="_blank" rel="noopener">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="823458299@qq.com">
+        
+          M
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["flash"],"timer":true,"delay":1500000,"shuffle":true,"count":12};
+var unsplashConfig = {"gravity":"center"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
