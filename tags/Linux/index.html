@@ -20,7 +20,7 @@
   
     <meta name="description" content="">
   
-  <title>Tag: Linux [ Cellophane's blog ]</title>
+  <title>Tag: linux [ Cellophane's blog ]</title>
   
   
     <link rel="shortcut icon" href="/icon.ico">
@@ -107,11 +107,177 @@
       
       
   <div id="tag">
-    <h1>Linux</h1>
+    <h1>linux</h1>
     
       
       
         
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+        
+      
+      
+    
+      
+      
+        
+      
+        
+      
+      
+    
+      
+      
+      
+    
+      
+      
+        
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
+      
+        
+      
+      
+    
+      
       
         
       
@@ -141,25 +307,18 @@
           
         
       
+        
+      
       
       <div class="post-title-item">
   
-  <a href="/2019/06/22/Linux-命令/">
+  <a href="/2020/09/27/shell判断文件是否存在/">
   
-    linux 命令
+    shell判断文件是否存在
   
   </a>
   <p class="page-title-sub">
-    <span id = "post-title-date">6-22</span>
-    
-    <span id = "post-title-categories">Category
-    
-    
-      
-      
-      <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-    
-    </span>
+    <span id = "post-title-date">9-27</span>
     
     
     <span id = "post-title-tags">
@@ -168,7 +327,13 @@
     
       
       
-      <a href="/tags/Linux/">Linux</a>
+      <a href="/tags/linux/">linux</a>
+    
+      
+        /
+      
+      
+      <a href="/tags/shell/">shell</a>
     
     </span>
     
@@ -190,8 +355,6 @@
     
       
       
-        
-      
       
     
       
@@ -210,27 +373,7 @@
       
         
       
-      
-    
-      
-      
         
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
       
         
       
@@ -281,161 +424,6 @@
       
     
       
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2019/07/18/linux-常用命令/">
-  
-    linux 常用命令
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-18</span>
-    
-    <span id = "post-title-categories">Category
-    
-    
-      
-      
-      <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    Tag
-    
-    
-      
-      
-      <a href="/tags/Linux/">Linux</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
       
         
       
@@ -504,36 +492,6 @@
         
       
         
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
       
         
       
@@ -679,6 +637,29 @@ $(".fancybox-thumb").fancybox({
 $(".video-container iframe").each(function(i){
   var url = $(this).attr('src');
   var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script>
+</body>
+</html>
+
+d = url.split('/').pop();
   var plyrContainer = document.createElement('div');
   plyrContainer.className = 'plyr';
   var plyrElement = document.createElement('div');
