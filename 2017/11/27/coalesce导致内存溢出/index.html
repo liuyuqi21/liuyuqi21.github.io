@@ -1,8 +1,6 @@
 
 
 
-  
-
 
 
 
@@ -18,9 +16,10 @@
   
   
   
-    <meta name="description" content="">
+    <meta name="description" content="在执行某个脚本的时候，我想要在输出时减少分区数，使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，然后由于分区数太少，导致了内存溢出。之后我换成了repartition算子，问题解决了，只有在执行到repartition的是时候才开始减少分区。
+这是因为repartition会...">
   
-  <title>Tag: 缓存 [ Cellophane's blog ]</title>
+  <title>coalesce 导致内存溢出 [ Cellophane's blog ]</title>
   
   
     <link rel="shortcut icon" href="/icon.ico">
@@ -42,6 +41,24 @@
 <body>
 <div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/11/27/chrome%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        chrome插件推荐
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/25/%E7%94%A8VS-code%E5%86%99C-C++/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        用VS code写C/C++
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -74,7 +91,7 @@
           </li>
         
           
-            <li class="active">
+            <li>
           
             <a href="/tags">Tags</a>
             
@@ -106,415 +123,73 @@
     <div id="content-inner">
       
       
-  <div id="tag">
-    <h1>缓存</h1>
-    
+  
+
+  <article id="post">
+    <h1>coalesce 导致内存溢出</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">Created at 2017-11-27</span>
+      
+        <span id = "post-title-updated">Updated at 2021-12-11</span>
+      
+      
+      <span id = "post-title-categories">Category
       
       
         
-      
         
+        <a href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+      
+      </span>
+      
+      
+        <span id = "post-title-tags">
+          Tag
           
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2019/11/12/CPU缓存相关-MESI协议/">
-  
-    CPU 缓存相关-MESI 协议
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">11-12</span>
-    
-    <span id = "post-title-categories">Category
-    
-    
-      
-      
-      <a href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    Tag
-    
-    
-      
-      
-      <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-    
-      
-        /
-      
-      
-      <a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
+          
+            
+            
+            <a href="/tags/Elasticsearch/">Elasticsearch</a>
+          
+        </span>
+      
+      <span id="/2017/11/27/coalesce导致内存溢出/" class="leancloud-visitors" data-flag-title="coalesce 导致内存溢出">
+        <i class="leancloud-visitors-count"></i>
+        <em class="post-meta-item-text"> views </em>
+      </span>
+    </p>
+    
+    <p>在执行某个脚本的时候，我想要在输出时减少分区数，使用了coalesce算子，将原本2000的分区减少为200，但是执行过程中发现，分区数并不是和我想象的一样执行到最后一步再开始减少，而是从一开始就只有200个分区，然后由于分区数太少，导致了内存溢出。之后我换成了<code>repartition</code>算子，问题解决了，只有在执行到<code>repartition</code>的是时候才开始减少分区。</p>
+<p>这是因为<code>repartition</code>会有一个shuffle的过程，shuffle前后时两个stage。而<code>coalesce</code>不会产生shuffle，一直只有一个stage，所以分区数一开始就减少了。</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
+  <div class="random-toc">
+    <h2>Table of Content</h2>
     
   </div>
+</div>
 
   
+  
+<nav id="pagination">
+  
+    <a href="/2017/11/27/chrome%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90/" class="prev">&larr; Prev post chrome插件推荐</a>
+  
+
+  
+
+  
+    <a href="/2017/07/25/%E7%94%A8VS-code%E5%86%99C-C++/" class="next">Next post 用VS code写C/C++ &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+
+<!-- JiaThis Button END -->
+
 
       
       

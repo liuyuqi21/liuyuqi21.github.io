@@ -622,7 +622,8 @@ code style .line,
 figure.highlight .line {
   height: 22px;
 }
-code {
+p>code,
+li>code {
   font-family: "Source Code Pro", Consolas, Monaco, Menlo, monospace, SFMono-Regular, Liberation Mono;
   background: #eee;
   text-shadow: 0 1px #fff;
